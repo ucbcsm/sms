@@ -11,7 +11,6 @@ import {
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import {
-  Avatar,
   Badge,
   Button,
   Card,
@@ -159,7 +158,7 @@ export default function Page() {
                 label: (
                   <>
                     Candidature (s) en attente (s){" "}
-                    <Badge count={41} color="red" />
+                    <Badge count={41} color="red" overflowCount={9} />
                   </>
                 ),
               },
@@ -211,12 +210,21 @@ export default function Page() {
                       </Col>
                       <Col span={12}>
                         <Statistic
+                          value={9}
+                          title="Promotions"
+                          prefix={<ApartmentOutlined />}
+                          // prefix={<UsergroupAddOutlined />}
+                          // valueStyle={{ color: '#3f8600' }}
+                        />
+                      </Col>
+                      {/* <Col span={12}>
+                        <Statistic
                           value={30}
                           title="Enseignants"
                           prefix={<UsergroupAddOutlined />}
                           // valueStyle={{ color: '#3f8600' }}
                         />
-                      </Col>
+                      </Col> */}
                     </Row>
                   </Card>
                 </Col>

@@ -103,11 +103,13 @@ export default function Page() {
               key: "details",
               label: "Détails",
             },
-            { key: "programs", label: "Programmes" },
-            { key: "courses", label: "Cours" },
             { key: "students", label: "Étudiants" },
+            { key: "departement", label: "Filières enfant" },
+            { key: "batches", label: "Promotions" }, 
+            { key: "courses", label: "Cours" },
             { key: "staff", label: "Personnel" },
             { key: "teachers", label: "Enseignants" },
+               
           ]}
           defaultActiveTabKey="details"
         >

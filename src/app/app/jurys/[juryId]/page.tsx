@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Card,
+  Descriptions,
   Dropdown,
   Layout,
   List,
@@ -57,19 +58,66 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
+        
         <Card
+          extra={<Button icon={<EditOutlined/>}>Modifier</Button>}
           tabBarExtraContent={
-            <Radio.Group>
+            <Radio.Group defaultValue="list">
               <Radio.Button value="grid">
-                <AppstoreOutlined />
+          <AppstoreOutlined />
               </Radio.Button>
               <Radio.Button value="list">
-                <UnorderedListOutlined />
+          <UnorderedListOutlined />
               </Radio.Button>
             </Radio.Group>
           }
+          title={<Descriptions  items={[{key:"1", label:"Période",children:"Semester 1"}]}/>}
+          tabList={[{key:"1", label:"Promotions affectées"},{key:"3", label:"Grades"},{key:"4", label:"Critere de deliberations"}, {key:"2",label:"Rapports"}]}
+          
         >
-          {/* Jury contents */}
+          <List
+            dataSource={[
+              {
+          id: "1",
+          name: "Promotion 1",
+          description: "Description de la promotion 1",
+              },
+              {
+          id: "2",
+          name: "Promotion 2",
+          description: "Description de la promotion 2",
+              },
+              {
+          id: "3",
+          name: "Promotion 3",
+          description: "Description de la promotion 3",
+              },
+            ]}
+            renderItem={(item) => (
+              <List.Item
+          key={item.id}
+          actions={[
+            <Button
+              type="link"
+              icon={<EditOutlined />}
+              title="Modifier la promotion"
+            />,
+            <Button
+              type="link"
+              icon={<DeleteOutlined />}
+              title="Retirer la promotion"
+              danger
+            />,
+          ]}
+              >
+          <List.Item.Meta
+            title={<Link href="#">{item.name}</Link>}
+            description={item.description}
+          />
+              </List.Item>
+            )}
+          />
+        
         </Card>
         <Layout.Footer
           style={{

@@ -4,6 +4,7 @@ import "../styles/globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider } from "antd";
 import type { ThemeConfig } from "antd";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}  antialiased`}>
-        <ConfigProvider theme={themeConfig}>
-          <AntdRegistry>{children}</AntdRegistry>
-        </ConfigProvider>
+        <NuqsAdapter>
+          <ConfigProvider theme={themeConfig}>
+            <AntdRegistry>{children}</AntdRegistry>
+          </ConfigProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );

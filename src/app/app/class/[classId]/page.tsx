@@ -103,7 +103,11 @@ export default function Page() {
             },
             { key: "students", label: "Étudiants" },
             { key: "courses", label: "Cours" },
-            { key: "teachers", label: "Enseignants" },
+            {key:"planing", label:"Planning des cours"},
+            {key:"attendances", label:"Présences"},
+            {key:"jury", label:"Jury"},
+             { key: "teachers", label: "Enseignants" },
+             {key:"fees", label:"Frais"},
           ]}
           defaultActiveTabKey="details"
         >
@@ -169,7 +173,7 @@ export default function Page() {
             )}
           />
         </Card>
-        <Card
+        {/* <Card
           variant="borderless"
           title="Ressources"
           style={{ boxShadow: "none", marginTop: 16 }}
@@ -178,7 +182,7 @@ export default function Page() {
             dataSource={[
               { label: "Guide de la promotion", link: "/guide" },
               { label: "Règlement intérieur", link: "/reglement" },
-              { label: "Planning des cours", link: "/planning" },
+          
             ]}
             renderItem={(item) => (
               <List.Item>
@@ -188,7 +192,7 @@ export default function Page() {
               </List.Item>
             )}
           />
-        </Card>
+        </Card> */}
       </Layout.Sider>
     </Layout>
   );

@@ -5,6 +5,7 @@ import { YearSelector } from "@/components/yearSelector";
 import {
   DashboardOutlined,
   DollarOutlined,
+  HomeOutlined,
   LogoutOutlined,
   NotificationOutlined,
   QuestionOutlined,
@@ -62,7 +63,7 @@ export default function AppLayout({
           theme="light"
           defaultSelectedKeys={["1"]}
           items={[
-            { key: "/app", label: "Dashboard", icon: <DashboardOutlined />,  },
+            { key: "/app", label: "Tableau de bord", icon: <DashboardOutlined />,  },
             {
               key: "/app/students",
               label: "Etudiants",

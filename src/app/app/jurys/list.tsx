@@ -4,6 +4,7 @@ import {
     FileExcelOutlined,
     FilePdfOutlined,
     FilterOutlined,
+    PlusOutlined,
     PrinterOutlined,
     TeamOutlined,
 } from "@ant-design/icons";
@@ -146,7 +147,7 @@ export function JurysList() {
                     <div className="flex-1" />
                     <Space>
                         <Button
-                            icon={<TeamOutlined />}
+                            icon={<PlusOutlined />}
                             type="primary"
                             style={{ boxShadow: "none" }}
                         >

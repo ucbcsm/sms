@@ -97,11 +97,14 @@ export default function Page() {
             <Dropdown
               menu={{
               items: [
-                { key: "form", label: "Fiche d'inscription" },
+                { key: "form", label: "Attestation d'admission" },
                 { key: "card", label: "Carte d'étudiant" },
                 { key: "transcript", label: "Relevé de notes" },
                 { key: "certificate", label: "Certificat de scolarité" },
                 { key: "schedule", label: "Attestation de fréquentation" },
+                { key: "diploma", label: "Diplôme" },
+                { key: "report", label: "Rapport de stage" },
+                { key: "rules", label: "Règlement intérieur" },
               ],
               }}
             >

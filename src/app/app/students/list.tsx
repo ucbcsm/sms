@@ -4,6 +4,7 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
   FilterOutlined,
+  MoreOutlined,
   PrinterOutlined,
   UserAddOutlined,
   UserOutlined,
@@ -13,11 +14,13 @@ import {
   Button,
   Dropdown,
   Input,
+  Select,
   Space,
   Table,
   TableColumnType,
   Tag,
 } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type StudentType = {
@@ -58,15 +61,20 @@ const columns: TableColumnType<StudentType>[] = [
     dataIndex: "matricule",
     key: "matricule",
     width: 92,
-    render: (value) => value,
+    render: (value, record) => (
+      <Link href={`/app/students/${record.id}`}>{value}</Link>
+    ),
     align: "center",
   },
   {
     title: "Noms",
     dataIndex: "lastname",
     key: "name",
-    render: (value, record) =>
-      `${record.firstname} ${record.lastname} ${record.surname}`,
+    render: (value, record) => (
+      <Link href={`/app/students/${record.id}`}>
+        {record.firstname} {record.lastname} {record.surname}
+      </Link>
+    ),
     ellipsis: true,
   },
   {
@@ -110,6 +118,27 @@ const columns: TableColumnType<StudentType>[] = [
       </>
     ),
   },
+  {
+    key: "actions",
+    title:"Actions",
+    render: () => (
+      <Space>
+        <Button type="dashed">Gérer</Button>
+        <Dropdown
+          menu={{
+            items: [
+              { key: "1", label: "Action 1" },
+              { key: "2", label: "Action 2" },
+              { key: "3", label: "Action 3" },
+            ],
+          }}
+        >
+          <Button type="text" icon={<MoreOutlined />} />
+        </Dropdown>
+      </Space>
+    ),
+    width: 120,
+  },
 ];
 
 const data: StudentType[] = Array.from({ length: 100 }, (_, index) => {
@@ -136,33 +165,15 @@ export function StudentsList() {
         <header className="flex  pb-3">
           <Space>
             <Input.Search placeholder="Rechercher ..." />
-            <Button icon={<FilterOutlined />} style={{ boxShadow: "none" }}>
+            <Select placeholder="Faculté" showSearch/>
+            <Select placeholder="Département" showSearch/>
+            <Select placeholder="Promotion" showSearch/>
+            {/* <Button icon={<FilterOutlined />} style={{ boxShadow: "none" }}>
               Filtrer
-            </Button>
+            </Button> */}
           </Space>
           <div className="flex-1" />
           <Space>
-            <Dropdown
-              menu={{
-                items: [
-                  { key: "old", label: "Réinscrire", icon: <UserOutlined /> },
-                  {
-                    key: "new",
-                    label: "Inscrire un nouveau",
-                    icon: <UserAddOutlined />,
-                  },
-                ],
-              }}
-            >
-              <Button
-                icon={<UserAddOutlined />}
-                type="primary"
-                style={{ boxShadow: "none" }}
-                variant="dashed"
-              >
-                Inscrire
-              </Button>
-            </Dropdown>
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -193,7 +204,7 @@ export function StudentsList() {
       )}
       columns={columns}
       dataSource={data}
-      rowClassName={`bg-[#f5f5f5] odd:bg-white hover:cursor-pointer`}
+      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       rowSelection={{
         type: "checkbox",
       }}
@@ -203,11 +214,11 @@ export function StudentsList() {
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
       }}
-      onRow={(record) => ({
-        onClick: () => {
-          router.push(`/app/students/${record.id}`); // Navigate to the student details page
-        },
-      })}
+      // onRow={(record) => ({
+      //   onClick: () => {
+      //     router.push(`/app/students/${record.id}`); // Navigate to the student details page
+      //   },
+      // })}
     />
   );
 }

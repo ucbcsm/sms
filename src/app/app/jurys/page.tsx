@@ -82,12 +82,12 @@ export default function Page() {
           </Space>
         </Layout.Footer>
       </Layout.Content>
-      <Layout.Sider
+      {/* <Layout.Sider
         width={280}
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        {/* <Card
+        <Card
           variant="borderless"
           title="Bureau d'étudiants"
           style={{ boxShadow: "none" }}
@@ -143,8 +143,8 @@ export default function Page() {
               </List.Item>
             )}
           />
-        </Card> */}
-      </Layout.Sider>
+        </Card>
+      </Layout.Sider> */}
     </Layout>
   );
 }
