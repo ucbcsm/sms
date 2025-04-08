@@ -1,0 +1,12 @@
+<svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 640 480"
+      fill="currentColor"
+      
+    >
+      <rect width="640" height="480" fill="#012169"/>
+      <path fill="#FFF" d="M75 0v480M0 75h640"/>
+      <path fill="#FFF" d="M0 0l640 480M640 0L0 480"/>
+      <path fill="#C8102E" d="M0 0l320 240M320 0L0 240"/>
+      <path fill="#C8102E" d="M0 75h640M75 0v480"/>
+    </svg>
