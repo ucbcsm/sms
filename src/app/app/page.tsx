@@ -18,6 +18,7 @@ import {
   Button,
   Card,
   Col,
+  Dropdown,
   Flex,
   Input,
   Layout,
@@ -35,14 +36,14 @@ import Link from "next/link";
 
 export default function Page() {
   const {
-    token: { colorBgContainer, colorBorder },
+    token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
   return (
     <Layout>
       <Layout.Content
         style={{
           minHeight: 280,
-          padding: "4px 32px 32px 32px",
+          padding: "0 32px 0 32px",
           background: colorBgContainer,
           overflowY: "auto",
           height: "calc(100vh - 64px)",
@@ -57,7 +58,9 @@ export default function Page() {
           }}
         >
           <Space>
-            <Typography.Title level={3}>Tableau de bord</Typography.Title>
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Tableau de bord
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
@@ -113,7 +116,12 @@ export default function Page() {
                 <Card>
                   <Flex justify="space-between">
                     <Statistic title="Femmes" value={"145"} />
-                    <Progress type="dashboard" percent={42.0} size={58} strokeColor="cyan" />
+                    <Progress
+                      type="dashboard"
+                      percent={42.0}
+                      size={58}
+                      strokeColor="cyan"
+                    />
                   </Flex>
                 </Card>
               </Col>
@@ -171,7 +179,18 @@ export default function Page() {
                 <Col key={index} span={8}>
                   <Card
                     title={`Faculté ${index}`}
-                    extra={<Button type="text" ghost icon={<MoreOutlined />} />}
+                    extra={
+                      <Dropdown
+                        menu={{
+                          items: [
+                            { key: "1", label: "Action 1" },
+                            { key: "2", label: "Action 2" },
+                          ],
+                        }}
+                      >
+                        <Button type="text" icon={<MoreOutlined />} />
+                      </Dropdown>
+                    }
                     type="inner"
                   >
                     <Row gutter={[16, 16]}>
@@ -194,7 +213,7 @@ export default function Page() {
                       <Col span={12}>
                         <Statistic
                           value={5}
-                          title="Membres"
+                          title="Membres bureau"
                           prefix={<UsergroupAddOutlined />}
                           // valueStyle={{ color: '#cf1322' }}
                         />
@@ -214,13 +233,22 @@ export default function Page() {
             </Row>
           </Card>
         </Flex>
+        <Layout.Footer
+          style={{ background: colorBgContainer, padding: " 24px 0" }}
+        >
+          <Typography.Text type="secondary">
+            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+          </Typography.Text>
+        </Layout.Footer>
       </Layout.Content>
       <Layout.Sider
         width={280}
         theme="light"
-        style={{ borderLeft: `1px solid ${colorBorder}` }}
+        style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <Typography.Title level={5} className="pl-7 pt-3">Promotions</Typography.Title>
+        <Typography.Title level={5} className="pl-7 pt-3">
+          Promotions
+        </Typography.Title>
         <Tabs
           tabBarStyle={{ paddingLeft: 28 }}
           items={[
@@ -249,9 +277,7 @@ export default function Page() {
                     renderItem={(item, index) => (
                       <List.Item
                         key={item.id}
-                        extra={
-                          <Button type="text" ghost icon={<RightOutlined />} />
-                        }
+                        extra={<Button type="text" icon={<RightOutlined />} />}
                       >
                         <List.Item.Meta
                           title={<Link href="">{item.name}</Link>}
@@ -260,10 +286,10 @@ export default function Page() {
                               <Badge
                                 color="cyan"
                                 size="small"
-                                count="Effectif 21"
+                                count="21 Etudiants"
                               />
-                              <Badge color="blue" size="small" count="12M" />
-                              <Badge color="pink" size="small" count="9F" />
+                              <Badge color="blue" size="small" count="12 H" />
+                              <Badge color="pink" size="small" count="9 F" />
                             </Space>
                           }
                         />
@@ -304,49 +330,6 @@ export default function Page() {
             },
           ]}
         />
-        {/* <Card
-          title={<Statistic title="8" value="Promotions" />}
-          variant="borderless"
-          tabList={[
-            { key: "1", label: "Licence" },
-            { key: "2", label: "Master" },
-            { key: "3", label: "Doctorat" },
-          ]}
-          style={{ padding:0, borderRadius: 0, boxShadow: "none" }}
-        >
-          <div className=" overflow-y-auto h-[calc(100vh-248px)]">
-          <List
-            dataSource={[
-              { id: "1", name: "L1 Genie informatique" },
-              { id: "2", name: "L2 Electromecanique" },
-              { id: "3", name: "L3 Genie informatique" },
-              { id: "4", name: "L4 Genie informatique" },
-              { id: "5", name: "L2 Gestion informatique" },
-              { id: "6", name: "L1 Théologie" },
-              { id: "7", name: "L3 Communication" },
-              { id: "8", name: "L2 Théologie" },
-            ]}
-            renderItem={(item, index) => (
-              <List.Item
-                key={item.id}
-                extra={<Button type="text" ghost icon={<RightOutlined />} />}
-              >
-                <List.Item.Meta
-                  title={<Link href="">{item.name}</Link>}
-                  description={
-                    <Space>
-                      <Badge color="cyan" size="small" count="Effectif 21" />
-                      <Badge color="blue" size="small" count="12M" />
-                      <Badge color="pink" size="small" count="9F" />
-                    </Space>
-                  }
-                />
-                
-              </List.Item>
-            )}
-          />
-          </div>
-        </Card> */}
       </Layout.Sider>
     </Layout>
   );

@@ -22,7 +22,7 @@ export default function YearLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBgContainer, colorBorder },
+    token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
   return (
     <Layout>
@@ -30,7 +30,7 @@ export default function YearLayout({
         width={260}
         style={{
         
-          borderRight: `1px solid ${colorBorder}`,
+          borderRight: `1px solid ${colorBorderSecondary}`,
           paddingTop:20,
           background: colorBgContainer,
           height:`calc(100vh - 64px)`,
@@ -50,15 +50,9 @@ export default function YearLayout({
                 className:"uppercase", 
                 children: [
                   {
-                    key: "dashboard",
-                    label: "Dashboard",
-                    icon: <DashboardOutlined />,
-                    className:"normal-case"
-                  },
-                  {
                     key: "2",
-                    label: "Profile de l'université",
-                    icon: <ProfileOutlined />,
+                    label: "L'année académique",
+                    icon: <ClockCircleOutlined />,
                     className:"normal-case"
                   },
                   {
@@ -158,7 +152,7 @@ export default function YearLayout({
               },
             ]}
           />
-          <Layout.Footer style={{padding:"20px 16px" , borderTop:`1px solid ${colorBorder}`, background: colorBgContainer,}}>
+          <Layout.Footer style={{padding:"20px 16px" , borderTop:`1px solid ${colorBorderSecondary}`, background: colorBgContainer,}}>
           <Typography.Text type="secondary">© 2025 CI-UCBC.</Typography.Text>
           {/* <Typography.Text type="secondary" style={{display:"block"}}>Tous droits réservés.</Typography.Text> */}
           

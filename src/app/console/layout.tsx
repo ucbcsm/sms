@@ -7,11 +7,23 @@ import {
   CloseOutlined,
   LogoutOutlined,
   MenuOutlined,
-  SelectOutlined,
   TeamOutlined,
+  UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Layout, Select, Space, theme } from "antd";
+import {
+  Alert,
+  Avatar,
+  Button,
+  Divider,
+  Dropdown,
+  Layout,
+  Modal,
+  Space,
+  theme,
+  Typography,
+} from "antd";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ConsoleLayout({
@@ -20,8 +32,12 @@ export default function ConsoleLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBgContainer, colorBorder },
+    token: { colorBgContainer, colorBorderSecondary, colorPrimary },
   } = theme.useToken();
+
+  const { yearName } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   return (
     <Layout>
@@ -30,32 +46,50 @@ export default function ConsoleLayout({
           display: "flex",
           alignItems: "center",
           background: colorBgContainer,
-          borderBottom: `1px solid ${colorBorder}` 
+          borderBottom: `1px solid ${colorBorderSecondary}`,
+          paddingLeft: 0,
         }}
       >
-        <Space>
+        <Space style={{ background: colorPrimary }}>
+          <Button
+            type="primary"
+            icon={<CloseOutlined />}
+            style={{
+              boxShadow: "none",
+              height: 64,
+              width: 64,
+              borderRadius: 0,
+            }}
+            size="large"
+            onClick={() => setIsModalOpen(true)}
+          />
+          <Modal
+            title={`Voulez-vous quitter la console d'administration ${
+              yearName ?? ""
+            }? `}
+            open={isModalOpen}
+            onOk={() => {
+              router.push("/app");
+              setIsModalOpen(false);
+            }}
+            onCancel={() => setIsModalOpen(false)}
+            okButtonProps={{ style: { boxShadow: "none" } }}
+            cancelButtonProps={{ style: { boxShadow: "none" } }}
+          >
+            <Alert
+              message="Vous êtes sur le point de quitter la console d'administration. Assurez-vous d'avoir enregistré toutes vos modifications, car toute modification non sauvegardée sera perdue. Voulez-vous vraiment continuer ?"
+              type="warning"
+            />
+          </Modal>
+        </Space>
+        <Space style={{ paddingLeft: 16 }}>
           <Dropdown
             menu={{
               selectedKeys: ["1"],
               items: [
                 {
-                  key: "currentYear",
-                  label: "Annnée en cours",
-                  type: "group",
-                  children: [
-                    {
-                      key: `1`,
-                      label: `2023-2024`,
-                      icon: <SelectOutlined />,
-                    },
-                  ],
-                },
-                {
-                  type: "divider",
-                },
-                {
                   key: "global",
-                  label: "Accès avancé",
+                  label: "Menu",
                   type: "group",
                   children: [
                     {
@@ -64,19 +98,16 @@ export default function ConsoleLayout({
                       icon: <ClockCircleOutlined />,
                     },
                     {
+                      key: "/console/profile",
+                      label: "Profile de l'université",
+                      icon: <UnorderedListOutlined />,
+                    },
+                    {
                       key: "/console/users",
-                      label: "Utilisateurs",
+                      label: "Comptes utilisateurs",
                       icon: <TeamOutlined />,
                     },
                   ],
-                },
-                {
-                  type: "divider",
-                },
-                {
-                  key: "",
-                  label: "Quitter",
-                  icon: <CloseOutlined />,
                 },
               ],
               //   onClick: ({ key }) => {
@@ -92,12 +123,24 @@ export default function ConsoleLayout({
           >
             <Button icon={<MenuOutlined color="#fff" />} type="text" />
           </Dropdown>
-          <div className="Logo">Paramètres</div>
+          <Typography.Title level={5} style={{ marginBottom: 0 }}>
+            CI-UCBC
+          </Typography.Title>
+          <Divider type="vertical" style={{ display: yearName ? "block" : "none"}} />
+          <Typography.Text
+            type="secondary"
+            style={{ display: yearName ? "block" : "none" }}
+          >
+            Console d&apos;administration
+          </Typography.Text>
         </Space>
         <div className="flex-1" />
         <Space>
-          <YearSelector />
+          <div style={{ display: yearName ? "block" : "none" }}>
+            <YearSelector />
+          </div>
           <LanguageSwitcher />
+
           <Dropdown
             menu={{
               items: [

@@ -1,31 +1,23 @@
 "use client";
+
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
 import {
-  ApartmentOutlined,
-  CheckCircleOutlined,
   DashboardOutlined,
   DollarOutlined,
   LogoutOutlined,
-  MonitorOutlined,
+  NotificationOutlined,
   QuestionOutlined,
   SafetyCertificateOutlined,
   SettingOutlined,
+  TagsOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import {
-  Avatar,
-  Breadcrumb,
-  Button,
-  Dropdown,
-  Layout,
-  Menu,
-  Space,
-  theme,
-} from "antd";
+import { Avatar, Button, Dropdown, Layout, Menu, Space, theme, Typography } from "antd";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function AppLayout({
   children,
@@ -33,8 +25,10 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBgContainer, borderRadiusLG, colorPrimary, colorBorder },
+    token: { colorBgContainer, borderRadiusLG, colorPrimary, colorBorderSecondary },
   } = theme.useToken();
+
+  const router = useRouter();
 
   return (
     <Layout>
@@ -43,33 +37,50 @@ export default function AppLayout({
           display: "flex",
           alignItems: "center",
           background: colorBgContainer,
-          borderBottom: `1px solid ${colorBorder}`,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
+          paddingLeft: 32,
+          paddingRight: 32,
         }}
       >
-        <div className="Logo">CI-UCBC</div>
+        <Typography.Title level={5} style={{marginBottom:0}}>CI-UCBC</Typography.Title>
         <Menu
           mode="horizontal"
           theme="light"
           defaultSelectedKeys={["1"]}
           items={[
-            { key: "1", label: "Dashboard", icon: <DashboardOutlined /> },
-            { key: "2", label: "Etudiants", icon: <UsergroupAddOutlined /> },
-            { key: "3", label: "Enseigants", icon: <TeamOutlined /> },
-            { key: "4", label: "Finances", icon: <DollarOutlined /> },
-            { key: "5", label: "Jurys", icon: <SafetyCertificateOutlined /> },
+            { key: "/app", label: "Dashboard", icon: <DashboardOutlined /> },
+            {
+              key: "/app/students",
+              label: "Etudiants",
+              icon: <UsergroupAddOutlined />,
+            },
+            { key: "/app/staff", label: "Enseigants", icon: <TeamOutlined /> },
+            {
+              key: "/app/finances",
+              label: "Finances",
+              icon: <DollarOutlined />,
+            },
+            {
+              key: "/app/jurys",
+              label: "Jurys",
+              icon: <SafetyCertificateOutlined />,
+            },
             {
               key: "7",
               label: "Autres",
               children: [
-                { key: "8", label: "Evennements" },
-                { key: "9", label: "Annonces" },
+                { key: "/app/announcements", label: "Annonces", icon:<NotificationOutlined /> },
+                { key: "/app/rooms", label: "Salles de classe", icon:<TagsOutlined/> },
               ],
             },
           ]}
-          style={{ flex: 1, minWidth: 0 , borderBottom:0}}
+          style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
+          onClick={({ key }) => {
+            router.push(key);
+          }}
         />
         <Space>
-          <YearSelector/>
+          <YearSelector />
           <Link href="/console">
             <Button type="text" icon={<SettingOutlined />} />
           </Link>
@@ -99,7 +110,7 @@ export default function AppLayout({
               className=" text-inherit bg-transparent"
               icon={<UserOutlined />}
               src={undefined}
-              style={{background:colorPrimary}}
+              style={{ background: colorPrimary }}
             />
           </Dropdown>
         </Space>
