@@ -67,6 +67,7 @@ export default function ConsoleLayout({
             title={`Voulez-vous quitter la console d'administration ${
               yearName ?? ""
             }? `}
+            centered
             open={isModalOpen}
             onOk={() => {
               router.push("/app");
@@ -126,7 +127,10 @@ export default function ConsoleLayout({
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
             CI-UCBC
           </Typography.Title>
-          <Divider type="vertical" style={{ display: yearName ? "block" : "none"}} />
+          <Divider
+            type="vertical"
+            style={{ display: yearName ? "block" : "none" }}
+          />
           <Typography.Text
             type="secondary"
             style={{ display: yearName ? "block" : "none" }}

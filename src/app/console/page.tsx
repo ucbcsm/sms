@@ -23,6 +23,7 @@ import {
 import Dropdown from "antd/es/dropdown/dropdown";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { NewYearForm } from "./forms/newYear";
 
 export default function Page() {
   const {
@@ -72,14 +73,7 @@ export default function Page() {
                 </Space>
                 <div className="flex-1" />
                 <Space>
-                  <Button
-                    type="primary"
-                    icon={<PlusOutlined />}
-                    className="shadow-none"
-                    style={{ boxShadow: "none" }}
-                  >
-                    Nouvelle année
-                  </Button>
+                  <NewYearForm /> {/*  With Button to create a new academic year */}
                 </Space>
               </header>
             )}
@@ -104,9 +98,9 @@ export default function Page() {
                 title: "Status",
               },
               {
-                key: "action",
-                dataIndex: "action",
-                title: "Action",
+                key: "actions",
+                dataIndex: "actions",
+                title: "Actions",
                 render: (value, record, index) => {
                   return (
                     <Space size="middle">
