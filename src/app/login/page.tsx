@@ -12,14 +12,16 @@ import {
   theme,
   Typography,
 } from "antd";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+  const router = useRouter();
 
   const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+    router.push("/app");
   };
   return (
     <Layout>
@@ -70,9 +72,9 @@ export default function Page() {
                 
               >
                 <Form.Item
-                  name="username"
+                  name="email"
                   rules={[
-                    { required: true, message: "Please input your Username!" },
+                    { required: true, message: "Please input your Email or your matricule!" },
                   ]}
                 >
                   <Input

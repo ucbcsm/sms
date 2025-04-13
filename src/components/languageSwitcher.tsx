@@ -22,7 +22,7 @@ export function LanguageSwitcher() {
       }}
     >
       <Button
-        icon={lang.toUpperCase()}
+        icon={lang === "fr" ? <Flags.FrFlag className="w-4 h-4" /> : <Flags.GbFlag className="w-4 h-4" />}
         type="text"
         className=" uppercase"
         // style={{paddingLeft:2, paddingRight:2}}

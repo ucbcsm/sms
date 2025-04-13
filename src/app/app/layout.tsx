@@ -15,7 +15,15 @@ import {
   UsergroupAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Layout, Menu, Space, theme, Typography } from "antd";
+import {
+  Button,
+  Dropdown,
+  Layout,
+  Menu,
+  Space,
+  theme,
+  Typography,
+} from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -25,7 +33,11 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBgContainer, borderRadiusLG, colorPrimary, colorBorderSecondary },
+    token: {
+      colorBgContainer,
+      borderRadiusLG,
+      colorBorderSecondary,
+    },
   } = theme.useToken();
 
   const router = useRouter();
@@ -42,13 +54,15 @@ export default function AppLayout({
           paddingRight: 32,
         }}
       >
-        <Typography.Title level={5} style={{marginBottom:0}}>CI-UCBC</Typography.Title>
+        <Typography.Title level={5} style={{ marginBottom: 0 }}>
+          CI-UCBC
+        </Typography.Title>
         <Menu
           mode="horizontal"
           theme="light"
           defaultSelectedKeys={["1"]}
           items={[
-            { key: "/app", label: "Dashboard", icon: <DashboardOutlined /> },
+            { key: "/app", label: "Dashboard", icon: <DashboardOutlined />,  },
             {
               key: "/app/students",
               label: "Etudiants",
@@ -69,8 +83,16 @@ export default function AppLayout({
               key: "7",
               label: "Autres",
               children: [
-                { key: "/app/announcements", label: "Annonces", icon:<NotificationOutlined /> },
-                { key: "/app/rooms", label: "Salles de classe", icon:<TagsOutlined/> },
+                {
+                  key: "/app/announcements",
+                  label: "Annonces",
+                  icon: <NotificationOutlined />,
+                },
+                {
+                  key: "/app/rooms",
+                  label: "Salles de classe",
+                  icon: <TagsOutlined />,
+                },
               ],
             },
           ]}
@@ -81,13 +103,6 @@ export default function AppLayout({
         />
         <Space>
           <YearSelector />
-          <Link href="/console">
-            <Button type="text" icon={<SettingOutlined />} />
-          </Link>
-          <Link href="/app/support">
-            <Button type="text" icon={<QuestionOutlined />}></Button>
-          </Link>
-          <LanguageSwitcher />
           <Dropdown
             menu={{
               items: [
@@ -106,13 +121,15 @@ export default function AppLayout({
             trigger={["hover"]}
             destroyPopupOnHide={true}
           >
-            <Avatar
-              className=" text-inherit bg-transparent"
-              icon={<UserOutlined />}
-              src={undefined}
-              style={{ background: colorPrimary }}
-            />
+            <Button type="text" icon={<UserOutlined />} />
           </Dropdown>
+          <Link href="/console">
+            <Button type="text" icon={<SettingOutlined />} />
+          </Link>
+          <Link href="/app/support">
+            <Button type="text" icon={<QuestionOutlined />}></Button>
+          </Link>
+          <LanguageSwitcher />
         </Space>
       </Layout.Header>
       <Layout.Content>

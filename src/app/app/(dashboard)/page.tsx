@@ -1,5 +1,6 @@
 "use client";
 
+import { Palette } from "@/components/palette";
 import {
   ApartmentOutlined,
   AppstoreOutlined,
@@ -64,14 +65,15 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <Button
+            <Palette/>
+            {/* <Button
               icon={<UserAddOutlined />}
               // variant="dashed"
               type="dashed"
               style={{ boxShadow: "none" }}
             >
               Inscrire
-            </Button>
+            </Button> */}
           </Space>
         </Layout.Header>
         <Flex vertical={true} gap={24}>
@@ -246,9 +248,12 @@ export default function Page() {
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <Typography.Title level={5} className="pl-7 pt-3">
-          Promotions
-        </Typography.Title>
+        <Flex justify="space-between" align="center" className="px-7 pt-3" style={{paddingLeft:28, paddingRight:28, paddingTop:12}}>
+          <Typography.Title level={5} className="">
+            Promotions
+          </Typography.Title>
+          <Badge count={15} color="green" />
+        </Flex>
         <Tabs
           tabBarStyle={{ paddingLeft: 28 }}
           items={[

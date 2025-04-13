@@ -18,6 +18,7 @@ import {
 } from "antd";
 import { StaffList } from "./list";
 import Link from "next/link";
+import { Palette } from "@/components/palette";
 
 export default function Page() {
   const {
@@ -47,7 +48,9 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space></Space>
+          <Space>
+            <Palette/>
+          </Space>
         </Layout.Header>
         <Card
           tabBarExtraContent={

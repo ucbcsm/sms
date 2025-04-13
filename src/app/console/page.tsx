@@ -24,6 +24,7 @@ import Dropdown from "antd/es/dropdown/dropdown";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { NewYearForm } from "./forms/newYear";
+import { Palette } from "@/components/palette";
 
 export default function Page() {
   const {
@@ -46,7 +47,9 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space></Space>
+          <Space>
+            <Palette/>
+          </Space>
         </Layout.Header>
         <Card
           tabList={[

@@ -17,6 +17,7 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
+import { Palette } from "@/components/palette";
 
 export default function Page() {
   const {
@@ -42,10 +43,14 @@ export default function Page() {
           }}
         >
           <Space>
-            <Typography.Title level={3} style={{marginBottom:0}}>Etudiants</Typography.Title>
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Etudiants
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space></Space>
+          <Space>
+            <Palette/>
+          </Space>
         </Layout.Header>
         <Card
           tabBarExtraContent={

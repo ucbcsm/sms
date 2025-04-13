@@ -143,7 +143,6 @@ export default function ConsoleLayout({
           <div style={{ display: yearName ? "block" : "none" }}>
             <YearSelector />
           </div>
-          <LanguageSwitcher />
 
           <Dropdown
             menu={{
@@ -163,12 +162,9 @@ export default function ConsoleLayout({
             trigger={["hover"]}
             destroyPopupOnHide={true}
           >
-            <Avatar
-              className=" text-inherit bg-transparent"
-              icon={<UserOutlined />}
-              src={undefined}
-            />
+            <Button type="text" icon={<UserOutlined/>}/>
           </Dropdown>
+          <LanguageSwitcher />
         </Space>
       </Layout.Header>
       <Layout style={{}}>{children}</Layout>
