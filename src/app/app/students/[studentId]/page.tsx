@@ -1,13 +1,14 @@
 "use client";
 import { Palette } from "@/components/palette";
 import { getHSLColor } from "@/lib/utils";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, MoreOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
   Card,
   Col,
   Descriptions,
+  Dropdown,
   Flex,
   Layout,
   Progress,
@@ -43,7 +44,7 @@ export default function Page() {
         >
           <Space>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Nom complet de l'étudiant
+              Nom complet (étudiant)
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -86,7 +87,24 @@ export default function Page() {
               label: "Discipline",
             },
           ]}
-          activeTabKey="overview"
+          defaultActiveTabKey="overview"
+          tabBarExtraContent={
+            <Dropdown
+              menu={{
+              items: [
+                { key: "form", label: "Fiche d'inscription" },
+                { key: "card", label: "Carte d'étudiant" },
+                { key: "transcript", label: "Relevé de notes" },
+                { key: "certificate", label: "Certificat de scolarité" },
+                { key: "schedule", label: "Emploi du temps" },
+                { key: "attendance", label: "Rapport de présence" },
+                { key: "payment", label: "Historique des paiements" },
+              ],
+              }}
+            >
+              <Button type="text" icon={<MoreOutlined />} />
+            </Dropdown>
+          }
         >
           <Row gutter={24}>
             <Col span={18}>

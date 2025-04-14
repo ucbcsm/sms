@@ -19,6 +19,7 @@ import {
   TableColumnType,
   Tag,
 } from "antd";
+import { useRouter } from "next/navigation";
 
 type TeacherType = {
   id: string | number;
@@ -122,6 +123,7 @@ const data: TeacherType[] = Array.from({ length: 100 }, (_, index) => {
 });
 
 export function StaffList() {
+  const router = useRouter();
   return (
     <Table
       title={() => (
@@ -137,7 +139,11 @@ export function StaffList() {
             <Dropdown
               menu={{
                 items: [
-                  { key: "old", label: "Importer parmi les anciens", icon: <UploadOutlined /> },
+                  {
+                    key: "old",
+                    label: "Importer parmi les anciens",
+                    icon: <UploadOutlined />,
+                  },
                   {
                     key: "new",
                     label: "Un nouveau enseignant",
@@ -195,6 +201,11 @@ export function StaffList() {
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
       }}
+      onRow={(record) => ({
+        onClick: () => {
+          router.push(`/app/staff/${record.id}`); // Navigate to the teacher details page
+        },
+      })}
     />
   );
 }
