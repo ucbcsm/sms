@@ -66,14 +66,6 @@ export default function Page() {
           <div className="flex-1" />
           <Space>
             <Palette/>
-            {/* <Button
-              icon={<UserAddOutlined />}
-              // variant="dashed"
-              type="dashed"
-              style={{ boxShadow: "none" }}
-            >
-              Inscrire
-            </Button> */}
           </Space>
         </Layout.Header>
         <Flex vertical={true} gap={24}>
@@ -236,11 +228,15 @@ export default function Page() {
           </Card>
         </Flex>
         <Layout.Footer
-          style={{ background: colorBgContainer, padding: " 24px 0" }}
+          style={{ display:"flex", background: colorBgContainer, padding: " 24px 0" }}
         >
           <Typography.Text type="secondary">
             © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
           </Typography.Text>
+          <div className="flex-1" />
+          <Space>
+            <Palette/>
+          </Space>
         </Layout.Footer>
       </Layout.Content>
       <Layout.Sider

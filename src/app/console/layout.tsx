@@ -80,6 +80,10 @@ export default function ConsoleLayout({
             <Alert
               message="Vous êtes sur le point de quitter la console d'administration. Assurez-vous d'avoir enregistré toutes vos modifications, car toute modification non sauvegardée sera perdue. Voulez-vous vraiment continuer ?"
               type="warning"
+              style={{
+                marginTop:16,
+                marginBottom: 32,
+              border:0}}
             />
           </Modal>
         </Space>
@@ -97,11 +101,6 @@ export default function ConsoleLayout({
                       key: "/console",
                       label: "Années academiques",
                       icon: <ClockCircleOutlined />,
-                    },
-                    {
-                      key: "/console/profile",
-                      label: "Profile de l'université",
-                      icon: <UnorderedListOutlined />,
                     },
                     {
                       key: "/console/users",

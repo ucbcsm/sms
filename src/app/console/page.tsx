@@ -6,12 +6,14 @@ import {
   DeleteOutlined,
   EditOutlined,
   MoreOutlined,
-  PlusOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import {
+  Avatar,
   Button,
   Card,
+  Descriptions,
+  Flex,
   Input,
   Layout,
   Radio,
@@ -28,13 +30,17 @@ import { Palette } from "@/components/palette";
 
 export default function Page() {
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
   const router = useRouter();
   return (
     <Layout>
       <Layout.Content
-        style={{ padding: "0 32px 0 32px", height: "calc(100vh - 64px)", overflowY: "auto" }}
+        style={{
+          padding: "0 32px 0 32px",
+          height: "calc(100vh - 64px)",
+          overflowY: "auto",
+        }}
         className="px-4 md:px-8 bg-white"
       >
         <Layout.Header
@@ -48,13 +54,12 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette/>
+            <Palette />
           </Space>
         </Layout.Header>
         <Card
           tabList={[
             { key: "years", label: "Années academiques" },
-            { key: "profile", label: "Profile de l'université" },
             { key: "users", label: "Comptes utilisateurs" },
           ]}
           tabBarExtraContent={
@@ -76,19 +81,20 @@ export default function Page() {
                 </Space>
                 <div className="flex-1" />
                 <Space>
-                  <NewYearForm /> {/*  With Button to create a new academic year */}
+                  <NewYearForm />{" "}
+                  {/*  With Button to create a new academic year */}
                 </Space>
               </header>
             )}
             columns={[
-              { key: "name", dataIndex: "name", title: "Nom", render:(value, record, index)=>{
-                return (
-                  <Link href={`/console/${value}`}>
-                    {value}
-                  </Link>
-                );
-                
-              }, },
+              {
+                key: "name",
+                dataIndex: "name",
+                title: "Nom",
+                render: (value, record, index) => {
+                  return <Link href={`/console/${value}`}>{value}</Link>;
+                },
+              },
               {
                 key: "startDate",
                 dataIndex: "startDate",
@@ -110,7 +116,9 @@ export default function Page() {
                       <Button
                         type="link"
                         title="Ajouter un membre du bureau"
-                        onClick={() => {router.push(`/console/${record.name}`);}}
+                        onClick={() => {
+                          router.push(`/console/${record.name}`);
+                        }}
                       >
                         Gérer
                       </Button>
@@ -134,17 +142,16 @@ export default function Page() {
                               danger: true,
                             },
                           ],
-                        }}>
+                        }}
+                      >
                         <Button
                           type="text"
                           icon={<MoreOutlined />}
                           title="Ajouter un membre du bureau"
                         />
-                          
-                        </Dropdown>
+                      </Dropdown>
                     </Space>
                   );
-
                 },
                 width: 150,
               },
@@ -268,13 +275,150 @@ export default function Page() {
           />
         </Card>
         <Layout.Footer
-          style={{ background: colorBgContainer, padding: " 24px 0" }}
+          style={{
+            display: "flex",
+            background: colorBgContainer,
+            padding: " 24px 0",
+          }}
         >
           <Typography.Text type="secondary">
             © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
           </Typography.Text>
+          <div className="flex-1" />
+          <Space>
+            <Palette />
+          </Space>
         </Layout.Footer>
       </Layout.Content>
+      <Layout.Sider
+        width={280}
+        theme="light"
+        style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
+      >
+        <Flex
+          justify="space-between"
+          align="center"
+          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
+        >
+          <Typography.Title level={5} className="">
+            Profile de l'université
+          </Typography.Title>
+          <Button
+              type="link"
+              icon={<EditOutlined />}
+              title="Modifier le profile"
+            />
+             
+        </Flex>
+        <Space
+          direction="vertical"
+          style={{
+            padding: "40px 0 28px 28px",
+            width: "100%",
+            height: "calc(100vh - 108px)",
+            overflowY: "auto",
+          }}
+        >
+          <div style={{ textAlign: "center", marginBottom: 28 }}>
+            <Avatar
+              src="https://images.pexels.com/photos/170809/pexels-photo-170809.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              alt="Logo"
+              style={{
+                marginBottom: 28,
+              }}
+              size={100}
+              shape="square"
+            />
+            <Typography.Title level={4}>UCBC</Typography.Title>
+           
+          </div>
+          <Descriptions
+            title="Détails"
+            column={1}
+            items={[
+              {
+                label: "Sigle",
+                children: "CI-UCBC",
+              },
+              {
+                label: "Nom",
+                children: "Université Chrétienne Bilingue du Congo",
+              },
+              {
+                label:"Devise",
+                children: "Savoir et Foi",
+              },
+              {
+                label: "Pays",
+                children: "République Démocratique du Congo",
+              },
+              {
+                label: "Province",
+                children: "Nord-Kivu",
+              },
+              {
+                label: "Ville",
+                children: "Beni",
+              },
+              {
+                label: "Adresse",
+                children: "Beni, Nord-Kivu, République Démocratique du Congo",
+              },
+              {
+                label: "Téléphone",
+                children: "+243 999 123 456",
+              },
+              {
+                label: "Email",
+                children: "contact@ucbc.cd",
+              },
+              {
+                label: "Site Web",
+                children: (
+                  <Link href="https://www.ucbc.cd" target="_blank">
+                    www.ucbc.cd
+                  </Link>
+                ),
+              },
+              {
+                label: "Année de création",
+                children: "2007",
+              },
+              {
+                label: "Statut",
+                children: "Privée",
+              },
+              {
+                label: "Accréditation",
+                children: "Ministère de l'Enseignement Supérieur et Universitaire",
+              },
+              {
+                label: "Type d'établissement",
+                children: "Université",
+              },
+              {
+                label: "Langue d'enseignement",
+                children: "Français, Anglais",
+              },
+              
+              {
+                label: "Mission",
+                children:
+                  "Former des leaders chrétiens compétents et intègres pour transformer la société.",
+              },
+              {
+                label: "Description",
+                children:
+                  "L'Université Chrétienne Bilingue du Congo (UCBC) est une institution académique qui vise à offrir une éducation de qualité tout en promouvant des valeurs chrétiennes pour le développement durable.",
+              },
+              {
+                label: "Organisation mère",
+                children: "Congo Initiative",
+              },
+            ]}
+          />
+        </Space>
+      </Layout.Sider>
     </Layout>
   );
 }

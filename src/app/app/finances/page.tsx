@@ -77,11 +77,15 @@ export default function Page() {
           <StaffList />
         </Card>
         <Layout.Footer
-          style={{ background: colorBgContainer, padding: " 24px 0" }}
+          style={{ display:"flex", background: colorBgContainer, padding: " 24px 0" }}
         >
           <Typography.Text type="secondary">
             © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
           </Typography.Text>
+          <div className="flex-1" />
+          <Space>
+            <Palette/>
+          </Space>
         </Layout.Footer>
       </Layout.Content>
       <Layout.Sider
