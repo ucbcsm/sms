@@ -1,4 +1,5 @@
 "use client";
+import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
 import { getHSLColor } from "@/lib/utils";
 import { EditOutlined, MoreOutlined } from "@ant-design/icons";
@@ -43,6 +44,7 @@ export default function Page() {
           }}
         >
           <Space>
+            <BackButton/>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
               Nom complet de (enseignant)
             </Typography.Title>

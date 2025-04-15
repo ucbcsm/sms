@@ -10,15 +10,14 @@ import {
   theme,
   Typography,
 } from "antd";
-import { StudentsList } from "./list";
 import {
   AppstoreOutlined,
   PlusCircleOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import Link from "next/link";
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
+import Link from "next/link";
 
 export default function Page() {
   const {
@@ -43,16 +42,15 @@ export default function Page() {
             padding: 0,
           }}
         >
-          
           <Space>
-          <BackButton/>
+            <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Etudiants
+              Nom du jury d&apos;évaluation
             </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette/>
+            <Palette />
           </Space>
         </Layout.Header>
         <Card
@@ -66,27 +64,22 @@ export default function Page() {
               </Radio.Button>
             </Radio.Group>
           }
-          tabList={[
-            {
-              key: "all",
-              label: "Tous",
-            },
-            { key: "licence", label: "Licence" },
-            { key: "master", label: "Master" },
-            { key: "doctorat", label: "Doctorat" },
-          ]}
         >
-          <StudentsList />
+          {/* Jury contents */}
         </Card>
         <Layout.Footer
-          style={{ display:"flex", background: colorBgContainer, padding: " 24px 0" }}
+          style={{
+            display: "flex",
+            background: colorBgContainer,
+            padding: " 24px 0",
+          }}
         >
           <Typography.Text type="secondary">
             © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>
-            <Palette/>
+            <Palette />
           </Space>
         </Layout.Footer>
       </Layout.Content>
@@ -97,13 +90,13 @@ export default function Page() {
       >
         <Card
           variant="borderless"
-          title="Bureau d'étudiants"
+          title="Membres du jury"
           style={{ boxShadow: "none" }}
           extra={
             <Button
               type="link"
               icon={<PlusCircleOutlined />}
-              title="Ajouter un membre du bureau"
+              title="Ajouter un membre du jury"
             >
               Ajouter
             </Button>
@@ -114,27 +107,27 @@ export default function Page() {
               {
                 id: "1",
                 name: "Kahindo Lwanzo Alfred",
-                role: "Finance Director",
+                role: "Président du Jury",
               },
               {
                 id: "2",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Accounting Manager",
+                name: "Mumbere Katembo Jean",
+                role: "Secrétaire",
               },
               {
                 id: "3",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Budget Officer",
+                name: "Kasereka Mwamba Paul",
+                role: "Membre",
               },
               {
                 id: "4",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Treasurer",
+                name: "Muhindo Kyavaghendi Sarah",
+                role: "Membre",
               },
               {
                 id: "5",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Financial Analyst",
+                name: "Kavira Bahati Marie",
+                role: "Observateur",
               },
             ]}
             renderItem={(item, index) => (

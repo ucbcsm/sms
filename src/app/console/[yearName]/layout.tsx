@@ -7,7 +7,6 @@ import {
   ClockCircleOutlined,
   DashboardOutlined,
   DollarCircleOutlined,
-  ProfileOutlined,
   ReadOutlined,
   SafetyCertificateOutlined,
   TagsOutlined,
@@ -15,6 +14,7 @@ import {
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, theme, Typography } from "antd";
+import { useParams, useRouter } from "next/navigation";
 
 export default function YearLayout({
   children,
@@ -24,42 +24,43 @@ export default function YearLayout({
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+  const { yearName } = useParams();
+  const router = useRouter();
   return (
     <Layout>
       <Layout.Sider
         width={260}
         style={{
-        
           borderRight: `1px solid ${colorBorderSecondary}`,
-          paddingTop:20,
+          paddingTop: 20,
           background: colorBgContainer,
-          height:`calc(100vh - 64px)`,
-          overflow:"auto"
+          height: `calc(100vh - 64px)`,
+          overflow: "auto",
         }}
       >
-        <Layout style={{  }}>
+        <Layout style={{}}>
           <Menu
             mode="inline"
             theme="light"
-            style={{ height: "100%", borderRight: 0, }}
+            style={{ height: "100%", borderRight: 0 }}
             items={[
               {
-                key: "0",
+                key: `/console/${yearName}`,
                 label: "Gestion Générale",
                 type: "group",
-                className:"uppercase", 
+                className: "uppercase",
                 children: [
                   {
-                    key: "2",
+                    key: `/console/${yearName}`,
                     label: "L'année académique",
                     icon: <ClockCircleOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                   {
-                    key: "3",
+                    key: `/console/${yearName}/tracks`,
                     label: "Filières et promotions",
                     icon: <BranchesOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                 ],
               },
@@ -68,25 +69,25 @@ export default function YearLayout({
                 key: "courseandtime",
                 label: "Gestion des cours et du temps",
                 type: "group",
-                className:"uppercase",
+                className: "uppercase",
                 children: [
                   {
                     key: "course",
                     label: "Cours et programmes",
                     icon: <ReadOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                   {
                     key: "4",
                     label: "Périodes ou sessions",
                     icon: <ClockCircleOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                   {
                     key: "jurys",
                     label: "Jurys d'évaluations",
                     icon: <SafetyCertificateOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                 ],
               },
@@ -94,25 +95,25 @@ export default function YearLayout({
                 key: "finances",
                 label: "Gestion des frais",
                 type: "group",
-                className:"uppercase",
+                className: "uppercase",
                 children: [
                   {
                     key: "fees",
                     label: "Frais",
                     icon: <BorderOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                   {
                     key: "paymentmode",
                     label: "Modes de paiement",
                     icon: <ArrowRightOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                   {
                     key: "",
                     label: "Monnaies",
                     icon: <DollarCircleOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                 ],
               },
@@ -120,13 +121,13 @@ export default function YearLayout({
                 key: "classrooms",
                 label: "Gestion des salles de classe",
                 type: "group",
-                className:"uppercase",
+                className: "uppercase",
                 children: [
                   {
                     key: "class",
                     label: "Salles de classe",
                     icon: <TagsOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                 ],
               },
@@ -134,32 +135,40 @@ export default function YearLayout({
                 key: "users",
                 label: "Gestion des utilisateurs",
                 type: "group",
-                className:"uppercase",
+                className: "uppercase",
                 children: [
                   {
                     key: "tearchers",
                     label: "Enseignants (Staff)",
                     icon: <TeamOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                   {
                     key: "students",
                     label: "Etudiants",
                     icon: <UsergroupAddOutlined />,
-                    className:"normal-case"
+                    className: "normal-case",
                   },
                 ],
               },
             ]}
+            onClick={({ key }) => {
+              router.push(key);
+            }}
           />
-          <Layout.Footer style={{padding:"20px 16px" , borderTop:`1px solid ${colorBorderSecondary}`, background: colorBgContainer,}}>
-          <Typography.Text type="secondary">© 2025 CI-UCBC.</Typography.Text>
-          {/* <Typography.Text type="secondary" style={{display:"block"}}>Tous droits réservés.</Typography.Text> */}
-          
+          <Layout.Footer
+            style={{
+              padding: "20px 16px",
+              borderTop: `1px solid ${colorBorderSecondary}`,
+              background: colorBgContainer,
+            }}
+          >
+            <Typography.Text type="secondary">© 2025 CI-UCBC.</Typography.Text>
+            {/* <Typography.Text type="secondary" style={{display:"block"}}>Tous droits réservés.</Typography.Text> */}
           </Layout.Footer>
         </Layout>
       </Layout.Sider>
-      <Layout style={{ padding: "0 24px 24px", background:colorBgContainer }}>{children}</Layout>
+      <Layout>{children}</Layout>
     </Layout>
   );
 }

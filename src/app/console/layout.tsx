@@ -8,12 +8,10 @@ import {
   LogoutOutlined,
   MenuOutlined,
   TeamOutlined,
-  UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import {
   Alert,
-  Avatar,
   Button,
   Divider,
   Dropdown,
@@ -108,15 +106,14 @@ export default function ConsoleLayout({
                       icon: <TeamOutlined />,
                     },
                   ],
+                  
                 },
               ],
-              //   onClick: ({ key }) => {
-              //     if (key === "") {
-              //       push("/app");
-              //     } else {
-              //       push(key);
-              //     }
-              //   },
+                onClick: ({ key }) => {
+                
+                    router.push(key);
+                  
+                },
             }}
             trigger={["hover"]}
             destroyPopupOnHide={true}
@@ -166,7 +163,7 @@ export default function ConsoleLayout({
           <LanguageSwitcher />
         </Space>
       </Layout.Header>
-      <Layout style={{}}>{children}</Layout>
+      <div >{children}</div>
     </Layout>
   );
 }

@@ -1,8 +1,17 @@
 "use client";
+
+import {
+  AppstoreOutlined,
+  MoreOutlined,
+  PlusCircleOutlined,
+  PlusOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
 import {
   Avatar,
   Button,
   Card,
+  Dropdown,
   Layout,
   List,
   Radio,
@@ -10,20 +19,15 @@ import {
   theme,
   Typography,
 } from "antd";
-import { StudentsList } from "./list";
-import {
-  AppstoreOutlined,
-  PlusCircleOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
-import Link from "next/link";
+
 import { Palette } from "@/components/palette";
-import BackButton from "@/components/backButton";
+import Link from "next/link";
 
 export default function Page() {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+
   return (
     <Layout>
       <Layout.Content
@@ -43,53 +47,70 @@ export default function Page() {
             padding: 0,
           }}
         >
-          
           <Space>
-          <BackButton/>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Etudiants
+              Gestion des filières
             </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette/>
+            <Palette />
           </Space>
         </Layout.Header>
         <Card
           tabBarExtraContent={
-            <Radio.Group>
-              <Radio.Button value="grid">
-                <AppstoreOutlined />
-              </Radio.Button>
-              <Radio.Button value="list">
-                <UnorderedListOutlined />
-              </Radio.Button>
-            </Radio.Group>
+            <Space>
+              <Button
+                icon={<PlusOutlined />}
+                type="primary"
+                title="Ajouter une filière"
+                style={{ boxShadow: "none" }}
+              >
+                Ajouter une filière
+              </Button>
+              <Radio.Group>
+                <Radio.Button value="grid">
+                  <AppstoreOutlined />
+                </Radio.Button>
+                <Radio.Button value="list">
+                  <UnorderedListOutlined />
+                </Radio.Button>
+              </Radio.Group>
+            </Space>
           }
           tabList={[
             {
               key: "all",
-              label: "Tous",
+              label: "Toutes",
             },
-            { key: "licence", label: "Licence" },
-            { key: "master", label: "Master" },
-            { key: "doctorat", label: "Doctorat" },
+            { key: "domains", label: "Domaines" },
+            { key: "faculties", label: "Facultés" },
+            { key: "departments", label: "Départements" },
+            { key: "specializations", label: "Spécialisations" },
           ]}
         >
-          <StudentsList />
+          {/* Contenu de l'onglet actif */}
+          <Typography.Text>
+          Contenu de l&apos;onglet actif 
+          </Typography.Text>
         </Card>
         <Layout.Footer
-          style={{ display:"flex", background: colorBgContainer, padding: " 24px 0" }}
+          style={{
+            display: "flex",
+            background: colorBgContainer,
+            padding: "24px 0",
+          }}
         >
           <Typography.Text type="secondary">
             © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>
-            <Palette/>
+            <Palette />
           </Space>
         </Layout.Footer>
       </Layout.Content>
+
       <Layout.Sider
         width={280}
         theme="light"
@@ -97,13 +118,13 @@ export default function Page() {
       >
         <Card
           variant="borderless"
-          title="Bureau d'étudiants"
-          style={{ boxShadow: "none" }}
+          title="Promotions (Classes)"
+          style={{ boxShadow: "none"}}
           extra={
             <Button
               type="link"
               icon={<PlusCircleOutlined />}
-              title="Ajouter un membre du bureau"
+              title="Ajouter une promotion"
             >
               Ajouter
             </Button>
@@ -113,40 +134,43 @@ export default function Page() {
             dataSource={[
               {
                 id: "1",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Finance Director",
+                name: "Informatique",
+                type: "Département",
               },
               {
                 id: "2",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Accounting Manager",
+                name: "Génie Civil",
+                type: "Département",
               },
               {
                 id: "3",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Budget Officer",
+                name: "Sciences de Gestion",
+                type: "Faculté",
               },
               {
                 id: "4",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Treasurer",
+                name: "Sciences et Technologies",
+                type: "Département",
               },
               {
                 id: "5",
-                name: "Kahindo Lwanzo Alfred",
-                role: "Financial Analyst",
+                name: "Réseaux et Télécoms",
+                type: "Spécialisation",
               },
             ]}
             renderItem={(item, index) => (
-              <List.Item key={item.id}>
+              <List.Item
+                key={item.id}
+                extra={
+                  <Dropdown menu={{ items: [{key:"1", label:"Action 1"}, {key:"2", label:"Action 2"}, {key:"3", label:"Action 3"}] }}>
+                    <Button icon={<MoreOutlined />} type="text" />
+                  </Dropdown>
+                }
+              >
                 <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-                    />
-                  }
+                  avatar={<Avatar>L{index}</Avatar>}
                   title={<Link href="#">{item.name}</Link>}
-                  description={item.role}
+                  description={item.type}
                 />
               </List.Item>
             )}

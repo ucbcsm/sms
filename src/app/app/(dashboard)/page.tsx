@@ -4,13 +4,10 @@ import { Palette } from "@/components/palette";
 import {
   ApartmentOutlined,
   AppstoreOutlined,
-  ArrowRightOutlined,
-  BranchesOutlined,
   MoreOutlined,
   RightOutlined,
   TeamOutlined,
   UnorderedListOutlined,
-  UserAddOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import {
@@ -172,7 +169,7 @@ export default function Page() {
               {[1, 2, 3, 4].map((index) => (
                 <Col key={index} span={8}>
                   <Card
-                    title={`Faculté ${index}`}
+                    title={ <Link href={`/app/track/${index}`}>Faculté {index}</Link>}
                     extra={
                       <Dropdown
                         menu={{
@@ -207,7 +204,7 @@ export default function Page() {
                       <Col span={12}>
                         <Statistic
                           value={5}
-                          title="Membres bureau"
+                          title="Personnel"
                           prefix={<UsergroupAddOutlined />}
                           // valueStyle={{ color: '#cf1322' }}
                         />
@@ -281,7 +278,7 @@ export default function Page() {
                         extra={<Button type="text" icon={<RightOutlined />} />}
                       >
                         <List.Item.Meta
-                          title={<Link href="">{item.name}</Link>}
+                          title={<Link href={`/app/class/${item.id}`}>{item.name}</Link>}
                           description={
                             <Space>
                               <Badge

@@ -19,6 +19,7 @@ import {
 import { StaffList } from "./list";
 import Link from "next/link";
 import { Palette } from "@/components/palette";
+import BackButton from "@/components/backButton";
 
 export default function Page() {
   const {
@@ -44,6 +45,7 @@ export default function Page() {
           }}
         >
           <Space>
+            <BackButton/>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
               Enseignants
             </Typography.Title>

@@ -1,4 +1,5 @@
 "use client";
+import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
 import { getHSLColor } from "@/lib/utils";
 import { EditOutlined, MoreOutlined } from "@ant-design/icons";
@@ -43,6 +44,7 @@ export default function Page() {
           }}
         >
           <Space>
+            <BackButton/>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
               Nom complet (étudiant)
             </Typography.Title>
@@ -96,9 +98,7 @@ export default function Page() {
                 { key: "card", label: "Carte d'étudiant" },
                 { key: "transcript", label: "Relevé de notes" },
                 { key: "certificate", label: "Certificat de scolarité" },
-                { key: "schedule", label: "Emploi du temps" },
-                { key: "attendance", label: "Rapport de présence" },
-                { key: "payment", label: "Historique des paiements" },
+                { key: "schedule", label: "Attestation de fréquentation" },
               ],
               }}
             >
@@ -269,8 +269,8 @@ export default function Page() {
             items={[
               {
                 key: "sex",
-                label: "Genre",
-                children: "Homme",
+                label: "Sexe",
+                children: "Masculin",
               },
               {
                 key: "name",

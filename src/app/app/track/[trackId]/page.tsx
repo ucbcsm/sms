@@ -4,19 +4,21 @@ import {
   AppstoreOutlined,
   EditOutlined,
   MoreOutlined,
+  PlusCircleOutlined,
   PlusOutlined,
+  RightOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import {
+  Avatar,
   Button,
   Card,
   Dropdown,
   Layout,
   List,
-  Radio ,
-  Space ,
+  Radio,
+  Space,
   theme,
-  Typography as AntTypography,
   Typography,
 } from "antd";
 
@@ -51,7 +53,7 @@ export default function Page() {
           <Space>
             <BackButton/>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Nom de la promotion ou classe
+              Nom de la filière (Faculté ou Département)
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -71,7 +73,7 @@ export default function Page() {
               <Button
                 type="dashed"
                 icon={<EditOutlined />}
-                title="Modifier la promotion"
+                title="Modifier la filière"
               >
                 Modifier
               </Button>
@@ -101,8 +103,10 @@ export default function Page() {
               key: "details",
               label: "Détails",
             },
-            { key: "students", label: "Étudiants" },
+            { key: "programs", label: "Programmes" },
             { key: "courses", label: "Cours" },
+            { key: "students", label: "Étudiants" },
+            { key: "staff", label: "Personnel" },
             { key: "teachers", label: "Enseignants" },
           ]}
           defaultActiveTabKey="details"
@@ -110,15 +114,25 @@ export default function Page() {
           <div>
             <List
               dataSource={[
-                { label: "Nom", value: "Nom de la promotion ou classe" },
-                { label: "Code de la promotion", value: "PROM123" },
-                { label: "Filière", value: "Informatique" },
-                { label: "Année académique", value: "2023-2024" },
-                { label: "Nombre d'étudiants", value: "45" },
-                { label: "Nombre de filles", value: "25 (55.56%)" },
-                { label: "Nombre de garçons", value: "20 (44.44%)" },
-                { label: "Responsable", value: "Mme. Jane Doe" },
-                { label: "Date de création", value: "2018" },
+                { label: "Nom", value: "Nom de la filière" },
+                { label: "Code de la filière", value: "FIL123" },
+                {
+                  label: "Type",
+                  value: "Faculté ou Département ou Spécialisation",
+                },
+                { label: "Filière parent", value: "Sciences et Technologies" },
+                { label: "Nombre de filières enfants", value: "5" },
+                { label: "Nombre d'étudiants", value: "120" },
+                { 
+                  label: "Nombre de filles", 
+                  value: "70 (58.33%)" 
+                },
+                { 
+                  label: "Nombre de garçons", 
+                  value: "50 (41.67%)" 
+                },
+                { label: "Responsable", value: "Dr. Alfred L." },
+                { label: "Année de création", value: "2005" },
               ]}
               renderItem={(item) => (
                 <List.Item>
@@ -126,6 +140,7 @@ export default function Page() {
                 </List.Item>
               )}
             />
+          
           </div>
         </Card>
         <Layout.Footer
@@ -151,39 +166,54 @@ export default function Page() {
       >
         <Card
           variant="borderless"
-          title="Statistiques"
+          title="Filières enfant"
           style={{ boxShadow: "none" }}
+          extra={
+            <Button
+              type="link"
+              icon={<PlusCircleOutlined />}
+              title="Ajouter une filière enfant"
+            >
+              Ajouter
+            </Button>
+          }
         >
           <List
             dataSource={[
-              { label: "Taux de réussite", value: "85%" },
-              { label: "Taux d'abandon", value: "5%" },
-              { label: "Nombre de cours", value: "12" },
-              { label: "Nombre d'enseignants", value: "8" },
-              { label: "Projets réalisés", value: "3" },
+              {
+                id: "1",
+                name: "Informatique",
+                type: "Département",
+              },
+              {
+                id: "2",
+                name: "Génie Civil",
+                type: "Département",
+              },
+              {
+                id: "3",
+                name: "Sciences de Gestion",
+                type: "Faculté",
+              },
+              {
+                id: "4",
+                name: "Sciences et Technologies",
+                type: "Domaine",
+              },
+              {
+                id: "5",
+                name: "Réseaux et Télécoms",
+                type: "Spécialisation",
+              },
             ]}
-            renderItem={(item) => (
-              <List.Item>
-                <List.Item.Meta title={item.label} description={item.value} />
-              </List.Item>
-            )}
-          />
-        </Card>
-        <Card
-          variant="borderless"
-          title="Ressources"
-          style={{ boxShadow: "none", marginTop: 16 }}
-        >
-          <List
-            dataSource={[
-              { label: "Guide de la promotion", link: "/guide" },
-              { label: "Règlement intérieur", link: "/reglement" },
-              { label: "Planning des cours", link: "/planning" },
-            ]}
-            renderItem={(item) => (
-              <List.Item>
+            renderItem={(item, index) => (
+              <List.Item
+                key={item.id}
+                extra={<Button type="text" icon={<RightOutlined />} />}
+              >
                 <List.Item.Meta
-                  title={<Link href={item.link}>{item.label}</Link>}
+                  title={<Link href="#">{item.name}</Link>}
+                  description={item.type}
                 />
               </List.Item>
             )}
