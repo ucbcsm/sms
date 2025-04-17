@@ -87,7 +87,10 @@ export default function Page() {
             {
               key: "discipline",
               label: "Discipline",
-            },
+            },{
+              key:"path",
+              label:"Parcours académique"
+            }
           ]}
           defaultActiveTabKey="overview"
           tabBarExtraContent={

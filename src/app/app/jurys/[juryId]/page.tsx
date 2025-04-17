@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Card,
+  Dropdown,
   Layout,
   List,
   Radio,
@@ -12,6 +13,9 @@ import {
 } from "antd";
 import {
   AppstoreOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  MoreOutlined,
   PlusCircleOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
@@ -131,7 +135,16 @@ export default function Page() {
               },
             ]}
             renderItem={(item, index) => (
-              <List.Item key={item.id}>
+              <List.Item key={item.id} extra={<Dropdown
+                menu={{
+                  items: [
+                    { key: "1", label: "Modifier", icon:<EditOutlined/> },
+                    { key: "2", label: "Retirer", danger: true, icon:<DeleteOutlined/> },
+                  ],
+                }}
+              >
+                <Button icon={<MoreOutlined />} type="text" />
+              </Dropdown>}>
                 <List.Item.Meta
                   avatar={
                     <Avatar

@@ -2,6 +2,7 @@
 
 import {
   AppstoreOutlined,
+  DeleteOutlined,
   EditOutlined,
   MoreOutlined,
   PlusCircleOutlined,
@@ -26,6 +27,7 @@ import { Palette } from "@/components/palette";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { getHSLColor } from "@/lib/utils";
+import BackButton from "@/components/backButton";
 
 export default function Page() {
   const {
@@ -53,8 +55,9 @@ export default function Page() {
           }}
         >
           <Space>
+            <BackButton/>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Détails de l'année académique
+              Détails de l&apos;année
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -63,19 +66,19 @@ export default function Page() {
           </Space>
         </Layout.Header>
         <Card
-          // title={<Descriptions items={[{key:"name",label:"Nom", children:yearName}]}/>}
-          // extra={
-          //   <Space>
-          //     <Button
-          //       icon={<EditOutlined />}
-          //       type="primary"
-          //       title="Ajouter un détail"
-          //       style={{ boxShadow: "none" }}
-          //     >
-          //       Modifier
-          //     </Button>
-          //   </Space>
-          // }
+        // title={<Descriptions items={[{key:"name",label:"Nom", children:yearName}]}/>}
+        // extra={
+        //   <Space>
+        //     <Button
+        //       icon={<EditOutlined />}
+        //       type="primary"
+        //       title="Ajouter un détail"
+        //       style={{ boxShadow: "none" }}
+        //     >
+        //       Modifier
+        //     </Button>
+        //   </Space>
+        // }
         >
           <List
             dataSource={[
@@ -87,12 +90,16 @@ export default function Page() {
               {
                 id: "1",
                 name: "Date de début",
-                description: `${new Intl.DateTimeFormat("FR",{dateStyle:"full"}).format(new Date())}`,
+                description: `${new Intl.DateTimeFormat("FR", {
+                  dateStyle: "full",
+                }).format(new Date())}`,
               },
               {
                 id: "2",
                 name: "Date de fin",
-                description: `${new Intl.DateTimeFormat("FR",{dateStyle:"full"}).format(new Date())}`,
+                description: `${new Intl.DateTimeFormat("FR", {
+                  dateStyle: "full",
+                }).format(new Date())}`,
               },
               {
                 id: "3",
@@ -183,8 +190,13 @@ export default function Page() {
                   <Dropdown
                     menu={{
                       items: [
-                        { key: "1", label: "Modifier" },
-                        { key: "2", label: "Supprimer" },
+                        { key: "1", label: "Modifier", icon: <EditOutlined /> },
+                        {
+                          key: "2",
+                          label: "Supprimer",
+                          danger: true,
+                          icon: <DeleteOutlined />,
+                        },
                       ],
                     }}
                   >
@@ -193,7 +205,11 @@ export default function Page() {
                 }
               >
                 <List.Item.Meta
-                  avatar={<Avatar style={{background:getHSLColor(item.name)}}>{item.name.charAt(0).toUpperCase()}</Avatar>}
+                  avatar={
+                    <Avatar style={{ background: getHSLColor(item.name) }}>
+                      {item.name.charAt(0).toUpperCase()}
+                    </Avatar>
+                  }
                   title={<Link href="#">{item.name}</Link>}
                   description={item.type}
                 />

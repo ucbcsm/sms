@@ -1,11 +1,9 @@
 "use client";
 import {
-  ApartmentOutlined,
   ArrowRightOutlined,
   BorderOutlined,
   BranchesOutlined,
   ClockCircleOutlined,
-  DashboardOutlined,
   DollarCircleOutlined,
   ReadOutlined,
   SafetyCertificateOutlined,
@@ -72,19 +70,19 @@ export default function YearLayout({
                 className: "uppercase",
                 children: [
                   {
-                    key: "course",
+                    key: `/console/${yearName}/courses`,
                     label: "Cours et programmes",
                     icon: <ReadOutlined />,
                     className: "normal-case",
                   },
                   {
-                    key: "4",
+                    key: `/console/${yearName}/periods`,
                     label: "Périodes ou sessions",
                     icon: <ClockCircleOutlined />,
                     className: "normal-case",
                   },
                   {
-                    key: "jurys",
+                    key: `/console/${yearName}/jurys`,
                     label: "Jurys d'évaluations",
                     icon: <SafetyCertificateOutlined />,
                     className: "normal-case",
@@ -98,19 +96,19 @@ export default function YearLayout({
                 className: "uppercase",
                 children: [
                   {
-                    key: "fees",
+                    key: `/console/${yearName}/fees`,
                     label: "Frais",
                     icon: <BorderOutlined />,
                     className: "normal-case",
                   },
                   {
-                    key: "paymentmode",
+                    key: `/console/${yearName}/payment-methods`,
                     label: "Modes de paiement",
                     icon: <ArrowRightOutlined />,
                     className: "normal-case",
                   },
                   {
-                    key: "",
+                    key: `/console/${yearName}/currencies`,
                     label: "Monnaies",
                     icon: <DollarCircleOutlined />,
                     className: "normal-case",
@@ -124,7 +122,7 @@ export default function YearLayout({
                 className: "uppercase",
                 children: [
                   {
-                    key: "class",
+                    key: "/app/rooms",
                     label: "Salles de classe",
                     icon: <TagsOutlined />,
                     className: "normal-case",
@@ -138,13 +136,13 @@ export default function YearLayout({
                 className: "uppercase",
                 children: [
                   {
-                    key: "tearchers",
+                    key: "/app/staff",
                     label: "Enseignants (Staff)",
                     icon: <TeamOutlined />,
                     className: "normal-case",
                   },
                   {
-                    key: "students",
+                    key: "/app/students",
                     label: "Etudiants",
                     icon: <UsergroupAddOutlined />,
                     className: "normal-case",

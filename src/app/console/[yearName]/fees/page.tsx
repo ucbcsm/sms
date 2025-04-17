@@ -2,8 +2,9 @@
 
 import {
   AppstoreOutlined,
+  DeleteOutlined,
+  EditOutlined,
   MoreOutlined,
-  PlusCircleOutlined,
   PlusOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
@@ -49,9 +50,9 @@ export default function Page() {
           }}
         >
           <Space>
-            <BackButton/>
+            <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Gestion des filières
+              Gestion des frais académiques
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -65,10 +66,10 @@ export default function Page() {
               <Button
                 icon={<PlusOutlined />}
                 type="primary"
-                title="Ajouter une filière"
+                title="Ajouter un frais académique"
                 style={{ boxShadow: "none" }}
               >
-                Ajouter une filière
+                Ajouter un frais
               </Button>
               <Radio.Group>
                 <Radio.Button value="grid">
@@ -83,18 +84,78 @@ export default function Page() {
           tabList={[
             {
               key: "all",
-              label: "Toutes",
+              label: "Tous",
             },
-            { key: "domains", label: "Domaines" },
-            { key: "faculties", label: "Facultés" },
-            { key: "departments", label: "Départements" },
-            { key: "specializations", label: "Spécialisations" },
+            { key: "paid", label: "Payés" },
+            { key: "unpaid", label: "Non payés" },
           ]}
         >
-          {/* Contenu de l'onglet actif */}
-          <Typography.Text>
-          Contenu de l&apos;onglet actif 
-          </Typography.Text>
+          <List
+            dataSource={[
+              {
+                id: "1",
+                name: "Frais d'inscription",
+                description: "Frais pour l'inscription annuelle",
+                amount: "50 USD",
+                classes: ["1ère année", "2ème année"],
+              },
+              {
+                id: "2",
+                name: "Frais de scolarité",
+                description: "Frais pour le semestre en cours",
+                amount: "200 USD",
+                classes: ["Toutes les années"],
+              },
+              {
+                id: "3",
+                name: "Frais de bibliothèque",
+                description: "Frais pour l'accès à la bibliothèque",
+                amount: "10 USD",
+                classes: ["1ère année", "3ème année"],
+              },
+              {
+                id: "4",
+                name: "Frais de laboratoire",
+                description: "Frais pour l'utilisation des laboratoires",
+                amount: "30 USD",
+                classes: ["2ème année", "3ème année"],
+              },
+            ]}
+            renderItem={(item, index) => (
+              <List.Item
+                key={item.id}
+                extra={
+                  <Dropdown
+                    menu={{
+                      items: [
+                        { key: "1", label: "Modifier", icon: <EditOutlined /> },
+                        {
+                          key: "2",
+                          label: "Supprimer",
+                          danger: true,
+                          icon: <DeleteOutlined />,
+                        },
+                      ],
+                    }}
+                  >
+                    <Button icon={<MoreOutlined />} type="text" />
+                  </Dropdown>
+                }
+              >
+                <List.Item.Meta
+                  avatar={<Avatar>F{index + 1}</Avatar>}
+                  title={<Link href="#">{item.name}</Link>}
+                  description={
+                    <>
+                      <div>{item.description}</div>
+                      <div>Montant: {item.amount}</div>
+                      <div>Classes: {item.classes.join(", ")}</div>
+                    </>
+                  }
+                />
+              </List.Item>
+            )}
+          />
         </Card>
         <Layout.Footer
           style={{
@@ -112,73 +173,6 @@ export default function Page() {
           </Space>
         </Layout.Footer>
       </Layout.Content>
-
-      <Layout.Sider
-        width={280}
-        theme="light"
-        style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
-      >
-        <Card
-          variant="borderless"
-          title="Promotions (Classes)"
-          style={{ boxShadow: "none"}}
-          extra={
-            <Button
-              type="link"
-              icon={<PlusCircleOutlined />}
-              title="Ajouter une promotion"
-            >
-              Ajouter
-            </Button>
-          }
-        >
-          <List
-            dataSource={[
-              {
-                id: "1",
-                name: "Informatique",
-                type: "Département",
-              },
-              {
-                id: "2",
-                name: "Génie Civil",
-                type: "Département",
-              },
-              {
-                id: "3",
-                name: "Sciences de Gestion",
-                type: "Faculté",
-              },
-              {
-                id: "4",
-                name: "Sciences et Technologies",
-                type: "Département",
-              },
-              {
-                id: "5",
-                name: "Réseaux et Télécoms",
-                type: "Spécialisation",
-              },
-            ]}
-            renderItem={(item, index) => (
-              <List.Item
-                key={item.id}
-                extra={
-                  <Dropdown menu={{ items: [{key:"1", label:"Action 1"}, {key:"2", label:"Action 2"}, {key:"3", label:"Action 3"}] }}>
-                    <Button icon={<MoreOutlined />} type="text" />
-                  </Dropdown>
-                }
-              >
-                <List.Item.Meta
-                  avatar={<Avatar>L{index}</Avatar>}
-                  title={<Link href="#">{item.name}</Link>}
-                  description={item.type}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
-      </Layout.Sider>
     </Layout>
   );
 }

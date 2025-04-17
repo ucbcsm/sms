@@ -1,14 +1,20 @@
 "use client";
-
-import React from "react";
-import { Button, Card, Layout, Result, Space, theme, Typography } from "antd";
 import {
-  PhoneOutlined,
-  QuestionCircleOutlined,
-  WhatsAppOutlined,
-} from "@ant-design/icons";
-import BackButton from "@/components/backButton";
+  Avatar,
+  Button,
+  Card,
+  Layout,
+  List,
+  Radio,
+  Space,
+  theme,
+  Typography,
+} from "antd";
+import { AppstoreOutlined, UnorderedListOutlined } from "@ant-design/icons";
 import { Palette } from "@/components/palette";
+import BackButton from "@/components/backButton";
+import { JurysList } from "@/app/app/jurys/list";
+// import { JurysList } from "./list";
 
 export default function Page() {
   const {
@@ -36,7 +42,7 @@ export default function Page() {
           <Space>
             <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Assistance technique
+              Jurys d&apos;évaluations
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -44,32 +50,19 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
-        <Card>
-          <Result
-            className="max-w-3xl mx-auto"
-            icon={<QuestionCircleOutlined style={{ color: "" }} />}
-            title="Assistance technique"
-            subTitle="Les experts à la matière n'attendent que vous. Nous vous proposons de l’expertise,
-    de l’expérience et de la méthodologie pour une bonne utilisation de cette application. Pour tout problème technique n'hésitez pas à nous contacter et nous pouvons nous déplacer vers vous s'il le faut."
-            extra={[
-              <Button
-                type="dashed"
-                key="call"
-                icon={<PhoneOutlined />}
-                style={{ boxShadow: "none" }}
-              >
-                Télephone
-              </Button>,
-              <Button
-                type="primary"
-                key="write"
-                icon={<WhatsAppOutlined />}
-                style={{ boxShadow: "none" }}
-              >
-                Whatsapp
-              </Button>,
-            ]}
-          />
+        <Card
+          tabBarExtraContent={
+            <Radio.Group>
+              <Radio.Button value="grid">
+                <AppstoreOutlined />
+              </Radio.Button>
+              <Radio.Button value="list">
+                <UnorderedListOutlined />
+              </Radio.Button>
+            </Radio.Group>
+          }
+        >
+          <JurysList />
         </Card>
         <Layout.Footer
           style={{
