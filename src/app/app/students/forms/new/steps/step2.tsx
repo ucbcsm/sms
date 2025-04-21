@@ -48,7 +48,7 @@ export const Step2: FC<Props> = ({ setStep }) => {
       >
         <Space>
           <Button onClick={() => setStep(0)} style={{ boxShadow: "none" }}>
-            Precedant
+          Précédent
           </Button>
           <Button
             type="primary"

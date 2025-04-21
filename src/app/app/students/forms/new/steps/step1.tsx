@@ -289,6 +289,25 @@ export const Step1: FC<Props> = ({ setStep }) => {
         <Input placeholder="Affiliation religieuse" />
       </Form.Item>
       <Form.Item
+        label="Aptitude physique"
+        name="physical_ability"
+        rules={[{ required: true, message: "Ce champ est requis" }]}
+      >
+        <Radio.Group
+          options={[
+            { value: "normale", label: "Normale" },
+            { value: "Handicapé", label: "Handicapé" },
+          ]}
+        />
+      </Form.Item>
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[{ required: true }]}
+      >
+        <Input placeholder="Email" />
+      </Form.Item>
+      <Form.Item
         label="Téléphone 1"
         name="phone_number_1"
         rules={[{ required: true }]}

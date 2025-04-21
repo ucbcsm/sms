@@ -1,30 +1,35 @@
-import { Button, Form, Input, Select, Space } from "antd";
+import { Button, Form, Input, InputNumber, Select, Space, Upload } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 import { Options } from "nuqs";
 import { FC } from "react";
 
 type Props = {
-  setStep: (
-    value: number | ((old: number) => number | null) | null,
-    options?: Options
-  ) => Promise<URLSearchParams>;
+    setStep: (
+        value: number | ((old: number) => number | null) | null,
+        options?: Options
+    ) => Promise<URLSearchParams>;
 };
 
-export const Step3: FC<Props> = ({ setStep }) => {
-  const onFinish = (values: any) => {
-    setStep(3);
-  };
+export const Step5: FC<Props> = ({ setStep }) => {
+    const onFinish = (values: any) => {
+        setStep(5);
+    };
 
-  return (
-    <Form style={{ width: 500 }} onFinish={onFinish}>
-      <Form.Item
-        label="Pays d'origine"
-        name="country_of_origin"
-        rules={[{ required: true }]}
-      >
-        <Select
-          placeholder="Pays d'origine"
-          options={[
-            { value: "afghanistan", label: "Afghanistan" },
+    return (
+        <Form style={{ width: 500 }} onFinish={onFinish}>
+            <Form.Item
+                label="Nom de l'école secondaire"
+                name="name_of_secondary_school"
+                rules={[{ required: true }]}
+            >
+                <Input placeholder="Nom de l'école secondaire" />
+            </Form.Item>
+            <Form.Item
+                label="Pays de l'école secondaire"
+                name="country_of_secondary_school"
+                rules={[{ required: true }]}
+            >
+                <Select placeholder="Pays de l'école secondaire" options={[ { value: "afghanistan", label: "Afghanistan" },
             { value: "afrique_du_sud", label: "Afrique du Sud" },
             { value: "albanie", label: "Albanie" },
             { value: "algerie", label: "Algérie" },
@@ -229,41 +234,83 @@ export const Step3: FC<Props> = ({ setStep }) => {
             { value: "vietnam", label: "Vietnam" },
             { value: "yemen", label: "Yémen" },
             { value: "zambie", label: "Zambie" },
-            { value: "zimbabwe", label: "Zimbabwe" },
-          ]}
-        />
-      </Form.Item>
-      <Form.Item
-        label="Province d'origine"
-        name="province_of_origin"
-        rules={[{ required: true }]}
-      >
-        <Input placeholder="Province d'origine" />
-      </Form.Item>
-      <Form.Item
-        label="Territoire ou municipalité d'origine"
-        name="territory_or_municipality_of_origin"
-        rules={[{ required: true }]}
-      >
-        <Input placeholder="Territoire ou municipalité d'origine" />
-      </Form.Item>
+            { value: "zimbabwe", label: "Zimbabwe" },]} />
+            </Form.Item>
+            <Form.Item
+                label="Province de l'école secondaire"
+                name="province_of_secondary_school"
+                rules={[{ required: true }]}
+            >
+                <Input placeholder="Province de l'école secondaire" />
+            </Form.Item>
+            <Form.Item
+                label="Territoire ou municipalité de l'école"
+                name="territory_or_municipality_of_school"
+                rules={[{ required: true }]}
+            >
+                <Input placeholder="Territoire ou municipalité de l'école" />
+            </Form.Item>
+            <Form.Item
+                label="Section ou option suivie aux humanités"
+                name="section_followed"
+                rules={[{ required: true }]}
+            >
+                <Input placeholder="Section suivie" />
+            </Form.Item>
+            <Form.Item
+                label="Année d'obtention du diplôme"
+                name="year_of_diploma_obtained"
+                rules={[{ required: true }]}
+            >
+                <InputNumber placeholder="Année d'obtention du diplôme" step={1} />
+            </Form.Item>
+            <Form.Item
+                label="Numéro du diplôme"
+                name="diploma_number"
+                rules={[{ required: true }]}
+            >
+                <Input placeholder="Numéro du diplôme" />
+            </Form.Item>
+            <Form.Item
+                label="Pourcentage obtenu au diplôme"
+                name="diploma_percentage"
+                rules={[{ required: true }]}
+            >
+                <InputNumber placeholder="Pourcentage obtenu au diplôme" step={0.01} suffix="%" min={0} max={100} />
+            </Form.Item>
+            <Form.Item
+                label="Fichier du diplôme"
+                name="diploma_file"
+            >
+                <Upload>
+                    <Button icon={<UploadOutlined />}>Télécharger le fichier</Button>
+                </Upload>
+            </Form.Item>
+            <Form.Item
+                label="Autres documents"
+                name="other_documents"
+            >
+                <Upload>
+                    <Button icon={<UploadOutlined />}>Télécharger les documents</Button>
+                </Upload>
+            </Form.Item>
 
-      <Form.Item
-        style={{ display: "flex", justifyContent: "flex-end", paddingTop: 20 }}
-      >
-        <Space>
-          <Button onClick={() => setStep(1)} style={{ boxShadow: "none" }}>
-            Précédent
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ boxShadow: "none" }}
-          >
-            Suivant
-          </Button>
-        </Space>
-      </Form.Item>
-    </Form>
-  );
+            <Form.Item
+                style={{ display: "flex", justifyContent: "flex-end", paddingTop: 20 }}
+            >
+                <Space>
+                    <Button onClick={() => setStep(3)} style={{ boxShadow: "none" }}>
+                        Précédent
+                    </Button>
+                    <Button
+                        type="primary"
+                        htmlType="submit"
+                        style={{ boxShadow: "none" }}
+                    >
+                        Suivant
+                    </Button>
+                </Space>
+            </Form.Item>
+        </Form>
+    );
 };

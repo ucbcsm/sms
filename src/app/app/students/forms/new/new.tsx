@@ -15,6 +15,13 @@ import { Options, parseAsInteger, useQueryState } from "nuqs";
 import { Step1 } from "./steps/step1";
 import { Step2 } from "./steps/step2";
 import { Step3 } from "./steps/step3";
+import { Step4 } from "./steps/step4";
+import { Step5 } from "./steps/step5";
+import { title } from "process";
+import { Step6 } from "./steps/step6";
+import { Step7 } from "./steps/step7";
+import { Step8 } from "./steps/step8";
+import { Step9 } from "./steps/step9";
 
 type Props = {
   open: boolean;
@@ -54,20 +61,28 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       content: <Step3 setStep={setStep}/>
     },
     {
-      title: "Informations académiques",
-      content: "Informations sur les parents",
+      title: "Adresse actuelle",
+      content: <Step4 setStep={setStep}  />,
     },
     {
-      title: "Informations sur la classe",
-      content: "Informations sur la classe",
+      title: "Etudes secondaires faites",
+      content: <Step5 setStep={setStep}/>,
     },
     {
-      title: "Documents",
-      content: "Documents",
+      title:"Occupations après les humanités",
+      content:<Step6 setStep={setStep}/>
+    },
+    {
+      title: "Choix de filière",
+      content: <Step7 setStep={setStep}/>,
+    },
+    {
+      title: "Autres questions importantes",
+      content: <Step8 setStep={setStep}/>,
     },
     {
       title: "Confirmation",
-      content: "Confirmation",
+      content: <Step9 setStep={setStep}/>,
     },
   ];
 
@@ -148,22 +163,6 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
           </div>
         </Card>
       </Flex>
-      {/* <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          height: "auto",
-          color: colorTextTertiary,
-          backgroundColor: colorBgContainer,
-          // borderRadius: borderRadiusLG,
-          border: `1px dashed ${colorBorder}`,
-          marginTop: 16,
-          padding:28
-        }}
-      >
-        
-      </div> */}
     </Drawer>
   );
 };
