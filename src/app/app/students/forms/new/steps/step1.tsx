@@ -1,6 +1,13 @@
+"use client";
 import { Button, DatePicker, Form, Input, Radio, Select } from "antd";
-import { Options } from "nuqs";
-import { FC } from "react";
+import dayjs from "dayjs";
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+} from "lz-string";
+import { Options} from "nuqs";
+import { FC, useEffect } from "react";
+import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -9,12 +16,58 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
+const formSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  surname: z.string(),
+  sex: z.enum(["M", "F"]),
+  place_of_birth: z
+    .string(),
+  date_of_birth: z.string(),
+  nationality: z.string(),
+  marital_status: z.enum(["C", "M", "D", "V"]),
+  religious_affiliation: z
+    .string(),
+  physical_ability: z.enum(["normale", "Handicapé"]),
+  email: z
+    .string()
+    .email(),
+  phone_number_1: z.string(),
+  phone_number_2: z.string().optional(),
+});
+
+type FormSchemaType = z.infer<typeof formSchema>;
+
 export const Step1: FC<Props> = ({ setStep }) => {
-  const onFinish = (values: any) => {
-    setStep(1);
-  };
+
+  const [form] = Form.useForm<FormSchemaType>();
+
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("d1");
+    if (typeof savedData === "string") {
+      const raw = decompressFromEncodedURIComponent(savedData);
+      const data = JSON.parse(raw);
+      form.setFieldsValue({
+        ...data,
+        date_of_birth: dayjs(data.date_of_birth, "YYYY-MM-DD"),
+      });
+    }
+  }, []);
+
   return (
-    <Form style={{ width: 500 }} onFinish={onFinish}>
+    <Form
+      form={form}
+      name="step1"
+      style={{ maxWidth: 500 }}
+      onFinish={(values) => {
+        const compressedData = compressToEncodedURIComponent(
+          JSON.stringify(values)
+        );
+        localStorage.setItem("d1", compressedData);
+        setStep(1);
+      }}
+    >
       <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
         <Input placeholder="Nom" />
       </Form.Item>
@@ -47,6 +100,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
         <DatePicker
           placeholder="DD/MM/YYYY"
           format={{ format: "DD/MM/YYYY" }}
+          picker="date"
         />
       </Form.Item>
       <Form.Item
@@ -300,11 +354,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-      <Form.Item
-        label="Email"
-        name="email"
-        rules={[{ required: true }]}
-      >
+      <Form.Item label="Email" name="email" rules={[{ required: true }]}>
         <Input placeholder="Email" />
       </Form.Item>
       <Form.Item

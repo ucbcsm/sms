@@ -1,6 +1,8 @@
 import { Button, Form, Input, Space } from "antd";
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { Options } from "nuqs";
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -9,12 +11,41 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
+const formSchema = z.object({
+  father_name: z.string(),
+  mother_name: z.string(),
+  father_phone_number: z.string().optional(),
+  mother_phone_number: z.string().optional(),
+});
+
+type FormSchemaType = z.infer<typeof formSchema>;
+
 export const Step2: FC<Props> = ({ setStep }) => {
-  const onFinish = (values: any) => {
-    setStep(2);
-  };
+  const [form] = Form.useForm<FormSchemaType>();
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("d2");
+    if (typeof savedData === "string") {
+      const raw = decompressFromEncodedURIComponent(savedData);
+      const data = JSON.parse(raw);
+      form.setFieldsValue({
+        ...data
+      });
+    }
+  }, []);
+
   return (
-    <Form style={{ width: 500 }} onFinish={onFinish}>
+    <Form
+      form={form}
+      style={{ width: 500 }}
+      onFinish={(values) => {
+        const compressedData = compressToEncodedURIComponent(
+          JSON.stringify(values)
+        );
+        localStorage.setItem("d2", compressedData);
+        setStep(2);
+      }}
+    >
       <Form.Item
         label="Nom du père"
         name="father_name"
@@ -48,7 +79,7 @@ export const Step2: FC<Props> = ({ setStep }) => {
       >
         <Space>
           <Button onClick={() => setStep(0)} style={{ boxShadow: "none" }}>
-          Précédent
+            Précédent
           </Button>
           <Button
             type="primary"

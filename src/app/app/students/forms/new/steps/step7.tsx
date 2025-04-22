@@ -1,15 +1,11 @@
+import { Button, Form, Input, Select, Space, Radio } from "antd";
 import {
-  Button,
-  Form,
-  Input,
-  Select,
-  Space,
-  DatePicker,
-  Checkbox,
-  Radio,
-} from "antd";
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+} from "lz-string";
 import { Options } from "nuqs";
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -18,17 +14,86 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-export const Step7: FC<Props> = ({ setStep }) => {
-  const onFinish = (values: any) => {
-    setStep(7);
-  };
+const formSchema = z.object({
+  academic_year: z.string(),
+  cycle: z.enum(["licence", "master", "doctorat"]),
+  field: z.enum(["sciences", "Art", "Droit", "Théologie"]),
+  faculty: z
+    .string()
+    .nonempty("Ce champ est requis")
+    .refine(
+      (val) =>
+        [
+          "Faculte 1",
+          "Faculte 2",
+          "Faculte 3",
+          "Faculte 4",
+          "Faculte 5",
+        ].includes(val),
+      {
+        message: "Faculté invalide",
+      }
+    ),
+  departement: z
+    .string()
+    .nonempty("Ce champ est requis")
+    .refine(
+      (val) =>
+        [
+          "Département 1",
+          "Département 2",
+          "Département 3",
+          "Département 4",
+          "Département 5",
+        ].includes(val),
+      {
+        message: "Département invalide",
+      }
+    ),
+  class_year: z
+    .string()
+    .nonempty("Ce champ est requis")
+    .refine(
+      (val) =>
+        [
+          "Promotion 1",
+          "Promotion 2",
+          "Promotion 3",
+          "Promotion 4",
+          "Promotion 5",
+        ].includes(val),
+      {
+        message: "Promotion invalide",
+      }
+    ),
+  period: z.enum(["Semester 1", "Semester 2"]),
+});
 
+type FormSchemaType = z.infer<typeof formSchema>;
+export const Step7: FC<Props> = ({ setStep }) => {
+  const [form] = Form.useForm<FormSchemaType>();
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("d7");
+    if (typeof savedData === "string") {
+      const raw = decompressFromEncodedURIComponent(savedData);
+      const data = JSON.parse(raw);
+      form.setFieldsValue({ ...data });
+    }
+  },[]);
   return (
-    <Form style={{ width: 500 }} onFinish={onFinish}>
-      <Form.Item
-        label="Année académique"
-        name="academic_year"
-      >
+    <Form
+      form={form}
+      style={{ width: 500 }}
+      onFinish={(values) => {
+        const compressedData = compressToEncodedURIComponent(
+          JSON.stringify(values)
+        );
+        localStorage.setItem("d7", compressedData);
+        setStep(7);
+      }}
+    >
+      <Form.Item label="Année académique" name="academic_year">
         <Input placeholder="2024-2025" disabled variant="borderless" />
       </Form.Item>
       <Form.Item
@@ -43,7 +108,6 @@ export const Step7: FC<Props> = ({ setStep }) => {
             { value: "doctorat", label: "Doctorat" },
           ]}
         />
-        {/* <Input placeholder="Cycle" /> */}
       </Form.Item>
       <Form.Item
         label="Filière ou Domaine"
@@ -59,10 +123,6 @@ export const Step7: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-
-      {/* <Form.Item label="Ancien matricule" name="former_matricule">
-        <Input placeholder="Ancien matricule" />
-      </Form.Item> */}
       <Form.Item
         label="Faculté"
         name="faculty"
@@ -84,44 +144,46 @@ export const Step7: FC<Props> = ({ setStep }) => {
         name="departement"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
-        <Select placeholder="Département" options={[
+        <Select
+          placeholder="Département"
+          options={[
             { value: "Département 1", label: "Département 1" },
             { value: "Département 2", label: "Département 2" },
             { value: "Département 3", label: "Département 3" },
             { value: "Département 4", label: "Département 4" },
             { value: "Département 5", label: "Département 5" },
-        ]} />
+          ]}
+        />
       </Form.Item>
       <Form.Item
         label="Promotion"
         name="class_year"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
-        <Select placeholder="Promotion ou classe" options={[
+        <Select
+          placeholder="Promotion ou classe"
+          options={[
             { value: "Promotion 1", label: "Promotion 1" },
             { value: "Promotion 2", label: "Promotion 2" },
             { value: "Promotion 3", label: "Promotion 3" },
             { value: "Promotion 4", label: "Promotion 4" },
             { value: "Promotion 5", label: "Promotion 5" },
-        ]} />
+          ]}
+        />
       </Form.Item>
       <Form.Item
         label="Période"
         name="period"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
-        <Select placeholder="Période" options={[
+        <Select
+          placeholder="Période"
+          options={[
             { value: "Semester 1", label: "Semester 1" },
             { value: "Semester 2", label: "Semester 2" },
-        ]} />
+          ]}
+        />
       </Form.Item>
-      {/* <Form.Item
-        label="Date de soumission"
-        name="date_of_submission"
-        rules={[{ required: true, message: "Ce champ est requis" }]}
-      >
-        <DatePicker style={{ width: "100%" }} />
-      </Form.Item> */}
       <Form.Item
         style={{
           display: "flex",

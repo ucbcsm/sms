@@ -22,6 +22,7 @@ import { Step6 } from "./steps/step6";
 import { Step7 } from "./steps/step7";
 import { Step8 } from "./steps/step8";
 import { Step9 } from "./steps/step9";
+import { CloseOutlined } from "@ant-design/icons";
 
 type Props = {
   open: boolean;
@@ -54,35 +55,35 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
     },
     {
       title: "Informations sur les parents",
-      content: <Step2 setStep={setStep}/>,
+      content: <Step2 setStep={setStep} />,
     },
     {
       title: "Origine",
-      content: <Step3 setStep={setStep}/>
+      content: <Step3 setStep={setStep} />,
     },
     {
       title: "Adresse actuelle",
-      content: <Step4 setStep={setStep}  />,
+      content: <Step4 setStep={setStep} />,
     },
     {
       title: "Etudes secondaires faites",
-      content: <Step5 setStep={setStep}/>,
+      content: <Step5 setStep={setStep} />,
     },
     {
-      title:"Occupations après les humanités",
-      content:<Step6 setStep={setStep}/>
+      title: "Occupations après les humanités",
+      content: <Step6 setStep={setStep} />,
     },
     {
       title: "Choix de filière",
-      content: <Step7 setStep={setStep}/>,
+      content: <Step7 setStep={setStep} />,
     },
     {
       title: "Autres questions importantes",
-      content: <Step8 setStep={setStep}/>,
+      content: <Step8 setStep={setStep} />,
     },
     {
       title: "Confirmation",
-      content: <Step9 setStep={setStep}/>,
+      content: <Step9 setStep={setStep} />,
     },
   ];
 
@@ -103,8 +104,10 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
               onClick={() => {
                 setCancel(true);
               }}
+              icon={<CloseOutlined />}
+              type="text"
             >
-              Annuler
+              {/* Annuler */}
             </Button>
             <Modal
               title="Annuler la candidature"
@@ -127,13 +130,13 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
               />
             </Modal>
           </>
-          <Button
+          {/* <Button
             type="primary"
             style={{ boxShadow: "none" }}
             disabled={step !== 6}
           >
             Enregistrer
-          </Button>
+          </Button> */}
         </Space>
       }
     >
@@ -143,7 +146,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
           message=" Veuillez compléter toutes les étapes avant de soumettre la candidature."
           description="Tout formulaire qui contiendrait de faux renseignements ne sera pas pris en considération"
           showIcon
-          style={{border:0}}
+          style={{ border: 0 }}
           closable
         />
         <Card
@@ -152,15 +155,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
           extra={<Steps current={step} items={items} />}
           style={{ boxShadow: "none" }}
         >
-          <div
-            style={{
-              // display: "flex",
-              // flexDirection: "column",
-              // alignItems: "center",
-            }}
-          >
-            {steps[step].content}
-          </div>
+          <div>{steps[step].content}</div>
         </Card>
       </Flex>
     </Drawer>

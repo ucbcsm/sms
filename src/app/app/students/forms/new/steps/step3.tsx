@@ -1,6 +1,11 @@
 import { Button, Form, Input, Select, Space } from "antd";
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent,
+} from "lz-string";
 import { Options } from "nuqs";
-import { FC } from "react";
+import { FC, useEffect } from "react";
+import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -9,13 +14,40 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
+const formSchema = z.object({
+  country_of_origin: z.string(),
+  province_of_origin: z.string(),
+  territory_or_municipality_of_origin: z.string(),
+});
+
+type FormSchemaType = z.infer<typeof formSchema>;
+
 export const Step3: FC<Props> = ({ setStep }) => {
-  const onFinish = (values: any) => {
-    setStep(3);
-  };
+  const [form] = Form.useForm<FormSchemaType>();
+
+  useEffect(() => {
+    const savedData = localStorage.getItem("d3");
+    if (typeof savedData === "string") {
+      const raw = decompressFromEncodedURIComponent(savedData);
+      const data = JSON.parse(raw);
+      form.setFieldsValue({
+        ...data,
+      });
+    }
+  }, []);
 
   return (
-    <Form style={{ width: 500 }} onFinish={onFinish}>
+    <Form
+      form={form}
+      style={{ width: 500 }}
+      onFinish={(values) => {
+        const compressedData = compressToEncodedURIComponent(
+          JSON.stringify(values)
+        );
+        localStorage.setItem("d3", compressedData);
+        setStep(3);
+      }}
+    >
       <Form.Item
         label="Pays d'origine"
         name="country_of_origin"
