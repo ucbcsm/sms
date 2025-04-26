@@ -20,15 +20,15 @@ const formSchema = z.object({
   first_name: z.string(),
   last_name: z.string(),
   surname: z.string(),
-  sex: z.enum(["M", "F"]),
+  gender: z.enum(["M", "F"]),
   place_of_birth: z
     .string(),
   date_of_birth: z.string(),
   nationality: z.string(),
-  marital_status: z.enum(["C", "M", "D", "V"]),
+  marital_status: z.enum(["single", "married", "divorced", "widowed"]),
   religious_affiliation: z
     .string(),
-  physical_ability: z.enum(["normale", "Handicapé"]),
+  physical_ability: z.enum(["normal", "disabled"]),
   email: z
     .string()
     .email(),
@@ -77,7 +77,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
       <Form.Item label="Prénom" name="surname" rules={[{ required: true }]}>
         <Input placeholder="Prénom" />
       </Form.Item>
-      <Form.Item label="Sexe" name="sex" rules={[{ required: true }]}>
+      <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>
         <Radio.Group
           options={[
             { value: "M", label: "Homme" },
@@ -328,10 +328,10 @@ export const Step1: FC<Props> = ({ setStep }) => {
       >
         <Radio.Group
           options={[
-            { value: "C", label: "Célibataire" },
-            { value: "M", label: "Marié(e)" },
-            { value: "D", label: "Divorcé(e)" },
-            { value: "V", label: "Veuf(ve)" },
+            { value: "single", label: "Célibataire" },
+            { value: "married", label: "Marié(e)" },
+            { value: "divorced", label: "Divorcé(e)" },
+            { value: "widowed", label: "Veuf(ve)" },
           ]}
         />
       </Form.Item>
@@ -349,8 +349,8 @@ export const Step1: FC<Props> = ({ setStep }) => {
       >
         <Radio.Group
           options={[
-            { value: "normale", label: "Normale" },
-            { value: "Handicapé", label: "Handicapé" },
+            { value: "normal", label: "Normale" },
+            { value: "disabled", label: "Handicapé" },
           ]}
         />
       </Form.Item>

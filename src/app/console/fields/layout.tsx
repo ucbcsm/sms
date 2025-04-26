@@ -13,7 +13,6 @@ import {
   Avatar,
   Button,
   Card,
-  Descriptions,
   Dropdown,
   Layout,
   List,
@@ -25,15 +24,20 @@ import {
 
 import { Palette } from "@/components/palette";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { getHSLColor } from "@/lib/utils";
 import BackButton from "@/components/backButton";
+import { getHSLColor } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function Page() {
+export default function FieldsLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
-  const { yearName } = useParams();
+  const router = useRouter();
+  const pathname=usePathname()
 
   return (
     <Layout>
@@ -55,9 +59,9 @@ export default function Page() {
           }}
         >
           <Space>
-            <BackButton/>
+            <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Détails de l&apos;année
+              Gestion des cycles et filières
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -66,67 +70,20 @@ export default function Page() {
           </Space>
         </Layout.Header>
         <Card
-        // title={<Descriptions items={[{key:"name",label:"Nom", children:yearName}]}/>}
-        // extra={
-        //   <Space>
-        //     <Button
-        //       icon={<EditOutlined />}
-        //       type="primary"
-        //       title="Ajouter un détail"
-        //       style={{ boxShadow: "none" }}
-        //     >
-        //       Modifier
-        //     </Button>
-        //   </Space>
-        // }
+          tabList={[
+            {
+              key: "/console/fields",label: "Tous"},
+            { key: "/console/fields/tracks", label: "Domaines" },
+            { key: "/console/fields/faculties", label: "Facultés" },
+            { key: "/console/fields/departments", label: "Départements" },
+            { key: "/console/fields/classes", label: "Promotions" },
+          ]}
+          activeTabKey={pathname}
+          onTabChange={(key) => {
+            router.push(key);
+          }}
         >
-          <List
-            dataSource={[
-              {
-                id: "0",
-                name: "Nom",
-                description: `${yearName}`,
-              },
-              {
-                id: "1",
-                name: "Date de début",
-                description: `${new Intl.DateTimeFormat("FR", {
-                  dateStyle: "full",
-                }).format(new Date())}`,
-              },
-              {
-                id: "2",
-                name: "Date de fin",
-                description: `${new Intl.DateTimeFormat("FR", {
-                  dateStyle: "full",
-                }).format(new Date())}`,
-              },
-              {
-                id: "3",
-                name: "Status",
-                description: "En cours",
-              },
-            ]}
-            renderItem={(item) => (
-              <List.Item
-                actions={[
-                  <Button
-                    type="link"
-                    key="edit"
-                    onClick={() => alert(`Modifier: ${item.name}`)}
-                  >
-                    Modifier
-                  </Button>,
-                ]}
-              >
-                <List.Item.Meta
-                  // avatar={<Avatar>{item.name.charAt(0).toUpperCase()}</Avatar>}
-                  title={<Typography.Text strong>{item.name}</Typography.Text>}
-                  description={item.description}
-                />
-              </List.Item>
-            )}
-          />
+          {children}
         </Card>
         <Layout.Footer
           style={{
@@ -152,7 +109,7 @@ export default function Page() {
       >
         <Card
           variant="borderless"
-          title="Cycles organisés"
+          title="Cycles"
           style={{ boxShadow: "none" }}
           extra={
             <Button
@@ -169,21 +126,21 @@ export default function Page() {
             dataSource={[
               {
                 id: "1",
-                name: "Licence (L)",
-                type: "Cycle de licence",
+                name: "Licence",
+                description: "Premier cycle universitaire",
               },
               {
                 id: "2",
-                name: "Master (M)",
-                type: "Cycle de master",
+                name: "Master",
+                description: "Deuxième cycle universitaire",
               },
               {
                 id: "3",
-                name: "Doctorat (D)",
-                type: "Cycle de doctorat",
+                name: "Doctorat",
+                description: "Troisième cycle universitaire",
               },
             ]}
-            renderItem={(item, index) => (
+            renderItem={(item) => (
               <List.Item
                 key={item.id}
                 extra={
@@ -194,8 +151,8 @@ export default function Page() {
                         {
                           key: "2",
                           label: "Supprimer",
-                          danger: true,
                           icon: <DeleteOutlined />,
+                          danger: true,
                         },
                       ],
                     }}
@@ -207,11 +164,11 @@ export default function Page() {
                 <List.Item.Meta
                   avatar={
                     <Avatar style={{ background: getHSLColor(item.name) }}>
-                      {item.name.charAt(0).toUpperCase()}
+                      {item.name.charAt(0)}
                     </Avatar>
                   }
                   title={<Link href="#">{item.name}</Link>}
-                  description={item.type}
+                  description={item.description}
                 />
               </List.Item>
             )}

@@ -51,7 +51,7 @@ export default function Page() {
           }}
         >
           <Space>
-            <BackButton/>
+            <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
               Nom de la filière (Faculté ou Département)
             </Typography.Title>
@@ -100,16 +100,15 @@ export default function Page() {
           }
           tabList={[
             {
-              key: "details",
-              label: "Détails",
+              key: "overview",
+              label: "Aperçu",
             },
             { key: "students", label: "Étudiants" },
-            { key: "departement", label: "Filières enfant" },
-            { key: "batches", label: "Promotions" }, 
+            { key: "departement", label: "Départements" },
+            { key: "batches", label: "Promotions" },
             { key: "courses", label: "Cours" },
             { key: "staff", label: "Personnel" },
             { key: "teachers", label: "Enseignants" },
-               
           ]}
           defaultActiveTabKey="details"
         >
@@ -125,13 +124,13 @@ export default function Page() {
                 { label: "Filière parent", value: "Sciences et Technologies" },
                 { label: "Nombre de filières enfants", value: "5" },
                 { label: "Nombre d'étudiants", value: "120" },
-                { 
-                  label: "Nombre de filles", 
-                  value: "70 (58.33%)" 
+                {
+                  label: "Nombre de filles",
+                  value: "70 (58.33%)",
                 },
-                { 
-                  label: "Nombre de garçons", 
-                  value: "50 (41.67%)" 
+                {
+                  label: "Nombre de garçons",
+                  value: "50 (41.67%)",
                 },
                 { label: "Responsable", value: "Dr. Alfred L." },
                 { label: "Année de création", value: "2005" },
@@ -142,7 +141,6 @@ export default function Page() {
                 </List.Item>
               )}
             />
-          
           </div>
         </Card>
         <Layout.Footer
@@ -168,13 +166,13 @@ export default function Page() {
       >
         <Card
           variant="borderless"
-          title="Filières enfant"
+          title="Personnel"
           style={{ boxShadow: "none" }}
           extra={
             <Button
               type="link"
               icon={<PlusCircleOutlined />}
-              title="Ajouter une filière enfant"
+              title="Ajouter un membre du personnel"
             >
               Ajouter
             </Button>
@@ -184,28 +182,28 @@ export default function Page() {
             dataSource={[
               {
                 id: "1",
-                name: "Informatique",
-                type: "Département",
+                name: "Dr. Alfred L.",
+                role: "Responsable",
               },
               {
                 id: "2",
-                name: "Génie Civil",
-                type: "Département",
+                name: "Mme. Sophie K.",
+                role: "Secrétaire académique",
               },
               {
                 id: "3",
-                name: "Sciences de Gestion",
-                type: "Faculté",
+                name: "M. Jean P.",
+                role: "Chargé des finances",
               },
               {
                 id: "4",
-                name: "Sciences et Technologies",
-                type: "Domaine",
+                name: "Mme. Claire T.",
+                role: "Coordonnatrice des cours",
               },
               {
                 id: "5",
-                name: "Réseaux et Télécoms",
-                type: "Spécialisation",
+                name: "M. David M.",
+                role: "Technicien informatique",
               },
             ]}
             renderItem={(item, index) => (
@@ -214,8 +212,13 @@ export default function Page() {
                 extra={<Button type="text" icon={<RightOutlined />} />}
               >
                 <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+                    />
+                  }
                   title={<Link href="#">{item.name}</Link>}
-                  description={item.type}
+                  description={item.role}
                 />
               </List.Item>
             )}

@@ -7,7 +7,6 @@ import {
   PrinterOutlined,
   UploadOutlined,
   UserAddOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -17,9 +16,10 @@ import {
   Space,
   Table,
   TableColumnType,
-  Tag,
 } from "antd";
 import { useRouter } from "next/navigation";
+import { parseAsBoolean, useQueryState } from "nuqs";
+import { NewStaffForm } from "./forms/new";
 
 type TeacherType = {
   id: string | number;
@@ -33,6 +33,7 @@ type TeacherType = {
   email: string;
   phone: string;
   role: string;
+  type:"Permanent" | "Visiteur";
   status: "active" | "abandon" | "dismissed";
 };
 
@@ -95,12 +96,28 @@ const columns: TableColumnType<TeacherType>[] = [
     ellipsis: true,
   },
   {
-    title: "Rôle",
-    dataIndex: "role",
+    title: "Type",
+    dataIndex: "type",
+    key: "name",
     render: (value) => `${value}`,
-    key: "class",
     ellipsis: true,
   },
+ 
+  {
+    title: "Statut",
+    dataIndex: "status",
+    key: "name",
+    render: (value) => `${value}`,
+    ellipsis: true,
+    width: 80,
+  }
+  // {
+  //   title: "Rôle",
+  //   dataIndex: "role",
+  //   render: (value) => `${value}`,
+  //   key: "class",
+  //   ellipsis: true,
+  // },
 ];
 
 const data: TeacherType[] = Array.from({ length: 100 }, (_, index) => {
@@ -117,6 +134,7 @@ const data: TeacherType[] = Array.from({ length: 100 }, (_, index) => {
     role: "enseignant",
     status: "active",
     avatar: "",
+    type: "Permanent",
     matricule: `0024${13 + index}`,
     promotion: "L1 Genie informatique",
   };
@@ -124,7 +142,13 @@ const data: TeacherType[] = Array.from({ length: 100 }, (_, index) => {
 
 export function StaffList() {
   const router = useRouter();
+  const [newTeacher, setNewTeacher] = useQueryState(
+    "new",
+    parseAsBoolean.withDefault(false)
+  );
+
   return (
+    <>
     <Table
       title={() => (
         <header className="flex  pb-3">
@@ -140,17 +164,25 @@ export function StaffList() {
               menu={{
                 items: [
                   {
-                    key: "old",
-                    label: "Importer parmi les anciens",
-                    icon: <UploadOutlined />,
-                  },
-                  {
                     key: "new",
                     label: "Un nouveau enseignant",
                     icon: <UserAddOutlined />,
                   },
+                  {
+                    key: "import",
+                    label: "Importer un fichier CSV",
+                    icon: <UploadOutlined />,
+                  },
                 ],
+                onClick:({key}) => {
+                  if (key === "new") {
+                    setNewTeacher(true);
+                  } else {
+                   
+                  }
+                }
               }}
+             
             >
               <Button
                 icon={<UserAddOutlined />}
@@ -207,5 +239,7 @@ export function StaffList() {
         },
       })}
     />
+    <NewStaffForm open={newTeacher} setOpen={setNewTeacher}/>
+    </>
   );
 }

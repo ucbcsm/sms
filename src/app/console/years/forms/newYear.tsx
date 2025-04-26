@@ -116,7 +116,7 @@ export const NewYearForm: React.FC = () => {
         >
           <Input placeholder="YYYY-YYYY" />
         </Form.Item>
-        <Form.Item
+        {/* <Form.Item
           name="cycles"
           label="Cycles organisés"
           rules={[
@@ -131,7 +131,7 @@ export const NewYearForm: React.FC = () => {
             ]}
             defaultValue={[]}
           />
-        </Form.Item>
+        </Form.Item> */}
       </Modal>
     </>
   );

@@ -10,18 +10,14 @@ import {
   Space,
   StepProps,
   Steps,
+  Typography,
 } from "antd";
 import { Options, parseAsInteger, useQueryState } from "nuqs";
-import { Step1 } from "./steps/step1";
-import { Step2 } from "./steps/step2";
-import { Step3 } from "./steps/step3";
-import { Step4 } from "./steps/step4";
-import { Step5 } from "./steps/step5";
-import { Step6 } from "./steps/step6";
-import { Step7 } from "./steps/step7";
-import { Step8 } from "./steps/step8";
-import { Step9 } from "./steps/step9";
+
 import { CloseOutlined } from "@ant-design/icons";
+import { Step1 } from "./step1";
+import { Step2 } from "./step2";
+import { Step3 } from "./step3";
 
 type Props = {
   open: boolean;
@@ -31,10 +27,9 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
+export const NewStaffForm: FC<Props> = ({ open, setOpen }) => {
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const [cancel, setCancel] = useState<boolean>(false);
-
   const [steps] = useState<
     ReadonlyArray<{ title: string; content: ReactNode }>
   >([
@@ -43,39 +38,14 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       content: <Step1 setStep={setStep} />,
     },
     {
-      title: "Informations sur les parents",
+      title: "Etudes et titres académiques",
       content: <Step2 setStep={setStep} />,
     },
     {
-      title: "Origine",
+      title: "Confirmation",
       content: <Step3 setStep={setStep} />,
     },
-    {
-      title: "Adresse actuelle",
-      content: <Step4 setStep={setStep} />,
-    },
-    {
-      title: "Etudes secondaires faites",
-      content: <Step5 setStep={setStep} />,
-    },
-    {
-      title: "Occupations après les humanités",
-      content: <Step6 setStep={setStep} />,
-    },
-    {
-      title: "Choix de filière",
-      content: <Step7 setStep={setStep} />,
-    },
-    {
-      title: "Autres questions importantes",
-      content: <Step8 setStep={setStep} />,
-    },
-    {
-      title: "Confirmation",
-      content: <Step9 setStep={setStep} />,
-    },
   ]);
-
   const onClose = () => {
     setOpen(false);
   };
@@ -87,7 +57,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
   return (
     <Drawer
       width={`100%`}
-      title="Nouvelle candidature"
+      title="Nouvel enseignant"
       onClose={onClose}
       open={open}
       closable={false}
@@ -102,12 +72,12 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
             type="text"
           />
           <Modal
-            title="Annuler la candidature"
+            title="Annuler l'enregistrement"
             open={cancel}
             onOk={() => {
               localStorage.clear();
-              setOpen(null);
-              setStep(null);
+              setOpen(false);
+              setStep(null)
               setCancel(false);
             }}
             okButtonProps={{ style: { boxShadow: "none" } }}
@@ -116,8 +86,8 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
             centered
           >
             <Alert
-              message="Êtes-vous sûr de vouloir annuler la candidature ?"
-              description="Vous allez perdre toutes les informations saisies."
+              message="Êtes-vous sûr de vouloir annuler l'enregistrement ?"
+              description="Toutes les informations saisies seront perdues."
               type="warning"
               showIcon
               style={{ marginBottom: 16, border: 0 }}
@@ -128,16 +98,17 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
     >
       <Flex vertical gap={16}>
         <Alert
-          type="warning"
-          message=" Veuillez compléter toutes les étapes avant de soumettre la candidature."
-          description="Tout formulaire qui contiendrait de faux renseignements ne sera pas pris en considération"
+          type="info"
+          message="Veuillez remplir toutes les informations nécessaires pour enregistrer un nouvel enseignant."
+          description="Assurez-vous que toutes les données saisies sont exactes et complètes avant de soumettre."
           showIcon
           style={{ border: 0 }}
           closable
         />
         <Card
-          title={steps[step].title}
+          title={<Typography.Title level={5}>{step+1}. {steps[step].title}</Typography.Title>}
           variant="borderless"
+          style={{ boxShadow: "none" }}
           extra={
             <Steps
               current={step}
@@ -146,7 +117,6 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
               percent={(step / (steps.length - 1)) * 100}
             />
           }
-          style={{ boxShadow: "none" }}
         >
           {steps[step].content}
         </Card>

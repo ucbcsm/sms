@@ -65,6 +65,10 @@ export default function Page() {
               label: "Cours",
             },
             {
+              key: "coursestaught",
+              label: "Cours dispensés",
+            },
+            {
               key: "grades",
               label: "Notes",
             },

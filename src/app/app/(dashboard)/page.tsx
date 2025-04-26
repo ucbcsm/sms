@@ -184,37 +184,54 @@ export default function Page() {
                     type="inner"
                   >
                     <Row gutter={[16, 16]}>
-                      <Col span={12}>
+                      <Col span={8}>
                         <Statistic
                           value={2}
                           title="Départements"
-                          prefix={<ApartmentOutlined />}
+                          // prefix={<ApartmentOutlined />}
                           // valueStyle={{ color: '#3f8600' }}
                         />
                       </Col>
-                      <Col span={12}>
+                      <Col span={8}>
+                        <Statistic
+                          value={50}
+                          title="Cours"
+                          // prefix={<ApartmentOutlined />}
+                          // valueStyle={{ color: '#3f8600' }}
+                        />
+                      </Col>
+                      <Col span={8}>
+                        <Statistic
+                          value={6}
+                          title="Semestres"
+                          // prefix={<ApartmentOutlined />}
+                          // valueStyle={{ color: '#3f8600' }}
+                        />
+                      </Col>
+                      <Col span={8}>
                         <Statistic
                           value={103}
                           title="Etudiants"
-                          prefix={<TeamOutlined />}
+                          // prefix={<TeamOutlined />}
                           // valueStyle={{ color: '#cf1322' }}
                         />
                       </Col>
-                      <Col span={12}>
-                        <Statistic
-                          value={5}
-                          title="Personnel"
-                          prefix={<UsergroupAddOutlined />}
-                          // valueStyle={{ color: '#cf1322' }}
-                        />
-                      </Col>
-                      <Col span={12}>
+                      
+                      <Col span={8}>
                         <Statistic
                           value={9}
                           title="Promotions"
-                          prefix={<ApartmentOutlined />}
+                          // prefix={<ApartmentOutlined />}
                           // prefix={<UsergroupAddOutlined />}
                           // valueStyle={{ color: '#3f8600' }}
+                        />
+                      </Col>
+                      <Col span={8}>
+                        <Statistic
+                          value={5}
+                          title="Personnel"
+                          // prefix={<UsergroupAddOutlined />}
+                          // valueStyle={{ color: '#cf1322' }}
                         />
                       </Col>
                       {/* <Col span={12}>

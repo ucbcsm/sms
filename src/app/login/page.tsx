@@ -60,7 +60,7 @@ export default function Page() {
                 Bienvenue!
               </Typography.Title>
               <Typography.Text type="secondary">
-                Veuillez vous connecter pour accéder votre compte.
+                Veuillez vous connecter pour accéder à votre compte.
               </Typography.Text>
             </div>
             <div className="mt-8">

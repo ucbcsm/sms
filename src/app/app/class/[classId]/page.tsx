@@ -103,7 +103,7 @@ export default function Page() {
             },
             { key: "students", label: "Étudiants" },
             { key: "courses", label: "Cours" },
-            {key:"planing", label:"Planning des cours"},
+            {key:"planing", label:"Cours dispensés"},
             {key:"attendances", label:"Présences"},
             {key:"jury", label:"Jury"},
              { key: "teachers", label: "Enseignants" },
