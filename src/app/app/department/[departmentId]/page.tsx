@@ -53,7 +53,7 @@ export default function Page() {
           <Space>
             <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Nom de la filière (Faculté ou Département)
+              Nom du Département
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -104,7 +104,6 @@ export default function Page() {
               label: "Aperçu",
             },
             { key: "students", label: "Étudiants" },
-            { key: "departement", label: "Départements" },
             { key: "batches", label: "Promotions" },
             { key: "courses", label: "Cours" },
             { key: "staff", label: "Personnel" },

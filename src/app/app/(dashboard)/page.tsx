@@ -2,39 +2,43 @@
 
 import { Palette } from "@/components/palette";
 import {
-  ApartmentOutlined,
   AppstoreOutlined,
-  MoreOutlined,
   RightOutlined,
-  TeamOutlined,
   UnorderedListOutlined,
-  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import {
   Badge,
   Button,
   Card,
-  Col,
-  Dropdown,
   Flex,
   Input,
   Layout,
   List,
-  Progress,
   Radio,
-  Row,
   Space,
-  Statistic,
   Tabs,
   theme,
   Typography,
 } from "antd";
 import Link from "next/link";
+import { parseAsStringEnum, useQueryState } from "nuqs";
+import { StudentsStatistics } from "./statistics/students";
+import { TeachersStatistics } from "./statistics/teachers";
+import { FacultiesStatistics } from "./statistics/faculties";
+import { DepartmentsStatistics } from "./statistics/departments";
+import { EnrollmentsStatistics } from "./statistics/enrollments";
 
 export default function Page() {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+
+  const [statTab, setStatTab] = useQueryState(
+    "tab", parseAsStringEnum(["students","teachers"]).withDefault("students")
+  );
+
+  const [dashTab, setDashTab]=useQueryState("dash_tab", parseAsStringEnum(["faculty","department", "enrollment"]).withDefault("faculty"))
+
   return (
     <Layout>
       <Layout.Content
@@ -61,61 +65,27 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette/>
+            <Palette />
           </Space>
         </Layout.Header>
         <Flex vertical={true} gap={24}>
           <Card
             title="Statistiques"
             tabList={[
-              { key: "1", label: "Etudiants" },
-              { key: "2", label: "Enseignants" },
+              { key: "students", label: "Etudiants" },
+              { key: "teachers", label: "Enseignants" },
             ]}
             tabBarExtraContent={<Button type="link">Voir plus</Button>}
+            onTabChange={(key) => {
+              setStatTab(key as "teachers" |"students");
+            }}
+            activeTabKey={statTab}
           >
-            <Row gutter={24}>
-              <Col span={6}>
-                <Card>
-                  <Flex>
-                    <Statistic title="Année" value={"2024-2025"} />
-                    <Progress
-                      type="line"
-                      percent={20}
-                      style={{ position: "absolute", right: 16, width: 100 }}
-                    />
-                  </Flex>
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card>
-                  <Flex justify="space-between">
-                    <Statistic title="Etudiants" value={"345"} />
-                    <Progress type="dashboard" percent={100} size={58} />
-                  </Flex>
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card>
-                  <Flex justify="space-between">
-                    <Statistic title="Hommes" value={"200"} />
-                    <Progress type="dashboard" percent={57.9} size={58} />
-                  </Flex>
-                </Card>
-              </Col>
-              <Col span={6}>
-                <Card>
-                  <Flex justify="space-between">
-                    <Statistic title="Femmes" value={"145"} />
-                    <Progress
-                      type="dashboard"
-                      percent={42.0}
-                      size={58}
-                      strokeColor="cyan"
-                    />
-                  </Flex>
-                </Card>
-              </Col>
-            </Row>
+            {statTab === "teachers" ? (
+              <TeachersStatistics />
+            ) : (
+              <StudentsStatistics />
+            )}
           </Card>
           <Card
             tabBarExtraContent={
@@ -130,7 +100,7 @@ export default function Page() {
             }
             tabList={[
               {
-                key: "1",
+                key: "faculty",
                 label: (
                   <>
                     Facultés <Badge count={4} color="green" />
@@ -138,126 +108,45 @@ export default function Page() {
                 ),
               },
               {
-                key: "2",
+                key: "department",
                 label: (
                   <>
-                    Départements <Badge count={8} color="yellow" />
+                    Départements <Badge count={8} color="blue" />
                   </>
                 ),
               },
               {
-                key: "3",
+                key: "enrollment",
                 label: (
                   <>
-                    Filières <Badge count={11} color="blue" />
-                  </>
-                ),
-              },
-              {
-                key: "4",
-                label: (
-                  <>
-                    Candidature (s) en attente (s){" "}
-                    <Badge count={41} color="red" overflowCount={9} />
+                    Candidatures en attente <Badge count={41} color="red" overflowCount={9} />
                   </>
                 ),
               },
             ]}
+            activeTabKey={dashTab}
+            onTabChange={(key)=>{
+              setDashTab(key as "faculty"|"department"| "enrollment")
+            }}
           >
-            <Row gutter={[16, 16]}>
-              {[1, 2, 3, 4].map((index) => (
-                <Col key={index} span={8}>
-                  <Card
-                    title={ <Link href={`/app/track/${index}`}>Faculté {index}</Link>}
-                    extra={
-                      <Dropdown
-                        menu={{
-                          items: [
-                            { key: "1", label: "Action 1" },
-                            { key: "2", label: "Action 2" },
-                          ],
-                        }}
-                      >
-                        <Button type="text" icon={<MoreOutlined />} />
-                      </Dropdown>
-                    }
-                    type="inner"
-                  >
-                    <Row gutter={[16, 16]}>
-                      <Col span={8}>
-                        <Statistic
-                          value={2}
-                          title="Départements"
-                          // prefix={<ApartmentOutlined />}
-                          // valueStyle={{ color: '#3f8600' }}
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Statistic
-                          value={50}
-                          title="Cours"
-                          // prefix={<ApartmentOutlined />}
-                          // valueStyle={{ color: '#3f8600' }}
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Statistic
-                          value={6}
-                          title="Semestres"
-                          // prefix={<ApartmentOutlined />}
-                          // valueStyle={{ color: '#3f8600' }}
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Statistic
-                          value={103}
-                          title="Etudiants"
-                          // prefix={<TeamOutlined />}
-                          // valueStyle={{ color: '#cf1322' }}
-                        />
-                      </Col>
-                      
-                      <Col span={8}>
-                        <Statistic
-                          value={9}
-                          title="Promotions"
-                          // prefix={<ApartmentOutlined />}
-                          // prefix={<UsergroupAddOutlined />}
-                          // valueStyle={{ color: '#3f8600' }}
-                        />
-                      </Col>
-                      <Col span={8}>
-                        <Statistic
-                          value={5}
-                          title="Personnel"
-                          // prefix={<UsergroupAddOutlined />}
-                          // valueStyle={{ color: '#cf1322' }}
-                        />
-                      </Col>
-                      {/* <Col span={12}>
-                        <Statistic
-                          value={30}
-                          title="Enseignants"
-                          prefix={<UsergroupAddOutlined />}
-                          // valueStyle={{ color: '#3f8600' }}
-                        />
-                      </Col> */}
-                    </Row>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
+            <div style={{display:dashTab==="faculty"?"block":"none"}}><FacultiesStatistics/></div>
+            <div style={{display:dashTab==="department"?"block":"none"}}><DepartmentsStatistics/></div>
+            <div style={{display:dashTab==="enrollment"?"block":"none"}}><EnrollmentsStatistics/></div>
           </Card>
         </Flex>
         <Layout.Footer
-          style={{ display:"flex", background: colorBgContainer, padding: " 24px 0" }}
+          style={{
+            display: "flex",
+            background: colorBgContainer,
+            padding: " 24px 0",
+          }}
         >
           <Typography.Text type="secondary">
             © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>
-            <Palette/>
+            <Palette />
           </Space>
         </Layout.Footer>
       </Layout.Content>
@@ -266,7 +155,12 @@ export default function Page() {
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <Flex justify="space-between" align="center" className="px-7 pt-3" style={{paddingLeft:28, paddingRight:28, paddingTop:12}}>
+        <Flex
+          justify="space-between"
+          align="center"
+          className="px-7 pt-3"
+          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
+        >
           <Typography.Title level={5} className="">
             Promotions
           </Typography.Title>
@@ -303,7 +197,11 @@ export default function Page() {
                         extra={<Button type="text" icon={<RightOutlined />} />}
                       >
                         <List.Item.Meta
-                          title={<Link href={`/app/class/${item.id}`}>{item.name}</Link>}
+                          title={
+                            <Link href={`/app/class/${item.id}`}>
+                              {item.name}
+                            </Link>
+                          }
                           description={
                             <Space>
                               <Badge
