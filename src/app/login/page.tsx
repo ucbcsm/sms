@@ -3,8 +3,6 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
   Button,
-  Checkbox,
-  Flex,
   Form,
   Input,
   Layout,
@@ -13,6 +11,14 @@ import {
   Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+
+const formSchema = z.object({
+  email: z.string().nonempty("L'email ou le matricule est requis."),
+  password: z.string().nonempty("Le mot de passe est requis."),
+});
+
+type FormSchema = z.infer<typeof formSchema>;
 
 export default function Page() {
   const {
@@ -20,14 +26,18 @@ export default function Page() {
   } = theme.useToken();
   const router = useRouter();
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: FormSchema) => {
     router.push("/app");
   };
   return (
     <Layout>
       <Layout.Content
         style={{
-          backgroundImage: `url("https://images.pexels.com/photos/247823/pexels-photo-247823.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1")`,
+          backgroundImage: `url("/ucbc-front.jpg")`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          minHeight: "100vh",
         }}
       ></Layout.Content>
       <Layout.Sider
@@ -74,7 +84,7 @@ export default function Page() {
                 <Form.Item
                   name="email"
                   rules={[
-                    { required: true, message: "Please input your Email or your matricule!" },
+                    { required: true },
                   ]}
                 >
                   <Input
@@ -85,7 +95,7 @@ export default function Page() {
                 <Form.Item
                   name="password"
                   rules={[
-                    { required: true, message: "Please input your Password!" },
+                    { required: true},
                   ]}
                 >
                   <Input.Password

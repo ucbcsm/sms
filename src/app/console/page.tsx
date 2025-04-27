@@ -9,6 +9,7 @@ import {
   Card,
   Col,
   Descriptions,
+  Image,
   Layout,
   Row,
   Space,
@@ -145,14 +146,14 @@ export default function Page() {
             </Col>
             <Col span={8}>
               <div style={{ textAlign: "center", marginBottom: 28 }}>
-                <Avatar
-                  src="https://images.pexels.com/photos/170809/pexels-photo-170809.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                  alt="Logo"
+                <Image
+                  src="/ucbc-logo.png"
+                  alt="Logo ucbc"
                   style={{
                     marginBottom: 28,
                   }}
-                  size={200}
-                  shape="square"
+                  // size={200}
+                  // shape="square"
                 />
                 {/* <Typography.Title level={4}>LOGO</Typography.Title> */}
               </div>

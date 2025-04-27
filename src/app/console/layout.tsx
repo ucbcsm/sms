@@ -18,6 +18,7 @@ import {
   Button,
   Divider,
   Dropdown,
+  Image,
   Layout,
   Menu,
   Modal,
@@ -53,6 +54,7 @@ export default function ConsoleLayout({
           paddingLeft: 0,
         }}
       >
+
         <Space style={{ background: colorPrimary }}>
           <Button
             type="primary"
@@ -66,6 +68,7 @@ export default function ConsoleLayout({
             size="large"
             onClick={() => setIsModalOpen(true)}
           />
+          
           <Modal
             title={`Quitter la console d'administration`}
             centered
@@ -90,7 +93,16 @@ export default function ConsoleLayout({
             />
           </Modal>
         </Space>
-        <Space style={{ paddingLeft: 16 }}>
+       <div className=" flex items-center px-4">
+       <Image
+          src="/ucbc-logo.png"
+           alt="Logo ucbc"
+           width={36}
+           preview={false}
+           style={{}}
+          />
+       </div>
+        <Space style={{  }}>
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
             CI-UCBC
           </Typography.Title>
@@ -167,7 +179,7 @@ export default function ConsoleLayout({
                 },
                 {
                   key: `/console/fields`,
-                  label: "Cycles et filières",
+                  label: "Filières",
                   icon: <ApartmentOutlined />,
                   className: "normal-case",
                 },

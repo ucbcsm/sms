@@ -5,8 +5,8 @@ import { YearSelector } from "@/components/yearSelector";
 import {
   DashboardOutlined,
   DollarOutlined,
-  HomeOutlined,
   LogoutOutlined,
+  MoreOutlined,
   NotificationOutlined,
   QuestionOutlined,
   SafetyCertificateOutlined,
@@ -17,8 +17,10 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import {
+  Avatar,
   Button,
   Dropdown,
+  Image,
   Layout,
   Menu,
   Space,
@@ -26,7 +28,7 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function AppLayout({
   children,
@@ -42,6 +44,7 @@ export default function AppLayout({
   } = theme.useToken();
 
   const router = useRouter();
+  const pathname=usePathname()
 
   return (
     <Layout>
@@ -55,15 +58,31 @@ export default function AppLayout({
           paddingRight: 32,
         }}
       >
+        <Link href="/app" style={{ display: "flex", alignItems: "center" }}>
+        <div className="flex items-center pr-3">
+         <Image
+          src="/ucbc-logo.png"
+           alt="Logo ucbc"
+           width={36}
+           preview={false}
+          />
+          </div>
         <Typography.Title level={5} style={{ marginBottom: 0 }}>
           CI-UCBC
         </Typography.Title>
+        </Link>
         <Menu
           mode="horizontal"
           theme="light"
-          defaultSelectedKeys={["1"]}
+          defaultSelectedKeys={[pathname]}
+          selectedKeys={[pathname]}
+          overflowedIndicator={<MoreOutlined />}
           items={[
-            { key: "/app", label: "Tableau de bord", icon: <DashboardOutlined />,  },
+            { 
+              key: "/app", 
+              label: "Tableau de bord", 
+              icon: <DashboardOutlined />,
+            },
             {
               key: "/app/students",
               label: "Etudiants",
@@ -90,9 +109,9 @@ export default function AppLayout({
                   icon: <NotificationOutlined />,
                 },
                 {
-                  key: "/app/rooms",
-                  label: "Salles de classe",
-                  icon: <TagsOutlined />,
+                  key: "/console",
+                  label: "Paramètres",
+                  icon: <SettingOutlined />,
                 },
               ],
             },
