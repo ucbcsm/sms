@@ -70,7 +70,11 @@ export default function Page() {
                   },
                   {
                     label: "Devise",
-                    children: "Savoir et Foi",
+                    children: "Amour, Travail, Fidélité",
+                  },
+                  {
+                    label: "Slogan",
+                    children: "Etre Transformé pour transformer",
                   },
                   {
                     label: "Pays",

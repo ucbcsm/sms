@@ -114,7 +114,7 @@ export default function Page() {
                 dataIndex: "name",
                 title: "Nom",
                 render: (value, record, index) => {
-                  return <Link href={`/console/years/${value}`}>{value}</Link>;
+                  return <Link href={`/console/years/${value}/periods`}>{value}</Link>;
                 },
               },
               {
@@ -138,7 +138,7 @@ export default function Page() {
                       <Button
                         title="Gérer l'année académique"
                         onClick={() => {
-                          router.push(`/console/years/${record.name}`);
+                          router.push(`/console/years/${record.name}/periods`);
                         }}
                         style={{ boxShadow: "none" }}
                       >

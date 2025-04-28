@@ -128,7 +128,7 @@ export default function Page() {
         },
         {
           id: "3",
-          name: "Session d'été",
+          name: "Bloc semestre",
           type: "Session",
           startDate: "01/08/2023",
           endDate: "31/08/2023",
