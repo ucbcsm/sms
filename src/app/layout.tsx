@@ -22,6 +22,8 @@ const themeConfig: ThemeConfig = {
   },
 };
 
+// https://ciucbc.pythonanywhere.com
+
 export default function RootLayout({
   children,
 }: Readonly<{
