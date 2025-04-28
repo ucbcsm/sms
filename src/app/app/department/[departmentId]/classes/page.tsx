@@ -10,14 +10,16 @@ import {
     PrinterOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    const router=useRouter()
     return (
         <Table
             title={() => (
                 <header className="flex pb-3">
                     <Space>
-                        <Input.Search placeholder="Rechercher un cours prévu ..." />
+                        <Input.Search placeholder="Rechercher une promotion ..." />
                     </Space>
                     <div className="flex-1" />
                     <Space>
@@ -52,74 +54,60 @@ export default function Page() {
             dataSource={[
                 {
                     key: "1",
-                    code: "MATH101",
-                    title: "Mathématiques Générales",
-                    teacher: "Prof. Kabasele Mwamba",
-                    credits: 3,
-                    hours: 30,
-                    room: "Salle A1",
-                    type: "Obligatoire",
+                    name: "L1",
+                    department: "Informatique",
+                    students: 120,
+                    year: "2023-2024",
+                    type: "Licence",
                 },
                 {
                     key: "2",
-                    code: "PHYS201",
-                    title: "Physique Appliquée",
-                    teacher: "Prof. Mbuyi Tshibanda",
-                    credits: 4,
-                    hours: 40,
-                    room: "Salle B2",
-                    type: "Électif",
+                    name: "M1",
+                    department: "Informatique",
+                    students: 80,
+                    year: "2023-2024",
+                    type: "Master",
                 },
                 {
                     key: "3",
-                    code: "HIST301",
-                    title: "Histoire Moderne",
-                    teacher: "Prof. Nzinga Lunda",
-                    credits: 2,
-                    hours: 20,
-                    room: "Salle C3",
-                    type: "Obligatoire",
+                    name: "L2",
+                    department: "Mathématiques",
+                    students: 100,
+                    year: "2023-2024",
+                    type: "Licence",
                 },
                 {
                     key: "4",
-                    code: "LITT401",
-                    title: "Littérature Africaine",
-                    teacher: "Prof. Ilunga Kalala",
-                    credits: 3,
-                    hours: 30,
-                    room: "Salle D4",
-                    type: "Électif",
+                    name: "D1",
+                    department: "Informatique",
+                    students: 15,
+                    year: "2023-2024",
+                    type: "Doctorat",
                 },
             ]}
             columns={[
                 {
-                    title: "Code",
-                    dataIndex: "code",
-                    key: "code",
+                    title: "Promotion",
+                    dataIndex: "name",
+                    key: "name",
                 },
                 {
-                    title: "Titre du cours",
-                    dataIndex: "title",
-                    key: "title",
+                    title: "Etudiants",
+                    dataIndex: "students",
+                    key: "students",
+                   
                 },
                 {
-                    title: "Crédits",
-                    dataIndex: "credits",
-                    key: "credits",
-                    align: "center",
+                    title: "Année",
+                    dataIndex: "year",
+                    key: "year",
                 },
                 {
-                    title: "Heures",
-                    dataIndex: "hours",
-                    key: "hours",
-                    align: "center",
-                },
-                {
-                    title: "Type",
+                    title: "Cycle",
                     dataIndex: "type",
                     key: "type",
                     render: (type) => {
-                        let color = type === "Obligatoire" ? "blue" : "green";
+                        let color = type === "Licence" ? "blue" : type === "Master" ? "green" : "purple";
                         return (
                             <Tag color={color} bordered={false} style={{ borderRadius: 10 }}>
                                 {type}
@@ -132,7 +120,7 @@ export default function Page() {
                     key: "actions",
                     render: (_, record) => (
                         <Space>
-                            <Button style={{ boxShadow: "none" }}>Détails</Button>
+                            <Button style={{ boxShadow: "none" }} onClick={()=>{router.push(`/app/class/1`)}}>Voir détails</Button>
                             <Dropdown
                                 menu={{
                                     items: [

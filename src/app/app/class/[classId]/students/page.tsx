@@ -11,8 +11,10 @@ import {
     PrinterOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    const router =useRouter()
     return (
         <Table
             title={() => (
@@ -130,7 +132,7 @@ export default function Page() {
                         key: "actions",
                         render: (_, record) => (
                             <Space>
-                                <Button style={{boxShadow:"none"}}>Gérer</Button>
+                                <Button style={{boxShadow:"none"}} onClick={()=>{router.push(`/app/student/1`)}}>Gérer</Button>
                             <Dropdown
                                 menu={{
                                     items: [

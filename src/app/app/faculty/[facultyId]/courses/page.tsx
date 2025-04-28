@@ -7,6 +7,7 @@ import {
     FileExcelOutlined,
     FilePdfOutlined,
     MoreOutlined,
+    PlusOutlined,
     PrinterOutlined,
 } from "@ant-design/icons";
 import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
@@ -17,10 +18,11 @@ export default function Page() {
             title={() => (
                 <header className="flex pb-3">
                     <Space>
-                        <Input.Search placeholder="Rechercher un cours prévu ..." />
+                        <Input.Search placeholder="Rechercher un cours dans le catalogue ..." />
                     </Space>
                     <div className="flex-1" />
                     <Space>
+                        <Button type="primary" icon={<PlusOutlined/>} style={{boxShadow:"none"}}>Ajouter</Button>
                         <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
                             Imprimer
                         </Button>
@@ -52,43 +54,43 @@ export default function Page() {
             dataSource={[
                 {
                     key: "1",
-                    code: "MATH101",
-                    title: "Mathématiques Générales",
-                    teacher: "Prof. Kabasele Mwamba",
+                    code: "INF101",
+                    title: "Introduction à l'Informatique",
+                    teacher: "Dr. Kabasele Mwamba",
                     credits: 3,
-                    hours: 30,
-                    room: "Salle A1",
+                    hours: 45,
+                    semester: "Semestre 1",
                     type: "Obligatoire",
                 },
                 {
                     key: "2",
-                    code: "PHYS201",
-                    title: "Physique Appliquée",
-                    teacher: "Prof. Mbuyi Tshibanda",
+                    code: "INF202",
+                    title: "Structures de Données",
+                    teacher: "Dr. Mbuyi Tshibanda",
                     credits: 4,
-                    hours: 40,
-                    room: "Salle B2",
-                    type: "Électif",
-                },
-                {
-                    key: "3",
-                    code: "HIST301",
-                    title: "Histoire Moderne",
-                    teacher: "Prof. Nzinga Lunda",
-                    credits: 2,
-                    hours: 20,
-                    room: "Salle C3",
+                    hours: 60,
+                    semester: "Semestre 2",
                     type: "Obligatoire",
                 },
                 {
-                    key: "4",
-                    code: "LITT401",
-                    title: "Littérature Africaine",
-                    teacher: "Prof. Ilunga Kalala",
+                    key: "3",
+                    code: "INF303",
+                    title: "Bases de Données",
+                    teacher: "Dr. Nzinga Lunda",
                     credits: 3,
-                    hours: 30,
-                    room: "Salle D4",
+                    hours: 45,
+                    semester: "Semestre 3",
                     type: "Électif",
+                },
+                {
+                    key: "4",
+                    code: "INF404",
+                    title: "Développement Web",
+                    teacher: "Dr. Ilunga Kalala",
+                    credits: 3,
+                    hours: 45,
+                    semester: "Semestre 4",
+                    type: "Obligatoire",
                 },
             ]}
             columns={[
@@ -132,7 +134,7 @@ export default function Page() {
                     key: "actions",
                     render: (_, record) => (
                         <Space>
-                            <Button style={{ boxShadow: "none" }}>Détails</Button>
+                            <Button style={{ boxShadow: "none" }}>Voir détails</Button>
                             <Dropdown
                                 menu={{
                                     items: [

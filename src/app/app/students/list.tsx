@@ -62,7 +62,7 @@ const columns: TableColumnType<StudentType>[] = [
     key: "matricule",
     width: 92,
     render: (value, record) => (
-      <Link href={`/app/students/${record.id}`}>{value}</Link>
+      <Link href={`/app/student/${record.id}`}>{value}</Link>
     ),
     align: "center",
   },
@@ -71,7 +71,7 @@ const columns: TableColumnType<StudentType>[] = [
     dataIndex: "lastname",
     key: "name",
     render: (value, record) => (
-      <Link href={`/app/students/${record.id}`}>
+      <Link href={`/app/student/${record.id}`}>
         {record.firstname} {record.lastname} {record.surname}
       </Link>
     ),

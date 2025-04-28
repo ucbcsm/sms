@@ -9,15 +9,17 @@ import {
     MoreOutlined,
     PrinterOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    const router=useRouter()
     return (
         <Table
             title={() => (
                 <header className="flex pb-3">
                     <Space>
-                        <Input.Search placeholder="Rechercher un cours prévu ..." />
+                        <Input.Search placeholder="Rechercher un étudiant ..." />
                     </Space>
                     <div className="flex-1" />
                     <Space>
@@ -31,7 +33,7 @@ export default function Page() {
                                         key: "pdf",
                                         label: "PDF",
                                         icon: <FilePdfOutlined />,
-                                        title: "Exporter en PDF",
+                                        title: "Exporter en pdf",
                                     },
                                     {
                                         key: "excel",
@@ -52,87 +54,81 @@ export default function Page() {
             dataSource={[
                 {
                     key: "1",
-                    code: "MATH101",
-                    title: "Mathématiques Générales",
-                    teacher: "Prof. Kabasele Mwamba",
-                    credits: 3,
-                    hours: 30,
-                    room: "Salle A1",
-                    type: "Obligatoire",
+                    avatar: "https://i.pravatar.cc/150?img=1",
+                    matricule: "2021001",
+                    name: "Kabasele Mwamba",
+                    department: "Informatique",
+                    promotion: "L3",
+                    status: "Actif",
                 },
                 {
                     key: "2",
-                    code: "PHYS201",
-                    title: "Physique Appliquée",
-                    teacher: "Prof. Mbuyi Tshibanda",
-                    credits: 4,
-                    hours: 40,
-                    room: "Salle B2",
-                    type: "Électif",
+                    avatar: "https://i.pravatar.cc/150?img=2",
+                    matricule: "2020002",
+                    name: "Mbuyi Tshibanda",
+                    department: "Mathématiques",
+                    promotion: "L2",
+                    status: "Actif",
                 },
                 {
                     key: "3",
-                    code: "HIST301",
-                    title: "Histoire Moderne",
-                    teacher: "Prof. Nzinga Lunda",
-                    credits: 2,
-                    hours: 20,
-                    room: "Salle C3",
-                    type: "Obligatoire",
+                    avatar: "https://i.pravatar.cc/150?img=3",
+                    matricule: "2022003",
+                    name: "Nzinga Lunda",
+                    department: "Physique",
+                    promotion: "L1",
+                    status: "Actif",
                 },
                 {
                     key: "4",
-                    code: "LITT401",
-                    title: "Littérature Africaine",
-                    teacher: "Prof. Ilunga Kalala",
-                    credits: 3,
-                    hours: 30,
-                    room: "Salle D4",
-                    type: "Électif",
+                    avatar: "https://i.pravatar.cc/150?img=4",
+                    matricule: "2019004",
+                    name: "Ilunga Kalala",
+                    department: "Chimie",
+                    promotion: "L0",
+                    status: "Abandon",
                 },
             ]}
             columns={[
                 {
-                    title: "Code",
-                    dataIndex: "code",
-                    key: "code",
+                    title: "Avatar",
+                    dataIndex: "avatar",
+                    key: "avatar",
+                    render: (avatar) => <Avatar src={avatar} />,
+                    width: 50,
                 },
                 {
-                    title: "Titre du cours",
-                    dataIndex: "title",
-                    key: "title",
+                    title: "Matricule",
+                    dataIndex: "matricule",
+                    key: "matricule",
                 },
                 {
-                    title: "Crédits",
-                    dataIndex: "credits",
-                    key: "credits",
-                    align: "center",
+                    title: "Nom",
+                    dataIndex: "name",
+                    key: "name",
                 },
                 {
-                    title: "Heures",
-                    dataIndex: "hours",
-                    key: "hours",
-                    align: "center",
+                    title: "Promotion",
+                    dataIndex: "promotion",
+                    key: "promotion",
                 },
                 {
-                    title: "Type",
-                    dataIndex: "type",
-                    key: "type",
-                    render: (type) => {
-                        let color = type === "Obligatoire" ? "blue" : "green";
-                        return (
-                            <Tag color={color} bordered={false} style={{ borderRadius: 10 }}>
-                                {type}
-                            </Tag>
-                        );
-                    },
+                    title: "Statut",
+                    dataIndex: "status",
+                    key: "status",
+                    render: (status) => (
+                        <Tag color={status === "Actif" ? "green" : "red"} bordered={false} >{status}</Tag>
+                    ),
+                    align: "start",
                 },
                 {
-                    title: "Actions",
+                    title: "",
                     key: "actions",
                     render: (_, record) => (
                         <Space>
-                            <Button style={{ boxShadow: "none" }}>Détails</Button>
+                            <Button style={{ boxShadow: "none" }} onClick={()=>{
+                                router.push(`/app/student/1`)
+                            }}>Gérer</Button>
                             <Dropdown
                                 menu={{
                                     items: [

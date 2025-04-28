@@ -1,7 +1,7 @@
 "use client";
 
+import { EditOutlined } from "@ant-design/icons";
 import {
-  theme,
   Descriptions,
   Row,
   Col,
@@ -9,12 +9,10 @@ import {
   Flex,
   Statistic,
   Progress,
+  Button,
 } from "antd";
 
 export default function Page() {
-  const {
-    token: { colorBgContainer, colorBorderSecondary },
-  } = theme.useToken();
 
   return (
     <Row gutter={[16, 16]}>
@@ -96,6 +94,7 @@ export default function Page() {
       <Col span={8}>
         <Descriptions
           title="Détails sur la promotion"
+          extra={<Button type="link" icon={<EditOutlined/>}>Modifier</Button>}
           column={1}
           items={[
             {

@@ -9,15 +9,17 @@ import {
     MoreOutlined,
     PrinterOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import { Button, Dropdown, Input, Space, Table} from "antd";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+    const router =useRouter()
     return (
         <Table
             title={() => (
                 <header className="flex pb-3">
                     <Space>
-                        <Input.Search placeholder="Rechercher un cours prévu ..." />
+                        <Input.Search placeholder="Rechercher un département ..." />
                     </Space>
                     <div className="flex-1" />
                     <Space>
@@ -52,87 +54,56 @@ export default function Page() {
             dataSource={[
                 {
                     key: "1",
-                    code: "MATH101",
-                    title: "Mathématiques Générales",
-                    teacher: "Prof. Kabasele Mwamba",
-                    credits: 3,
-                    hours: 30,
-                    room: "Salle A1",
-                    type: "Obligatoire",
+                    name: "Informatique",
+                    head: "Dr. Alice Dupont",
+                    programs: 6,
+                    students: 400,
                 },
                 {
                     key: "2",
-                    code: "PHYS201",
-                    title: "Physique Appliquée",
-                    teacher: "Prof. Mbuyi Tshibanda",
-                    credits: 4,
-                    hours: 40,
-                    room: "Salle B2",
-                    type: "Électif",
+                    name: "Mathématiques",
+                    head: "Dr. Jean Martin",
+                    programs: 6,
+                    students: 250,
                 },
                 {
                     key: "3",
-                    code: "HIST301",
-                    title: "Histoire Moderne",
-                    teacher: "Prof. Nzinga Lunda",
-                    credits: 2,
-                    hours: 20,
-                    room: "Salle C3",
-                    type: "Obligatoire",
+                    name: "Physique",
+                    head: "Dr. Clara Bernard",
+                    programs: 6,
+                    students: 300,
                 },
                 {
                     key: "4",
-                    code: "LITT401",
-                    title: "Littérature Africaine",
-                    teacher: "Prof. Ilunga Kalala",
-                    credits: 3,
-                    hours: 30,
-                    room: "Salle D4",
-                    type: "Électif",
+                    name: "Chimie",
+                    head: "Dr. Pierre Durand",
+                    programs: 6,
+                    students: 150,
                 },
             ]}
             columns={[
                 {
-                    title: "Code",
-                    dataIndex: "code",
-                    key: "code",
+                    title: "Nom du département",
+                    dataIndex: "name",
+                    key: "name",
                 },
                 {
-                    title: "Titre du cours",
-                    dataIndex: "title",
-                    key: "title",
+                    title: "Programmes",
+                    dataIndex: "programs",
+                    key: "programs",
                 },
                 {
-                    title: "Crédits",
-                    dataIndex: "credits",
-                    key: "credits",
-                    align: "center",
-                },
-                {
-                    title: "Heures",
-                    dataIndex: "hours",
-                    key: "hours",
-                    align: "center",
-                },
-                {
-                    title: "Type",
-                    dataIndex: "type",
-                    key: "type",
-                    render: (type) => {
-                        let color = type === "Obligatoire" ? "blue" : "green";
-                        return (
-                            <Tag color={color} bordered={false} style={{ borderRadius: 10 }}>
-                                {type}
-                            </Tag>
-                        );
-                    },
+                    title: "Etudiants",
+                    dataIndex: "students",
+                    key: "students",
+                    align: "end",
                 },
                 {
                     title: "Actions",
                     key: "actions",
                     render: (_, record) => (
                         <Space>
-                            <Button style={{ boxShadow: "none" }}>Détails</Button>
+                            <Button style={{ boxShadow: "none" }} onClick={()=>{router.push(`/app/department/1`)}}>Voir détails</Button>
                             <Dropdown
                                 menu={{
                                     items: [
