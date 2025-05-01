@@ -1,7 +1,0 @@
- "amphitheater", "Amphithéâtre"
- "classroom", "Salle de cours"
-"laboratory", "Laboratoire"
-"computer-room", "Salle informatique"
-"meeting-room", "Salle de réunion"
-"chapel", "Chapelle"
-"office", "Bureau"
