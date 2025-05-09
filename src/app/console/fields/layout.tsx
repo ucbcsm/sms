@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  AppstoreOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  MoreOutlined,
-  PlusCircleOutlined,
-  PlusOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -16,7 +8,6 @@ import {
   Dropdown,
   Layout,
   List,
-  Radio,
   Space,
   theme,
   Typography,
@@ -27,6 +18,9 @@ import Link from "next/link";
 import BackButton from "@/components/backButton";
 import { getHSLColor } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getCycles } from "@/utils";
+import { NewCycleForm } from "./(cycles)/forms/newCycle";
 
 export default function FieldsLayout({
   children,
@@ -37,7 +31,12 @@ export default function FieldsLayout({
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
   const router = useRouter();
-  const pathname=usePathname()
+  const pathname = usePathname();
+
+  const { data: cycles, isPending } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: getCycles,
+  });
 
   return (
     <Layout>
@@ -71,9 +70,7 @@ export default function FieldsLayout({
         </Layout.Header>
         <Card
           tabList={[
-            {
-              key: "/console/fields",label: "Tous"},
-            { key: "/console/fields/tracks", label: "Domaines" },
+            { key: "/console/fields", label: "Domaines" },
             { key: "/console/fields/faculties", label: "Facultés" },
             { key: "/console/fields/departments", label: "Départements" },
             { key: "/console/fields/classes", label: "Promotions" },
@@ -108,38 +105,14 @@ export default function FieldsLayout({
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
         <Card
+          loading={isPending}
           variant="borderless"
           title="Cycles"
           style={{ boxShadow: "none" }}
-          extra={
-            <Button
-              type="link"
-              icon={<PlusCircleOutlined />}
-              title="Ajouter un cycle"
-              disabled
-            >
-              Ajouter
-            </Button>
-          }
+          extra={<NewCycleForm cycles={cycles} />}
         >
           <List
-            dataSource={[
-              {
-                id: "1",
-                name: "Licence",
-                description: "Premier cycle universitaire",
-              },
-              {
-                id: "2",
-                name: "Master",
-                description: "Deuxième cycle universitaire",
-              },
-              {
-                id: "3",
-                name: "Doctorat",
-                description: "Troisième cycle universitaire",
-              },
-            ]}
+            dataSource={cycles}
             renderItem={(item) => (
               <List.Item
                 key={item.id}
@@ -164,11 +137,11 @@ export default function FieldsLayout({
                 <List.Item.Meta
                   avatar={
                     <Avatar style={{ background: getHSLColor(item.name) }}>
-                      {item.name.charAt(0)}
+                      {item.symbol || item.name[0].toUpperCase()}
                     </Avatar>
                   }
-                  title={<Link href="#">{item.name}</Link>}
-                  description={item.description}
+                  title={item.name}
+                  description={item.purpose}
                 />
               </List.Item>
             )}

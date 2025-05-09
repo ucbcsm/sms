@@ -1,5 +1,9 @@
 //  ENDPOINTS LINKS 
 
+// get token after login: https://ciucbc.pythonanywhere.com/https://ciucbc.pythonanywhere.com/auth/jwt/create/
+// create user or register user: https://ciucbc.pythonanywhere.com/auth/users/
+// get the current connected user info: https://ciucbc.pythonanywhere.com/auth/users/me/
+
 //  https://ciucbc.pythonanywhere.com/api/v01/main_config/academic-year/
 //  https://ciucbc.pythonanywhere.com/api/v01/main_config/class-year/
 //  https://ciucbc.pythonanywhere.com/api/v01/main_config/cycle/
@@ -13,8 +17,6 @@
 //  https://ciucbc.pythonanywhere.com/api/v01/main_config/period/
 //  https://ciucbc.pythonanywhere.com/api/v01/main_config/service/
 //  https://ciucbc.pythonanywhere.com/api/v01/main_config/timetable/
-
-
 
 //  https://ciucbc.pythonanywhere.com/api/v01/apparitorat/application/,
 //  https://ciucbc.pythonanywhere.com/api/v01/apparitorat/application-pending/,

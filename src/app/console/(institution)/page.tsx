@@ -1,11 +1,11 @@
 "use client";
 
 import BackButton from "@/components/backButton";
+import { ErrorCard } from "@/components/errorCard";
 import { Palette } from "@/components/palette";
-import { EditOutlined } from "@ant-design/icons";
+import { getInstitution } from "@/utils";
+import { useQuery } from "@tanstack/react-query";
 import {
-  Avatar,
-  Button,
   Card,
   Col,
   Descriptions,
@@ -16,12 +16,22 @@ import {
   theme,
   Typography,
 } from "antd";
-import Link from "next/link";
+import { EditInstitutionForm } from "./forms/edit";
 
 export default function Page() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["institution"],
+    queryFn: getInstitution,
+  });
+
+  if (isError) {
+    return <ErrorCard />;
+  }
+
   return (
     <Layout>
       <Layout.Content
@@ -47,13 +57,13 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
+
         <Card
           title="Détails"
           extra={
-            <Button icon={<EditOutlined />} style={{ boxShadow: "none" }}>
-              Modifier
-            </Button>
+            <EditInstitutionForm institution={data} isLoading={isPending} />
           }
+          loading={isPending}
         >
           <Row>
             <Col span={16}>
@@ -61,89 +71,103 @@ export default function Page() {
                 column={2}
                 items={[
                   {
-                    label: "Sigle",
-                    children: "UCBC",
+                    label: "Nom",
+                    children: data?.name,
                   },
                   {
-                    label: "Nom",
-                    children: "Université Chrétienne Bilingue du Congo",
+                    label: "Sigle",
+                    children: data?.acronym,
                   },
+
                   {
                     label: "Devise",
-                    children: "Amour, Travail, Fidélité",
+                    children: data?.motto,
                   },
                   {
                     label: "Slogan",
-                    children: "Etre Transformé pour transformer",
+                    children: data?.slogan,
                   },
                   {
                     label: "Pays",
-                    children: "République Démocratique du Congo",
+                    children: data?.country,
                   },
                   {
                     label: "Province",
-                    children: "Nord-Kivu",
+                    children: data?.province,
                   },
                   {
                     label: "Ville",
-                    children: "Beni",
+                    children: data?.city,
                   },
                   {
                     label: "Adresse",
-                    children:
-                      "Beni, Nord-Kivu, République Démocratique du Congo",
+                    children: data?.address,
                   },
                   {
-                    label: "Téléphone",
-                    children: "+243 999 123 456",
+                    label: "Téléphone principal",
+                    children: data?.phone_number_1,
+                  },
+                  {
+                    label: "Téléphone secondaire",
+                    children: data?.phone_number_2,
                   },
                   {
                     label: "Email",
-                    children: "contact@ucbc.cd",
+                    children: (
+                      <a href={`mailto:${data?.email_address}`} target="_blank">
+                        {data?.email_address}
+                      </a>
+                    ),
                   },
                   {
                     label: "Site web",
                     children: (
-                      <Link href="https://www.ucbc.cd" target="_blank">
-                        www.ucbc.cd
-                      </Link>
+                      <a href={`${data?.web_site}`} target="_blank">
+                        {data?.web_site}
+                      </a>
                     ),
                   },
-                  {
-                    label: "Année de création",
-                    children: "2007",
-                  },
+                  // {
+                  //   label: "Année de création",
+                  //   children: "2007",
+                  // },
                   {
                     label: "Statut",
-                    children: "Privée",
+                    children: data?.status === "private" ? "Privée" : "Public",
                   },
-                  {
-                    label: "Accréditation",
-                    children:
-                      "Ministère de l'Enseignement Supérieur et Universitaire",
-                  },
+                  // {
+                  //   label: "Accréditation",
+                  //   children:
+                  //     "Ministère de l'Enseignement Supérieur et Universitaire",
+                  // },
                   {
                     label: "Type d'établissement",
-                    children: "Université",
+                    children:
+                      data?.category === "university"
+                        ? "Université"
+                        : "Institut supérieure",
                   },
-                  {
-                    label: "Langue d'enseignement",
-                    children: "Français, Anglais",
-                  },
+                  // {
+                  //   label: "Langue d'enseignement",
+                  //   children: "Français, Anglais",
+                  // },
 
                   {
                     label: "Mission",
-                    children:
-                      "Former des leaders chrétiens compétents et intègres pour transformer la société.",
+                    children: data?.mission,
                   },
                   {
-                    label: "Description",
-                    children:
-                      "L'Université Chrétienne Bilingue du Congo (UCBC) est une institution académique qui vise à offrir une éducation de qualité tout en promouvant des valeurs chrétiennes pour le développement durable.",
+                    label: "Vision",
+                    children: data?.vision,
                   },
+                  // {
+                  //   label: "Description",
+                  //   children:
+                  //     "L'Université Chrétienne Bilingue du Congo (UCBC) est une institution académique qui vise à offrir une éducation de qualité tout en promouvant des valeurs chrétiennes pour le développement durable.",
+                  // },
                   {
                     label: "Organisation mère",
-                    children: "Congo Initiative",
+                    children: data?.parent_organization,
                   },
                 ]}
               />
@@ -151,7 +175,7 @@ export default function Page() {
             <Col span={8}>
               <div style={{ textAlign: "center", marginBottom: 28 }}>
                 <Image
-                  src="/ucbc-logo.png"
+                  src={data?.logo || "/ucbc-logo.png"}
                   alt="Logo ucbc"
                   style={{
                     marginBottom: 28,

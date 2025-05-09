@@ -123,6 +123,7 @@ export default function DepartmentLayout({
             },
           ]}
           defaultActiveTabKey={pathname}
+          activeTabKey={pathname}
           onTabChange={(key) => {
             router.push(key);
           }}

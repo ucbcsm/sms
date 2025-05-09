@@ -1,5 +1,7 @@
 "use client";
 
+import { Period } from "@/types";
+import { getPeriods } from "@/utils/api/period";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -10,14 +12,24 @@ import {
   PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Input, Space, Table, TableColumnType } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Button,
+  Dropdown,
+  Input,
+  Space,
+  Table,
+  TableColumnType,
+  Tag,
+} from "antd";
+import dayjs from "dayjs";
+import { record } from "zod";
 
-const columns: TableColumnType<any>[] = [
+const columns: TableColumnType<Period>[] = [
   {
     title: "Nom",
     dataIndex: "name",
     key: "name",
-    render: (text, record) => text,
   },
   {
     title: "Type",
@@ -27,17 +39,47 @@ const columns: TableColumnType<any>[] = [
   {
     title: "Date de début",
     key: "dates",
-    render: (_, record) => `${record.startDate}`,
+    render: (_, record, __) => dayjs(record.start_date).format("DD/MM/YYYY"),
   },
   {
     title: "Date de fin",
     key: "dates",
-    render: (_, record) => `${record.endDate}`,
+    render: (_, record, __) => dayjs(record.end_date).format("DD/MM/YYYY"),
   },
   {
     title: "Statut",
     dataIndex: "status",
     key: "status",
+    render: (_, record, __) => {
+      let color = "";
+      let text = "";
+      switch (record.status) {
+        case "pending":
+          color = "orange";
+          text = "En attente";
+          break;
+        case "progress":
+          color = "blue";
+          text = "En cours";
+          break;
+        case "finished":
+          color = "green";
+          text = "Terminé";
+          break;
+        case "suspended":
+          color = "red";
+          text = "Suspendu";
+          break;
+        default:
+          color = "default";
+          text = "Inconnu";
+      }
+      return (
+        <Tag color={color} style={{ border: 0 }}>
+          {text}
+        </Tag>
+      );
+    },
   },
   {
     title: "",
@@ -64,8 +106,13 @@ const columns: TableColumnType<any>[] = [
 ];
 
 export default function Page() {
+  const { data: periods, isPending } = useQuery({
+    queryKey: ["periods"],
+    queryFn: getPeriods,
+  });
   return (
     <Table
+      loading={isPending}
       title={() => (
         <header className="flex pb-3">
           <Space>
@@ -109,40 +156,7 @@ export default function Page() {
           </Space>
         </header>
       )}
-      dataSource={[
-        {
-          id: "1",
-          name: "Semestre 1",
-          type: "Semestre",
-          startDate: "01/01/2023",
-          endDate: "30/06/2023",
-          status: "En cours",
-        },
-        {
-          id: "2",
-          name: "Semestre 2",
-          type: "Semestre",
-          startDate: "01/07/2023",
-          endDate: "31/12/2023",
-          status: "À venir",
-        },
-        {
-          id: "3",
-          name: "Bloc semestre",
-          type: "Session",
-          startDate: "01/08/2023",
-          endDate: "31/08/2023",
-          status: "Terminée",
-        },
-        {
-          id: "5",
-          name: "Session spéciale",
-          type: "Session",
-          startDate: "01/09/2023",
-          endDate: "30/09/2023",
-          status: "À venir",
-        },
-      ]}
+      dataSource={periods}
       columns={columns}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}

@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  AppstoreOutlined,
-  CopyOutlined,
   DeleteOutlined,
   DownOutlined,
   EditOutlined,
@@ -10,19 +8,15 @@ import {
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
-  UnorderedListOutlined,
 } from "@ant-design/icons";
 import {
-  Avatar,
   Button,
   Card,
-  Descriptions,
-  Flex,
   Input,
   Layout,
-  Radio,
   Space,
   Table,
+  Tag,
   theme,
   Typography,
 } from "antd";
@@ -32,12 +26,18 @@ import { useRouter } from "next/navigation";
 import { NewYearForm } from "./forms/newYear";
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
+import { useQuery } from "@tanstack/react-query";
+import { getYears } from "@/utils";
 
 export default function Page() {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBgContainer },
   } = theme.useToken();
   const router = useRouter();
+  const { data: years, isPending } = useQuery({
+    queryKey: ["years"],
+    queryFn: getYears,
+  });
   return (
     <Layout>
       <Layout.Content
@@ -63,7 +63,7 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
-        <Card>
+        <Card loading={isPending}>
           <Table
             title={() => (
               <header className="flex  pb-3">
@@ -104,7 +104,6 @@ export default function Page() {
                       Exporter
                     </Button>
                   </Dropdown>
-                  {/*  With Button to create a new academic year */}
                 </Space>
               </header>
             )}
@@ -113,26 +112,56 @@ export default function Page() {
                 key: "name",
                 dataIndex: "name",
                 title: "Nom",
-                render: (value, record, index) => {
-                  return <Link href={`/console/years/${value}/periods`}>{value}</Link>;
+                render: (value) => {
+                  return (
+                    <Link href={`/console/years/${value}/periods`}>
+                      {value}
+                    </Link>
+                  );
                 },
               },
               {
-                key: "startDate",
-                dataIndex: "startDate",
+                key: "start_date",
+                dataIndex: "start_date",
                 title: "Date de début",
               },
-              { key: "endDate", dataIndex: "endDate", title: "Date de fin" },
+              { key: "end_date", dataIndex: "end_date", title: "Date de fin" },
               {
                 key: "status",
                 dataIndex: "status",
                 title: "Status",
+                render: (_, record, __) => {
+                  let color = "";
+                  let text = "";
+                  switch (record.status) {
+                    case "pending":
+                      color = "orange";
+                      text = "En attente";
+                      break;
+                    case "progress":
+                      color = "blue";
+                      text = "En cours";
+                      break;
+                    case "finished":
+                      color = "green";
+                      text = "Terminé";
+                      break;
+                    case "suspended":
+                      color = "red";
+                      text = "Suspendu";
+                      break;
+                    default:
+                      color = "default";
+                      text = "Inconnu";
+                  }
+                  return <Tag color={color} style={{border:0}}>{text}</Tag>;
+                },
               },
               {
                 key: "actions",
                 dataIndex: "actions",
                 title: "Actions",
-                render: (value, record, index) => {
+                render: (_, record, __) => {
                   return (
                     <Space size="middle">
                       <Button
@@ -151,11 +180,6 @@ export default function Page() {
                               key: "edit",
                               label: "Modifier",
                               icon: <EditOutlined />,
-                            },
-                            {
-                              key: "duplicate",
-                              label: "Dupliquer",
-                              icon: <CopyOutlined />,
                             },
                             {
                               key: "delete",
@@ -178,110 +202,7 @@ export default function Page() {
                 width: 120,
               },
             ]}
-            dataSource={[
-              {
-                name: "2023-2024",
-                startDate: "2023-09-01",
-                endDate: "2024-06-30",
-                status: "En cours",
-              },
-              {
-                name: "2022-2023",
-                startDate: "2022-09-01",
-                endDate: "2023-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2021-2022",
-                startDate: "2021-09-01",
-                endDate: "2022-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2020-2021",
-                startDate: "2020-09-01",
-                endDate: "2021-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2019-2020",
-                startDate: "2019-09-01",
-                endDate: "2020-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2018-2019",
-                startDate: "2018-09-01",
-                endDate: "2019-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2017-2018",
-                startDate: "2017-09-01",
-                endDate: "2018-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2016-2017",
-                startDate: "2016-09-01",
-                endDate: "2017-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2015-2016",
-                startDate: "2015-09-01",
-                endDate: "2016-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2014-2015",
-                startDate: "2014-09-01",
-                endDate: "2015-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2013-2014",
-                startDate: "2013-09-01",
-                endDate: "2014-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2012-2013",
-                startDate: "2012-09-01",
-                endDate: "2013-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2011-2012",
-                startDate: "2011-09-01",
-                endDate: "2012-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2010-2011",
-                startDate: "2010-09-01",
-                endDate: "2011-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2009-2010",
-                startDate: "2009-09-01",
-                endDate: "2010-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2008-2009",
-                startDate: "2008-09-01",
-                endDate: "2009-06-30",
-                status: "Terminé",
-              },
-              {
-                name: "2007-2008",
-                startDate: "2007-09-01",
-                endDate: "2008-06-30",
-                status: "Terminé",
-              },
-            ]}
+            dataSource={years}
             rowKey="id"
             rowClassName={`bg-[#f5f5f5] odd:bg-white`}
             rowSelection={{

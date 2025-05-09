@@ -1,5 +1,6 @@
 "use client";
 
+import { getDepartments } from "@/utils/api/department";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -10,11 +11,19 @@ import {
   PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import { Button, Dropdown, Input, Space, Table, Typography } from "antd";
 
 export default function Page() {
+
+    const {data:departments,isPending}=useQuery({
+        queryKey:["departments"],
+        queryFn:getDepartments
+    })
+
 return (
     <Table
+        loading={isPending}
         title={() => (
             <header className="flex pb-3">
                 <Space>
@@ -65,24 +74,16 @@ return (
                 title: "Nom du département",
             },
             {
-                key: "code",
-                dataIndex: "code",
+                key: "acronym",
+                dataIndex: "acronym",
                 title: "Code",
+                width:100
             },
             {
                 key: "faculty",
                 dataIndex: "faculty",
                 title: "Faculté",
-            },
-            {
-                key: "status",
-                dataIndex: "status",
-                title: "Statut",
-                render: (value) => (
-                    <Typography.Text type={value === "Active" ? "success" : "danger"}>
-                        {value}
-                    </Typography.Text>
-                ),
+                render:(_,record,__)=>`${record.faculty.name}`
             },
             {
                 key: "actions",
@@ -116,35 +117,7 @@ return (
                 width: 50,
             },
         ]}
-        dataSource={Array.from({ length: 10 }, (_, index) => ({
-            id: (index + 1).toString(),
-            name: [
-                "Département de Mathématiques",
-                "Département de Physique",
-                "Département de Chimie",
-                "Département de Biologie",
-                "Département d'Histoire",
-                "Département de Géographie",
-                "Département de Philosophie",
-                "Département de Sociologie",
-                "Département de Psychologie",
-                "Département d'Économie",
-            ][index % 10],
-            code: `DEP${(index + 1).toString().padStart(3, "0")}`,
-            faculty: [
-                "Faculté des Sciences",
-                "Faculté des Sciences",
-                "Faculté des Sciences",
-                "Faculté des Sciences",
-                "Faculté des Lettres",
-                "Faculté des Lettres",
-                "Faculté des Lettres",
-                "Faculté des Lettres",
-                "Faculté des Lettres",
-                "Faculté des Sciences Économiques",
-            ][index % 10],
-            status: index % 2 === 0 ? "Active" : "Inactive",
-        }))}
+        dataSource={departments}
         rowKey="id"
         rowClassName={`bg-[#f5f5f5] odd:bg-white`}
         rowSelection={{

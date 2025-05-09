@@ -1,21 +1,18 @@
 "use client";
+
 import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
 import { EditOutlined, MoreOutlined } from "@ant-design/icons";
+
 import {
-  Avatar,
   Button,
   Card,
-  Col,
   Descriptions,
   Dropdown,
   Flex,
   Image,
   Layout,
-  Progress,
-  Row,
   Space,
-  Statistic,
   theme,
   Typography,
 } from "antd";
@@ -27,7 +24,7 @@ export default function TeacherLayout({
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
-  const { staffId } = useParams();
+  const { teacherId } = useParams();
   const router = useRouter();
   const pathname = usePathname();
   return (
@@ -63,24 +60,25 @@ export default function TeacherLayout({
         <Card
           tabList={[
             {
-              key: `/app/staff/${staffId}`,
+              key: `/app/teacher/${teacherId}`,
               label: "Aperçu",
             },
             {
-              key: `/app/staff/${staffId}/courses`,
+              key: `/app/teacher/${teacherId}/courses`,
               label: "Cours",
             },
             {
-                key: `/app/staff/${staffId}/documents`,
+                key: `/app/teacher/${teacherId}/documents`,
                 label: "Documents",
               },
             {
-              key: `/app/staff/${staffId}/evaluations`,
+              key: `/app/teacher/${teacherId}/evaluations`,
               label: "Évaluations",
             },
            
           ]}
           defaultActiveTabKey={pathname}
+          activeTabKey={pathname}
           onTabChange={(key) => {
             router.push(key);
           }}

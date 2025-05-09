@@ -111,6 +111,7 @@ export default function FacultyLayout({children}:Readonly<{children:ReactNode}>)
             { key: `/app/faculty/${facultyId}/teachers`, label: "Enseignants" },
           ]}
           defaultActiveTabKey={pathname}
+          activeTabKey={pathname}
           onTabChange={(key) => {
             router.push(key);
           }}

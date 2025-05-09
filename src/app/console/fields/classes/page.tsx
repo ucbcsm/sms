@@ -1,5 +1,6 @@
 "use client";
 
+import { getClasses } from "@/utils/api/class";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -10,11 +11,17 @@ import {
   PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import { Button, Dropdown, Input, Space, Table, Typography } from "antd";
 
 export default function Page() {
+    const {data:classes, isPending}=useQuery({
+        queryKey:["classes"],
+        queryFn: getClasses
+    })
 return (
     <Table
+        loading={isPending}
         title={() => (
             <header className="flex pb-3">
                 <Space>
@@ -65,32 +72,16 @@ return (
                 title: "Nom",
             },
             {
-                key: "code",
-                dataIndex: "code",
+                key: "acronym",
+                dataIndex: "acronym",
                 title: "Code",
-                render: (value, record) => (
-                        `${record.cycle}${record.level}`
-                ),
+                width:100
             },
             {
                 key: "cycle",
                 dataIndex: "cycle",
                 title: "Cycle",
-                render: (value) => (
-                    <Typography.Text>
-                        {value === "L" ? "Licence" : value === "M" ? "Master" : "Doctorat"}
-                    </Typography.Text>
-                ),
-            },
-            {
-                key: "status",
-                dataIndex: "status",
-                title: "Statut",
-                render: (value) => (
-                    <Typography.Text type={value === "Active" ? "success" : "danger"}>
-                        {value}
-                    </Typography.Text>
-                ),
+                render: (_,record,__)=>`${record.cycle?.name||""}`,
             },
             {
                 key: "actions",
@@ -124,13 +115,7 @@ return (
                 width: 50,
             },
         ]}
-        dataSource={Array.from({ length: 8 }, (_, index) => ({
-            id: (index + 1).toString(),
-            name: `Promotion ${index + 1}`,
-            level:[0,1,2,3][index % 4],
-            cycle: ["L", "M", "D"][index % 3],
-            status: index % 2 === 0 ? "Active" : "Inactive",
-        }))}
+        dataSource={classes}
         rowKey="id"
         rowClassName={`bg-[#f5f5f5] odd:bg-white`}
         rowSelection={{

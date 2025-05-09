@@ -101,6 +101,7 @@ export default function ClassLayout({
             { key: `/app/class/${classId}/fees`, label: "Frais" },
           ]}
           defaultActiveTabKey={pathname}
+          activeTabKey={pathname}
           onTabChange={(key) => {
             router.push(key);
           }}

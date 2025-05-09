@@ -2,16 +2,17 @@
 
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
+import { logout } from "@/utils/auth";
 import {
   DashboardOutlined,
   DollarOutlined,
+  LoadingOutlined,
   LogoutOutlined,
   MoreOutlined,
   NotificationOutlined,
   QuestionOutlined,
   SafetyCertificateOutlined,
   SettingOutlined,
-  TagsOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
   UserOutlined,
@@ -23,12 +24,14 @@ import {
   Image,
   Layout,
   Menu,
+  message,
   Space,
   theme,
   Typography,
 } from "antd";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function AppLayout({
   children,
@@ -36,18 +39,17 @@ export default function AppLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: {
-      colorBgContainer,
-      borderRadiusLG,
-      colorBorderSecondary,
-    },
+    token: { colorBgContainer, borderRadiusLG, colorBorderSecondary },
   } = theme.useToken();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
 
   const router = useRouter();
-  const pathname=usePathname()
+  const pathname = usePathname();
 
   return (
     <Layout>
+      {contextHolder}
       <Layout.Header
         style={{
           display: "flex",
@@ -59,17 +61,17 @@ export default function AppLayout({
         }}
       >
         <Link href="/app" style={{ display: "flex", alignItems: "center" }}>
-        <div className="flex items-center pr-3">
-         <Image
-          src="/ucbc-logo.png"
-           alt="Logo ucbc"
-           width={36}
-           preview={false}
-          />
+          <div className="flex items-center pr-3">
+            <Image
+              src="/ucbc-logo.png"
+              alt="Logo ucbc"
+              width={36}
+              preview={false}
+            />
           </div>
-        <Typography.Title level={5} style={{ marginBottom: 0 }}>
-          CI-UCBC
-        </Typography.Title>
+          <Typography.Title level={5} style={{ marginBottom: 0 }}>
+            CI-UCBC
+          </Typography.Title>
         </Link>
         <Menu
           mode="horizontal"
@@ -78,9 +80,9 @@ export default function AppLayout({
           selectedKeys={[pathname]}
           overflowedIndicator={<MoreOutlined />}
           items={[
-            { 
-              key: "/app", 
-              label: "Tableau de bord", 
+            {
+              key: "/app",
+              label: "Tableau de bord",
               icon: <DashboardOutlined />,
             },
             {
@@ -88,7 +90,11 @@ export default function AppLayout({
               label: "Etudiants",
               icon: <UsergroupAddOutlined />,
             },
-            { key: "/app/staff", label: "Enseigants", icon: <TeamOutlined /> },
+            {
+              key: "/app/teachers",
+              label: "Enseigants",
+              icon: <TeamOutlined />,
+            },
             {
               key: "/app/finances",
               label: "Finances",
@@ -134,14 +140,48 @@ export default function AppLayout({
                 {
                   type: "divider",
                 },
-                { key: "", label: "Déconnexion", icon: <LogoutOutlined /> },
+                {
+                  key: "logout",
+                  label: "Déconnexion",
+                  icon: !isLoadingLogout ? (
+                    <LogoutOutlined />
+                  ) : (
+                    <LoadingOutlined />
+                  ),
+                },
               ],
-              onClick: ({ key }) => {},
+              onClick: async ({ key }) => {
+                if (key === "logout") {
+                  setIsLoadingLogout(true);
+                  await logout()
+                    .then(() => {
+                      messageApi.success("Déconnexion réussie!");
+                      router.push("/auth/login");
+                    })
+                    .catch((error) => {
+                      console.log(
+                        "Error",
+                        error.response?.status,
+                        error.message
+                      );
+                      messageApi.error(
+                        "Ouf, une erreur est survenue, Veuillez réessayer!"
+                      );
+                    })
+                    .finally(() => {
+                      setIsLoadingLogout(false);
+                    });
+                }
+              },
             }}
             trigger={["hover"]}
             destroyPopupOnHide={true}
           >
-            <Button type="text" icon={<UserOutlined />} />
+            <Button
+              disabled={isLoadingLogout}
+              type="text"
+              icon={!isLoadingLogout ? <UserOutlined /> : <LoadingOutlined />}
+            />
           </Dropdown>
           <Link href="/console">
             <Button type="text" icon={<SettingOutlined />} />

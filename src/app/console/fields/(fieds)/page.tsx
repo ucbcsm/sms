@@ -1,5 +1,6 @@
 "use client";
 
+import { getFields } from "@/utils";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -10,11 +11,19 @@ import {
   PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Input, Space, Table, Typography } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { Button, Dropdown, Input, Space, Table } from "antd";
 
 export default function Page() {
+
+    const {data:fields, isPending}=useQuery({
+        queryKey:["fields"],
+        queryFn:getFields
+    })
+
 return (
     <Table
+        loading={isPending}
         title={() => (
             <header className="flex pb-3">
                 <Space>
@@ -65,24 +74,10 @@ return (
                 title: "Nom du domaine",
             },
             {
-                key: "code",
-                dataIndex: "code",
+                key: "acronym",
+                dataIndex: "acronym",
                 title: "Code",
-            },
-            {
-                key: "description",
-                dataIndex: "description",
-                title: "Description",
-            },
-            {
-                key: "status",
-                dataIndex: "status",
-                title: "Statut",
-                render: (value) => (
-                    <Typography.Text type={value === "Active" ? "success" : "danger"}>
-                        {value}
-                    </Typography.Text>
-                ),
+                width: 100
             },
             {
                 key: "actions",
@@ -90,7 +85,7 @@ return (
                 render: (value, record, index) => {
                     return (
                         <Space size="middle">
-                            <Button style={{ boxShadow: "none" }}>Gérer</Button>
+                            {/* <Button style={{ boxShadow: "none" }}>Gérer</Button> */}
                             <Dropdown
                                 menu={{
                                     items: [
@@ -116,35 +111,7 @@ return (
                 width: 50,
             },
         ]}
-        dataSource={Array.from({ length: 10 }, (_, index) => ({
-            id: (index + 1).toString(),
-            name: [
-                "Sciences",
-                "Santé",
-                "Droit",
-                "Lettres",
-                "Gestion",
-                "Informatique",
-                "Agronomie",
-                "Pharmacie",
-                "Théologie",
-                "Arts",
-            ][index % 10],
-            code: `DOM${(index + 1).toString().padStart(3, "0")}`,
-            description: [
-                "Domaines scientifiques et techniques",
-                "Domaines liés à la santé et médecine",
-                "Domaines juridiques et légaux",
-                "Domaines littéraires et linguistiques",
-                "Domaines de gestion et économie",
-                "Domaines informatiques et technologiques",
-                "Domaines agricoles et environnementaux",
-                "Domaines pharmaceutiques",
-                "Domaines théologiques et religieux",
-                "Domaines artistiques et culturels",
-            ][index % 10],
-            status: index % 2 === 0 ? "Active" : "Inactive",
-        }))}
+        dataSource={fields}
         rowKey="id"
         rowClassName={`bg-[#f5f5f5] odd:bg-white`}
         rowSelection={{

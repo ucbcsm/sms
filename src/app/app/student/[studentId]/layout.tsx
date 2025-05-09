@@ -98,6 +98,7 @@ export default function StudentLayout({
             },
           ]}
           defaultActiveTabKey={pathname}
+          activeTabKey={pathname}
           onTabChange={(key) => {
             router.push(key);
           }}

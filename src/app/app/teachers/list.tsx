@@ -235,7 +235,7 @@ export function StaffList() {
       }}
       onRow={(record) => ({
         onClick: () => {
-          router.push(`/app/staff/${record.id}`); // Navigate to the teacher details page
+          router.push(`/app/teacher/${record.id}`); // Navigate to the teacher details page
         },
       })}
     />

@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
-import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ConfigProvider } from "antd";
-import type { ThemeConfig } from "antd";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import ClientProvider from "@/components/clientProvider";
+import { getServerSession } from "@/utils/auth";
 
 const inter = Inter({
-  variable: "--font-inter",
+  // variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -16,27 +14,16 @@ export const metadata: Metadata = {
   description: "Student Management System",
 };
 
-const themeConfig: ThemeConfig = {
-  token: {
-    colorPrimary: "#008367",
-  },
-};
-
-// https://ciucbc.pythonanywhere.com
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
   return (
     <html lang="en">
       <body className={`${inter.className}  antialiased`}>
-        <NuqsAdapter>
-          <ConfigProvider theme={themeConfig}>
-            <AntdRegistry>{children}</AntdRegistry>
-          </ConfigProvider>
-        </NuqsAdapter>
+        <ClientProvider session={session}>{children}</ClientProvider>
       </body>
     </html>
   );

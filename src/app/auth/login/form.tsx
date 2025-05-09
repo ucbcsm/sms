@@ -1,36 +1,59 @@
 "use client";
 
+import { Palette } from "@/components/palette";
+import { login } from "@/utils/auth";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
   Button,
   Form,
   Input,
   Layout,
+  message,
   Space,
   theme,
   Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { z } from "zod";
 
 const formSchema = z.object({
-  email: z.string().nonempty("L'email ou le matricule est requis."),
-  password: z.string().nonempty("Le mot de passe est requis."),
+  matricule: z.string(),
+  password: z.string(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export default function Page() {
+export function LoginForm() {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+  const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onFinish = (values: FormSchema) => {
-    router.push("/app");
+    setLoading(true);
+    login(values)
+      .then(() => {
+        messageApi.success("Connexion réussie!");
+        router.push("/app");
+      })
+      .catch((error) => {
+        if (error?.message === "Invalid credentials. Please try again.") {
+          messageApi.error("Matricule ou mot de passe incorrect!");
+        } else {
+          messageApi.error("Ouf, une erreur est survenue, Veuillez réessayer!");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
+
   return (
     <Layout>
+      {contextHolder}
       <Layout.Content
         style={{
           backgroundImage: `url("/ucbc-front.jpg")`,
@@ -56,12 +79,17 @@ export default function Page() {
               background: colorBgContainer,
               paddingLeft: 32,
               paddingRight: 32,
+              display: "flex",
             }}
           >
             <Space>
               <Typography.Title level={4} style={{ marginBottom: 0 }}>
                 CI-UCBC
               </Typography.Title>
+            </Space>
+            <div className="flex-1" />
+            <Space>
+              <Palette />
             </Space>
           </Layout.Header>
           <div className="flex-1 flex flex-col justify-center p-8">
@@ -79,25 +107,12 @@ export default function Page() {
                 initialValues={{ remember: true }}
                 style={{ maxWidth: 360 }}
                 onFinish={onFinish}
-                
+                disabled={loading}
               >
-                <Form.Item
-                  name="email"
-                  rules={[
-                    { required: true },
-                  ]}
-                >
-                  <Input
-                    prefix={<UserOutlined />}
-                    placeholder="Email ou Matricule"
-                  />
+                <Form.Item name="matricule" rules={[{ required: true }]}>
+                  <Input prefix={<UserOutlined />} placeholder="Matricule" />
                 </Form.Item>
-                <Form.Item
-                  name="password"
-                  rules={[
-                    { required: true},
-                  ]}
-                >
+                <Form.Item name="password" rules={[{ required: true }]}>
                   <Input.Password
                     prefix={<LockOutlined />}
                     type="password"
@@ -110,12 +125,18 @@ export default function Page() {
                     type="primary"
                     htmlType="submit"
                     style={{ boxShadow: "none" }}
+                    loading={loading}
                   >
                     Connexion
                   </Button>
                 </Form.Item>
                 <Form.Item>
-                  <Button block type="link">
+                  <Button
+                    block
+                    type="link"
+                    htmlType="button"
+                    onClick={() => router.push("/auth/reset-password")}
+                  >
                     Mot de passe oublié
                   </Button>
                 </Form.Item>
