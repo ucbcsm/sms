@@ -1,21 +1,24 @@
 'use client'
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Form, Input, message, Modal, Switch } from "antd";
+import { Form, Input, message, Modal, Select, Switch } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePaymentMethod } from "@/utils";
 import { PaymentMethod } from "@/types";
+import { getPaymentMethod, getPaymentMethodsAsOptionsWithDisabled } from "@/lib/data/paymentMethods";
 
 type FormDataType = Omit<PaymentMethod, "id">;
 
 type EditPaymentMethodFormProps = {
   paymentMethod: PaymentMethod;
+  paymentMethods?:PaymentMethod[]
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const EditPaymentMethodForm: React.FC<EditPaymentMethodFormProps> = ({
   paymentMethod,
+  paymentMethods,
   open,
   setOpen,
 }) => {
@@ -87,7 +90,14 @@ export const EditPaymentMethodForm: React.FC<EditPaymentMethodFormProps> = ({
           rules={[{ required: true }]}
           style={{ marginTop: 24 }}
         >
-          <Input placeholder="Nom de la méthode de paiement" />
+          <Select
+            options={getPaymentMethodsAsOptionsWithDisabled(paymentMethods)}
+            placeholder="Nom de la méthode de paiement"
+            onSelect={(value) => {
+              const selectdPaymentMethod = getPaymentMethod(value);
+              form.setFieldsValue({ ...selectdPaymentMethod });
+            }}
+          />
         </Form.Item>
         <Form.Item name="enabled" label="Activé" rules={[]}>
           <Switch />

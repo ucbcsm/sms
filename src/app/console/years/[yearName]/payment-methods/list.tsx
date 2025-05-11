@@ -1,11 +1,16 @@
 "use client";
 
+import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import {
-  DeleteOutlined,
-  EditOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
-import { Button, Dropdown, Input, List, message, Space, Switch, Typography } from "antd";
+  Button,
+  Dropdown,
+  Input,
+  List,
+  message,
+  Space,
+  Switch,
+  Typography,
+} from "antd";
 
 import { getPaymentMethods, updatePaymentMethod } from "@/utils";
 
@@ -15,12 +20,15 @@ import { NewPaymentMethodForm } from "./forms/new";
 import { PaymentMethod } from "@/types";
 import { EditPaymentMethodForm } from "./forms/edit";
 import { DeletePaymentMethodForm } from "./forms/delete";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { DataFetchErrorResult } from "@/components/errorResult";
 
 type ListItemProps = {
   item: PaymentMethod;
+  items?: PaymentMethod[];
 };
 
-const ListItem: FC<ListItemProps> = ({ item }) => {
+const ListItem: FC<ListItemProps> = ({ item, items }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
@@ -69,6 +77,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
             />
             <EditPaymentMethodForm
               paymentMethod={item}
+              paymentMethods={items}
               open={openEdit}
               setOpen={setOpenEdit}
             />
@@ -81,12 +90,12 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
               menu={{
                 items: [
                   { key: "edit", label: "Modifier", icon: <EditOutlined /> },
-                  {
-                    key: "delete",
-                    label: "Supprimer",
-                    danger: true,
-                    icon: <DeleteOutlined />,
-                  },
+                  // {
+                  //   key: "delete",
+                  //   label: "Supprimer",
+                  //   danger: true,
+                  //   icon: <DeleteOutlined />,
+                  // },
                 ],
                 onClick: ({ key }) => {
                   if (key === "edit") {
@@ -109,62 +118,41 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
 };
 
 export function ListPaymentMethods() {
-  const { data: paymentMethods, isPending } = useQuery({
+  const {
+    data: paymentMethods,
+    isPending,
+    isError,
+  } = useQuery({
     queryKey: ["payment-methods"],
     queryFn: getPaymentMethods,
   });
-
+  if (isPending) {
+    return <DataFetchPendingSkeleton variant="table" />;
+  }
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
   return (
     <List
       header={
         <header className="flex pb-3">
           <Space>
-            <Typography.Title level={5} style={{marginBottom:0}}>Méthodes de paiement</Typography.Title>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              Méthodes de paiement
+            </Typography.Title>
             {/* <Input.Search placeholder="Rechercher un méthode de paiement ..." /> */}
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewPaymentMethodForm />
+            <NewPaymentMethodForm paymentMethods={paymentMethods} />
           </Space>
         </header>
       }
       loading={isPending}
-      dataSource={
-        paymentMethods
-        // [
-        // {
-        //   id: "1",
-        //   name: "Carte Bancaire",
-        //   description: "Paiement via carte bancaire (Visa, MasterCard, etc.)",
-        //   status: "disabled",
-        // },
-        // {
-        //   id: "2",
-        //   name: "PayPal",
-        //   description: "Paiement via compte PayPal",
-        //   status: "disabled",
-        // },
-        // {
-        //   id: "3",
-        //   name: "Virement Bancaire",
-        //   description: "Paiement par transfert bancaire",
-        //   status: "enabled",
-        // },
-        // {
-        //   id: "4",
-        //   name: "Espèces",
-        //   description: "Paiement en espèces au bureau",
-        //   status: "enabled",
-        // },
-        // {
-        //   id: "5",
-        //   name: "Chèques",
-        //   description: "Paiement par chèques bancaires",
-        //   status: "enabled",
-        // },
-        //   ]
-      }
-      renderItem={(item) => <ListItem key={item.id} item={item} />}
+      dataSource={paymentMethods}
+      renderItem={(item) => (
+        <ListItem key={item.id} item={item} items={paymentMethods} />
+      )}
     />
   );
 }

@@ -132,7 +132,7 @@ export default function ConsoleLayout({
                 {
                   type: "divider",
                 },
-                { key: "", label: "Déconnexion", icon: <LogoutOutlined /> },
+                { key: "logout", label: "Déconnexion", icon: <LogoutOutlined /> },
               ],
               onClick: ({ key }) => {},
             }}

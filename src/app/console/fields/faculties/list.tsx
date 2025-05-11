@@ -1,0 +1,177 @@
+"use client";
+
+import { DataFetchErrorResult } from "@/components/errorResult";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { Faculty } from "@/types";
+import { getFaculties } from "@/utils";
+import {
+  DeleteOutlined,
+  DownOutlined,
+  EditOutlined,
+  FileExcelOutlined,
+  FilePdfOutlined,
+  MoreOutlined,
+  PlusOutlined,
+  PrinterOutlined,
+} from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
+import { Button, Dropdown, Input, Space, Table } from "antd";
+import { FC, useState } from "react";
+import { EditFacultyForm } from "./forms/edit";
+import { DeleteFacultyForm } from "./forms/delete";
+import { NewFacultyForm } from "./forms/new";
+
+type ActionsBarProps = {
+  record: Faculty;
+};
+
+const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
+
+  return (
+    <Space size="middle">
+      <Button
+        title="Gérer la faculté"
+        onClick={() => {}}
+        style={{ boxShadow: "none" }}
+      >
+        Gérer
+      </Button>
+      <EditFacultyForm faculty={record} open={openEdit} setOpen={setOpenEdit} />
+      <DeleteFacultyForm
+        faculty={record}
+        open={openDelete}
+        setOpen={setOpenDelete}
+      />
+      <Dropdown
+        menu={{
+          items: [
+            {
+              key: "edit",
+              label: "Modifier",
+              icon: <EditOutlined />,
+            },
+            {
+              key: "delete",
+              label: "Supprimer",
+              icon: <DeleteOutlined />,
+              danger: true,
+            },
+          ],
+          onClick: ({ key }) => {
+            if (key === "edit") {
+              setOpenEdit(true);
+            } else if (key === "delete") {
+              setOpenDelete(true);
+            }
+          },
+        }}
+      >
+        <Button type="text" icon={<MoreOutlined />} />
+      </Dropdown>
+    </Space>
+  );
+};
+
+export function ListFaculties() {
+  const {
+    data: faculties,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  if (isPending) {
+    return <DataFetchPendingSkeleton variant="table" />;
+  }
+
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
+
+  return (
+    <Table
+      loading={isPending}
+      title={() => (
+        <header className="flex pb-3">
+          <Space>
+            <Input.Search placeholder="Rechercher une faculté ..." />
+          </Space>
+          <div className="flex-1" />
+          <Space>
+            <NewFacultyForm/>
+            <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
+              Imprimer
+            </Button>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "pdf",
+                    label: "PDF",
+                    icon: <FilePdfOutlined />,
+                    title: "Exporter en pdf",
+                  },
+                  {
+                    key: "excel",
+                    label: "EXCEL",
+                    icon: <FileExcelOutlined />,
+                    title: "Exporter vers excel",
+                  },
+                ],
+              }}
+            >
+              <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
+                Exporter
+              </Button>
+            </Dropdown>
+          </Space>
+        </header>
+      )}
+      columns={[
+        {
+          key: "name",
+          dataIndex: "name",
+          title: "Nom de la faculté",
+        },
+        {
+          key: "acronym",
+          dataIndex: "acronym",
+          title: "Code",
+          width: 100,
+        },
+        {
+          key: "parentDomain",
+          dataIndex: "parentDomain",
+          title: "Domaine",
+          render: (_, record, __) => `${record.field.name}`,
+        },
+
+        {
+          key: "actions",
+          dataIndex: "actions",
+          render: (_, record, __) => {
+            return <ActionsBar record={record} />;
+          },
+          width: 50,
+        },
+      ]}
+      dataSource={faculties}
+      rowKey="id"
+      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      rowSelection={{
+        type: "checkbox",
+      }}
+      size="small"
+      pagination={{
+        defaultPageSize: 10,
+        pageSizeOptions: [10, 25, 50],
+        size: "small",
+      }}
+      bordered={false}
+    />
+  );
+}

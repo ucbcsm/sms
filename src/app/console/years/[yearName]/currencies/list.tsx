@@ -2,11 +2,7 @@
 
 import { Currency } from "@/types";
 import { getCurrencies, updateCurrency } from "@/utils";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Button,
@@ -21,12 +17,15 @@ import { FC, useState } from "react";
 import { NewCurrencyForm } from "./forms/new";
 import { DeleteCurrencyForm } from "./forms/delete";
 import { EditCurrencyForm } from "./forms/edit";
+import { DataFetchErrorResult } from "@/components/errorResult";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 
 type ListItemProps = {
   item: Currency;
+  currencies?: Currency[];
 };
 
-const ListItem: FC<ListItemProps> = ({ item }) => {
+const ListItem: FC<ListItemProps> = ({ item, currencies }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
@@ -76,6 +75,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
               currency={item}
               open={openEdit}
               setOpen={setOpenEdit}
+              currencies={currencies}
             />
             <DeleteCurrencyForm
               currency={item}
@@ -86,12 +86,13 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
               menu={{
                 items: [
                   { key: "edit", label: "Modifier", icon: <EditOutlined /> },
-                  {
-                    key: "delete",
-                    label: "Supprimer",
-                    danger: true,
-                    icon: <DeleteOutlined />,
-                  },
+                  // {
+                  //   key: "delete",
+                  //   label: "Supprimer",
+                  //   danger: true,
+                  //   disabled: true,
+                  //   icon: <DeleteOutlined />,
+                  // },
                 ],
                 onClick: ({ key }) => {
                   if (key === "edit") {
@@ -122,10 +123,21 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
 };
 
 export const ListCurrencies = () => {
-  const { data: currencies, isPending } = useQuery({
+  const {
+    data: currencies,
+    isPending,
+    isError,
+  } = useQuery({
     queryKey: ["currencies"],
     queryFn: getCurrencies,
   });
+
+  if (isPending) {
+    return <DataFetchPendingSkeleton variant="table" />;
+  }
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
 
   return (
     <List
@@ -138,13 +150,13 @@ export const ListCurrencies = () => {
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewCurrencyForm />
+            <NewCurrencyForm currencies={currencies} />
           </Space>
         </header>
       }
       loading={isPending}
       dataSource={currencies}
-      renderItem={(item) => <ListItem key={item.id} item={item} />}
+      renderItem={(item) => <ListItem key={item.id} item={item} currencies={currencies}/>}
     />
   );
 };

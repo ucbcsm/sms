@@ -1,7 +1,7 @@
 "use client";
 
 import BackButton from "@/components/backButton";
-import { ErrorCard } from "@/components/errorCard";
+import { DataFetchErrorResult } from "@/components/errorResult";
 import { Palette } from "@/components/palette";
 import { getInstitution } from "@/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +12,7 @@ import {
   Image,
   Layout,
   Row,
+  Skeleton,
   Space,
   theme,
   Typography,
@@ -27,10 +28,6 @@ export default function Page() {
     queryKey: ["institution"],
     queryFn: getInstitution,
   });
-
-  if (isError) {
-    return <ErrorCard />;
-  }
 
   return (
     <Layout>
@@ -57,137 +54,148 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
+        {isError && <DataFetchErrorResult variant="card" />}
 
-        <Card
-          title="Détails"
-          extra={
-            <EditInstitutionForm institution={data} isLoading={isPending} />
-          }
-          loading={isPending}
-        >
-          <Row>
-            <Col span={16}>
-              <Descriptions
-                column={2}
-                items={[
-                  {
-                    label: "Nom",
-                    children: data?.name,
-                  },
-                  {
-                    label: "Sigle",
-                    children: data?.acronym,
-                  },
+        {(data || isPending) && (
+          <Card
+            title={!isPending ? "Détails" : <Skeleton.Input active />}
+            extra={
+              !isPending ? (
+                <EditInstitutionForm institution={data} isLoading={isPending} />
+              ) : (
+                <Skeleton.Button active />
+              )
+            }
+            loading={isPending}
+          >
+            <Row>
+              <Col span={16}>
+                <Descriptions
+                  column={2}
+                  items={[
+                    {
+                      label: "Nom",
+                      children: data?.name,
+                    },
+                    {
+                      label: "Sigle",
+                      children: data?.acronym,
+                    },
 
-                  {
-                    label: "Devise",
-                    children: data?.motto,
-                  },
-                  {
-                    label: "Slogan",
-                    children: data?.slogan,
-                  },
-                  {
-                    label: "Pays",
-                    children: data?.country,
-                  },
-                  {
-                    label: "Province",
-                    children: data?.province,
-                  },
-                  {
-                    label: "Ville",
-                    children: data?.city,
-                  },
-                  {
-                    label: "Adresse",
-                    children: data?.address,
-                  },
-                  {
-                    label: "Téléphone principal",
-                    children: data?.phone_number_1,
-                  },
-                  {
-                    label: "Téléphone secondaire",
-                    children: data?.phone_number_2,
-                  },
-                  {
-                    label: "Email",
-                    children: (
-                      <a href={`mailto:${data?.email_address}`} target="_blank">
-                        {data?.email_address}
-                      </a>
-                    ),
-                  },
-                  {
-                    label: "Site web",
-                    children: (
-                      <a href={`${data?.web_site}`} target="_blank">
-                        {data?.web_site}
-                      </a>
-                    ),
-                  },
-                  // {
-                  //   label: "Année de création",
-                  //   children: "2007",
-                  // },
-                  {
-                    label: "Statut",
-                    children: data?.status === "private" ? "Privée" : "Public",
-                  },
-                  // {
-                  //   label: "Accréditation",
-                  //   children:
-                  //     "Ministère de l'Enseignement Supérieur et Universitaire",
-                  // },
-                  {
-                    label: "Type d'établissement",
-                    children:
-                      data?.category === "university"
-                        ? "Université"
-                        : "Institut supérieure",
-                  },
-                  // {
-                  //   label: "Langue d'enseignement",
-                  //   children: "Français, Anglais",
-                  // },
+                    {
+                      label: "Devise",
+                      children: data?.motto,
+                    },
+                    {
+                      label: "Slogan",
+                      children: data?.slogan,
+                    },
+                    {
+                      label: "Pays",
+                      children: data?.country,
+                    },
+                    {
+                      label: "Province",
+                      children: data?.province,
+                    },
+                    {
+                      label: "Ville",
+                      children: data?.city,
+                    },
+                    {
+                      label: "Adresse",
+                      children: data?.address,
+                    },
+                    {
+                      label: "Téléphone principal",
+                      children: data?.phone_number_1,
+                    },
+                    {
+                      label: "Téléphone secondaire",
+                      children: data?.phone_number_2,
+                    },
+                    {
+                      label: "Email",
+                      children: (
+                        <a
+                          href={`mailto:${data?.email_address}`}
+                          target="_blank"
+                        >
+                          {data?.email_address}
+                        </a>
+                      ),
+                    },
+                    {
+                      label: "Site web",
+                      children: (
+                        <a href={`${data?.web_site}`} target="_blank">
+                          {data?.web_site}
+                        </a>
+                      ),
+                    },
+                    // {
+                    //   label: "Année de création",
+                    //   children: "2007",
+                    // },
+                    {
+                      label: "Statut",
+                      children:
+                        data?.status === "private" ? "Privée" : "Public",
+                    },
+                    // {
+                    //   label: "Accréditation",
+                    //   children:
+                    //     "Ministère de l'Enseignement Supérieur et Universitaire",
+                    // },
+                    {
+                      label: "Type d'établissement",
+                      children:
+                        data?.category === "university"
+                          ? "Université"
+                          : "Institut supérieure",
+                    },
+                    // {
+                    //   label: "Langue d'enseignement",
+                    //   children: "Français, Anglais",
+                    // },
 
-                  {
-                    label: "Mission",
-                    children: data?.mission,
-                  },
-                  {
-                    label: "Vision",
-                    children: data?.vision,
-                  },
-                  // {
-                  //   label: "Description",
-                  //   children:
-                  //     "L'Université Chrétienne Bilingue du Congo (UCBC) est une institution académique qui vise à offrir une éducation de qualité tout en promouvant des valeurs chrétiennes pour le développement durable.",
-                  // },
-                  {
-                    label: "Organisation mère",
-                    children: data?.parent_organization,
-                  },
-                ]}
-              />
-            </Col>
-            <Col span={8}>
-              <div style={{ textAlign: "center", marginBottom: 28 }}>
-                <Image
-                  src={data?.logo || "/ucbc-logo.png"}
-                  alt="Logo ucbc"
-                  style={{
-                    marginBottom: 28,
-                  }}
-                  // size={200}
-                  // shape="square"
+                    {
+                      label: "Mission",
+                      children: data?.mission,
+                    },
+                    {
+                      label: "Vision",
+                      children: data?.vision,
+                    },
+                    // {
+                    //   label: "Description",
+                    //   children:
+                    //     "L'Université Chrétienne Bilingue du Congo (UCBC) est une institution académique qui vise à offrir une éducation de qualité tout en promouvant des valeurs chrétiennes pour le développement durable.",
+                    // },
+                    {
+                      label: "Organisation mère",
+                      children: data?.parent_organization,
+                    },
+                  ]}
                 />
-                {/* <Typography.Title level={4}>LOGO</Typography.Title> */}
-              </div>
-            </Col>
-          </Row>
-        </Card>
+              </Col>
+              <Col span={8}>
+                <div style={{ textAlign: "center", marginBottom: 28 }}>
+                  <Image
+                    src={data?.logo || "/ucbc-logo.png"}
+                    alt="Logo ucbc"
+                    style={{
+                      marginBottom: 28,
+                    }}
+                    // size={200}
+                    // shape="square"
+                  />
+                  {/* <Typography.Title level={4}>LOGO</Typography.Title> */}
+                </div>
+              </Col>
+            </Row>
+          </Card>
+        )}
         <Layout.Footer
           style={{
             display: "flex",

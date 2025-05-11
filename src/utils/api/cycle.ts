@@ -35,11 +35,12 @@ export async function createCycle(params: Omit<Cycle, "id">) {
     planned_years: params.planned_years || null,
     planned_semester: params.planned_semester || null,
     purpose: params.purpose || null,
+    order_number: params.order_number
   });
   return res.data;
 }
 
-export async function updateCycle({ id, params }: { id: number; params: any }) {
+export async function updateCycle({ id, params }: { id: number; params: Partial<Cycle> }) {
   const res = await api.put(`/main_config/cycle/${id}/`, {
     ...params,
   });

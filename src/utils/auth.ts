@@ -1,5 +1,6 @@
 "use server";
 import { authApi } from "@/fetcher";
+import { User } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -16,7 +17,7 @@ import { redirect } from "next/navigation";
 export type Session = {
   accessToken: string | null;
   refreshToken: string | null;
-  user: Record<string, any> | null;
+  user: User | null;
   error: string | null;
 } | null;
 
@@ -39,15 +40,13 @@ export type Session = {
  * ```
  */
 export const getServerSession = async (): Promise<Session> => {
-  "use server";
   try {
-    const { cookies } = (await import("next/headers")).default;
     const cookieStore = await cookies();
 
     const accessToken = cookieStore.get("accessToken")?.value || null;
     const refreshToken = cookieStore.get("refreshToken")?.value || null;
 
-    if (!accessToken) {
+    if (!accessToken || !refreshToken) {
       return null;
     }
 
@@ -56,11 +55,6 @@ export const getServerSession = async (): Promise<Session> => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
-
-    if (userResponse.status===401) {
-      console.error("Unauthorized access:", userResponse.statusText);
-      redirect("/auth/login");  
-    }
 
     const user = userResponse.data;
 
@@ -75,7 +69,6 @@ export const getServerSession = async (): Promise<Session> => {
       error: null,
     };
   } catch (error: any) {
-    console.error("Error in getServerSession:", error.message || error);
     throw new Error("Failed to get server session");
   }
 };
@@ -110,8 +103,8 @@ export const login = async (credentials: {
     const Cookies = await cookies();
 
     const res = await authApi.post("/jwt/create", credentials);
-    console.log("Res: ",res)
-    console.log("Status: ",res.status)
+    // console.log("Res: ",res)
+    // console.log("Status: ",res.status)
 
     if (res.status !== 200) {
       console.error("Login failed with status:", res.status);

@@ -21,10 +21,13 @@ export async function updateCurrency({
   params,
 }: {
   id: number;
-  params: any;
+  params: Partial<Currency>;
 }) {
   const res = await api.put(`/main_config/currency/${id}/`, {
-    ...params,
+    name: params?.name,
+    iso_code: params?.iso_code,
+    symbol: params?.symbol,
+    enabled: params?.enabled,
   });
   return res.data;
 }

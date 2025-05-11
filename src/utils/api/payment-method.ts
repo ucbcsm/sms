@@ -2,7 +2,7 @@ import api from "@/fetcher";
 import { PaymentMethod } from "@/types";
 
 export async function getPaymentMethods() {
-  const res = await api.get(`/main_config/payement-method/`);
+  const res = await api.get(`/main_config/payment-method/`);
   return res.data as PaymentMethod[];
 }
 
@@ -30,7 +30,7 @@ export async function getPaymentMethods() {
  * ```
  */
 export async function createPaymentMethod(params: Omit<PaymentMethod, "id">) {
-  const res = await api.post(`/main_config/payement-method/`, {
+  const res = await api.post(`/main_config/payment-method/`, {
     name: params.name,
     description: params.description || "",
     enabled: params.enabled||false,
@@ -39,13 +39,13 @@ export async function createPaymentMethod(params: Omit<PaymentMethod, "id">) {
 }
 
 export async function updatePaymentMethod({ id, params }: { id: number; params: any }) {
-  const res = await api.put(`/main_config/payement-method/${id}/`, {
+  const res = await api.put(`/main_config/payment-method/${id}/`, {
     ...params
   });
   return res.data;
 }
 
 export async function deletePaymentMethod(id: number) {
-  const res = await api.delete(`/main_config/payement-method/${id}/`);
+  const res = await api.delete(`/main_config/payment-method/${id}/`);
   return res.data;
 }

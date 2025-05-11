@@ -328,17 +328,28 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
                 placeholder="Mot de passe"
               />
             </Form.Item>
-            {/* <Form.Item
+            <Form.Item
               label="Confirmer le mot de passe"
               name="confirm_password"
-              rules={[{ required: true }]}
+              rules={[{ required: true },({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      "Les deux mots de passe que vous avez saisis ne correspondent pas!"
+                    )
+                  );
+                },
+              }),]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
                 type="password"
                 placeholder="Confirmer le mot de passe"
               />
-            </Form.Item> */}
+            </Form.Item>
             <Form.Item>
               <Flex justify="end">
                 <Button

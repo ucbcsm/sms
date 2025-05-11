@@ -124,11 +124,12 @@ export default function Page() {
                           required: true,
                           message: "Veuillez entrer votre e-mail.",
                         },
+                        {type: "email", message: "Le format de l'adresse mail n'est pas valide!",}
                       ]}
                     >
                       <Input
                         prefix={<MailOutlined />}
-                        placeholder="Adresse e-mail"
+                        placeholder="Adresse mail"
                       />
                     </Form.Item>
                     <Form.Item>
@@ -160,15 +161,15 @@ export default function Page() {
                 status="success"
                 title="E-mail envoyé avec succès"
                 subTitle="Un e-mail de réinitialisation a été envoyé. Veuillez vérifier votre boîte de réception et suivez les instructions pour réinitialiser votre mot de passe."
-                extra={[
-                  <Button
-                    type="link"
-                    key="login"
-                    onClick={() => router.push("/auth/login")}
-                  >
-                    Retour à la connexion
-                  </Button>,
-                ]}
+                // extra={[
+                //   <Button
+                //     type="link"
+                //     key="login"
+                //     onClick={() => router.push("/auth/login")}
+                //   >
+                //     Retour à la connexion
+                //   </Button>,
+                // ]}
               />
             )}
           </div>

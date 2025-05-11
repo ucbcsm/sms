@@ -1,26 +1,17 @@
 "use client";
 
-import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import {
-  Avatar,
-  Button,
   Card,
-  Dropdown,
   Layout,
-  List,
   Space,
   theme,
   Typography,
 } from "antd";
 
 import { Palette } from "@/components/palette";
-import Link from "next/link";
 import BackButton from "@/components/backButton";
-import { getHSLColor } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { getCycles } from "@/utils";
-import { NewCycleForm } from "./(cycles)/forms/newCycle";
+import { ListCycles } from "./(cycles)/list";
 
 export default function FieldsLayout({
   children,
@@ -33,10 +24,7 @@ export default function FieldsLayout({
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: cycles, isPending } = useQuery({
-    queryKey: ["cycles"],
-    queryFn: getCycles,
-  });
+ 
 
   return (
     <Layout>
@@ -104,49 +92,7 @@ export default function FieldsLayout({
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <Card
-          loading={isPending}
-          variant="borderless"
-          title="Cycles"
-          style={{ boxShadow: "none" }}
-          extra={<NewCycleForm cycles={cycles} />}
-        >
-          <List
-            dataSource={cycles}
-            renderItem={(item) => (
-              <List.Item
-                key={item.id}
-                extra={
-                  <Dropdown
-                    menu={{
-                      items: [
-                        { key: "1", label: "Modifier", icon: <EditOutlined /> },
-                        {
-                          key: "2",
-                          label: "Supprimer",
-                          icon: <DeleteOutlined />,
-                          danger: true,
-                        },
-                      ],
-                    }}
-                  >
-                    <Button icon={<MoreOutlined />} type="text" />
-                  </Dropdown>
-                }
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar style={{ background: getHSLColor(item.name) }}>
-                      {item.symbol || item.name[0].toUpperCase()}
-                    </Avatar>
-                  }
-                  title={item.name}
-                  description={item.purpose}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
+        <ListCycles />
       </Layout.Sider>
     </Layout>
   );

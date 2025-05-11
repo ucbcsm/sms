@@ -1,5 +1,19 @@
-import {  z } from "zod";
+import {  string, z } from "zod";
 
+/**
+ * Represents a Year object with various properties.
+ * 
+ * @property {number} id - The unique identifier for the year.
+ * @property {Institute | null} university - The associated university or institute, which can be null.
+ * @property {string} name - The name of the year.
+ * @property {string} start_date - The start date of the year in string format, expected to be a valid date.
+ * @property {string} end_date - The end date of the year in string format, expected to be a valid date.
+ * @property {"pending" | "progress" | "finished" | "suspended"} status - The current status of the year, which can be one of the following:
+ * - "pending": The year is pending and has not started yet.
+ * - "progress": The year is currently in progress.
+ * - "finished": The year has been completed.
+ * - "suspended": The year has been suspended.
+ */
 export const Year = z.object({
   id: z.number(),
   university: Institute.nullable(),
@@ -82,9 +96,18 @@ export const Cycle = z.object({
 
 export type Cycle = z.infer<typeof Cycle>;
 
+
+/**
+ * Represents a Field with its associated properties.
+ *
+ * @property {number} id - Unique identifier of the field.
+ * @property {Cycle | null} cycle - The academic cycle associated with the field (nullable).
+ * @property {string} name - Name of the field.
+ * @property {string} acronym - Acronym representing the field.
+ */
 export const Field = z.object({
   id: z.number(),
-  cycle: Cycle,
+  cycle: Cycle.nullable(),
   name: z.string(),
   acronym: z.string(),
 });
@@ -159,3 +182,37 @@ export const PaymentMethod = z.object({
 });
 
 export type PaymentMethod=z.infer<typeof PaymentMethod>
+
+export const User = z.object({
+  id: z.number(),
+  user_permissions: z.array(),
+  groups: z.array(),
+  last_login: z.string().datetime(),
+  is_superuser: z.boolean(),
+  first_name: z.string().nullable(),
+  last_name: z.string().nullable(),
+  is_staff: z.boolean(),
+  is_active: z.boolean(),
+  date_joined: z.string().datetime(),
+  surname: z.string().nullable(),
+  username: z.string(),
+  email: z.string().email(),
+  matricule: z.string(),
+  avatar: z.string().nullable(),
+  pending_avatar: z.string().nullable(),
+  roles: z.array(),
+});
+
+export type User = z.infer<typeof User>;
+
+
+export const Classroom = z.object({
+  id:z.number(),
+  name: z.string(),
+  room_type: z.enum([]).nullable(),
+  capacity: z.number().nullable(),
+  code: z.string(),
+  status: z.enum([ "occupied","unoccupied"]).nullable(),
+});
+
+export type Classroom = z.infer<typeof Classroom>;

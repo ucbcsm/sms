@@ -171,7 +171,7 @@ export async function updateInstitution({
   params: Partial<Omit<Institute, "id">>;
 }) {
   const res = await api.put(`/main_config/institution/${id}/`, {
-    ...params
+    ...params, logo:null
   });
   return res.data;
 }

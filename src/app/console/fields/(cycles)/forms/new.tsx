@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Button, Form, Input, message, Modal, Select } from "antd";
+import { Button, Form, Input, InputNumber, message, Modal, Select } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCycle } from "@/utils";
 import { Cycle } from "@/types";
-import { universalCycles } from "@/lib/data/cycles";
+import { getCycleLMD, getCyclesLMDAsOptions, getCyclesLMDAsOptionsWithDisabled } from "@/lib/data/cycles";
 
 type FormDataType = Omit<Cycle, "id">;
 
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormDataType>();
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
@@ -24,12 +24,12 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
   const onFinish = (values: FormDataType) => {
     mutateAsync(values, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["cycles"] });
-        messageApi.success("");
-        setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["cycles"] });
+      messageApi.success("Cycle créé avec succès !");
+      setOpen(false);
       },
       onError: () => {
-        messageApi.error("");
+      messageApi.error("Une erreur s'est produite lors de la création du cycle.");
       },
     });
   };
@@ -86,7 +86,10 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
             { required: true, message: "Veuillez entrer le nom du cycle" },
           ]}
         >
-          <Select options={universalCycles} placeholder="Nom du cycle" />
+          <Select options={getCyclesLMDAsOptionsWithDisabled(cycles)} placeholder="Nom du cycle" onSelect={(value)=>{
+            const selectedCycle= getCycleLMD(value)
+            form.setFieldsValue({...selectedCycle})
+          }} />
         </Form.Item>
 
         <Form.Item
@@ -99,16 +102,25 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
             },
           ]}
         >
-          <Input placeholder="" disabled variant="borderless" />
+          <Input placeholder="" disabled variant="borderless"  />
+        </Form.Item>
+        <Form.Item
+          name="order_number"
+          label="Numéro d'ordre"
+          rules={[
+            { required: true, message: "Veuillez entrer le numéro d'ordre" },
+          ]}
+        >
+          <InputNumber placeholder="Numéro d'ordre" disabled variant="borderless" />
         </Form.Item>
         <Form.Item name="planned_credits" label="Crédits prévus" rules={[]}>
-          <Input type="number" placeholder="Nombre de crédits prévus" />
+          <InputNumber placeholder="Nombre de crédits prévus" />
         </Form.Item>
         <Form.Item name="planned_years" label="Années prévues" rules={[]}>
-          <Input type="number" placeholder="Nombre d'années prévues" />
+          <InputNumber type="number" placeholder="Nombre d'années prévues" />
         </Form.Item>
         <Form.Item name="planned_semester" label="Semestres prévus" rules={[]}>
-          <Input type="number" placeholder="Nombre de semestres prévus" />
+          <InputNumber type="number" placeholder="Nombre de semestres prévus" />
         </Form.Item>
         <Form.Item name="purpose" label="Objectif (Description)" rules={[]}>
           <Input.TextArea placeholder="Objectif du cycle" rows={4} />

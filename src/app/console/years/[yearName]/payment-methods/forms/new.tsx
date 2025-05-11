@@ -1,15 +1,23 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import { Button, Form, Input, message, Modal, Select, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPaymentMethod } from "@/utils";
 import { PaymentMethod } from "@/types";
+import {
+  getPaymentMethod,
+  getPaymentMethodsAsOptionsWithDisabled,
+} from "@/lib/data/paymentMethods";
 
 type FormDataType = Omit<PaymentMethod, "id">;
 
-
-export const NewPaymentMethodForm: React.FC = () => {
+type NewPaymentMethodFormProps = {
+  paymentMethods?: PaymentMethod[];
+};
+export const NewPaymentMethodForm: React.FC<NewPaymentMethodFormProps> = ({
+  paymentMethods,
+}) => {
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -18,18 +26,20 @@ export const NewPaymentMethodForm: React.FC = () => {
     mutationFn: createPaymentMethod,
   });
 
-const onFinish = (values: FormDataType) => {
+  const onFinish = (values: FormDataType) => {
     mutateAsync(values, {
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["payment-methods"] });
-            messageApi.success("Méthode de paiement créée avec succès !");
-            setOpen(false);
-        },
-        onError: () => {
-            messageApi.error("Une erreur s'est produite lors de la création de la méthode de paiement.");
-        },
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["payment-methods"] });
+        messageApi.success("Méthode de paiement créée avec succès !");
+        setOpen(false);
+      },
+      onError: () => {
+        messageApi.error(
+          "Une erreur s'est produite lors de la création de la méthode de paiement."
+        );
+      },
     });
-};
+  };
 
   return (
     <>
@@ -39,7 +49,7 @@ const onFinish = (values: FormDataType) => {
         icon={<PlusOutlined />}
         title="Ajouter une méthode de paiement"
         onClick={() => setOpen(true)}
-        style={{boxShadow:"none"}}
+        style={{ boxShadow: "none" }}
       >
         Ajouter
       </Button>
@@ -54,7 +64,7 @@ const onFinish = (values: FormDataType) => {
           htmlType: "submit",
           style: { boxShadow: "none" },
           disabled: isPending,
-          loading:isPending,
+          loading: isPending,
         }}
         cancelButtonProps={{
           style: { boxShadow: "none" },
@@ -62,7 +72,7 @@ const onFinish = (values: FormDataType) => {
         }}
         onCancel={() => setOpen(false)}
         destroyOnClose
-        closable={{disabled:isPending}}
+        closable={{ disabled: isPending }}
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -71,7 +81,7 @@ const onFinish = (values: FormDataType) => {
             name="create_payment_method_form"
             onFinish={onFinish}
             disabled={isPending}
-            initialValues={{enabled:true}}
+            initialValues={{ enabled: true }}
             clearOnDestroy
           >
             {dom}
@@ -81,15 +91,20 @@ const onFinish = (values: FormDataType) => {
         <Form.Item
           name="name"
           label="Nom"
-          rules={[
-            { required: true},
-          ]}
-          style={{marginTop:24}}
+          rules={[{ required: true }]}
+          style={{ marginTop: 24 }}
         >
-          <Input  placeholder="Nom de la méthode de paiement" />
+          <Select
+            options={getPaymentMethodsAsOptionsWithDisabled(paymentMethods)}
+            placeholder="Nom de la méthode de paiement"
+            onSelect={(value) => {
+              const selectdPaymentMethod = getPaymentMethod(value);
+              form.setFieldsValue({ ...selectdPaymentMethod });
+            }}
+          />
         </Form.Item>
         <Form.Item name="enabled" label="Activé" rules={[]}>
-          <Switch/>
+          <Switch />
         </Form.Item>
         <Form.Item
           name="description"
@@ -100,10 +115,8 @@ const onFinish = (values: FormDataType) => {
             },
           ]}
         >
-          <Input.TextArea placeholder="Description de la méthode de paiement"  />
+          <Input.TextArea placeholder="Description de la méthode de paiement" />
         </Form.Item>
-       
-        
       </Modal>
     </>
   );
