@@ -2,8 +2,8 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Faculty } from "@/types";
-import { getFaculties } from "@/utils";
+import { Faculty, Field } from "@/types";
+import { getFaculties, getFields } from "@/utils";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -11,7 +11,6 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
-  PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -23,9 +22,10 @@ import { NewFacultyForm } from "./forms/new";
 
 type ActionsBarProps = {
   record: Faculty;
+  fields?:Field[]
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, fields }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -38,7 +38,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
       >
         Gérer
       </Button>
-      <EditFacultyForm faculty={record} open={openEdit} setOpen={setOpenEdit} />
+      <EditFacultyForm faculty={record} fields={fields} open={openEdit} setOpen={setOpenEdit} />
       <DeleteFacultyForm
         faculty={record}
         open={openDelete}
@@ -84,6 +84,11 @@ export function ListFaculties() {
     queryFn: getFaculties,
   });
 
+  const { data: fields } = useQuery({
+    queryKey: ["fields"],
+    queryFn: getFields,
+  });
+
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
@@ -102,7 +107,7 @@ export function ListFaculties() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewFacultyForm/>
+            <NewFacultyForm fields={fields} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -148,15 +153,16 @@ export function ListFaculties() {
           dataIndex: "parentDomain",
           title: "Domaine",
           render: (_, record, __) => `${record.field.name}`,
+          ellipsis:true
         },
 
         {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} />;
+            return <ActionsBar record={record} fields={fields} />;
           },
-          width: 50,
+          width: 132,
         },
       ]}
       dataSource={faculties}

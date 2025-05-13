@@ -15,9 +15,9 @@ export async function getClassrooms() {
  *   - `capacity`: The maximum number of occupants the classroom can hold.
  *   - `code`: A unique code identifying the classroom.
  *   - `status`: The current status of the classroom (e.g., active, inactive).
- * 
+ *
  * @returns A promise that resolves to the data of the created classroom.
- * 
+ *
  * @throws An error if the API request fails.
  */
 export async function createClassroom(params: Omit<Classroom, "id">) {
@@ -52,3 +52,47 @@ export async function deleteClassroom(id: number) {
   const res = await api.delete(`/main_config/class-room/${id}/`);
   return res.data;
 }
+
+export const getClassroomsAsOptions=[
+  { value: "amphitheater", label: "Amphithéâtre" },
+  { value: "classroom", label: "Salle de cours" },
+  { value: "laboratory", label: "Laboratoire" },
+  { value: "computer-room", label: "Salle informatique" },
+  { value: "meeting-room", label: "Salle de réunion" },
+  { value: "chapel", label: "Chapelle" },
+  { value: "office", label: "Bureau" },
+  { value: "other", label: "Autre" },
+]
+
+export function getClassroomTypeName(
+  type:
+    | "amphitheater"
+    | "classroom"
+    | "laboratory"
+    | "computer-room"
+    | "meeting-room"
+    | "chapel"
+    | "office"
+    | string
+) {
+  switch (type) {
+    case "amphitheater":
+      return "Amphithéâtre";
+    case "classroom":
+      return "Salle de cours";
+    case "laboratory":
+      return "Laboratoire";
+    case "computer-room":
+      return "Salle informatique";
+    case "meeting-room":
+      return "Salle de réunion";
+    case "chapel":
+      return "Chapelle";
+    case "office":
+      return "Bureau";
+    default:
+      return "Inconnu";
+  }
+}
+
+

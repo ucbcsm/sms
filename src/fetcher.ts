@@ -23,10 +23,28 @@ api.interceptors.request.use(
 
 
 
-export const authApi = axios.create({
+ export const authApi = axios.create({
   baseURL: "https://ciucbc.pythonanywhere.com/auth",
-  withCredentials: true,
+  // withCredentials: true,
 });
+
+authApi.interceptors.request.use(
+  (config) => {
+    const token = useSessionStore.getState().accessToken;
+    // console.log("Token d'accès:", token); // Debugging line
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
+
+
+
+
 
 export default api; 
 

@@ -51,3 +51,10 @@ export async function deleteCycle(id: number) {
   const res = await api.delete(`/main_config/cycle/${id}/`);
   return res.data;
 }
+
+
+export function getCurrentCyclesAsOptions(cycles?: Cycle[]) {
+  return cycles?.map((cycle) => {
+    return { value: cycle.id, label: cycle.name };
+  });
+}

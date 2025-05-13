@@ -6,9 +6,11 @@ export async function getFields() {
   return res.data.results as Field[];
 }
 
-export async function createField(params: Omit<Field, "id">) {
+export async function createField(
+  params: Omit<Field, "id" | "cycle"> & { cycle_id: number }
+) {
   const res = await api.post(`/main_config/field/`, {
-    //  cycle: Cycle,
+    cycle: params.cycle_id,
     name: params.name,
     acronym: params.acronym,
   });
@@ -20,12 +22,12 @@ export async function updateField({
   params,
 }: {
   id: number;
-  params: Partial<Field>;
+  params: Omit<Field, "id" | "cycle"> & { cycle_id: number };
 }) {
   const res = await api.put(`/main_config/field/${id}/`, {
-    //  cycle: Cycle,
-     name: params.name,
-     acronym: params.acronym,
+    cycle: params.cycle_id,
+    name: params.name,
+    acronym: params.acronym,
   });
   return res.data;
 }
@@ -33,4 +35,10 @@ export async function updateField({
 export async function deleteField(id: number) {
   const res = await api.delete(`/main_config/field/${id}/`);
   return res.data;
+}
+
+export function getCurrentFieldsAsOptions(fields?: Field[]) {
+  return fields?.map((field) => {
+    return { value: field.id, label: field.name };
+  });
 }

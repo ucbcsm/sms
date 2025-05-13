@@ -1,15 +1,23 @@
-import { Select } from "antd";
+"use client";
+
+import { getYears, getYearsAsOptions } from "@/utils";
+import { useQuery } from "@tanstack/react-query";
+import { Select, Skeleton } from "antd";
 
 export function YearSelector() {
+  const { data: years, isPending } = useQuery({
+    queryKey: ["years"],
+    queryFn: getYears,
+  });
+  if (isPending) {
+    return <div><Skeleton.Input size="default" block /></div>;
+  }
   return (
     <Select
-      defaultValue="2023-2024"
+      defaultValue={5}
       variant="filled"
-      options={[
-        { value: "2023-2024", label: "2023-2024" },
-        { value: "2024-2025", label: "2024-2025" },
-      ]}
-      style={{}}
+      options={getYearsAsOptions(years)}
+      style={{width:108}}
     />
   );
 }

@@ -16,7 +16,7 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { Classroom } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClassroom } from "@/utils";
+import { createClassroom, getClassroomsAsOptions } from "@/utils";
 
 type FormDataType = Omit<Classroom, "id">;
 
@@ -124,26 +124,20 @@ export const NewClassroomForm: React.FC = () => {
         <Row gutter={[16,16]}>
             <Col span={16}>
             <Form.Item
-          name="room_type"
-          label="Type de salle"
-          rules={[
+            name="room_type"
+            label="Type de salle"
+            rules={[
             {
               required: true,
               message: "Veuillez sélectionner un type de salle",
             },
-          ]}
-        >
-          <Select
-            placeholder="Sélectionnez un type"
-            options={[
-              { value: "lecture", label: "Salle de cours" },
-              { value: "lab", label: "Laboratoire" },
-              { value: "auditorium", label: "Auditorium" },
-              { value: "conference", label: "Salle de conférence" },
-              { value: "workshop", label: "Salle d'atelier" },
             ]}
-          />
-        </Form.Item>
+          >
+            <Select
+            placeholder="Sélectionnez un type"
+            options={getClassroomsAsOptions}
+            />
+          </Form.Item>
             </Col>
         <Col span={8}>
         <Form.Item

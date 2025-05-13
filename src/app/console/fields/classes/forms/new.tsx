@@ -1,18 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Form, message, Modal } from "antd";
+import { Button, Form, Input, InputNumber, message, Modal, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Class } from "@/types";
+import { Class, Cycle } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClass } from "@/utils";
+import { createClass, getCurrentCyclesAsOptions } from "@/utils";
+import {
+  getClass,
+  getClassesAsOptionsWithDisabled,
+  getClassesByCycleAsOptionsWithDisabled,
+} from "@/lib/data/classes";
 
-type FormDataType = Omit<Class, "id">;
+type FormDataType = Omit<Class, "id" | "cycle"> & { cycle_id: number };
 
-export const NewClassForm: React.FC = () => {
+type NewClassFormProps = {
+  classes?: Class[];
+  cycles?: Cycle[];
+};
+
+export const NewClassForm: React.FC<NewClassFormProps> = ({
+  classes,
+  cycles,
+}) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
+  const [classNamesAsOptions, setClassNamesAsOptions] = useState<{}[]>([]);
 
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
@@ -80,7 +94,64 @@ export const NewClassForm: React.FC = () => {
             {dom}
           </Form>
         )}
-      ></Modal>
+      >
+        <Form.Item
+          name="cycle_id"
+          label="Cycle"
+          rules={[
+            { required: true, message: "Veuillez sélectionner un cycle" },
+          ]}
+        >
+          <Select
+            placeholder="Sélectionnez un cycle"
+            options={getCurrentCyclesAsOptions(cycles)}
+            onSelect={(_, option) => {
+              const selectedCycle = getClassesByCycleAsOptionsWithDisabled(
+                option.label,
+                classes
+              );
+              setClassNamesAsOptions(selectedCycle);
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          name="name"
+          label="Nom ou niveau"
+          rules={[{ required: true, message: "Veuillez sélectionner un nom" }]}
+        >
+          <Select
+            placeholder="Sélectionnez un nom"
+            options={classNamesAsOptions}
+            onSelect={(value) => {
+              const selectedClasse = getClass(value);
+              form.setFieldsValue(selectedClasse);
+            }}
+          />
+        </Form.Item>
+        <Form.Item
+          name="acronym"
+          label="Acronyme"
+          rules={[{ required: true, message: "Veuillez entrer un acronyme" }]}
+        >
+          <Input placeholder="Entrez un acronyme" disabled />
+        </Form.Item>
+        <Form.Item
+          name="order_number"
+          label="Numéro d'ordre"
+          rules={[
+            { required: true, message: "Veuillez entrer un numéro d'ordre" },
+          ]}
+        >
+          <InputNumber
+            type="number"
+            placeholder="Entrez un numéro d'ordre"
+            disabled
+          />
+        </Form.Item>
+        <Form.Item name="description" label="Description">
+          <Input.TextArea placeholder="Entrez une description" />
+        </Form.Item>
+      </Modal>
     </>
   );
 };

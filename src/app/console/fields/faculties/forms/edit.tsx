@@ -1,21 +1,23 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Form, message, Modal } from "antd";
-import { Faculty} from "@/types";
+import { Col, Form, Input, message, Modal, Row, Select } from "antd";
+import { Faculty, Field } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateFaculty } from "@/utils";
+import { getCurrentFieldsAsOptions, updateFaculty } from "@/utils";
 
-type FormDataType = Omit<Faculty, "id">;
+type FormDataType = Omit<Faculty, "id" | "field"> & { field_id: number };
 
 interface EditFacultyFormProps {
   faculty: Faculty;
+  fields?: Field[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
   faculty,
+  fields,
   open,
   setOpen,
 }) => {
@@ -75,13 +77,53 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
             layout="vertical"
             form={form}
             name="edit_faculty_form"
-            initialValues={faculty}
+            initialValues={{ field_id: faculty.field.id, ...faculty }}
             onFinish={onFinish}
           >
             {dom}
           </Form>
         )}
-      ></Modal>
+      >
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Form.Item
+              name="name"
+              label="Nom"
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez entrer un nom de la faculté",
+                },
+              ]}
+            >
+              <Input placeholder="Entrez le nom" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              name="acronym"
+              label="Acronyme"
+              rules={[
+                { required: true, message: "Veuillez entrer un acronyme" },
+              ]}
+            >
+              <Input placeholder="Entrez l'acronyme" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item
+          name="field_id"
+          label="Domaine"
+          rules={[
+            { required: true, message: "Veuillez sélectionner un  domaine" },
+          ]}
+        >
+          <Select
+            placeholder="Sélectionnez un domaine"
+            options={getCurrentFieldsAsOptions(fields)}
+          />
+        </Form.Item>
+      </Modal>
     </>
   );
 };

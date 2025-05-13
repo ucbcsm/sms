@@ -1,15 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Form, message, Modal } from "antd";
+import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Department } from "@/types";
+import { Department, Faculty } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDepartment } from "@/utils";
+import { createDepartment, getCurrentFacultiesAsOptions } from "@/utils";
 
-type FormDataType = Omit<Department, "id">;
-
-export const NewDepartmentForm: React.FC = () => {
+type FormDataType = Omit<Department, "id" | "faculty"> & { faculty_id: number };
+type NewDepartmentFormProps = {
+  faculties?: Faculty[];
+};
+export const NewDepartmentForm: React.FC<NewDepartmentFormProps> = ({
+  faculties,
+}) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -43,7 +47,7 @@ export const NewDepartmentForm: React.FC = () => {
         type="primary"
         icon={<PlusOutlined />}
         className="shadow-none"
-         title="Ajouter un département"
+        title="Ajouter un département"
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
@@ -80,7 +84,47 @@ export const NewDepartmentForm: React.FC = () => {
             {dom}
           </Form>
         )}
-      ></Modal>
+      >
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Form.Item
+              name="name"
+              label="Nom"
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez entrer un nom de la faculté",
+                },
+              ]}
+            >
+              <Input placeholder="Entrez le nom" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              name="acronym"
+              label="Acronyme"
+              rules={[
+                { required: true, message: "Veuillez entrer un acronyme" },
+              ]}
+            >
+              <Input placeholder="Entrez l'acronyme" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item
+          name="faculty_id"
+          label="Faculté"
+          rules={[
+            { required: true, message: "Veuillez sélectionner une faculté" },
+          ]}
+        >
+          <Select
+            placeholder="Sélectionnez un faculté"
+            options={getCurrentFacultiesAsOptions(faculties)}
+          />
+        </Form.Item>
+      </Modal>
     </>
   );
 };

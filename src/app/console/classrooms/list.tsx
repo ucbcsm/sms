@@ -1,6 +1,6 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getClassrooms } from "@/utils";
+import { getClassrooms, getClassroomTypeName } from "@/utils";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -23,7 +23,6 @@ type ActionsBarProps = {
 };
 
 const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
-  
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -36,7 +35,11 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
       >
         Gérer
       </Button>
-      <EditClassroomForm classroom={record} open={openEdit} setOpen={setOpenEdit} />
+      <EditClassroomForm
+        classroom={record}
+        open={openEdit}
+        setOpen={setOpenEdit}
+      />
       <DeleteClassroomForm
         classroom={record}
         open={openDelete}
@@ -66,10 +69,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
           },
         }}
       >
-        <Button
-          type="text"
-          icon={<MoreOutlined />}
-        />
+        <Button type="text" icon={<MoreOutlined />} />
       </Dropdown>
     </Space>
   );
@@ -136,26 +136,27 @@ export const ListClassrooms = () => {
           key: "name",
           dataIndex: "name",
           title: "Nom de la salle",
-          ellipsis:true
+          ellipsis: true,
         },
         {
           key: "code",
           dataIndex: "code",
           title: "Code",
-          width:100
+          width: 100,
         },
         {
           key: "room_type",
           dataIndex: "room_type",
           title: "Type",
-          ellipsis:true
+          render: (value) => getClassroomTypeName(value),
+          ellipsis: true,
         },
         {
           key: "capacity",
           dataIndex: "capacity",
           title: "Capacité",
-          width:56,
-          align:"end"
+          width: 100,
+          align: "end",
         },
 
         {
@@ -177,7 +178,7 @@ export const ListClassrooms = () => {
           render: (_, record, __) => {
             return <ActionsBar record={record} />;
           },
-          width: 50,
+          width:132
         },
       ]}
       dataSource={classrooms}

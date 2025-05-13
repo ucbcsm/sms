@@ -2,8 +2,8 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Field } from "@/types";
-import { getFields } from "@/utils";
+import { Cycle, Field } from "@/types";
+import { getCycles, getFields } from "@/utils";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -22,15 +22,21 @@ import { NewFieldForm } from "./forms/new";
 
 type ActionsBarProps = {
   record: Field;
+  cycles?: Cycle[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, cycles }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <Space size="middle">
-      <EditFieldForm field={record} open={openEdit} setOpen={setOpenEdit} />
+      <EditFieldForm
+        field={record}
+        cycles={cycles}
+        open={openEdit}
+        setOpen={setOpenEdit}
+      />
       <DeleteFieldForm
         field={record}
         open={openDelete}
@@ -76,6 +82,11 @@ export function ListFields() {
     queryFn: getFields,
   });
 
+  const { data: cycles } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: getCycles,
+  });
+
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
@@ -94,7 +105,7 @@ export function ListFields() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewFieldForm />
+            <NewFieldForm cycles={cycles} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -136,10 +147,16 @@ export function ListFields() {
           width: 100,
         },
         {
+          key: "cycle",
+          dataIndex: "cycle",
+          title: "Cycle",
+          render: (_, record, __) => record.cycle?.name || "",
+        },
+        {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} />;
+            return <ActionsBar record={record} cycles={cycles} />;
           },
           width: 50,
         },

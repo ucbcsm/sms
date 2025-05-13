@@ -38,7 +38,7 @@ export default function ConsoleLayout({
     token: { colorBgContainer, colorBorderSecondary, colorPrimary },
   } = theme.useToken();
 
-  const { yearName } = useParams();
+  const { yearId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const pathname =usePathname()
@@ -117,9 +117,9 @@ export default function ConsoleLayout({
         </Space>
         <div className="flex-1" />
         <Space>
-          <div style={{ display: yearName ? "block" : "none" }}>
+          
             <YearSelector />
-          </div>
+          
 
           <Dropdown
             menu={{
@@ -162,7 +162,7 @@ export default function ConsoleLayout({
               style={{ height: "100%", borderRight: 0 }}
               items={[
               {
-                key: `/console/${yearName}`,
+                key: `/`,
                 label: "Menu",
                 type: "group",
                 children: [

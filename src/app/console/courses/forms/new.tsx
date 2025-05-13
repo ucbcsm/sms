@@ -1,24 +1,39 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Radio,
+  Row,
+  Select,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Faculty, Field } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createFaculty, getCurrentFieldsAsOptions } from "@/utils";
+import {
+  createCourse,
+  getCourseTypesAsOptions,
+  getCurrentFacultiesAsOptions,
+} from "@/utils";
+import { Course, Faculty } from "@/types";
 
-type FormDataType = Omit<Faculty, "id" | "field"> & { field_id: number };
-type NewFacultyFormProps = {
-  fields?: Field[];
+type FormDataType = Omit<Course, "id" | "faculty"> & { faculty_id: number };
+
+type NewCourseFormProps = {
+  faculties?: Faculty[];
 };
-export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
+export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: createFaculty,
+    mutationFn: createCourse,
   });
 
   const onFinish = (values: FormDataType) => {
@@ -26,13 +41,13 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
 
     mutateAsync(values, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["faculties"] });
-        messageApi.success("Faculté créée avec succès !");
+        queryClient.invalidateQueries({ queryKey: ["courses"] });
+        messageApi.success("Cours créé avec succès !");
         setOpen(false);
       },
       onError: () => {
         messageApi.error(
-          "Une erreur s'est produite lors de la création de la faculté."
+          "Une erreur s'est produite lors de la création du cours."
         );
       },
     });
@@ -45,15 +60,14 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
         type="primary"
         icon={<PlusOutlined />}
         className="shadow-none"
-        title="Ajouter une faculté"
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
-        Ajouter
+        Nouveau cours
       </Button>
       <Modal
         open={open}
-        title="Nouvelle faculté"
+        title="Nouveau cours"
         centered
         okText="Créer"
         cancelText="Annuler"
@@ -72,10 +86,10 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
         modalRender={(dom) => (
           <Form
             disabled={isPending}
-            key="create_new_faculty"
+            key="create_new_course"
             layout="vertical"
             form={form}
-            name="create_new_faculty"
+            name="create_new_course"
             onFinish={onFinish}
             clearOnDestroy
           >
@@ -83,44 +97,52 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
           </Form>
         )}
       >
-        
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
           <Col span={16}>
             <Form.Item
               name="name"
-              label="Nom"
+              label="Nom du cours"
               rules={[
                 {
                   required: true,
-                  message: "Veuillez entrer un nom de la faculté",
+                  message: "Veuillez entrer le nom du cours",
                 },
               ]}
             >
-              <Input placeholder="Entrez le nom" />
+              <Input placeholder="Nom du cours" />
             </Form.Item>
           </Col>
           <Col span={8}>
             <Form.Item
-              name="acronym"
-              label="Acronyme"
+              name="code"
+              label="Code"
               rules={[
-                { required: true, message: "Veuillez entrer un acronyme" },
+                {
+                  required: true,
+                  message: "Veuillez entrer le code du cours",
+                },
               ]}
             >
-              <Input placeholder="Entrez l'acronyme" />
+              <Input placeholder="Code du cours" />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item
-          name="field_id"
-          label="Domaine"
+          name="course_type"
+          label="Type de cours"
           rules={[
-            { required: true, message: "Veuillez sélectionner un  domaine" },
+            {
+              required: true,
+              message: "Veuillez sélectionner un type de cours",
+            },
           ]}
         >
+          <Select options={getCourseTypesAsOptions} />
+        </Form.Item>
+        <Form.Item name="faculty_id" label="Pour faculté" rules={[]}>
           <Select
-            placeholder="Sélectionnez un domaine"
-            options={getCurrentFieldsAsOptions(fields)}
+            placeholder="Sélectionnez une faculté"
+            options={getCurrentFacultiesAsOptions(faculties)}
           />
         </Form.Item>
       </Modal>

@@ -2,7 +2,7 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Class } from "@/types";
+import { Class, Cycle } from "@/types";
 import { getClasses } from "@/utils/api/class";
 import {
   DeleteOutlined,
@@ -11,7 +11,6 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
-  PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -20,18 +19,27 @@ import { FC, useState } from "react";
 import { EditClassForm } from "./forms/edit";
 import { DeleteClassForm } from "./forms/delete";
 import { NewClassForm } from "./forms/new";
+import { getCycles } from "@/utils";
 
 type ActionsBarProps = {
   record: Class;
+  classes?: Class[];
+  cycles?: Cycle[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, classes, cycles }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <Space size="middle">
-      <EditClassForm classe={record} open={openEdit} setOpen={setOpenEdit} />
+      <EditClassForm
+        classe={record}
+        classes={classes}
+        cycles={cycles}
+        open={openEdit}
+        setOpen={setOpenEdit}
+      />
       <DeleteClassForm
         classe={record}
         open={openDelete}
@@ -76,6 +84,12 @@ export function ListClasses() {
     queryKey: ["classes"],
     queryFn: getClasses,
   });
+
+  const { data: cycles } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: getCycles,
+  });
+
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
@@ -92,7 +106,7 @@ export function ListClasses() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewClassForm/>
+            <NewClassForm classes={classes} cycles={cycles} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -134,16 +148,30 @@ export function ListClasses() {
           width: 100,
         },
         {
+          key: "order_number",
+          dataIndex: "order_number",
+          title: "No d'ordre",
+          width: 90,
+        },
+        {
           key: "cycle",
           dataIndex: "cycle",
           title: "Cycle",
           render: (_, record, __) => `${record.cycle?.name || ""}`,
         },
         {
+          key: "description",
+          dataIndex: "description",
+          title: "Desciption",
+          ellipsis: true,
+        },
+        {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} />;
+            return (
+              <ActionsBar record={record} classes={classes} cycles={cycles} />
+            );
           },
           width: 50,
         },

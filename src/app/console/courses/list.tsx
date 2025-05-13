@@ -2,8 +2,13 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Department, Faculty } from "@/types";
-import { getDepartments, getFaculties } from "@/utils";
+import { Course, Faculty } from "@/types";
+import {
+  getCourseTypeName,
+  getCouses,
+  getCurrentFacultiesAsOptions,
+  getFaculties,
+} from "@/utils";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -15,14 +20,15 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Dropdown, Input, Space, Table } from "antd";
+import { Button, Dropdown, Input, Select, Space, Table } from "antd";
+import { useParams, useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { EditDepartmentForm } from "./forms/edit";
-import { DeleteDepartmentForm } from "./forms/delete";
-import { NewDepartmentForm } from "./forms/new";
+import { DeleteCourseForm } from "./forms/delete";
+import { NewCourseForm } from "./forms/new";
+import { EditCourseForm } from "./forms/edit";
 
 type ActionsBarProps = {
-  record: Department;
+  record: Course;
   faculties?: Faculty[];
 };
 
@@ -32,21 +38,14 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
 
   return (
     <Space size="middle">
-      <Button
-        title="Gérer le département"
-        onClick={() => {}}
-        style={{ boxShadow: "none" }}
-      >
-        Gérer
-      </Button>
-      <EditDepartmentForm
-        department={record}
+      <EditCourseForm
+        course={record}
         faculties={faculties}
         open={openEdit}
         setOpen={setOpenEdit}
       />
-      <DeleteDepartmentForm
-        department={record}
+      <DeleteCourseForm
+        course={record}
         open={openDelete}
         setOpen={setOpenDelete}
       />
@@ -80,16 +79,17 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
   );
 };
 
-export function ListDepartments() {
+export const ListCourses = () => {
+  const { facultyId } = useParams();
   const {
-    data: departments,
+    data: courses,
     isPending,
     isError,
   } = useQuery({
-    queryKey: ["departments"],
-    queryFn: getDepartments,
+    queryKey: ["courses"],
+    queryFn: getCouses,
   });
-
+  const router = useRouter();
   const { data: faculties } = useQuery({
     queryKey: ["faculties"],
     queryFn: getFaculties,
@@ -102,17 +102,26 @@ export function ListDepartments() {
   if (isError) {
     return <DataFetchErrorResult />;
   }
+
   return (
     <Table
-      loading={isPending}
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Input.Search placeholder="Rechercher un département ..." />
+            <Input.Search placeholder="Rechercher un cours ..." />
+            <Select
+              placeholder="Faculté"
+              options={getCurrentFacultiesAsOptions(faculties)}
+              style={{ width: 200 }}
+              onSelect={(value) => {
+                router.push(`/console/courses/${value}`);
+              }}
+              defaultValue={Number(facultyId)}
+            />
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewDepartmentForm faculties={faculties} />
+            <NewCourseForm faculties={faculties} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -129,7 +138,7 @@ export function ListDepartments() {
                     key: "excel",
                     label: "EXCEL",
                     icon: <FileExcelOutlined />,
-                    title: "Exporter vers excel",
+                    title: "Exporter ver excel",
                   },
                 ],
               }}
@@ -145,20 +154,24 @@ export function ListDepartments() {
         {
           key: "name",
           dataIndex: "name",
-          title: "Nom du département",
+          title: "Nom du cours",
         },
         {
-          key: "acronym",
-          dataIndex: "acronym",
+          key: "code",
+          dataIndex: "code",
           title: "Code",
-          width: 100,
         },
         {
           key: "faculty",
           dataIndex: "faculty",
           title: "Faculté",
-          render: (_, record, __) => `${record.faculty.name}`,
-          ellipsis:true
+          render: (_, record, __) => record.faculty?.name,
+        },
+        {
+          key: "course_type",
+          dataIndex: "course_type",
+          title: "Nature",
+          render: (_, record, __) => getCourseTypeName(record.course_type),
         },
         {
           key: "actions",
@@ -166,10 +179,10 @@ export function ListDepartments() {
           render: (_, record, __) => {
             return <ActionsBar record={record} faculties={faculties} />;
           },
-          width: 132,
+          width: 50,
         },
       ]}
-      dataSource={departments}
+      dataSource={courses}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       rowSelection={{
@@ -184,4 +197,4 @@ export function ListDepartments() {
       bordered={false}
     />
   );
-}
+};

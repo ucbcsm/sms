@@ -207,12 +207,36 @@ export type User = z.infer<typeof User>;
 
 
 export const Classroom = z.object({
-  id:z.number(),
+  id: z.number(),
   name: z.string(),
-  room_type: z.enum([]).nullable(),
+  room_type: z
+    .enum([
+      "amphitheater", // Amphithéâtre
+      "classroom", // Salle de cours
+      "laboratory", // Laboratoire
+      "computer-room", // Salle informatique
+      "meeting-room", // Salle de réunion
+      "chapel", // Chapelle
+      "office", // Bureau
+    ])
+    .nullable(),
   capacity: z.number().nullable(),
   code: z.string(),
-  status: z.enum([ "occupied","unoccupied"]).nullable(),
+  status: z.enum(["occupied", "unoccupied"]).nullable(),
 });
 
 export type Classroom = z.infer<typeof Classroom>;
+
+export const Course = z.object({
+  id: z.number(),
+  faculty: Faculty.nullable(),
+  name: z.string(),
+  code: z.string(),
+  course_type: z.enum([
+    "theoretical",
+    "practical",
+    "theoretical_and_practical",
+  ]),
+});
+
+export type Course = z.infer<typeof Course>;

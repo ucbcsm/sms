@@ -1,7 +1,9 @@
 "use client";
 
-import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
-import { NewYearForm } from "./forms/new";
+import { DataFetchErrorResult } from "@/components/errorResult";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { Cycle, Period } from "@/types";
+import { getPeriods, getPeriodTypeName } from "@/utils/api/period";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -11,39 +13,38 @@ import {
   MoreOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getYears } from "@/utils";
-import { FC, useState } from "react";
-import { Year } from "@/types";
-import { DeleteYearForm } from "./forms/delete";
-import { EditYearForm } from "./forms/edit";
+import { Badge, Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import dayjs from "dayjs";
-import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { FC, useState } from "react";
+import { EditPeriodForm } from "./forms/edit";
+import { DeletePeriodForm } from "./forms/delete";
+import { NewPeriodForm } from "./forms/new";
+import { getCycles } from "@/utils";
+import { getHSLColor } from "@/lib/utils";
 
 type ActionsBarProps = {
-  record: Year;
+  record: Period;
+  cycles?: Cycle[];
 };
-const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
-  const router = useRouter();
+
+const ActionsBar: FC<ActionsBarProps> = ({ record, cycles }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <Space size="middle">
-      <Button
-        title="Gérer l'année académique"
-        onClick={() => {
-          router.push(`/console/years/${record.id}/periods`);
-        }}
-        style={{ boxShadow: "none" }}
-      >
-        Gérer
-      </Button>
-      <EditYearForm year={record} open={openEdit} setOpen={setOpenEdit} />
-      <DeleteYearForm year={record} open={openDelete} setOpen={setOpenDelete} />
+      <EditPeriodForm
+        period={record}
+        open={openEdit}
+        setOpen={setOpenEdit}
+        cycles={cycles}
+      />
+      <DeletePeriodForm
+        period={record}
+        open={openDelete}
+        setOpen={setOpenDelete}
+      />
       <Dropdown
         menu={{
           items: [
@@ -68,24 +69,25 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
           },
         }}
       >
-        <Button
-          type="text"
-          icon={<MoreOutlined />}
-          title="Ajouter un membre du bureau"
-        />
+        <Button type="text" icon={<MoreOutlined />} />
       </Dropdown>
     </Space>
   );
 };
 
-export const ListYears = () => {
+export function ListPeriods() {
   const {
-    data: years,
+    data: periods,
     isPending,
     isError,
   } = useQuery({
-    queryKey: ["years"],
-    queryFn: getYears,
+    queryKey: ["periods"],
+    queryFn: getPeriods,
+  });
+
+  const { data: cycles } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: getCycles,
   });
 
   if (isPending) {
@@ -99,13 +101,13 @@ export const ListYears = () => {
     <Table
       loading={isPending}
       title={() => (
-        <header className="flex  pb-3">
+        <header className="flex pb-3">
           <Space>
-            <Input.Search placeholder="Rechercher ..." />
+            <Input.Search placeholder="Rechercher une période ..." />
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewYearForm />
+            <NewPeriodForm cycles={cycles} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -134,37 +136,59 @@ export const ListYears = () => {
           </Space>
         </header>
       )}
+      dataSource={periods}
       columns={[
         {
-          key: "name",
           dataIndex: "name",
+          key: "name",
           title: "Nom",
-          render: (_, record, __) => {
-            return (
-              <Link href={`/console/years/${record.id}/periods`}>
-                {record.name}
-              </Link>
-            );
-          },
+          ellipsis: true,
         },
         {
-          key: "start_date",
-          dataIndex: "start_date",
+          dataIndex: "type_of_period",
+          key: "type_of_period",
+          title: "Type",
+          render: (_, record, __) => getPeriodTypeName(record.type_of_period),
+        },
+        {
+          key: "acronym",
+          dataIndex: "acronym",
+          title: "Code",
+          width: 50,
+          align: "center",
+        },
+        {
+          key: "order_number",
+          dataIndex: "order_number",
+          title: "No d'ordre",
+        },
+        {
+          key: "cycle",
+          dataIndex: "cycle",
+          title: "Cycle",
+          render: (_, record, __) => (
+            <Badge
+              count={record.cycle?.name}
+              color={getHSLColor(`${record.cycle?.name}`)}
+            />
+          ),
+        },
+        {
           title: "Date de début",
+          key: "dates",
           render: (_, record, __) =>
             dayjs(record.start_date).format("DD/MM/YYYY"),
         },
         {
-          key: "end_date",
-          dataIndex: "end_date",
           title: "Date de fin",
+          key: "dates",
           render: (_, record, __) =>
             dayjs(record.end_date).format("DD/MM/YYYY"),
         },
         {
-          key: "status",
+          title: "Statut",
           dataIndex: "status",
-          title: "Status",
+          key: "status",
           render: (_, record, __) => {
             let color = "";
             let text = "";
@@ -197,14 +221,14 @@ export const ListYears = () => {
           },
         },
         {
+          title: "",
           key: "actions",
-          dataIndex: "actions",
-          title: "Actions",
-          render: (_, record, __) => <ActionsBar record={record} />,
-          width: 120,
+          render: (_, record, __) => (
+            <ActionsBar record={record} cycles={cycles} />
+          ),
+          width: 50,
         },
       ]}
-      dataSource={years}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       rowSelection={{
@@ -216,7 +240,6 @@ export const ListYears = () => {
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
       }}
-      bordered={false}
     />
   );
-};
+}

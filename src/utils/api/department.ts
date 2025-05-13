@@ -6,12 +6,14 @@ export async function getDepartments() {
   return res.data.results as Department[];
 }
 
-export async function createDepartment(params: Omit<Department, "id">) {
+export async function createDepartment(
+  params: Omit<Department, "id" | "faculty"> & { faculty_id: number }
+) {
   const res = await api.post(`/main_config/departement/`, {
-     // start_class_year: Class,
-    // end_class_year: Class,
-    // faculty: ,
-    // chair_person: null,
+    start_class_year: null,
+    end_class_year: null, // To remove next time
+    faculty: params.faculty_id,
+    chair_person: null,
     name: params?.name,
     acronym: params.acronym,
   });
@@ -23,13 +25,13 @@ export async function updateDepartment({
   params,
 }: {
   id: number;
-  params: Partial<Department>;
+  params: Omit<Department, "id" | "faculty"> & { faculty_id: number };
 }) {
   const res = await api.put(`/main_config/departement/${id}/`, {
-    // start_class_year: Class,
-    // end_class_year: Class,
-    // faculty: ,
-    // chair_person: null,
+    start_class_year: null,
+    end_class_year: null, // To remove next time
+    faculty: params.faculty_id,
+    chair_person: null,
     name: params.name,
     acronym: params.acronym,
   });

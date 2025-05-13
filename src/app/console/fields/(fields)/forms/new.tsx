@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Form, message, Modal } from "antd";
+import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Field } from "@/types";
+import { Cycle, Field } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createField } from "@/utils";
+import { createField, getCurrentCyclesAsOptions } from "@/utils";
 
-type FormDataType = Omit<Field, "id">;
-
-export const NewFieldForm: React.FC = () => {
+type FormDataType = Omit<Field, "id" | "cycle"> & { cycle_id: number };
+type NewFieldFormProps = {
+  cycles?: Cycle[];
+};
+export const NewFieldForm: React.FC<NewFieldFormProps> = ({ cycles }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -43,7 +45,7 @@ export const NewFieldForm: React.FC = () => {
         type="primary"
         icon={<PlusOutlined />}
         className="shadow-none"
-         title="Ajouter un domaine"
+        title="Ajouter un domaine"
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
@@ -80,7 +82,47 @@ export const NewFieldForm: React.FC = () => {
             {dom}
           </Form>
         )}
-      ></Modal>
+      >
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Form.Item
+              name="name"
+              label="Nom"
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez entrer un nom du domaine",
+                },
+              ]}
+            >
+              <Input placeholder="Entrez le nom" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              name="acronym"
+              label="Acronyme"
+              rules={[
+                { required: true, message: "Veuillez entrer un acronyme" },
+              ]}
+            >
+              <Input placeholder="Entrez l'acronyme" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item
+          name="cycle_id"
+          label="Cycle"
+          rules={[
+            { required: true, message: "Veuillez sélectionner un cycle" },
+          ]}
+        >
+          <Select
+            placeholder="Sélectionnez un cycle"
+            options={getCurrentCyclesAsOptions(cycles)}
+          />
+        </Form.Item>
+      </Modal>
     </>
   );
 };

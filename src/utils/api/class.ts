@@ -6,9 +6,11 @@ export async function getClasses() {
   return res.data.results as Class[];
 }
 
-export async function createClass(params: Omit<Class, "id">) {
+export async function createClass(
+  params: Omit<Class, "id" | "cycle"> & { cycle_id: number }
+) {
   const res = await api.post(`/main_config/class-year/`, {
-    //  cycle: Cycle,
+    cycle: params.cycle_id,
     name: params.name,
     acronym: params.acronym,
     order_number: params.order_number,
@@ -22,10 +24,10 @@ export async function updateClass({
   params,
 }: {
   id: number;
-  params: Partial<Class>;
+  params: Omit<Class, "id" | "cycle"> & { cycle_id: number };
 }) {
   const res = await api.put(`/main_config/class-year/${id}/`, {
-    //  cycle: Cycle,
+    cycle: params.cycle_id,
     name: params.name,
     acronym: params.acronym,
     order_number: params.order_number,

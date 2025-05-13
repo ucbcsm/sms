@@ -1,9 +1,5 @@
 "use client";
 
-import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Period } from "@/types";
-import { getPeriods } from "@/utils/api/period";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -14,8 +10,8 @@ import {
   PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
 import {
+  Avatar,
   Button,
   Dropdown,
   Input,
@@ -23,14 +19,19 @@ import {
   Table,
   Tag,
 } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { getUsers } from "@/utils";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { DataFetchErrorResult } from "@/components/errorResult";
 import dayjs from "dayjs";
 import { FC, useState } from "react";
-import { EditPeriodForm } from "./forms/edit";
-import { DeletePeriodForm } from "./forms/delete";
-import { NewPeriodForm } from "./forms/new";
+import { User } from "@/types";
+import { DeleteUserForm } from "./forms/delete";
+import { EditUserForm } from "./forms/edit";
+
 
 type ActionsBarProps = {
-  record: Period;
+  record: User;
 };
 
 const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
@@ -39,9 +40,13 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
 
   return (
     <Space size="middle">
-      <EditPeriodForm period={record} open={openEdit} setOpen={setOpenEdit} />
-      <DeletePeriodForm
-        period={record}
+      <EditUserForm
+        user={record}
+        open={openEdit}
+        setOpen={setOpenEdit}
+      />
+      <DeleteUserForm
+        user={record}
         open={openDelete}
         setOpen={setOpenDelete}
       />
@@ -75,34 +80,40 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
   );
 };
 
-export function ListPeriods() {
-  const {
-    data: periods,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["periods"],
-    queryFn: getPeriods,
+
+export const ListUsers:FC=()=> {
+
+
+  const { data: users, isPending, isError } = useQuery({
+    queryKey: ["users"],
+    queryFn: getUsers,
   });
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
+  if(isPending){
+    return <DataFetchPendingSkeleton variant="table"/>
   }
-  if (isError) {
-    return <DataFetchErrorResult />;
+
+  if(isError){
+    return <DataFetchErrorResult/>
   }
 
   return (
     <Table
-      loading={isPending}
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Input.Search placeholder="Rechercher une période ..." />
+            <Input.Search placeholder="Rechercher un utilisateur ..." />
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewPeriodForm/>
+            <Button
+              icon={<PlusOutlined />}
+              type="primary"
+              title="Ajouter un utilisateur"
+              style={{ boxShadow: "none" }}
+            >
+              Ajouter
+            </Button>
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -131,72 +142,75 @@ export function ListPeriods() {
           </Space>
         </header>
       )}
-      dataSource={periods}
       columns={[
         {
-          title: "Nom",
-          dataIndex: "name",
-          key: "name",
+          key: "avatar",
+          dataIndex: "avatar",
+          title: "Photo",
+          render: (value, record) => (
+            <Avatar src={value} alt={record?.first_name || ""}>
+              {record.first_name?.charAt(0) || "U"}
+            </Avatar>
+          ),
+          width:56
         },
         {
-          title: "Type",
-          dataIndex: "type",
-          key: "type",
-        },
-        {
-          title: "Date de début",
-          key: "dates",
+          key: "fullName",
+          dataIndex: "fullName",
+          title: "Nom complet",
           render: (_, record, __) =>
-            dayjs(record.start_date).format("DD/MM/YYYY"),
+            `${record.first_name || ""} ${record.last_name || ""} ${
+              record.surname || ""
+            }`,
         },
         {
-          title: "Date de fin",
-          key: "dates",
-          render: (_, record, __) =>
-            dayjs(record.end_date).format("DD/MM/YYYY"),
+          key: "matricule",
+          dataIndex: "matricule",
+          title: "Matricule",
         },
         {
-          title: "Statut",
-          dataIndex: "status",
+          key: "email",
+          dataIndex: "email",
+          title: "Email",
+        },
+        {
+          key: "role",
+          dataIndex: "role",
+          title: "Rôle",
+        },
+        {
+          key: "date_joined",
+          dataIndex: "date_joined",
+          title: "Création",
+          render: (_, record, __) => dayjs(record.date_joined).format("DD/MM/YYYY"),
+        ellipsis:true
+        },
+        {
           key: "status",
+          dataIndex: "status",
+          title: "Statut",
+          render: (_, record, __) => (
+            <Tag
+              color={record.is_active ? "green" : "red"}
+              style={{ border: 0 }}
+            >
+              {record.is_active ? "Actif" : "Bloqué"}
+            </Tag>
+          ),
+          width:60
+        },
+        {
+          key: "actions",
+          dataIndex: "actions",
           render: (_, record, __) => {
-            let color = "";
-            let text = "";
-            switch (record.status) {
-              case "pending":
-                color = "orange";
-                text = "En attente";
-                break;
-              case "progress":
-                color = "blue";
-                text = "En cours";
-                break;
-              case "finished":
-                color = "green";
-                text = "Terminé";
-                break;
-              case "suspended":
-                color = "red";
-                text = "Suspendu";
-                break;
-              default:
-                color = "default";
-                text = "Inconnu";
-            }
             return (
-              <Tag color={color} style={{ border: 0 }}>
-                {text}
-              </Tag>
+             <ActionsBar record={record}/>
             );
           },
-        },
-        {
-          title: "",
-          key: "actions",
-          render: (_, record, __) => <ActionsBar record={record} />,
           width: 50,
         },
       ]}
+      dataSource={users}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       rowSelection={{
@@ -204,10 +218,11 @@ export function ListPeriods() {
       }}
       size="small"
       pagination={{
-        defaultPageSize: 25,
-        pageSizeOptions: [25, 50, 75, 100],
+        defaultPageSize: 10,
+        pageSizeOptions: [10, 25, 50],
         size: "small",
       }}
+      bordered={false}
     />
   );
 }

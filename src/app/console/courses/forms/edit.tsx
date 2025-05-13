@@ -1,22 +1,26 @@
 "use client";
 
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { Department, Faculty } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentFacultiesAsOptions, updateDepartment } from "@/utils";
+import {
+  updateCourse,
+  getCourseTypesAsOptions,
+  getCurrentFacultiesAsOptions,
+} from "@/utils";
+import { Course, Faculty } from "@/types";
 
-type FormDataType = Omit<Department, "id" | "faculty"> & { faculty_id: number };
+type FormDataType = Omit<Course, "id" | "faculty"> & { faculty_id: number };
 
-interface EditDepartmentFormProps {
-  department: Department;
+type EditCourseFormProps = {
+  course: Course;
   faculties?: Faculty[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-}
+};
 
-export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
-  department,
+export const EditCourseForm: React.FC<EditCourseFormProps> = ({
+  course,
   faculties,
   open,
   setOpen,
@@ -26,23 +30,23 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
 
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: updateDepartment,
+    mutationFn: updateCourse,
   });
 
   const onFinish = (values: FormDataType) => {
     console.log("Received values of form: ", values);
 
     mutateAsync(
-      { id: department.id, params: values },
+      { id: course.id, params: values },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["departments"] });
-          messageApi.success("Département modifié avec succès !");
+          queryClient.invalidateQueries({ queryKey: ["courses"] });
+          messageApi.success("Cours modifié avec succès !");
           setOpen(false);
         },
         onError: () => {
           messageApi.error(
-            "Une erreur s'est produite lors de la modification du département"
+            "Une erreur s'est produite lors de la modification du cours."
           );
         },
       }
@@ -54,9 +58,9 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
       {contextHolder}
       <Modal
         open={open}
-        title="Modifier le département"
+        title="Modifier le cours"
         centered
-        okText="Mettre à jour"
+        okText="Enregistrer"
         cancelText="Annuler"
         okButtonProps={{
           autoFocus: true,
@@ -73,51 +77,60 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
         modalRender={(dom) => (
           <Form
             disabled={isPending}
-            key="edit_department_form"
+            key="edit_course"
             layout="vertical"
             form={form}
-            name="edit_department_form"
-            initialValues={{ faculty_id: department.faculty.id, ...department }}
+            name="edit_course"
+            initialValues={{ faculty_id: course.faculty?.id, ...course }}
             onFinish={onFinish}
           >
             {dom}
           </Form>
         )}
       >
-        <Row gutter={[16, 16]}>
+        <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
           <Col span={16}>
             <Form.Item
               name="name"
-              label="Nom"
+              label="Nom du cours"
               rules={[
                 {
                   required: true,
-                  message: "Veuillez entrer un nom de la faculté",
+                  message: "Veuillez entrer le nom du cours",
                 },
               ]}
             >
-              <Input placeholder="Entrez le nom" />
+              <Input placeholder="Nom du cours" />
             </Form.Item>
           </Col>
           <Col span={8}>
             <Form.Item
-              name="acronym"
-              label="Acronyme"
+              name="code"
+              label="Code"
               rules={[
-                { required: true, message: "Veuillez entrer un acronyme" },
+                {
+                  required: true,
+                  message: "Veuillez entrer le code du cours",
+                },
               ]}
             >
-              <Input placeholder="Entrez l'acronyme" />
+              <Input placeholder="Code du cours" />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item
-          name="faculty_id"
-          label="Faculté"
+          name="course_type"
+          label="Type de cours"
           rules={[
-            { required: true, message: "Veuillez sélectionner une faculté" },
+            {
+              required: true,
+              message: "Veuillez sélectionner un type de cours",
+            },
           ]}
         >
+          <Select options={getCourseTypesAsOptions} />
+        </Form.Item>
+        <Form.Item name="faculty_id" label="Pour faculté" rules={[]}>
           <Select
             placeholder="Sélectionnez une faculté"
             options={getCurrentFacultiesAsOptions(faculties)}

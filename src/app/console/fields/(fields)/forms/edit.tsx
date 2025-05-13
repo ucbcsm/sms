@@ -1,21 +1,23 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Form, message, Modal } from "antd";
-import { Field } from "@/types";
+import { Col, Form, Input, message, Modal, Row, Select } from "antd";
+import { Cycle, Field } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateField } from "@/utils";
+import { getCurrentCyclesAsOptions, updateField } from "@/utils";
 
-type FormDataType = Omit<Field, "id">;
+type FormDataType = Omit<Field, "id" | "cycle"> & { cycle_id: number };
 
 interface EditFieldFormProps {
   field: Field;
+  cycles?: Cycle[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export const EditFieldForm: React.FC<EditFieldFormProps> = ({
   field,
+  cycles,
   open,
   setOpen,
 }) => {
@@ -75,13 +77,53 @@ export const EditFieldForm: React.FC<EditFieldFormProps> = ({
             layout="vertical"
             form={form}
             name="edit_field_form"
-            initialValues={field}
+            initialValues={{ cycle_id: field.cycle?.id, ...field }}
             onFinish={onFinish}
           >
             {dom}
           </Form>
         )}
-      ></Modal>
+      >
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
+            <Form.Item
+              name="name"
+              label="Nom"
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez entrer un nom du domaine",
+                },
+              ]}
+            >
+              <Input placeholder="Entrez le nom" />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              name="acronym"
+              label="Acronyme"
+              rules={[
+                { required: true, message: "Veuillez entrer un acronyme" },
+              ]}
+            >
+              <Input placeholder="Entrez l'acronyme" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item
+          name="cycle_id"
+          label="Cycle"
+          rules={[
+            { required: true, message: "Veuillez sélectionner un cycle" },
+          ]}
+        >
+          <Select
+            placeholder="Sélectionnez un cycle"
+            options={getCurrentCyclesAsOptions(cycles)}
+          />
+        </Form.Item>
+      </Modal>
     </>
   );
 };
