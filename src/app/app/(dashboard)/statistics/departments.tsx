@@ -1,16 +1,25 @@
 import { getHSLColor } from "@/lib/utils";
+import { getDepartments } from "@/utils";
 import { MoreOutlined } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import { Button, Card, Col, Dropdown, Row, Statistic } from "antd";
 import Link from "next/link";
 
 export function DepartmentsStatistics() {
+  const {data, isPending}=useQuery({
+    queryKey:["departments"],
+    queryFn:getDepartments
+  })
+  if(isPending){
+    return
+  }
   return (
     <Row gutter={[16, 16]}>
-      {[1, 2, 3, 4, 5, 6, 7, 8,9,10].map((index) => (
-        <Col key={index} span={8}>
+      {data?.map((department) => (
+        <Col key={department.id} span={8}>
           <Card
             title={
-              <Link href={`/app/department/${index}`} style={{color:"#fff"}}>Département {index}</Link>
+              <Link href={`/app/department/${department.id}`} style={{color:"#fff"}}>{department.name}</Link>
             }
             extra={
               <Dropdown
@@ -21,11 +30,11 @@ export function DepartmentsStatistics() {
                   ],
                 }}
               >
-                <Button type="text" icon={<MoreOutlined />} />
+                <Button type="text" icon={<MoreOutlined />} style={{color:"#fff"}} />
               </Dropdown>
             }
             type="inner"
-            styles={{header:{background:getHSLColor(`Département ${index+40}`)}}}
+            styles={{header:{background:getHSLColor(department.name)}}}
           >
             <Row gutter={[16, 16]}>
               {/* <Col span={8}>

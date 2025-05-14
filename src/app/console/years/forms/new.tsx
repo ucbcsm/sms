@@ -18,8 +18,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createYear } from "@/utils";
 
 type FormDataType = Omit<Year, "id">
-
-export const NewYearForm: React.FC = () => {
+type NewYearFormProps={
+  buttonType?:"link" | "text" | "default" | "dashed" | "primary"
+}
+export const NewYearForm: React.FC<NewYearFormProps> = ({buttonType="primary"}) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -49,7 +51,7 @@ export const NewYearForm: React.FC = () => {
     <>
     {contextHolder}
       <Button
-        type="primary"
+        type={buttonType}
         icon={<PlusOutlined />}
         className="shadow-none"
         style={{ boxShadow: "none" }}
@@ -176,6 +178,7 @@ export const NewYearForm: React.FC = () => {
               { value: "finished", label: "Terminé" },
               { value: "suspended", label: "Suspendu" },
             ]}
+            defaultValue="progress"
           />
            
         </Form.Item>

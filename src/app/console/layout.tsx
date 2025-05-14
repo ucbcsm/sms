@@ -41,7 +41,7 @@ export default function ConsoleLayout({
   const { yearId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const router = useRouter();
-  const pathname =usePathname()
+  const pathname = usePathname();
 
   return (
     <Layout>
@@ -54,7 +54,6 @@ export default function ConsoleLayout({
           paddingLeft: 0,
         }}
       >
-
         <Space style={{ background: colorPrimary }}>
           <Button
             type="primary"
@@ -68,7 +67,7 @@ export default function ConsoleLayout({
             size="large"
             onClick={() => setIsModalOpen(true)}
           />
-          
+
           <Modal
             title={`Quitter la console d'administration`}
             centered
@@ -93,34 +92,27 @@ export default function ConsoleLayout({
             />
           </Modal>
         </Space>
-       <div className=" flex items-center px-4">
-       <Image
-          src="/ucbc-logo.png"
-           alt="Logo ucbc"
-           width={36}
-           preview={false}
-           style={{}}
+        <div className=" flex items-center px-4">
+          <Image
+            src="/ucbc-logo.png"
+            alt="Logo ucbc"
+            width={36}
+            preview={false}
+            style={{}}
           />
-       </div>
-        <Space style={{  }}>
+        </div>
+        <Space style={{}}>
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
             CI-UCBC
           </Typography.Title>
-          <Divider
-            type="vertical"
-          />
-          <Typography.Text
-            type="secondary"
-          >
+          <Divider type="vertical" />
+          <Typography.Text type="secondary">
             Console d&apos;administration
           </Typography.Text>
         </Space>
         <div className="flex-1" />
         <Space>
-          
-            <YearSelector />
-          
-
+          <YearSelector />
           <Dropdown
             menu={{
               items: [
@@ -132,7 +124,11 @@ export default function ConsoleLayout({
                 {
                   type: "divider",
                 },
-                { key: "logout", label: "Déconnexion", icon: <LogoutOutlined /> },
+                {
+                  key: "logout",
+                  label: "Déconnexion",
+                  icon: <LogoutOutlined />,
+                },
               ],
               onClick: ({ key }) => {},
             }}
@@ -155,61 +151,60 @@ export default function ConsoleLayout({
             overflow: "auto",
           }}
         >
-            <Layout style={{}}>
+          <Layout style={{}}>
             <Menu
               mode="inline"
               theme="light"
               style={{ height: "100%", borderRight: 0 }}
               items={[
-              {
-                key: `/`,
-                label: "Menu",
-                type: "group",
-                children: [
                 {
-                  key: `/console`,
-                  label: "Profile",
-                  icon: <HomeOutlined />,
+                  key: `/`,
+                  label: "Menu",
+                  type: "group",
+                  children: [
+                    {
+                      key: `/console`,
+                      label: "Profile",
+                      icon: <HomeOutlined />,
+                    },
+                    {
+                      key: `/console/years`,
+                      label: "Années",
+                      icon: <ClockCircleOutlined />,
+                      className: "normal-case",
+                    },
+                    {
+                      key: `/console/fields`,
+                      label: "Filières",
+                      icon: <ApartmentOutlined />,
+                      className: "normal-case",
+                    },
+                    {
+                      key: `/console/courses`,
+                      label: "Cours",
+                      icon: <ReadOutlined />,
+                      className: "normal-case",
+                    },
+                  ],
                 },
                 {
-                  key: `/console/years`,
-                  label: "Années",
-                  icon: <ClockCircleOutlined />,
+                  key: "/console/classrooms",
+                  label: "Salles de classe",
+                  icon: <TagsOutlined />,
                   className: "normal-case",
                 },
                 {
-                  key: `/console/fields`,
-                  label: "Filières",
-                  icon: <ApartmentOutlined />,
-                  className: "normal-case",
+                  key: "/console/users",
+                  label: "Comptes",
+                  icon: <TeamOutlined />,
                 },
-                {
-                  key: `/console/courses`,
-                  label: "Cours",
-                  icon: <ReadOutlined />,
-                  className: "normal-case",
-                },
-                ],
-              },
-              {
-                key: "/console/classrooms",
-                label: "Salles de classe",
-                icon: <TagsOutlined />,
-                className: "normal-case",
-              },
-              {
-                key: "/console/users",
-                label: "Comptes",
-                icon: <TeamOutlined />,
-              },
               ]}
               onClick={({ key }) => {
-              router.push(key);
+                router.push(key);
               }}
             />
-           
-               
-                    {/* {
+
+            {/* {
                       key: "/console/classrooms",
                       label: "Salles de classe",
                       icon: <TagsOutlined />,

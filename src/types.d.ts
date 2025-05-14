@@ -1,8 +1,8 @@
-import {  string, z } from "zod";
+import { number, z } from "zod";
 
 /**
  * Represents a Year object with various properties.
- * 
+ *
  * @property {number} id - The unique identifier for the year.
  * @property {Institute | null} university - The associated university or institute, which can be null.
  * @property {string} name - The name of the year.
@@ -96,7 +96,6 @@ export const Cycle = z.object({
 
 export type Cycle = z.infer<typeof Cycle>;
 
-
 /**
  * Represents a Field with its associated properties.
  *
@@ -172,7 +171,7 @@ export const Currency = z.object({
   enabled: z.boolean(),
 });
 
-export type Currency=z.infer<typeof Currency>
+export type Currency = z.infer<typeof Currency>;
 
 export const PaymentMethod = z.object({
   id: z.number(),
@@ -181,7 +180,7 @@ export const PaymentMethod = z.object({
   enabled: z.boolean(),
 });
 
-export type PaymentMethod=z.infer<typeof PaymentMethod>
+export type PaymentMethod = z.infer<typeof PaymentMethod>;
 
 export const User = z.object({
   id: z.number(),
@@ -204,7 +203,6 @@ export const User = z.object({
 });
 
 export type User = z.infer<typeof User>;
-
 
 export const Classroom = z.object({
   id: z.number(),
@@ -240,3 +238,129 @@ export const Course = z.object({
 });
 
 export type Course = z.infer<typeof Course>;
+
+export const Enrollment = z.object({
+  id: z.number(),
+  user: User,
+  academic_year: Year,
+  cycle: Cycle,
+  faculty: Faculty,
+  field: Field,
+  departement: Department,
+  class_year: Class,
+  period: Period,
+  common_enrollment_infos: StudentInfo,
+  type_of_enrollment: z.enum(["new_application"]).nullable(),
+  enrollment_fees: z.enum(["paid", "unpaid"]).nullable(),
+  status: z.enum(["enabled", "disabled"]).nullable(),
+});
+
+export type Enrollment = z.infer<typeof Enrollment>;
+
+export const House = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export type House = z.infer<typeof House>;
+
+export const StudentPreviousStudy = {
+  id: z.number(),
+  academic_year: z.string(),
+  institution: z.string(),
+  study_year_and_faculty: z.string(),
+  result: z.number(),
+};
+
+export type StudentPreviousStudy = z.infer<typeof StudentPreviousStudy>;
+
+export const EnrollmentQA = z.object({
+  id: z.number(),
+  question: z.string(),
+  response: z.string(),
+});
+
+export type EnrollmentQA = z.infer<typeof EnrollmentQA>;
+
+export const TestCourse = z.object({
+  id: z.number(),
+  faculty: Faculty,
+  name: z.string(),
+  max_value: z.string().nullable(),
+  description: z.string(),
+});
+
+export type TestCourse = z.infer<typeof TestCourse>;
+
+export const TestResult = z.object({
+  id: z.number(),
+  course_test: TestCourse,
+  result: z.string().nullable(),
+});
+
+export type TestResult = z.infer<typeof TestResult>;
+
+export const StudentInfo = z.object({
+  id: z.number(),
+  previous_university_studies: z.array(StudentPreviousStudy),
+  enrollment_question_response: z.array(EnrollmentQA),
+  admission_test_result: z.array(TestResult),
+  name: z.string(),
+  gender: z.enum(["M", "F"]),
+  place_of_birth: z.string(),
+  date_of_birth: z.string().date(),
+  nationality: z.string(),
+  marital_status: z
+    .enum(["single", "married", "divorced", "widowed"])
+    .nullable(),
+  religious_affiliation: z.string(),
+  phone_number_1: z.string(),
+  phone_number_2: z.string().nullable(),
+  name_of_secondary_school: z.string(),
+  country_of_secondary_school: z.string(),
+  province_of_secondary_school: z.string(),
+  territory_or_municipality_of_school: z.string(),
+  section_followed: z.string(),
+  father_name: z.string(),
+  father_phone_number: z.string().nullable(),
+  mother_name: z.string(),
+  mother_phone_number: z.string().nullable(),
+  current_city: z.string(),
+  current_municipality: z.string(),
+  current_neighborhood: z.string(),
+  country_of_origin: z.string(),
+  province_of_origin: z.string(),
+  territory_or_municipality_of_origin: z.string(),
+  physical_ability: z.enum(["normal" | "disabled"]).nullable(),
+  professional_activity: z.string(),
+  spoken_language: z.string(),
+  year_of_diploma_obtained: z.string(),
+  diploma_number: z.string(),
+  diploma_percentage: z.number(),
+  diploma_file: z.string().nullable(),
+  other_documents: z.string().nullable(),
+  is_foreign_registration: z.boolean().nullable(),
+  former_matricule: z.string(),
+  house: House.nullable(),
+});
+
+export const PrematureEnd = {
+  id: number(),
+  student: Enrollment,
+  reason: z.string(),
+};
+
+export type PrematureEnd = z.infer<typeof PrematureEnd>;
+
+export const Application = Enrollment.extend({
+  surname: z.string(),
+  last_name: z.string(),
+  first_name: z.string(),
+  email: z.string().email(),
+  status: z.enum(["pending", "validated", "reoriented", "rejected"]).nullable(),
+  avatar: z.string().nullable(),
+  is_former_student: z.boolean(),
+  date_of_submission: z.string().date(),
+});
+
+export type Application = z.infer<typeof Application>;

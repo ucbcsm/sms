@@ -61,6 +61,32 @@ export function getYearStatusName(
   }
 }
 
+export function getYearStatusColor(
+  status: "pending" | "progress" | "finished" | "suspended" | string
+) {
+  switch (status) {
+    case "pending":
+      return "orange";
+
+      break;
+    case "progress":
+      return "blue";
+
+      break;
+    case "finished":
+      return "green";
+
+      break;
+    case "suspended":
+      return "red";
+
+      break;
+    default:
+      return "default";
+  }
+}
+
+
 export function getYearsAsOptions(years?: Year[]) {
   return years?.map((year) => {
     return { value: year.id, label: year.name };
