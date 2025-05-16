@@ -15,7 +15,8 @@ export const useYid = () => {
 
   useEffect(() => {
     const storedYid = localStorage.getItem("yid");
-    if (storedYid) setYid(parseInt(storedYid));
+
+    if (storedYid) {setYid(parseInt(storedYid));}
   }, [localStorage]);
 
   return { yid, setYid, removeYid };

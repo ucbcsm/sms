@@ -1,4 +1,8 @@
+"use client";
+import { DataFetchErrorResult } from "@/components/errorResult";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getHSLColor } from "@/lib/utils";
+import { getEnrollments } from "@/utils";
 import {
   DownOutlined,
   FileExcelOutlined,
@@ -9,6 +13,7 @@ import {
   UserAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
@@ -36,138 +41,43 @@ type StudentType = {
   status: "active" | "abandon" | "dismissed";
 };
 
-const columns: TableColumnType<StudentType>[] = [
-  {
-    title: "Photo",
-    dataIndex: "firstname",
-    key: "image",
-    render: (value, record) => (
-      <Avatar
-        style={{
-          backgroundColor: getHSLColor(
-            `${record.firstname} ${record.lastname} ${record.surname}`
-          ),
-        }}
-      >
-        {record?.firstname?.charAt(0).toUpperCase()}
-        {record?.lastname?.charAt(0).toUpperCase()}
-      </Avatar>
-    ),
-    width: 58,
-    align: "center",
-  },
-  {
-    title: "Matricule",
-    dataIndex: "matricule",
-    key: "matricule",
-    width: 92,
-    render: (value, record) => (
-      <Link href={`/app/student/${record.id}`}>{value}</Link>
-    ),
-    align: "center",
-  },
-  {
-    title: "Noms",
-    dataIndex: "lastname",
-    key: "name",
-    render: (value, record) => (
-      <Link href={`/app/student/${record.id}`}>
-        {record.firstname} {record.lastname} {record.surname}
-      </Link>
-    ),
-    ellipsis: true,
-  },
-  {
-    title: "Sexe",
-    dataIndex: "sex",
-    key: "sex",
-    width: 58,
-    render: (value) => value,
-    align: "center",
-  },
-  {
-    title: "Promotion",
-    dataIndex: "promotion",
-    render: (value) => `${value}`,
-    key: "class",
-    ellipsis: true,
-  },
-
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    width: 96,
-    render: (value) => (
-      <>
-        {value === "active" && (
-          <Tag bordered={false} color="success" className="w-full mr-0">
-            Actif
-          </Tag>
-        )}
-        {value === "abandon" && (
-          <Tag bordered={false} color="warning" className="w-full mr-0">
-            Abandon
-          </Tag>
-        )}
-        {value === "dismissed" && (
-          <Tag bordered={false} color="error" className="w-full mr-0">
-            Renvoyé
-          </Tag>
-        )}
-      </>
-    ),
-  },
-  {
-    key: "actions",
-    title:"Actions",
-    render: () => (
-      <Space>
-        <Button type="dashed">Gérer</Button>
-        <Dropdown
-          menu={{
-            items: [
-              { key: "1", label: "Action 1" },
-              { key: "2", label: "Action 2" },
-              { key: "3", label: "Action 3" },
-            ],
-          }}
-        >
-          <Button type="text" icon={<MoreOutlined />} />
-        </Dropdown>
-      </Space>
-    ),
-    width: 120,
-  },
-];
-
-const data: StudentType[] = Array.from({ length: 100 }, (_, index) => {
-  const id = (index + 1).toString();
-  return {
-    id,
-    key: id,
-    firstname: "Kahindo",
-    lastname: "Lwanzo",
-    surname: "Alfred" + id,
-    sex: "M",
-    status: "active",
-    avatar: "",
-    matricule: `0024${13 + index}`,
-    promotion: "L1 Genie informatique",
-  };
-});
+// const data: StudentType[] = Array.from({ length: 100 }, (_, index) => {
+//   const id = (index + 1).toString();
+//   return {
+//     id,
+//     key: id,
+//     firstname: "Kahindo",
+//     lastname: "Lwanzo",
+//     surname: "Alfred" + id,
+//     sex: "M",
+//     status: "active",
+//     avatar: "",
+//     matricule: `0024${13 + index}`,
+//     promotion: "L1 Genie informatique",
+//   };
+// });
 
 export function StudentsList() {
   const router = useRouter();
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["enrollments"],
+    queryFn: getEnrollments,
+  });
+  if (isPending) {
+    return <DataFetchPendingSkeleton variant="table" />;
+  }
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
   return (
     <Table
       title={() => (
         <header className="flex  pb-3">
           <Space>
             <Input.Search placeholder="Rechercher ..." />
-            <Select placeholder="Faculté" showSearch/>
-            <Select placeholder="Département" showSearch/>
-            <Select placeholder="Promotion" showSearch/>
+            <Select placeholder="Faculté" showSearch />
+            <Select placeholder="Département" showSearch />
+            <Select placeholder="Promotion" showSearch />
             {/* <Button icon={<FilterOutlined />} style={{ boxShadow: "none" }}>
               Filtrer
             </Button> */}
@@ -202,7 +112,110 @@ export function StudentsList() {
           </Space>
         </header>
       )}
-      columns={columns}
+      columns={[
+        {
+          title: "Photo",
+          dataIndex: "firstname",
+          key: "image",
+          render: (value, record) => (
+            <Avatar
+              style={{
+                backgroundColor: getHSLColor(
+                  `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                ),
+              }}
+            >
+              {record?.user.first_name?.charAt(0).toUpperCase()}
+              {record?.user.last_name?.charAt(0).toUpperCase()}
+            </Avatar>
+          ),
+          width: 58,
+          align: "center",
+        },
+        {
+          title: "Matricule",
+          dataIndex: "matricule",
+          key: "matricule",
+          width: 92,
+          render: (value, record) => (
+            <Link href={`/app/student/${record.id}`}>
+              {record.user.matricule}
+            </Link>
+          ),
+          align: "center",
+        },
+        {
+          title: "Noms",
+          dataIndex: "lastname",
+          key: "name",
+          render: (value, record) => (
+            <Link href={`/app/student/${record.id}`}>
+              {record.user.first_name} {record.user.last_name}{" "}
+              {record.user.surname}
+            </Link>
+          ),
+          ellipsis: true,
+        },
+        {
+          title: "Sexe",
+          dataIndex: "sex",
+          key: "gender",
+          width: 58,
+          render: (_, record, __) => `${record.common_enrollment_infos.gender}`,
+          align: "center",
+        },
+        {
+          title: "Promotion",
+          dataIndex: "promotion",
+          render: (_, record, __) =>
+            `${record.class_year.acronym} ${record.departement.name}`,
+          key: "class",
+          ellipsis: true,
+        },
+        {
+          title: "Période",
+          dataIndex: "period",
+          render: (_, record, __) => `${record.period.name}`,
+          key: "class",
+          ellipsis: true,
+        },
+        {
+          title: "Status",
+          dataIndex: "status",
+          key: "status",
+          width: 96,
+          render: (_, record, __) => (
+            <Tag
+              bordered={false}
+              color={record.status === "enabled" ? "success" : "red"}
+              className="w-full mr-0"
+            >
+              {record.status === "enabled" ? "Actif" : "Abandon"}
+            </Tag>
+          ),
+        },
+        {
+          key: "actions",
+          title: "Actions",
+          render: () => (
+            <Space>
+              <Button type="dashed">Gérer</Button>
+              <Dropdown
+                menu={{
+                  items: [
+                    { key: "1", label: "Action 1" },
+                    { key: "2", label: "Action 2" },
+                    { key: "3", label: "Action 3" },
+                  ],
+                }}
+              >
+                <Button type="text" icon={<MoreOutlined />} />
+              </Dropdown>
+            </Space>
+          ),
+          width: 120,
+        },
+      ]}
       dataSource={data}
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       rowSelection={{

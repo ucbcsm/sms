@@ -40,3 +40,9 @@ export async function deleteClass(id: number) {
   const res = await api.delete(`/main_config/class-year/${id}/`);
   return res.data;
 }
+
+export function getCurrentClassesAsOptions(classes?: Class[]) {
+  return classes?.map((classe) => {
+    return { value: classe.id, label: `${classe.acronym} (${classe.name})` };
+  });
+}

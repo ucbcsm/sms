@@ -1,8 +1,9 @@
+'use client'
+import { Step2ApplicationFormDataType } from "@/types";
 import { Button, Form, Input, Space } from "antd";
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
-import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -11,17 +12,10 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-const formSchema = z.object({
-  father_name: z.string(),
-  mother_name: z.string(),
-  father_phone_number: z.string().optional(),
-  mother_phone_number: z.string().optional(),
-});
 
-type FormSchemaType = z.infer<typeof formSchema>;
 
 export const Step2: FC<Props> = ({ setStep }) => {
-  const [form] = Form.useForm<FormSchemaType>();
+  const [form] = Form.useForm<Step2ApplicationFormDataType>();
 
   useEffect(() => {
     const savedData = localStorage.getItem("d2");

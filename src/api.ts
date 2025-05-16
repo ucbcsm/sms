@@ -1,5 +1,10 @@
 //  ENDPOINTS LINKS 
 
+
+// https://ciucbc.pythonanywhere.com/api/v01/account/roles/
+// https://ciucbc.pythonanywhere.com/api/v01/account/permission/
+// https://ciucbc.pythonanywhere.com/api/v01/account/group/
+
 // 'https://ciucbc.pythonanywhere.com/api/v01/faculty/available-course/'
 // 'https://ciucbc.pythonanywhere.com/api/v01/faculty/course-student-assignation/'
 // 'https://ciucbc.pythonanywhere.com/api/v01/faculty/taught-course/'

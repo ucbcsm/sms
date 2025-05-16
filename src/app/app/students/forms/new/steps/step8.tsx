@@ -1,3 +1,5 @@
+'use client'
+import { Step8ApplicationFormDataType } from "@/types";
 import { Button, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,
@@ -14,18 +16,8 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-// Zod schema for form validation
-const formSchema = z.object({
-  q0: z.string().min(1, "Ce champ est requis"),
-  q1: z.string().min(1, "Ce champ est requis"),
-  q2: z.string().min(1, "Ce champ est requis"),
-  q3: z.string().min(1, "Ce champ est requis"),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
-
 export const Step8: FC<Props> = ({ setStep }) => {
-  const [form] = Form.useForm<FormSchemaType>();
+  const [form] = Form.useForm<any>();
 
   const [questions, setQuestions] = useState<
     { question: string; response: string }[]
@@ -56,8 +48,14 @@ export const Step8: FC<Props> = ({ setStep }) => {
     const savedData = localStorage.getItem("d8");
     if (typeof savedData === "string") {
       const raw = decompressFromEncodedURIComponent(savedData);
-      const data = JSON.parse(raw);
-      form.setFieldsValue({ ...data });
+      const data = JSON.parse(raw) as {question:string, response:string}[];
+      console.log("Brrrr:",data)
+      const fieldsValue = data.reduce((acc, item, index) => {
+        acc[`q${index}`] = item.response;
+        return acc;
+      }, {} as Record<string, string>);
+      
+      form.setFieldsValue(fieldsValue);
     }
   }, []);
 
@@ -67,8 +65,15 @@ export const Step8: FC<Props> = ({ setStep }) => {
       style={{ width: 500 }}
       layout="vertical"
       onFinish={(values) => {
+        console.log(values);
+
+        const responsesArray = Object.values(values);
+        const questionsWithResponses = questions.map((q, index) => ({
+          question: q.question,
+          response: responsesArray[index] || "",
+        }));
         const compressedData = compressToEncodedURIComponent(
-          JSON.stringify(values)
+          JSON.stringify(questionsWithResponses)
         );
         localStorage.setItem("d8", compressedData);
         setStep(8);

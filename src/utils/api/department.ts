@@ -42,3 +42,9 @@ export async function deleteDepartment(id: number) {
   const res = await api.delete(`/main_config/departement/${id}/`);
   return res.data;
 }
+
+export function getCurrentDepartmentsAsOptions(departments?: Department[]) {
+  return departments?.map((department) => {
+    return { value: department.id, label: department.name };
+  });
+}

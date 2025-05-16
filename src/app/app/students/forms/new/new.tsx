@@ -10,6 +10,7 @@ import {
   Space,
   StepProps,
   Steps,
+  theme,
 } from "antd";
 import { Options, parseAsInteger, useQueryState } from "nuqs";
 import { Step1 } from "./steps/step1";
@@ -22,6 +23,7 @@ import { Step7 } from "./steps/step7";
 import { Step8 } from "./steps/step8";
 import { Step9 } from "./steps/step9";
 import { CloseOutlined } from "@ant-design/icons";
+import { useApplicationStepsData } from "@/hooks/useApplicationStepsData";
 
 type Props = {
   open: boolean;
@@ -32,8 +34,10 @@ type Props = {
 };
 
 export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
+  const {token:{colorPrimary}}=theme.useToken()
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const [cancel, setCancel] = useState<boolean>(false);
+  const {removeData}=useApplicationStepsData()
 
   const [steps] = useState<
     ReadonlyArray<{ title: string; content: ReactNode }>
@@ -88,13 +92,14 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
     <Drawer
       width={`100%`}
       title="Nouvelle candidature"
+      styles={{header:{background:colorPrimary, color:"#fff"}}}
       onClose={onClose}
       open={open}
       closable={false}
       extra={
         <Space>
           <Button
-            style={{ boxShadow: "none" }}
+            style={{ boxShadow: "none", color:"#fff" }}
             onClick={() => {
               setCancel(true);
             }}
@@ -105,7 +110,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
             title="Annuler la candidature"
             open={cancel}
             onOk={() => {
-              localStorage.clear();
+              removeData()
               setOpen(null);
               setStep(null);
               setCancel(false);
@@ -128,7 +133,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
     >
       <Flex vertical gap={16}>
         <Alert
-          type="warning"
+          type="info"
           message=" Veuillez compléter toutes les étapes avant de soumettre la candidature."
           description="Tout formulaire qui contiendrait de faux renseignements ne sera pas pris en considération"
           showIcon

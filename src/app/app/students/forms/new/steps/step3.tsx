@@ -1,11 +1,12 @@
-import { Button, Form, Input, Select, Space } from "antd";
+'use client'
+import { Step3ApplicationFormDataType } from "@/types";
+import { Button, Checkbox, Form, Input, Select, Space } from "antd";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
-import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -14,16 +15,10 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-const formSchema = z.object({
-  country_of_origin: z.string(),
-  province_of_origin: z.string(),
-  territory_or_municipality_of_origin: z.string(),
-});
 
-type FormSchemaType = z.infer<typeof formSchema>;
 
 export const Step3: FC<Props> = ({ setStep }) => {
-  const [form] = Form.useForm<FormSchemaType>();
+  const [form] = Form.useForm<Step3ApplicationFormDataType>();
 
   useEffect(() => {
     const savedData = localStorage.getItem("d3");
@@ -279,7 +274,13 @@ export const Step3: FC<Props> = ({ setStep }) => {
       >
         <Input placeholder="Territoire ou municipalité d'origine" />
       </Form.Item>
-
+      <Form.Item
+        label="Êtes-vous étranger?"
+        name="is_foreign_registration"
+        valuePropName="checked"
+      >
+        <Checkbox />
+      </Form.Item>
       <Form.Item
         style={{ display: "flex", justifyContent: "flex-end", paddingTop: 20 }}
       >

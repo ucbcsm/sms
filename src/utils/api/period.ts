@@ -90,3 +90,9 @@ export function getPeriodTypeName(
       return "Inconnu";
   }
 }
+
+export function getCurrentPeriodsAsOptions(periods?: Period[]) {
+  return periods?.map((period) => {
+    return { value: period.id, label: `${period.acronym} (${period.name})` };
+  });
+}

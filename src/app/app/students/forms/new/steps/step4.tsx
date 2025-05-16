@@ -1,3 +1,5 @@
+'use client'
+import { Step4ApplicationFormDataType } from "@/types";
 import { Button, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,
@@ -5,7 +7,6 @@ import {
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
-import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -14,18 +15,9 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-const formSchema = z.object({
-  current_city: z.string().nonempty("Ville actuelle est requise"),
-  current_municipality: z
-    .string()
-    .nonempty("Municipalité actuelle est requise"),
-  current_neighborhood: z.string().nonempty("Adresse actuelle est requise"),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
 
 export const Step4: FC<Props> = ({ setStep }) => {
-  const [form] = Form.useForm<FormSchemaType>();
+  const [form] = Form.useForm<Step4ApplicationFormDataType>();
 
   useEffect(() => {
     const savedData = localStorage.getItem("d4");

@@ -1,3 +1,4 @@
+import { ST } from "next/dist/shared/lib/utils";
 import { number, z } from "zod";
 
 /**
@@ -250,7 +251,7 @@ export const Enrollment = z.object({
   class_year: Class,
   period: Period,
   common_enrollment_infos: StudentInfo,
-  type_of_enrollment: z.enum(["new_application"]).nullable(),
+  type_of_enrollment: z.enum(["new_application", "reapplication"]).nullable(),
   enrollment_fees: z.enum(["paid", "unpaid"]).nullable(),
   status: z.enum(["enabled", "disabled"]).nullable(),
 });
@@ -264,13 +265,13 @@ export const House = z.object({
 
 export type House = z.infer<typeof House>;
 
-export const StudentPreviousStudy = {
+export const StudentPreviousStudy = z.object({
   id: z.number(),
   academic_year: z.string(),
   institution: z.string(),
   study_year_and_faculty: z.string(),
   result: z.number(),
-};
+});
 
 export type StudentPreviousStudy = z.infer<typeof StudentPreviousStudy>;
 
@@ -295,7 +296,7 @@ export type TestCourse = z.infer<typeof TestCourse>;
 export const TestResult = z.object({
   id: z.number(),
   course_test: TestCourse,
-  result: z.string().nullable(),
+  result: z.number().nullable(),
 });
 
 export type TestResult = z.infer<typeof TestResult>;
@@ -340,7 +341,7 @@ export const StudentInfo = z.object({
   diploma_file: z.string().nullable(),
   other_documents: z.string().nullable(),
   is_foreign_registration: z.boolean().nullable(),
-  former_matricule: z.string(),
+  former_matricule: z.string().nullable(),
   house: House.nullable(),
 });
 
@@ -352,7 +353,7 @@ export const PrematureEnd = {
 
 export type PrematureEnd = z.infer<typeof PrematureEnd>;
 
-export const Application = Enrollment.extend({
+export const Application = Enrollment.merge(StudentInfo).extend({
   surname: z.string(),
   last_name: z.string(),
   first_name: z.string(),
@@ -364,3 +365,135 @@ export const Application = Enrollment.extend({
 });
 
 export type Application = z.infer<typeof Application>;
+
+export type ApplicationFormDataType = Omit<
+  Application,
+  | "id"
+  | "academic_year"
+  | "cycle"
+  | "faculty"
+  | "field"
+  | "departement"
+  | "class_year"
+  | "period"
+  | "previous_university_studies"
+  | "enrollment_question_response"
+  | "admission_test_result"
+  | "name"
+  | "house"
+  | "user"
+  | "common_enrollment_infos"
+  | "date_of_submission"
+> & {
+  year_id: number;
+  cycle_id: number;
+  faculty_id: number;
+  field_id: number;
+  department_id: number;
+  class_id: number;
+  period_id: number;
+  student_previous_studies: Omit<StudentPreviousStudy, "id">[];
+  enrollment_q_a: Omit<EnrollmentQA, "id">[];
+  test_result: Omit<TestResult, "id">[];
+};
+
+const Step1ApplicationFormDataType = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  surname: z.string(),
+  gender: z.enum(["M", "F"]),
+  place_of_birth: z.string(),
+  date_of_birth: z.string(),
+  nationality: z.string(),
+  marital_status: z.enum(["single", "married", "divorced", "widowed"]),
+  religious_affiliation: z.string(),
+  physical_ability: z.enum(["normal", "disabled"]),
+  spoken_language: z.string(),
+  email: z.string().email(),
+  phone_number_1: z.string(),
+  phone_number_2: z.string().nullable(),
+});
+
+export type Step1ApplicationFormDataType = z.infer<
+  typeof Step1ApplicationFormDataType
+>;
+
+const Step2ApplicationFormDataType = z.object({
+  father_name: z.string(),
+  mother_name: z.string(),
+  father_phone_number: z.string().optional(),
+  mother_phone_number: z.string().optional(),
+});
+
+export type Step2ApplicationFormDataType = z.infer<
+  typeof Step2ApplicationFormDataType
+>;
+
+const Step3ApplicationFormDataType = z.object({
+  country_of_origin: z.string(),
+  province_of_origin: z.string(),
+  territory_or_municipality_of_origin: z.string(),
+  is_foreign_registration: z.boolean(),
+});
+
+export type Step3ApplicationFormDataType = z.infer<
+  typeof Step3ApplicationFormDataType
+>;
+
+const Step4ApplicationFormDataType = z.object({
+  current_city: z.string(),
+  current_municipality: z.string(),
+  current_neighborhood: z.string(),
+});
+
+export type Step4ApplicationFormDataType = z.infer<
+  typeof Step4ApplicationFormDataType
+>;
+
+const Step5ApplicationFormDataType = z.object({
+  name_of_secondary_school: z.string().nonempty(),
+  country_of_secondary_school: z.string().nonempty(),
+  province_of_secondary_school: z.string().nonempty(),
+  territory_or_municipality_of_school: z.string(),
+  section_followed: z.string(),
+  year_of_diploma_obtained: z.string(),
+  diploma_number: z.string(),
+  diploma_percentage: z.number().min(0).max(100),
+  diploma_file: z.string().nullable(),
+  other_documents: z.string().optional(),
+});
+
+export type Step5ApplicationFormDataType = z.infer<
+  typeof Step5ApplicationFormDataType
+>;
+
+const Step6ApplicationFormDataType = z.object({
+  professional_activity: z.string(),
+  previous_university_studies: z.array(StudentPreviousStudy.omit({id:true})),
+});
+
+export type Step6ApplicationFormDataType = z.infer<
+  typeof Step6ApplicationFormDataType
+>;
+
+const Step7ApplicationFormDataType = z.object({
+  year_id: z.number(),
+  cycle_id: z.number(),
+  field_id: z.number(),
+  faculty_id: z.number(),
+  department_id: z.number(),
+  class_id: z.number(),
+  period_id: z.number(),
+});
+
+export type Step7ApplicationFormDataType = z.infer<
+  typeof Step7ApplicationFormDataType
+>;
+
+const Step8ApplicationFormDataType = z.object({
+  enrollment_q_a: z.array(EnrollmentQA.omit({ id: true })),
+});
+
+export type Step8ApplicationFormDataType = z.infer<
+  typeof Step8ApplicationFormDataType
+>;

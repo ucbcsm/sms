@@ -1,12 +1,13 @@
-import { Button, Form, Input, InputNumber, Select, Space, Upload } from "antd";
+'use client'
+import { Button, DatePicker, Form, Input, InputNumber, Select, Space, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
-import { z } from "zod";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
+import { Step5ApplicationFormDataType } from "@/types";
 
 type Props = {
   setStep: (
@@ -15,33 +16,8 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-// Zod schema for form validation
-const formSchema = z.object({
-  name_of_secondary_school: z.string().nonempty("Ce champ est requis"),
-  country_of_secondary_school: z.string().nonempty("Ce champ est requis"),
-  province_of_secondary_school: z.string().nonempty("Ce champ est requis"),
-  territory_or_municipality_of_school: z
-    .string()
-    .nonempty("Ce champ est requis"),
-  section_followed: z.string().nonempty("Ce champ est requis"),
-  year_of_diploma_obtained: z
-    .number()
-    .int()
-    .min(1900, "Année invalide")
-    .max(new Date().getFullYear(), "Année invalide"),
-  diploma_number: z.string().nonempty("Ce champ est requis"),
-  diploma_percentage: z
-    .number()
-    .min(0, "Le pourcentage doit être au moins 0")
-    .max(100, "Le pourcentage ne peut pas dépasser 100"),
-  diploma_file: z.any().optional(),
-  other_documents: z.any().optional(),
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
-
 export const Step5: FC<Props> = ({ setStep }) => {
-  const [form] = Form.useForm<FormSchemaType>();
+  const [form] = Form.useForm<Step5ApplicationFormDataType>();
 
   useEffect(() => {
     const savedData = localStorage.getItem("d5");
@@ -114,7 +90,7 @@ export const Step5: FC<Props> = ({ setStep }) => {
         name="year_of_diploma_obtained"
         rules={[{ required: true }]}
       >
-        <InputNumber placeholder="Année d'obtention du diplôme" step={1} />
+        <Input  placeholder="Année d'obtention du diplôme" />
       </Form.Item>
       <Form.Item
         label="Numéro du diplôme"
