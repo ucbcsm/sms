@@ -1,7 +1,7 @@
 "use client";
 
 import { getHSLColor } from "@/lib/utils";
-import { getFaculties } from "@/utils";
+import { getFaculties } from "@/lib/api";
 import { MoreOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Card, Col, Dropdown, Row, Statistic } from "antd";

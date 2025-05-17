@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import ClientProvider from "@/components/clientProvider";
-import { getServerSession } from "@/utils/auth";
+import { getServerSession } from "@/lib/api/auth";
 
 const inter = Inter({
   // variable: "--font-inter",

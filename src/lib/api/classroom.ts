@@ -1,5 +1,5 @@
-import api from "@/fetcher";
-import { Classroom } from "@/types";
+import api from "@/lib/fetcher";
+import { Classroom } from "@/lib/types";
 
 export async function getClassrooms() {
   const res = await api.get(`/main_config/class-room/`);

@@ -14,9 +14,9 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getYears } from "@/utils";
+import { getYears } from "@/lib/api";
 import { FC, useState } from "react";
-import { Year } from "@/types";
+import { Year } from "@/lib/types";
 import { DeleteYearForm } from "./forms/delete";
 import { EditYearForm } from "./forms/edit";
 import dayjs from "dayjs";

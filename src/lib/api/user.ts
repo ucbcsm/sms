@@ -1,5 +1,5 @@
-import { authApi } from "@/fetcher";
-import { User } from "@/types";
+import { authApi } from "@/lib/fetcher";
+import { User } from "@/lib/types";
 
 export async function getUsers() {
   const res = await authApi.get(`/users/`);

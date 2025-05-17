@@ -1,6 +1,6 @@
 "use client";
 import { useYid } from "@/hooks/useYid";
-import { Step7ApplicationFormDataType } from "@/types";
+import { Step7ApplicationFormDataType } from "@/lib/types";
 import {
   getClasses,
   getCurrentClassesAsOptions,
@@ -14,7 +14,7 @@ import {
   getFaculties,
   getFields,
   getPeriods,
-} from "@/utils";
+} from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Form, Input, Select, Space, Radio, InputNumber } from "antd";
 import {

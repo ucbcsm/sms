@@ -1,4 +1,4 @@
-import { PaymentMethod } from "@/types";
+import { PaymentMethod } from "@/lib/types";
 
 const availablePaymentMethods: Omit<PaymentMethod, "id" | "enabled">[] = [
   {

@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { Button, Form, Input, message, Modal, Select, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createPaymentMethod } from "@/utils";
-import { PaymentMethod } from "@/types";
+import { createPaymentMethod } from "@/lib/api";
+import { PaymentMethod } from "@/lib/types";
 import {
   getPaymentMethod,
   getPaymentMethodsAsOptionsWithDisabled,

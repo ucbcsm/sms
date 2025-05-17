@@ -1,5 +1,5 @@
 'use client'
-import { Step4ApplicationFormDataType } from "@/types";
+import { Step4ApplicationFormDataType } from "@/lib/types";
 import { Button, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,

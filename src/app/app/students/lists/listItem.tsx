@@ -1,8 +1,8 @@
 "use client";
 
 import { getHSLColor } from "@/lib/utils";
-import { Application } from "@/types";
-import { getApplicationStatusName } from "@/utils";
+import { Application } from "@/lib/types";
+import { getApplicationStatusName } from "@/lib/api";
 import {
   CheckOutlined,
   CloseOutlined,

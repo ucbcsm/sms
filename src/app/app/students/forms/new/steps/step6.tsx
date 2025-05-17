@@ -1,6 +1,6 @@
 "use client";
 
-import { Step6ApplicationFormDataType } from "@/types";
+import { Step6ApplicationFormDataType } from "@/lib/types";
 import { DeleteOutlined } from "@ant-design/icons";
 import { Badge, Button, Divider, Form, Input, Space, Typography } from "antd";
 import {

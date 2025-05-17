@@ -1,4 +1,4 @@
-import { Cycle } from "@/types";
+import { Cycle } from "@/lib/types";
 
 export const cyclesLMD: Omit<Cycle, "id">[] = [
   {

@@ -2,7 +2,7 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getHSLColor } from "@/lib/utils";
-import { getEnrollments } from "@/utils";
+import { getEnrollments } from "@/lib/api";
 import {
   DownOutlined,
   FileExcelOutlined,

@@ -18,8 +18,8 @@ import {
   createCourse,
   getCourseTypesAsOptions,
   getCurrentFacultiesAsOptions,
-} from "@/utils";
-import { Course, Faculty } from "@/types";
+} from "@/lib/api";
+import { Course, Faculty } from "@/lib/types";
 
 type FormDataType = Omit<Course, "id" | "faculty"> & { faculty_id: number };
 

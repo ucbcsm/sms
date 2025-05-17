@@ -1,6 +1,6 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getClassrooms, getClassroomTypeName } from "@/utils";
+import { getClassrooms, getClassroomTypeName } from "@/lib/api";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -13,7 +13,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import { NewClassroomForm } from "./forms/new";
-import { Classroom } from "@/types";
+import { Classroom } from "@/lib/types";
 import { FC, useState } from "react";
 import { DeleteClassroomForm } from "./forms/delete";
 import { EditClassroomForm } from "./forms/edit";

@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Button, Form, Input, InputNumber, message, Modal, Select } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCycle } from "@/utils";
-import { Cycle } from "@/types";
+import { createCycle } from "@/lib/api";
+import { Cycle } from "@/lib/types";
 import { getCycleLMD, getCyclesLMDAsOptions, getCyclesLMDAsOptionsWithDisabled } from "@/lib/data/cycles";
 
 type FormDataType = Omit<Cycle, "id">;

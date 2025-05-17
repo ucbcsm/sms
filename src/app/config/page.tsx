@@ -1,4 +1,4 @@
-import { checkInstitutionExistence } from "@/utils";
+import { checkInstitutionExistence } from "@/lib/api";
 import { ConfigForm } from "./form";
 import { redirect } from "next/navigation";
 

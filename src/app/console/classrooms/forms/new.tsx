@@ -14,9 +14,9 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Classroom } from "@/types";
+import { Classroom } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClassroom, getClassroomsAsOptions } from "@/utils";
+import { createClassroom, getClassroomsAsOptions } from "@/lib/api";
 
 type FormDataType = Omit<Classroom, "id">;
 

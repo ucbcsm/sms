@@ -13,13 +13,13 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Cycle, Period } from "@/types";
+import { Cycle, Period } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createPeriod,
   getCurrentCyclesAsOptions,
   getPeriodTypesAsOptions,
-} from "@/utils";
+} from "@/lib/api";
 import { useParams } from "next/navigation";
 
 type FormDataType = Omit<Period, "id" | "academic_year" | "cycle"> & {

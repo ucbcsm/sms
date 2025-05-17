@@ -2,9 +2,9 @@
 
 import React, { Dispatch, SetStateAction } from "react";
 import { Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { Cycle, Field } from "@/types";
+import { Cycle, Field } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentCyclesAsOptions, updateField } from "@/utils";
+import { getCurrentCyclesAsOptions, updateField } from "@/lib/api";
 
 type FormDataType = Omit<Field, "id" | "cycle"> & { cycle_id: number };
 

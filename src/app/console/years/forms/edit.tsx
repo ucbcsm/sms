@@ -11,9 +11,9 @@ import {
   Row,
   Select,
 } from "antd";
-import { Year } from "@/types";
+import { Year } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateYear } from "@/utils";
+import { updateYear } from "@/lib/api";
 import dayjs from "dayjs";
 
 type EditYearFormProps = {

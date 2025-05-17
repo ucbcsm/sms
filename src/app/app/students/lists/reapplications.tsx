@@ -1,7 +1,7 @@
 "use client";
 
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getApplicationStatusName, getPendingApplications } from "@/utils";
+import { getApplicationStatusName, getPendingApplications } from "@/lib/api";
 import {
   CheckOutlined,
   CloseOutlined,

@@ -1,7 +1,7 @@
 "use client";
 
 import { Palette } from "@/components/palette";
-import { login } from "@/utils/auth";
+import { login } from "@/lib/api/auth";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
   Button,

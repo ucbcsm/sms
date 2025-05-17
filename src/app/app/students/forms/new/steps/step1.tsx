@@ -1,5 +1,5 @@
 "use client";
-import { Step1ApplicationFormDataType } from "@/types";
+import { Step1ApplicationFormDataType } from "@/lib/types";
 import { Button, DatePicker, Form, Input, Radio, Select } from "antd";
 import dayjs from "dayjs";
 import {

@@ -12,8 +12,8 @@ import {
     Switch,
 } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUser } from "@/utils";
-import { User } from "@/types";
+import { updateUser } from "@/lib/api";
+import { User } from "@/lib/types";
 
 type EditUserFormProps = {
     user: User;

@@ -2,13 +2,13 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Course, Faculty } from "@/types";
+import { Course, Faculty } from "@/lib/types";
 import {
   getCourseTypeName,
   getCouses,
   getCurrentFacultiesAsOptions,
   getFaculties,
-} from "@/utils";
+} from "@/lib/api";
 import {
   DeleteOutlined,
   DownOutlined,

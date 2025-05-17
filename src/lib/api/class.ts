@@ -1,5 +1,5 @@
-import api from "@/fetcher";
-import { Class } from "@/types";
+import api from "@/lib/fetcher";
+import { Class } from "@/lib/types";
 
 export async function getClasses() {
   const res = await api.get(`/main_config/class-year/`);

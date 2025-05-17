@@ -27,5 +27,4 @@ export const useSessionStore = create<SessionStoreType>()((set) => ({
   updateUser: (user) => set({ user }),
   updateError: (error) => set({ error }),
   update: (session) => set({ ...session }),
-  //   xxx: (by) => set((state) => ({ bears: state.bears + by })),
 }));

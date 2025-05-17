@@ -1,7 +1,7 @@
 "use client";
 
 import { Palette } from "@/components/palette";
-import { resetPassword } from "@/utils/auth";
+import { resetPassword } from "@/lib/api/auth";
 import { MailOutlined } from "@ant-design/icons";
 import {
   Button,

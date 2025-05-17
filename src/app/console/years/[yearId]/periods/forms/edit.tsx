@@ -2,9 +2,9 @@
 
 import React, { Dispatch, SetStateAction } from "react";
 import { Col, DatePicker, Form, Input, message, Modal, Row, Select } from "antd";
-import { Cycle, Period } from "@/types";
+import { Cycle, Period } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentCyclesAsOptions, getPeriodTypesAsOptions, updatePeriod } from "@/utils";
+import { getCurrentCyclesAsOptions, getPeriodTypesAsOptions, updatePeriod } from "@/lib/api";
 import dayjs from "dayjs";
 
 type FormDataType = Omit<Period, "id" | "academic_year" | "cycle"> & {

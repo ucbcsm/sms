@@ -1,4 +1,4 @@
-import { checkInstitutionExistence } from "@/utils";
+import { checkInstitutionExistence } from "@/lib/api";
 import {LoginForm} from "./form";
 import { redirect } from "next/navigation";
 

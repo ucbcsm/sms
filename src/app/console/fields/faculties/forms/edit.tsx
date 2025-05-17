@@ -2,9 +2,9 @@
 
 import React, { Dispatch, SetStateAction } from "react";
 import { Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { Faculty, Field } from "@/types";
+import { Faculty, Field } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentFieldsAsOptions, updateFaculty } from "@/utils";
+import { getCurrentFieldsAsOptions, updateFaculty } from "@/lib/api";
 
 type FormDataType = Omit<Faculty, "id" | "field"> & { field_id: number };
 

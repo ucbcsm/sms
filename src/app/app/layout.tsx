@@ -3,7 +3,7 @@
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
 import { useYid } from "@/hooks/useYid";
-import { logout } from "@/utils/auth";
+import { logout } from "@/lib/api/auth";
 import {
   DashboardOutlined,
   DollarOutlined,

@@ -20,12 +20,12 @@ import {
   Tag,
 } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "@/utils";
+import { getUsers } from "@/lib/api";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import dayjs from "dayjs";
 import { FC, useState } from "react";
-import { User } from "@/types";
+import { User } from "@/lib/types";
 import { DeleteUserForm } from "./forms/delete";
 import { EditUserForm } from "./forms/edit";
 

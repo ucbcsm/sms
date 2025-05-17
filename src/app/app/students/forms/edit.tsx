@@ -2,7 +2,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Button, Form, Drawer, message, Space, theme } from "antd";
 import { CloseOutlined } from "@ant-design/icons";
-import { Application, Institute } from "@/types";
+import { Application, Institute } from "@/lib/types";
 import { Palette } from "@/components/palette";
 import type { GetProp, UploadFile, UploadProps } from "antd";
 

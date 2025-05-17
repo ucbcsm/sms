@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Faculty, Field } from "@/types";
+import { Faculty, Field } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createFaculty, getCurrentFieldsAsOptions } from "@/utils";
+import { createFaculty, getCurrentFieldsAsOptions } from "@/lib/api";
 
 type FormDataType = Omit<Faculty, "id" | "field"> & { field_id: number };
 type NewFacultyFormProps = {

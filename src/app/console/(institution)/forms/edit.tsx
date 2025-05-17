@@ -18,8 +18,8 @@ import {
 } from "antd";
 import { CloseOutlined, EditOutlined, UploadOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateInstitution } from "@/utils";
-import { Institute } from "@/types";
+import { updateInstitution } from "@/lib/api";
+import { Institute } from "@/lib/types";
 import { countries } from "@/lib/data/countries";
 import { Palette } from "@/components/palette";
 import type { GetProp, UploadFile, UploadProps } from "antd";

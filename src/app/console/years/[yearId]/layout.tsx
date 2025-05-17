@@ -16,7 +16,7 @@ import { Palette } from "@/components/palette";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import BackButton from "@/components/backButton";
 import { useQuery } from "@tanstack/react-query";
-import { getYearById, getYearStatusName } from "@/utils";
+import { getYearById, getYearStatusName } from "@/lib/api";
 import { useState } from "react";
 import { EditYearForm } from "../forms/edit";
 

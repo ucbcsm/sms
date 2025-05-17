@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useSessionStore } from "./store";
+import { useSessionStore } from "../store";
 
 export const API_URL = "https://ciucbc.pythonanywhere.com/api/v01";
 export const api = axios.create({

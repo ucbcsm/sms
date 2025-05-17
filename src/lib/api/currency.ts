@@ -1,5 +1,5 @@
-import api from "@/fetcher";
-import { Currency } from "@/types";
+import api from "@/lib/fetcher";
+import { Currency } from "@/lib/types";
 
 export async function getCurrencies() {
   const res = await api.get(`/main_config/currency/`);

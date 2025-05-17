@@ -1,11 +1,11 @@
 import { Avatar, Button, Card, Dropdown, List, Skeleton, Space } from "antd";
 import { EditCycleForm } from "./forms/edit";
 import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
-import { Cycle } from "@/types";
+import { Cycle } from "@/lib/types";
 import { FC, useState } from "react";
 import { getHSLColor } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { getCycles } from "@/utils";
+import { getCycles } from "@/lib/api";
 import { NewCycleForm } from "./forms/new";
 
 type ListItemProps = {

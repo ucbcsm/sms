@@ -1,5 +1,5 @@
-import api from "@/fetcher";
-import { Application, ApplicationFormDataType } from "@/types";
+import api from "@/lib/fetcher";
+import { Application, ApplicationFormDataType } from "@/lib/types";
 import dayjs from "dayjs";
 
 export async function getApplications() {

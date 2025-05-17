@@ -1,5 +1,5 @@
-import api from "@/fetcher";
-import { Department } from "@/types";
+import api from "@/lib/fetcher";
+import { Department } from "@/lib/types";
 
 export async function getDepartments() {
   const res = await api.get(`/main_config/departement/`);

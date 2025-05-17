@@ -2,8 +2,8 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Faculty, Field } from "@/types";
-import { getFaculties, getFields } from "@/utils";
+import { Faculty, Field } from "@/lib/types";
+import { getFaculties, getFields } from "@/lib/api";
 import {
   DeleteOutlined,
   DownOutlined,

@@ -2,9 +2,9 @@
 
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Form, Input, InputNumber, message, Modal, Select } from "antd";
-import { Class, Cycle } from "@/types";
+import { Class, Cycle } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentCyclesAsOptions, updateClass } from "@/utils";
+import { getCurrentCyclesAsOptions, updateClass } from "@/lib/api";
 import {
   getClass,
   getClassesByCycleAsOptionsWithDisabled,

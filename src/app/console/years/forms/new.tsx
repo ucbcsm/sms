@@ -13,9 +13,9 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Year } from "@/types";
+import { Year } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createYear } from "@/utils";
+import { createYear } from "@/lib/api";
 
 type FormDataType = Omit<Year, "id">
 type NewYearFormProps={

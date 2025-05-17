@@ -1,5 +1,5 @@
-import api from "@/fetcher";
-import { Field } from "@/types";
+import api from "@/lib/fetcher";
+import { Field } from "@/lib/types";
 
 export async function getFields() {
   const res = await api.get(`/main_config/field/`);

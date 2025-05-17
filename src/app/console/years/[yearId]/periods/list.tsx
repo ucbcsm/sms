@@ -2,8 +2,8 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Cycle, Period } from "@/types";
-import { getPeriods, getPeriodTypeName } from "@/utils/api/period";
+import { Cycle, Period } from "@/lib/types";
+import { getPeriods, getPeriodTypeName } from "@/lib/api/period";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -20,7 +20,7 @@ import { FC, useState } from "react";
 import { EditPeriodForm } from "./forms/edit";
 import { DeletePeriodForm } from "./forms/delete";
 import { NewPeriodForm } from "./forms/new";
-import { getCycles } from "@/utils";
+import { getCycles } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
 
 type ActionsBarProps = {

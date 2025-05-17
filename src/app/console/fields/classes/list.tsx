@@ -2,8 +2,8 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Class, Cycle } from "@/types";
-import { getClasses } from "@/utils/api/class";
+import { Class, Cycle } from "@/lib/types";
+import { getClasses } from "@/lib/api/class";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -19,7 +19,7 @@ import { FC, useState } from "react";
 import { EditClassForm } from "./forms/edit";
 import { DeleteClassForm } from "./forms/delete";
 import { NewClassForm } from "./forms/new";
-import { getCycles } from "@/utils";
+import { getCycles } from "@/lib/api";
 
 type ActionsBarProps = {
   record: Class;

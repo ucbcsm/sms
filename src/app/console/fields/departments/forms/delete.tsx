@@ -2,8 +2,8 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Form, Input, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteDepartment } from "@/utils";
-import { Department } from "@/types";
+import { deleteDepartment } from "@/lib/api";
+import { Department } from "@/lib/types";
 
 type FormDataType = {
   validate: string;

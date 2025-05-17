@@ -5,7 +5,7 @@ import {
   getPendingApplications,
   getRejectedApplications,
   getValidatedApplications,
-} from "@/utils";
+} from "@/lib/api";
 import { SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Badge, Input, List, Tabs } from "antd";

@@ -1,5 +1,5 @@
 import { getHSLColor } from "@/lib/utils";
-import { getDepartments } from "@/utils";
+import { getDepartments } from "@/lib/api";
 import { MoreOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Card, Col, Dropdown, Row, Statistic } from "antd";

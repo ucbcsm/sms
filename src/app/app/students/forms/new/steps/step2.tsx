@@ -1,5 +1,5 @@
 'use client'
-import { Step2ApplicationFormDataType } from "@/types";
+import { Step2ApplicationFormDataType } from "@/lib/types";
 import { Button, Form, Input, Space } from "antd";
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { Options } from "nuqs";

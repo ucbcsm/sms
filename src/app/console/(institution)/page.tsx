@@ -3,7 +3,7 @@
 import BackButton from "@/components/backButton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { Palette } from "@/components/palette";
-import { getInstitution } from "@/utils";
+import { getInstitution } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
   Card,

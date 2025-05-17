@@ -7,7 +7,7 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
-import { Step5ApplicationFormDataType } from "@/types";
+import { Step5ApplicationFormDataType } from "@/lib/types";
 
 type Props = {
   setStep: (

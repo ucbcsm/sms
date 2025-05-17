@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { Button, Form, Input, message, Modal, Select, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createCurrency } from "@/utils";
-import { Currency } from "@/types";
+import { createCurrency } from "@/lib/api";
+import { Currency } from "@/lib/types";
 import { availableCurrencies, getCurrenciesAsOptionsWithDisabled, getCurrency } from "@/lib/data/currencies";
 
 type FormDataType = Omit<Currency, "id">;

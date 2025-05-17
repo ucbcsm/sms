@@ -7,7 +7,7 @@ import {
   Step6ApplicationFormDataType,
   Step7ApplicationFormDataType,
   Step8ApplicationFormDataType,
-} from "@/types";
+} from "@/lib/types";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import { useEffect, useState } from "react";
 
