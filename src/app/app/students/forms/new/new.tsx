@@ -59,7 +59,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       content: <Step4 setStep={setStep} />,
     },
     {
-      title: "Etudes secondaires faites",
+      title: "Études secondaires faites",
       content: <Step5 setStep={setStep} />,
     },
     {
@@ -98,6 +98,12 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       closable={false}
       extra={
         <Space>
+           <Steps
+              current={step}
+              items={getStepItems()}
+              onChange={(current) => setStep(current)}
+              percent={(step / (steps.length - 1)) * 100}
+            />
           <Button
             style={{ boxShadow: "none", color:"#fff" }}
             onClick={() => {

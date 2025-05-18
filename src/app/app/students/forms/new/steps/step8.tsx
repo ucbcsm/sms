@@ -1,5 +1,5 @@
-'use client'
-import { Step8ApplicationFormDataType } from "@/lib/types";
+"use client";
+
 import { Button, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,
@@ -7,7 +7,6 @@ import {
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect, useState } from "react";
-import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -48,13 +47,13 @@ export const Step8: FC<Props> = ({ setStep }) => {
     const savedData = localStorage.getItem("d8");
     if (typeof savedData === "string") {
       const raw = decompressFromEncodedURIComponent(savedData);
-      const data = JSON.parse(raw) as {question:string, response:string}[];
-      console.log("Brrrr:",data)
+      const data = JSON.parse(raw) as { question: string; response: string }[];
+      console.log("Brrrr:", data);
       const fieldsValue = data.reduce((acc, item, index) => {
         acc[`q${index}`] = item.response;
         return acc;
       }, {} as Record<string, string>);
-      
+
       form.setFieldsValue(fieldsValue);
     }
   }, []);
@@ -65,7 +64,6 @@ export const Step8: FC<Props> = ({ setStep }) => {
       style={{ width: 500 }}
       layout="vertical"
       onFinish={(values) => {
-        console.log(values);
 
         const responsesArray = Object.values(values);
         const questionsWithResponses = questions.map((q, index) => ({
@@ -80,12 +78,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
       }}
     >
       {questions.map((q, index) => (
-        <Form.Item
-          key={index}
-          label={q.question}
-          name={`q${index}`}
-          rules={[{ required: true, message: "Ce champ est requis" }]}
-        >
+        <Form.Item key={index} label={q.question} name={`q${index}`} rules={[]}>
           <Input.TextArea placeholder="" />
         </Form.Item>
       ))}

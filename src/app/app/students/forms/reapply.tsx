@@ -20,6 +20,7 @@ import {
 } from "antd";
 import { Options, useQueryState } from "nuqs";
 import { CloseOutlined } from "@ant-design/icons";
+import { useApplicationStepsData } from "@/hooks/useApplicationStepsData";
 
 type Props = {
   open: boolean;
@@ -33,6 +34,7 @@ export const ReapplyForm: FC<Props> = ({ open, setOpen }) => {
   const [form] = Form.useForm();
   const [cancel, setCancel] = useState<boolean>(false);
   const [code, setCode] = useQueryState("code");
+  const {removeData}=useApplicationStepsData()
   const onClose = () => {
     setOpen(false);
   };
@@ -58,7 +60,7 @@ export const ReapplyForm: FC<Props> = ({ open, setOpen }) => {
             title="Annuler la réinscription"
             open={cancel}
             onOk={() => {
-              localStorage.clear();
+              removeData()
               setOpen(null);
               setCode(null)
               setCancel(false);

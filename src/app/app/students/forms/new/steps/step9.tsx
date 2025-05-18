@@ -32,14 +32,12 @@ export const Step9: FC<Props> = ({ setStep }) => {
   const { data: sdata, removeData } = useApplicationStepsData();
   const queryClient = useQueryClient();
 
-  const { mutateAsync, isPending, isError } = useMutation({
+  const { mutateAsync, isPending, } = useMutation({
     mutationFn: createApplication,
   });
 
   const onFinish = (values: FormSchemaType) => {
     console.log("value", values);
-    console.log("YEEAARR", sdata);
-
     if (sdata) {
       mutateAsync(
         {
@@ -80,7 +78,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
             sdata.territory_or_municipality_of_origin,
           physical_ability: sdata.physical_ability,
           professional_activity: sdata.professional_activity,
-          spoken_language: sdata.spoken_language,
+          spoken_languages: sdata.spoken_languages,
           year_of_diploma_obtained: sdata.year_of_diploma_obtained,
           diploma_number: sdata.diploma_number,
           diploma_percentage: sdata.diploma_percentage,

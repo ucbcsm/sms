@@ -23,15 +23,16 @@ export const useApplicationStepsData = () => {
       Step8ApplicationFormDataType
   >();
 
-  const removeData=()=>{
-    localStorage.removeItem("d1")
-    localStorage.removeItem("d2")
-    localStorage.removeItem("d3")
-    localStorage.removeItem("d4")
-    localStorage.removeItem("d5")
-    localStorage.removeItem("d6")
-    localStorage.removeItem("d7")
-  }
+  const removeData = () => {
+    localStorage.removeItem("d1");
+    localStorage.removeItem("d2");
+    localStorage.removeItem("d3");
+    localStorage.removeItem("d4");
+    localStorage.removeItem("d5");
+    localStorage.removeItem("d6");
+    localStorage.removeItem("d7");
+    localStorage.removeItem("d8");
+  };
 
   useEffect(() => {
     const savedData1 = localStorage.getItem("d1");
@@ -81,7 +82,7 @@ export const useApplicationStepsData = () => {
         ...data8,
       });
     }
-  },[]);
+  }, []);
 
-  return{ data:sdata!, removeData };
+  return { data: sdata!, removeData };
 };

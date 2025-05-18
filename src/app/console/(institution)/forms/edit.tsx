@@ -313,7 +313,7 @@ export const EditInstitutionForm: React.FC<Props> = ({
                 label="Site Web"
                 name="web_site"
                 rules={[
-                  { required: true, message: "Veuillez entrer le site web" },
+                  { required: true, type:"url", message: "Veuillez entrer le site web" },
                 ]}
               >
                 <Input />

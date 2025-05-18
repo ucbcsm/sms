@@ -85,12 +85,12 @@ export default function Page() {
               style={{ boxShadow: "none" }}
               variant="dashed"
             >
-              Ajouter
+              Créer
             </Button>
           </Dropdown>
         </Flex>
         <Tabs
-          tabBarStyle={{ paddingLeft: 28 }}
+          tabBarStyle={{ paddingLeft: 28, marginTop:0, }}
           tabPosition="bottom"
           type="card"
           items={[

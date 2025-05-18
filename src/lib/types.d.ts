@@ -384,6 +384,7 @@ export type ApplicationFormDataType = Omit<
   | "user"
   | "common_enrollment_infos"
   | "date_of_submission"
+  | "spoken_language"
 > & {
   year_id: number;
   cycle_id: number;
@@ -392,6 +393,7 @@ export type ApplicationFormDataType = Omit<
   department_id: number;
   class_id: number;
   period_id: number;
+  spoken_languages: { language: string }[];
   student_previous_studies: Omit<StudentPreviousStudy, "id">[];
   enrollment_q_a: Omit<EnrollmentQA, "id">[];
   test_result: Omit<TestResult, "id">[];
@@ -408,7 +410,7 @@ const Step1ApplicationFormDataType = z.object({
   marital_status: z.enum(["single", "married", "divorced", "widowed"]),
   religious_affiliation: z.string(),
   physical_ability: z.enum(["normal", "disabled"]),
-  spoken_language: z.string(),
+  spoken_languages: z.array(z.object({ language: z.string() })),
   email: z.string().email(),
   phone_number_1: z.string(),
   phone_number_2: z.string().nullable(),
@@ -469,7 +471,7 @@ export type Step5ApplicationFormDataType = z.infer<
 
 const Step6ApplicationFormDataType = z.object({
   professional_activity: z.string(),
-  previous_university_studies: z.array(StudentPreviousStudy.omit({id:true})),
+  previous_university_studies: z.array(StudentPreviousStudy.omit({ id: true })),
 });
 
 export type Step6ApplicationFormDataType = z.infer<

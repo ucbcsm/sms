@@ -1,7 +1,7 @@
 "use client";
 
 import { Step6ApplicationFormDataType } from "@/lib/types";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Badge, Button, Divider, Form, Input, Space, Typography } from "antd";
 import {
   compressToEncodedURIComponent,
@@ -44,7 +44,7 @@ export const Step6: FC<Props> = ({ setStep }) => {
       <Form.Item
         label="Activités professionnelles"
         name="professional_activity"
-        rules={[{ required: true }]}
+        rules={[]}
       >
         <Input.TextArea placeholder="Activités professionnelles" />
       </Form.Item>
@@ -58,7 +58,7 @@ export const Step6: FC<Props> = ({ setStep }) => {
         {(fields, { add, remove }) => (
           <>
             {fields.map(({ key, name, ...restField }, index) => (
-              <div className="py-4">
+              <div className="py-4" key={key}>
                 <Badge count={index + 1} />
                 <Form.Item
                   {...restField}
@@ -122,9 +122,9 @@ export const Step6: FC<Props> = ({ setStep }) => {
             ))}
             <Form.Item style={{ marginTop: 24 }}>
               <Button
-                type="dashed"
+                type="link"
                 onClick={() => add()}
-                icon="+"
+                icon={<PlusCircleOutlined />}
                 block
                 style={{
                   display: "flex",

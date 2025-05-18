@@ -1,6 +1,6 @@
 "use client";
 import { useYid } from "@/hooks/useYid";
-import { Step7ApplicationFormDataType } from "@/lib/types";
+import { Step7ApplicationFormDataType, Year } from "@/lib/types";
 import {
   getClasses,
   getCurrentClassesAsOptions,
@@ -33,7 +33,7 @@ type Props = {
 
 export const Step7: FC<Props> = ({ setStep }) => {
   const [form] = Form.useForm<Step7ApplicationFormDataType>();
-  const {yid}=useYid()
+  const { yid } = useYid();
 
   const { data: cycles } = useQuery({
     queryKey: ["cycles"],
@@ -64,37 +64,34 @@ export const Step7: FC<Props> = ({ setStep }) => {
     queryKey: ["periods"],
     queryFn: getPeriods,
   });
-console.log(departments)
+ 
   useEffect(() => {
     const savedData = localStorage.getItem("d7");
     if (typeof savedData === "string") {
       const raw = decompressFromEncodedURIComponent(savedData);
       const data = JSON.parse(raw);
-      form.setFieldsValue({ ...data, year_id:yid });
+      form.setFieldsValue({ ...data });
     }
   }, [yid]);
   return (
     <Form
-      
       form={form}
       style={{ width: 500 }}
       onFinish={(values) => {
-        console.log(values)
         const compressedData = compressToEncodedURIComponent(
-          JSON.stringify(values)
+          JSON.stringify({ ...values, year_id: yid })
         );
         localStorage.setItem("d7", compressedData);
         setStep(7);
       }}
     >
-      <Form.Item label="Année académique" name="year_id">
-        <InputNumber placeholder={`${yid}`} disabled variant="borderless" />
-      </Form.Item>
+      {/* <Form.Item label="Année académique" name="year_id">
+        <InputNumber disabled variant="borderless" />
+      </Form.Item> */}
       <Form.Item
         label="Cycle"
         name="cycle_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
-        
       >
         <Radio.Group options={getCurrentCyclesAsOptions(cycles)} />
       </Form.Item>
@@ -103,7 +100,11 @@ console.log(departments)
         name="field_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
-        <Select options={getCurrentFieldsAsOptions(fields)} disabled />
+        <Select
+          options={getCurrentFieldsAsOptions(fields)}
+          disabled
+          showSearch
+        />
       </Form.Item>
       <Form.Item
         label="Faculté"
@@ -111,9 +112,9 @@ console.log(departments)
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Select
-          placeholder="Faculté"
           options={getCurrentFacultiesAsOptions(faculties)}
-         disabled
+          disabled
+          showSearch
         />
       </Form.Item>
       <Form.Item
@@ -124,12 +125,16 @@ console.log(departments)
         <Select
           placeholder="Département"
           options={getCurrentDepartmentsAsOptions(departments)}
-          onSelect={(value)=>{
-            const selectedDep=departments?.find(dep=>dep.id===value)
-            const facId=selectedDep?.faculty.id
-            const selectedFac= faculties?.find(fac=>fac.id===facId)
-            form.setFieldsValue({faculty_id:facId,field_id:selectedFac?.field.id})
+          onSelect={(value) => {
+            const selectedDep = departments?.find((dep) => dep.id === value);
+            const facId = selectedDep?.faculty.id;
+            const selectedFac = faculties?.find((fac) => fac.id === facId);
+            form.setFieldsValue({
+              faculty_id: facId,
+              field_id: selectedFac?.field.id,
+            });
           }}
+          showSearch
         />
       </Form.Item>
       <Form.Item
@@ -140,6 +145,7 @@ console.log(departments)
         <Select
           placeholder="Promotion ou classe"
           options={getCurrentClassesAsOptions(classes)}
+          showSearch
         />
       </Form.Item>
       <Form.Item
@@ -150,6 +156,7 @@ console.log(departments)
         <Select
           placeholder="Période"
           options={getCurrentPeriodsAsOptions(periods)}
+          showSearch
         />
       </Form.Item>
       <Form.Item

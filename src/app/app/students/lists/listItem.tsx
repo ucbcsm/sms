@@ -2,7 +2,10 @@
 
 import { getHSLColor } from "@/lib/utils";
 import { Application } from "@/lib/types";
-import { getApplicationStatusName } from "@/lib/api";
+import {
+  getApplicationStatusName,
+  getApplicationStatusTypographyType,
+} from "@/lib/api";
 import {
   CheckOutlined,
   CloseOutlined,
@@ -100,7 +103,9 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
           }
           description={
             <div onClick={toggleEdit} style={{ cursor: "pointer" }}>
-              <Typography.Text type="danger">
+              <Typography.Text
+                type={getApplicationStatusTypographyType(item.status!)}
+              >
                 {getApplicationStatusName(`${item.status}`)}
               </Typography.Text>{" "}
               : {item.class_year.acronym} {item.departement.name}

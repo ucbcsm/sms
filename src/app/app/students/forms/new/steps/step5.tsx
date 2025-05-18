@@ -8,6 +8,7 @@ import {
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { Step5ApplicationFormDataType } from "@/lib/types";
+import { countries } from "@/lib/data/countries";
 
 type Props = {
   setStep: (
@@ -54,14 +55,8 @@ export const Step5: FC<Props> = ({ setStep }) => {
       >
         <Select
           placeholder="Pays de l'école secondaire"
-          options={[
-            { value: "afghanistan", label: "Afghanistan" },
-            { value: "afrique_du_sud", label: "Afrique du Sud" },
-            { value: "albanie", label: "Albanie" },
-            { value: "algerie", label: "Algérie" },
-            { value: "allemagne", label: "Allemagne" },
-            // ... (reste des options)
-          ]}
+          options={countries}
+          showSearch
         />
       </Form.Item>
       <Form.Item
@@ -72,7 +67,7 @@ export const Step5: FC<Props> = ({ setStep }) => {
         <Input placeholder="Province de l'école secondaire" />
       </Form.Item>
       <Form.Item
-        label="Territoire ou municipalité de l'école"
+        label="Ville ou Territoire de l'école"
         name="territory_or_municipality_of_school"
         rules={[{ required: true }]}
       >
@@ -95,7 +90,7 @@ export const Step5: FC<Props> = ({ setStep }) => {
       <Form.Item
         label="Numéro du diplôme"
         name="diploma_number"
-        rules={[{ required: true }]}
+        rules={[]}
       >
         <Input placeholder="Numéro du diplôme" />
       </Form.Item>

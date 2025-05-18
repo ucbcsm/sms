@@ -22,20 +22,20 @@ export const DataFetchPendingSkeleton: FC<DataFetchPendingSkeletonProps> = ({
           }}
         >
           <Space>
-            <Skeleton.Input size={size} />
+            <Skeleton.Input size={size} active />
           </Space>
           <div className="flex-1" />
           <Space>
-            <Skeleton.Button size={size} />
-            <Skeleton.Button size={size} />
-            <Skeleton.Button size={size} />
+            <Skeleton.Button size={size} active />
+            <Skeleton.Button size={size} active />
+            <Skeleton.Button size={size} active />
           </Space>
         </div>
         <Flex vertical gap="middle">
-          <Skeleton.Input block size={size} />
-          <Skeleton.Input block size={size} />
-          <Skeleton.Input block size={size} />
-          <Skeleton.Input block size={size} />
+          <Skeleton.Input block size={size} active />
+          <Skeleton.Input block size={size} active />
+          <Skeleton.Input block size={size} active />
+          <Skeleton.Input block size={size} active />
         </Flex>
       </>
     );
@@ -43,10 +43,10 @@ export const DataFetchPendingSkeleton: FC<DataFetchPendingSkeletonProps> = ({
 
   return (
     <Flex vertical gap="middle">
-      <Skeleton.Input block size={size} />
-      <Skeleton.Input block size={size} />
-      <Skeleton.Input block size={size} />
-      <Skeleton.Input block size={size} />
+      <Skeleton.Input block size={size} active />
+      <Skeleton.Input block size={size} active />
+      <Skeleton.Input block size={size} active />
+      <Skeleton.Input block size={size} active />
     </Flex>
   );
 };
