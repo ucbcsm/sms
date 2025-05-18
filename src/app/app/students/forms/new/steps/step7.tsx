@@ -16,13 +16,23 @@ import {
   getPeriods,
 } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Form, Input, Select, Space, Radio, InputNumber } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Select,
+  Space,
+  Radio,
+  InputNumber,
+  Flex,
+} from "antd";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
+import { Palette } from "@/components/palette";
 
 type Props = {
   setStep: (
@@ -64,7 +74,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
     queryKey: ["periods"],
     queryFn: getPeriods,
   });
- 
+
   useEffect(() => {
     const savedData = localStorage.getItem("d7");
     if (typeof savedData === "string") {
@@ -76,7 +86,6 @@ export const Step7: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify({ ...values, year_id: yid })
@@ -104,6 +113,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
           options={getCurrentFieldsAsOptions(fields)}
           disabled
           showSearch
+          variant="borderless"
         />
       </Form.Item>
       <Form.Item
@@ -115,6 +125,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
           options={getCurrentFacultiesAsOptions(faculties)}
           disabled
           showSearch
+          variant="borderless"
         />
       </Form.Item>
       <Form.Item
@@ -159,26 +170,29 @@ export const Step7: FC<Props> = ({ setStep }) => {
           showSearch
         />
       </Form.Item>
-      <Form.Item
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          paddingTop: 20,
-        }}
-      >
-        <Space>
-          <Button onClick={() => setStep(5)} style={{ boxShadow: "none" }}>
-            Précédent
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ boxShadow: "none" }}
-          >
-            Suivant
-          </Button>
-        </Space>
-      </Form.Item>
+      <Flex justify="space-between" align="center">
+        <Palette />
+        <Form.Item
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingTop: 20,
+          }}
+        >
+          <Space>
+            <Button onClick={() => setStep(5)} style={{ boxShadow: "none" }}>
+              Précédent
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none" }}
+            >
+              Suivant
+            </Button>
+          </Space>
+        </Form.Item>
+      </Flex>
     </Form>
   );
 };

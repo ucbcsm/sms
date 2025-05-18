@@ -110,7 +110,7 @@ export async function createApplication(params: ApplicationFormDataType) {
     physical_ability: params.physical_ability,
     professional_activity: params.professional_activity || "",
     spoken_language: formatLanguages(params.spoken_languages),
-    year_of_diploma_obtained: params.year_of_diploma_obtained,
+    year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
     diploma_number: params.diploma_number || null,
     diploma_percentage: params.diploma_percentage || null,
     diploma_file: params.diploma_file || null,
@@ -170,6 +170,7 @@ export async function updateApplication({
     former_matricule: params.former_matricule || "",
     spoken_language: formatLanguages(params.spoken_languages),
     date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
+    year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
   });
   return res.data;
 }

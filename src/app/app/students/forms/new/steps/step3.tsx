@@ -1,7 +1,8 @@
 "use client";
+import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
 import { Step3ApplicationFormDataType } from "@/lib/types";
-import { Button, Checkbox, Form, Input, Select, Space } from "antd";
+import { Button, Checkbox, Flex, Form, Input, Select, Space } from "antd";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -33,7 +34,6 @@ export const Step3: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
@@ -70,22 +70,29 @@ export const Step3: FC<Props> = ({ setStep }) => {
       >
         <Checkbox />
       </Form.Item>
-      <Form.Item
-        style={{ display: "flex", justifyContent: "flex-end", paddingTop: 20 }}
-      >
-        <Space>
-          <Button onClick={() => setStep(1)} style={{ boxShadow: "none" }}>
-            Précédent
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ boxShadow: "none" }}
-          >
-            Suivant
-          </Button>
-        </Space>
-      </Form.Item>
+      <Flex justify="space-between" align="center">
+        <Palette />
+        <Form.Item
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingTop: 20,
+          }}
+        >
+          <Space>
+            <Button onClick={() => setStep(1)} style={{ boxShadow: "none" }}>
+              Précédent
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none" }}
+            >
+              Suivant
+            </Button>
+          </Space>
+        </Form.Item>
+      </Flex>
     </Form>
   );
 };

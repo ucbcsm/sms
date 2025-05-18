@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Form, Input, Space } from "antd";
+import { Palette } from "@/components/palette";
+import { Button, Flex, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -61,7 +62,6 @@ export const Step8: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       layout="vertical"
       onFinish={(values) => {
 
@@ -82,6 +82,8 @@ export const Step8: FC<Props> = ({ setStep }) => {
           <Input.TextArea placeholder="" />
         </Form.Item>
       ))}
+        <Flex justify="space-between" align="center">
+              <Palette />
       <Form.Item
         style={{
           display: "flex",
@@ -102,6 +104,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
           </Button>
         </Space>
       </Form.Item>
+      </Flex>
     </Form>
   );
 };

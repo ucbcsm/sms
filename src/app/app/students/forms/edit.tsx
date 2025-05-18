@@ -149,11 +149,10 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       }
     );
   };
-
+  console.log(application.year_of_diploma_obtained);
   return (
     <>
       {contextHolder}
-
       <Drawer
         open={open}
         title={
@@ -232,6 +231,10 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             period_id: application.period.id,
             enrollment_question_response:
               application.enrollment_question_response,
+            year_of_diploma_obtained: dayjs(
+              `${application.year_of_diploma_obtained}`,
+              "YYYY"
+            ),
           }}
           onFinish={onFinish}
           disabled={isPending}
@@ -562,7 +565,12 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             name="year_of_diploma_obtained"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Année d'obtention du diplôme" />
+            <DatePicker
+              placeholder="Année d'obtention du diplôme"
+              mode="year"
+              picker="year"
+              format="YYYY"
+            />
           </Form.Item>
           <Form.Item label="Numéro du diplôme" name="diploma_number" rules={[]}>
             <Input placeholder="Numéro du diplôme" />
@@ -717,6 +725,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               options={getCurrentFieldsAsOptions(fields)}
               disabled
               showSearch
+              variant="borderless"
             />
           </Form.Item>
           <Form.Item
@@ -728,6 +737,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               options={getCurrentFacultiesAsOptions(faculties)}
               disabled
               showSearch
+              variant="borderless"
             />
           </Form.Item>
           <Form.Item
@@ -818,11 +828,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               </>
             )}
           </Form.List>
-          {/* <Divider orientation="left" orientationMargin={0}>
-            <Typography.Title level={3}>
-              Statut de la candidature
-            </Typography.Title>
-          </Divider> */}
+
           <Alert
             showIcon
             message="Statut de la candidature"
@@ -842,7 +848,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                 />
               </Form.Item>
             }
-            style={{ marginTop: 24 }}
+            style={{ marginTop: 36 }}
           />
         </Form>
       </Drawer>

@@ -51,7 +51,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       content: <Step2 setStep={setStep} />,
     },
     {
-      title: "Origine",
+      title: "Origine de l'étudiant",
       content: <Step3 setStep={setStep} />,
     },
     {
@@ -121,7 +121,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
               setStep(null);
               setCancel(false);
             }}
-            okButtonProps={{ style: { boxShadow: "none" } }}
+            okButtonProps={{ style: { boxShadow: "none" }, danger:true }}
             cancelButtonProps={{ style: { boxShadow: "none" } }}
             onCancel={() => setCancel(false)}
             centered
@@ -137,7 +137,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
         </Space>
       }
     >
-      <Flex vertical gap={16}>
+      <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
         <Alert
           type="info"
           message=" Veuillez compléter toutes les étapes avant de soumettre la candidature."
@@ -149,14 +149,6 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
         <Card
           title={steps[step].title}
           variant="borderless"
-          extra={
-            <Steps
-              current={step}
-              items={getStepItems()}
-              onChange={(current) => setStep(current)}
-              percent={(step / (steps.length - 1)) * 100}
-            />
-          }
           style={{ boxShadow: "none" }}
         >
           {steps[step].content}

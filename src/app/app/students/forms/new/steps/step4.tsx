@@ -1,6 +1,7 @@
-'use client'
+"use client";
+import { Palette } from "@/components/palette";
 import { Step4ApplicationFormDataType } from "@/lib/types";
-import { Button, Form, Input, Space } from "antd";
+import { Button, Flex, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -14,7 +15,6 @@ type Props = {
     options?: Options
   ) => Promise<URLSearchParams>;
 };
-
 
 export const Step4: FC<Props> = ({ setStep }) => {
   const [form] = Form.useForm<Step4ApplicationFormDataType>();
@@ -33,7 +33,6 @@ export const Step4: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
@@ -57,29 +56,35 @@ export const Step4: FC<Props> = ({ setStep }) => {
         <Input placeholder="Municipalité actuelle" />
       </Form.Item>
       <Form.Item
-        label="Adresse actuel"
+        label="Adresse actuelle"
         name="current_neighborhood"
         rules={[{ required: true }]}
       >
         <Input placeholder="Quartier ou Avenue et No" />
       </Form.Item>
-
-      <Form.Item
-        style={{ display: "flex", justifyContent: "flex-end", paddingTop: 20 }}
-      >
-        <Space>
-          <Button onClick={() => setStep(2)} style={{ boxShadow: "none" }}>
-            Précédent
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ boxShadow: "none" }}
-          >
-            Suivant
-          </Button>
-        </Space>
-      </Form.Item>
+      <Flex justify="space-between" align="center">
+        <Palette />
+        <Form.Item
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingTop: 20,
+          }}
+        >
+          <Space>
+            <Button onClick={() => setStep(2)} style={{ boxShadow: "none" }}>
+              Précédent
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none" }}
+            >
+              Suivant
+            </Button>
+          </Space>
+        </Form.Item>
+      </Flex>
     </Form>
   );
 };

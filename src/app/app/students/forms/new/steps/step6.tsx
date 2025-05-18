@@ -1,8 +1,9 @@
 "use client";
 
+import { Palette } from "@/components/palette";
 import { Step6ApplicationFormDataType } from "@/lib/types";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
-import { Badge, Button, Divider, Form, Input, Space, Typography } from "antd";
+import { Badge, Button, Divider, Flex, Form, Input, Space, Typography } from "antd";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -32,7 +33,7 @@ export const Step6: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
+      // style={{ width: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
@@ -138,7 +139,8 @@ export const Step6: FC<Props> = ({ setStep }) => {
           </>
         )}
       </Form.List>
-
+      <Flex justify="space-between" align="center">
+      <Palette />
       <Form.Item
         style={{
           display: "flex",
@@ -159,6 +161,7 @@ export const Step6: FC<Props> = ({ setStep }) => {
           </Button>
         </Space>
       </Form.Item>
+      </Flex>
     </Form>
   );
 };

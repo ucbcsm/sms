@@ -1,8 +1,9 @@
 "use client";
+import { Palette } from "@/components/palette";
 import { useApplicationStepsData } from "@/hooks/useApplicationStepsData";
 import { createApplication } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Space, Checkbox, Alert, message } from "antd";
+import { Button, Form, Space, Checkbox, Alert, message, Flex } from "antd";
 import { Options, parseAsBoolean, useQueryState } from "nuqs";
 import { FC } from "react";
 import { z } from "zod";
@@ -122,7 +123,6 @@ export const Step9: FC<Props> = ({ setStep }) => {
       <Form
         disabled={isPending}
         form={form}
-        style={{ width: 500 }}
         onFinish={onFinish}
       >
         <Alert
@@ -144,6 +144,8 @@ export const Step9: FC<Props> = ({ setStep }) => {
             exacts
           </Checkbox>
         </Form.Item>
+        <Flex justify="space-between" align="center">
+        <Palette />
         <Form.Item
           style={{
             display: "flex",
@@ -165,6 +167,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
             </Button>
           </Space>
         </Form.Item>
+        </Flex>
       </Form>
     </>
   );

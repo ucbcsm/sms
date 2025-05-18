@@ -1,5 +1,15 @@
-'use client'
-import { Button, DatePicker, Form, Input, InputNumber, Select, Space, Upload } from "antd";
+"use client";
+import {
+  Button,
+  DatePicker,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Space,
+  Upload,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
@@ -7,8 +17,10 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
-import { Step5ApplicationFormDataType } from "@/lib/types";
+import { Step5ApplicationFormDataType, Year } from "@/lib/types";
 import { countries } from "@/lib/data/countries";
+import { Palette } from "@/components/palette";
+import dayjs from "dayjs";
 
 type Props = {
   setStep: (
@@ -25,14 +37,13 @@ export const Step5: FC<Props> = ({ setStep }) => {
     if (typeof savedData === "string") {
       const raw = decompressFromEncodedURIComponent(savedData);
       const data = JSON.parse(raw);
-      form.setFieldsValue({ ...data });
+      form.setFieldsValue({ ...data, year_of_diploma_obtained:dayjs(`${data.year_of_diploma_obtained}`,"YYYY") });
     }
   }, []);
 
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
@@ -85,13 +96,14 @@ export const Step5: FC<Props> = ({ setStep }) => {
         name="year_of_diploma_obtained"
         rules={[{ required: true }]}
       >
-        <Input  placeholder="Année d'obtention du diplôme" />
+        <DatePicker
+          placeholder="Année"
+          mode="year"
+          picker="year"
+          format="YYYY"
+        />
       </Form.Item>
-      <Form.Item
-        label="Numéro du diplôme"
-        name="diploma_number"
-        rules={[]}
-      >
+      <Form.Item label="Numéro du diplôme" name="diploma_number" rules={[]}>
         <Input placeholder="Numéro du diplôme" />
       </Form.Item>
       <Form.Item
@@ -117,27 +129,29 @@ export const Step5: FC<Props> = ({ setStep }) => {
           <Button icon={<UploadOutlined />}>Télécharger les documents</Button>
         </Upload>
       </Form.Item>
-
-      <Form.Item
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          paddingTop: 20,
-        }}
-      >
-        <Space>
-          <Button onClick={() => setStep(3)} style={{ boxShadow: "none" }}>
-            Précédent
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ boxShadow: "none" }}
-          >
-            Suivant
-          </Button>
-        </Space>
-      </Form.Item>
+      <Flex justify="space-between" align="center">
+        <Palette />
+        <Form.Item
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingTop: 20,
+          }}
+        >
+          <Space>
+            <Button onClick={() => setStep(3)} style={{ boxShadow: "none" }}>
+              Précédent
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none" }}
+            >
+              Suivant
+            </Button>
+          </Space>
+        </Form.Item>
+      </Flex>
     </Form>
   );
 };

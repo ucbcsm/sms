@@ -1,5 +1,6 @@
 "use client";
 
+import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
 import { Step1ApplicationFormDataType } from "@/lib/types";
 import { CloseOutlined } from "@ant-design/icons";
@@ -47,7 +48,6 @@ export const Step1: FC<Props> = ({ setStep }) => {
     <Form
       form={form}
       name="step1"
-      style={{ maxWidth: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
@@ -131,7 +131,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-      <Typography.Text >Langues parlées</Typography.Text>
+      <Typography.Text>Langues parlées</Typography.Text>
       <Form.List
         name={["spoken_languages"]}
         rules={[
@@ -195,7 +195,11 @@ export const Step1: FC<Props> = ({ setStep }) => {
           </div>
         )}
       </Form.List>
-      <Form.Item label="Email" name="email" rules={[{ required: true },{type:"email"}]}>
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[{ required: true }, { type: "email" }]}
+      >
         <Input placeholder="Email" />
       </Form.Item>
       <Form.Item
@@ -212,13 +216,24 @@ export const Step1: FC<Props> = ({ setStep }) => {
       >
         <Input placeholder="Numéro de téléphone 2" />
       </Form.Item>
-      <Form.Item
-        style={{ display: "flex", justifyContent: "flex-end", paddingTop: 20 }}
-      >
-        <Button type="primary" htmlType="submit" style={{ boxShadow: "none" }}>
-          Suivant
-        </Button>
-      </Form.Item>
+      <Flex justify="space-between" align="center">
+        <Palette />
+        <Form.Item
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingTop: 20,
+          }}
+        >
+          <Button
+            type="primary"
+            htmlType="submit"
+            style={{ boxShadow: "none" }}
+          >
+            Suivant
+          </Button>
+        </Form.Item>
+      </Flex>
     </Form>
   );
 };
