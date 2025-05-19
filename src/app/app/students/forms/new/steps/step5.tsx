@@ -115,7 +115,7 @@ export const Step5: FC<Props> = ({ setStep }) => {
           placeholder="Pourcentage obtenu au diplôme"
           step={0.01}
           suffix="%"
-          min={0}
+          min={50}
           max={100}
         />
       </Form.Item>

@@ -1,6 +1,6 @@
 "use client";
 import { useYid } from "@/hooks/useYid";
-import { Step7ApplicationFormDataType, Year } from "@/lib/types";
+import { Step7ApplicationFormDataType } from "@/lib/types";
 import {
   getClasses,
   getCurrentClassesAsOptions,
@@ -8,22 +8,18 @@ import {
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
   getCurrentFieldsAsOptions,
-  getCurrentPeriodsAsOptions,
   getCycles,
   getDepartments,
   getFaculties,
   getFields,
-  getPeriods,
 } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
   Form,
-  Input,
   Select,
   Space,
   Radio,
-  InputNumber,
   Flex,
 } from "antd";
 import {
@@ -70,10 +66,6 @@ export const Step7: FC<Props> = ({ setStep }) => {
     queryFn: getClasses,
   });
 
-  const { data: periods } = useQuery({
-    queryKey: ["periods"],
-    queryFn: getPeriods,
-  });
 
   useEffect(() => {
     const savedData = localStorage.getItem("d7");
@@ -94,15 +86,32 @@ export const Step7: FC<Props> = ({ setStep }) => {
         setStep(7);
       }}
     >
-      {/* <Form.Item label="Année académique" name="year_id">
-        <InputNumber disabled variant="borderless" />
-      </Form.Item> */}
       <Form.Item
         label="Cycle"
         name="cycle_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Radio.Group options={getCurrentCyclesAsOptions(cycles)} />
+      </Form.Item>
+      <Form.Item
+        label="Département"
+        name="department_id"
+        rules={[{ required: true, message: "Ce champ est requis" }]}
+      >
+        <Select
+          placeholder="Département"
+          options={getCurrentDepartmentsAsOptions(departments)}
+          onSelect={(value) => {
+            const selectedDep = departments?.find((dep) => dep.id === value);
+            const facId = selectedDep?.faculty.id;
+            const selectedFac = faculties?.find((fac) => fac.id === facId);
+            form.setFieldsValue({
+              faculty_id: facId,
+              field_id: selectedFac?.field.id,
+            });
+          }}
+          showSearch
+        />
       </Form.Item>
       <Form.Item
         label="Filière ou Domaine"
@@ -128,26 +137,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
           variant="borderless"
         />
       </Form.Item>
-      <Form.Item
-        label="Département"
-        name="department_id"
-        rules={[{ required: true, message: "Ce champ est requis" }]}
-      >
-        <Select
-          placeholder="Département"
-          options={getCurrentDepartmentsAsOptions(departments)}
-          onSelect={(value) => {
-            const selectedDep = departments?.find((dep) => dep.id === value);
-            const facId = selectedDep?.faculty.id;
-            const selectedFac = faculties?.find((fac) => fac.id === facId);
-            form.setFieldsValue({
-              faculty_id: facId,
-              field_id: selectedFac?.field.id,
-            });
-          }}
-          showSearch
-        />
-      </Form.Item>
+      
       <Form.Item
         label="Promotion"
         name="class_id"
@@ -156,17 +146,6 @@ export const Step7: FC<Props> = ({ setStep }) => {
         <Select
           placeholder="Promotion ou classe"
           options={getCurrentClassesAsOptions(classes)}
-          showSearch
-        />
-      </Form.Item>
-      <Form.Item
-        label="Période"
-        name="period_id"
-        rules={[{ required: true, message: "Ce champ est requis" }]}
-      >
-        <Select
-          placeholder="Période"
-          options={getCurrentPeriodsAsOptions(periods)}
           showSearch
         />
       </Form.Item>

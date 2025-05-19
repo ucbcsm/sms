@@ -40,15 +40,13 @@ export function LoginForm() {
         router.push("/app");
       })
       .catch((error) => {
+        setLoading(false);
         if (error?.message === "Invalid credentials. Please try again.") {
           messageApi.error("Matricule ou mot de passe incorrect!");
         } else {
           messageApi.error("Ouf, une erreur est survenue, Veuillez réessayer!");
         }
       })
-      .finally(() => {
-        setLoading(false);
-      });
   };
 
   return (

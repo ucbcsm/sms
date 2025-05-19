@@ -249,7 +249,7 @@ export const Enrollment = z.object({
   field: Field,
   departement: Department,
   class_year: Class,
-  period: Period,
+  // period: Period,
   common_enrollment_infos: StudentInfo,
   type_of_enrollment: z.enum(["new_application", "reapplication"]).nullable(),
   enrollment_fees: z.enum(["paid", "unpaid"]).nullable(),
@@ -375,7 +375,6 @@ export type ApplicationFormDataType = Omit<
   | "field"
   | "departement"
   | "class_year"
-  | "period"
   | "previous_university_studies"
   | "enrollment_question_response"
   | "admission_test_result"
@@ -392,7 +391,6 @@ export type ApplicationFormDataType = Omit<
   field_id: number;
   department_id: number;
   class_id: number;
-  period_id: number;
   spoken_languages: { language: string }[];
   student_previous_studies: Omit<StudentPreviousStudy, "id">[];
   enrollment_q_a: Omit<EnrollmentQA, "id">[];
@@ -485,7 +483,6 @@ const Step7ApplicationFormDataType = z.object({
   faculty_id: z.number(),
   department_id: z.number(),
   class_id: z.number(),
-  period_id: z.number(),
 });
 
 export type Step7ApplicationFormDataType = z.infer<

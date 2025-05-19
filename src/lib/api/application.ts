@@ -70,6 +70,7 @@ export async function getRejectedApplications(searchParams?: {
   return res.data.results as Application[];
 }
 
+
 export async function createApplication(params: ApplicationFormDataType) {
   const res = await api.post(`/apparitorat/application/`, {
     academic_year: params.year_id,
@@ -78,7 +79,6 @@ export async function createApplication(params: ApplicationFormDataType) {
     field: params.field_id,
     departement: params.department_id,
     class_year: params.class_id,
-    period: params.period_id,
     previous_university_studies: params.student_previous_studies,
     enrollment_question_response: params.enrollment_q_a,
     admission_test_result: params.test_result,
@@ -144,7 +144,6 @@ export async function updateApplication({
     | "field"
     | "departement"
     | "class_year"
-    | "period"
     | "spoken_language"
   > & {
     year_id: number;
@@ -153,10 +152,10 @@ export async function updateApplication({
     field_id: number;
     department_id: number;
     class_id: number;
-    period_id: number;
     spoken_languages: { language: string }[];
   };
 }) {
+
   const res = await api.put(`/apparitorat/application/${id}/`, {
     ...params,
     academic_year: params.year_id,
@@ -165,7 +164,6 @@ export async function updateApplication({
     field: params.field_id,
     departement: params.department_id,
     class_year: params.class_id,
-    period: params.period_id,
     avatar: params.avatar || null,
     former_matricule: params.former_matricule || "",
     spoken_language: formatLanguages(params.spoken_languages),

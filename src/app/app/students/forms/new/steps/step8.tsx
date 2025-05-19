@@ -48,9 +48,10 @@ export const Step8: FC<Props> = ({ setStep }) => {
     const savedData = localStorage.getItem("d8");
     if (typeof savedData === "string") {
       const raw = decompressFromEncodedURIComponent(savedData);
-      const data = JSON.parse(raw) as { question: string; response: string }[];
-      console.log("Brrrr:", data);
-      const fieldsValue = data.reduce((acc, item, index) => {
+      const data = JSON.parse(raw) as {
+        enrollment_q_a: { question: string; response: string }[];
+      };
+      const fieldsValue = data.enrollment_q_a.reduce((acc, item, index) => {
         acc[`q${index}`] = item.response;
         return acc;
       }, {} as Record<string, string>);
@@ -71,7 +72,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
           response: responsesArray[index] || "",
         }));
         const compressedData = compressToEncodedURIComponent(
-          JSON.stringify(questionsWithResponses)
+          JSON.stringify({enrollment_q_a:questionsWithResponses})
         );
         localStorage.setItem("d8", compressedData);
         setStep(8);

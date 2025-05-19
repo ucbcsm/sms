@@ -173,9 +173,9 @@ export function StudentsList() {
           ellipsis: true,
         },
         {
-          title: "Période",
+          title: "Périodes",
           dataIndex: "period",
-          render: (_, record, __) => `${record.period.name}`,
+          // render: (_, record, __) => `${record.period.name}`,
           key: "class",
           ellipsis: true,
         },

@@ -38,7 +38,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
   });
 
   const onFinish = (values: FormSchemaType) => {
-    console.log("value", values);
+
     if (sdata) {
       mutateAsync(
         {
@@ -48,7 +48,6 @@ export const Step9: FC<Props> = ({ setStep }) => {
           field_id: sdata.field_id,
           department_id: sdata.department_id,
           class_id: sdata.class_id,
-          period_id: sdata.period_id,
           student_previous_studies: sdata.previous_university_studies,
           enrollment_q_a: sdata.enrollment_q_a,
           test_result: [],

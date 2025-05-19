@@ -38,18 +38,15 @@ import {
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
   getCurrentFieldsAsOptions,
-  getCurrentPeriodsAsOptions,
   getCycles,
   getDepartments,
   getFaculties,
   getFields,
-  getPeriods,
   parseLanguages,
   updateApplication,
 } from "@/lib/api";
 import { countries } from "@/lib/data/countries";
 import dayjs from "dayjs";
-import { useYid } from "@/hooks/useYid";
 
 type EditApplicationFormProps = {
   application: Application;
@@ -67,7 +64,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
   } = theme.useToken();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-  const { yid } = useYid();
   const queryClient = useQueryClient();
 
   const { data: cycles } = useQuery({
@@ -95,11 +91,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
     queryFn: getClasses,
   });
 
-  const { data: periods } = useQuery({
-    queryKey: ["periods"],
-    queryFn: getPeriods,
-  });
-
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateApplication,
   });
@@ -114,7 +105,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       | "field"
       | "departement"
       | "class_year"
-      | "period"
     > & {
       year_id: number;
       cycle_id: number;
@@ -122,10 +112,10 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       field_id: number;
       department_id: number;
       class_id: number;
-      period_id: number;
       spoken_languages: { language: string }[];
     }
   ) => {
+    console.log("EditedValues", values);
     mutateAsync(
       {
         id: Number(application?.id),
@@ -149,7 +139,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       }
     );
   };
-  console.log(application.year_of_diploma_obtained);
   return (
     <>
       {contextHolder}
@@ -208,6 +197,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                 onClick={() => form.submit()}
                 loading={isPending}
                 style={{ boxShadow: "none" }}
+                disabled={isPending}
               >
                 Sauvegarder
               </Button>
@@ -228,7 +218,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             faculty_id: application.faculty.id,
             department_id: application.departement.id,
             class_id: application.class_year.id,
-            period_id: application.period.id,
             enrollment_question_response:
               application.enrollment_question_response,
             year_of_diploma_obtained: dayjs(
@@ -618,7 +607,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               Études universitaires précédentes
             </Typography.Title>
           </Divider>
-          <Form.List name={["previous_university_studies"]}>
+          <Form.List name="previous_university_studies">
             {(fields, { add, remove }) => (
               <>
                 {fields.map(({ key, name, ...restField }, index) => (
@@ -773,18 +762,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               showSearch
             />
           </Form.Item>
-          <Form.Item
-            label="Période"
-            name="period_id"
-            rules={[{ required: true, message: "Ce champ est requis" }]}
-          >
-            <Select
-              placeholder="Période"
-              options={getCurrentPeriodsAsOptions(periods)}
-              showSearch
-            />
-          </Form.Item>
-
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>
               Autres questions importantes
