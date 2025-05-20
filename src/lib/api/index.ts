@@ -12,6 +12,6 @@ export * from "./classroom";
 export * from "./user";
 export * from "./course";
 export * from "./application";
-export * from "./enrollment";
+export * from "./year-enrollment";
 export * from "./required-document";
 export * from "./enrollment-question";

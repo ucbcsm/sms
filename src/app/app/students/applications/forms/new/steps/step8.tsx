@@ -19,7 +19,7 @@ import {
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { Options } from "nuqs";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 
 type Props = {
   setStep: (
@@ -38,7 +38,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
 
   const getEnrollementQAFromQuestions = () => {
     return enrollment_questions?.map((item) => ({
-      registered_enrollement_question: item.id,
+      registered_enrollment_question: item.id,
       response: null,
     }));
   };
@@ -79,7 +79,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
                 
                 <Form.Item
                   {...restField}
-                  name={[name, "registered_enrollement_question"]}
+                  name={[name, "registered_enrollment_question"]}
                   hidden
                   label={enrollment_questions?.[index].question}
                   rules={[]}

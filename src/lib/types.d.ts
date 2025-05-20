@@ -278,7 +278,7 @@ export type StudentPreviousStudy = z.infer<typeof StudentPreviousStudy>;
 
 export const EnrollmentQA = z.object({
   id: z.number(),
-  registered_enrollement_question: EnrollmentQuestion.nullable(),
+  registered_enrollment_question: EnrollmentQuestion.nullable(),
   response: z.string(),
 });
 
@@ -296,7 +296,7 @@ export const TestCourse = z.object({
   id: z.number(),
   faculty: Faculty,
   name: z.string(),
-  max_value: z.string().nullable(),
+  max_value: z.number(),
   description: z.string(),
 });
 
@@ -347,8 +347,6 @@ export const StudentInfo = z.object({
   year_of_diploma_obtained: z.string(),
   diploma_number: z.string(),
   diploma_percentage: z.number(),
-  diploma_file: z.string().nullable(),
-  other_documents: z.string().nullable(),
   is_foreign_registration: z.boolean().nullable(),
   former_matricule: z.string().nullable(),
   house: House.nullable(),
@@ -404,7 +402,7 @@ export type ApplicationFormDataType = Omit<
   class_id: number;
   spoken_languages: { language: string }[];
   student_previous_studies: Omit<StudentPreviousStudy, "id">[];
-  enrollment_q_a: Omit<EnrollmentQA, "id"|"registered_enrollement_question">[];
+  enrollment_q_a: Omit<EnrollmentQA, "id"|"registered_enrollment_question">[];
   test_result: Omit<TestResult, "id">[];
   application_documents: Omit<
     ApplicationDocument,
@@ -474,8 +472,6 @@ const Step5ApplicationFormDataType = z.object({
   year_of_diploma_obtained: z.string(),
   diploma_number: z.string(),
   diploma_percentage: z.number().min(0).max(100),
-  diploma_file: z.string().nullable(),
-  other_documents: z.string().optional(),
 });
 
 export type Step5ApplicationFormDataType = z.infer<
@@ -508,8 +504,8 @@ const Step8ApplicationFormDataType = z.object({
   enrollment_q_a: z.array(
     EnrollmentQA.omit({
       id: true,
-      registered_enrollement_question: true,
-    }).merge(z.object({ registered_enrollement_question: z.number() }))
+      registered_enrollment_question: true,
+    }).merge(z.object({ registered_enrollment_question: z.number() }))
   ),
 });
 

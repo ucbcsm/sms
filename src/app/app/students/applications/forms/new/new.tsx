@@ -35,10 +35,12 @@ type Props = {
 };
 
 export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
-  const {token:{colorPrimary}}=theme.useToken()
+  const {
+    token: { colorPrimary },
+  } = theme.useToken();
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const [cancel, setCancel] = useState<boolean>(false);
-  const {removeData}=useApplicationStepsData()
+  const { removeData } = useApplicationStepsData();
 
   const [steps] = useState<
     ReadonlyArray<{ title: string; content: ReactNode }>
@@ -76,8 +78,8 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       content: <Step8 setStep={setStep} />,
     },
     {
-      title:"Eléments du dosier",
-      content:<Step9 setStep={setStep}/>
+      title: "Eléments du dosier",
+      content: <Step9 setStep={setStep} />,
     },
     {
       title: "Confirmation",
@@ -97,20 +99,20 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
     <Drawer
       width={`100%`}
       title="Nouvelle candidature"
-      styles={{header:{background:colorPrimary, color:"#fff"}}}
+      styles={{ header: { background: colorPrimary, color: "#fff" } }}
       onClose={onClose}
       open={open}
       closable={false}
       extra={
         <Space>
-           <Steps
-              current={step}
-              items={getStepItems()}
-              onChange={(current) => setStep(current)}
-              percent={(step / (steps.length - 1)) * 100}
-            />
+          <Steps
+            current={step}
+            items={getStepItems()}
+            onChange={(current) => setStep(current)}
+            percent={(step / (steps.length - 1)) * 100}
+          />
           <Button
-            style={{ boxShadow: "none", color:"#fff" }}
+            style={{ boxShadow: "none", color: "#fff" }}
             onClick={() => {
               setCancel(true);
             }}
@@ -121,12 +123,12 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
             title="Annuler la candidature"
             open={cancel}
             onOk={() => {
-              removeData()
+              removeData();
               setOpen(null);
               setStep(null);
               setCancel(false);
             }}
-            okButtonProps={{ style: { boxShadow: "none" }, danger:true }}
+            okButtonProps={{ style: { boxShadow: "none" }, danger: true }}
             cancelButtonProps={{ style: { boxShadow: "none" } }}
             onCancel={() => setCancel(false)}
             centered

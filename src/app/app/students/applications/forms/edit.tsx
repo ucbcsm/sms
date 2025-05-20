@@ -32,6 +32,8 @@ import { Application } from "@/lib/types";
 import { Palette } from "@/components/palette";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
+  formatApplicationDocumentsForEdition,
+  formatEnrollmentQuestionResponseForEdition,
   getApplicationStatusAlertType,
   getApplicationStatusAsOptions,
   getClasses,
@@ -125,6 +127,8 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
           ...values,
           year_id: application.academic_year.id,
           type_of_enrollment: application.type_of_enrollment,
+          application_documents:formatApplicationDocumentsForEdition(values.application_documents),
+          enrollment_question_response:formatEnrollmentQuestionResponseForEdition(values.enrollment_question_response)
         },
       },
       {
@@ -774,19 +778,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               <>
                 {fields.map(({ key, name, ...restField }, index) => (
                   <div className="py-4" key={key}>
-                    <Badge count={`Q.${index + 1}`} />
-                    <Form.Item
-                      {...restField}
-                      name={[name, "registered_enrollement_question"]}
-                      // hidden
-                      rules={[
-                        {
-                          required: true,
-                        },
-                      ]}
-                    >
-                      <InputNumber />
-                    </Form.Item>
+                    <Badge color="lime" count={`Q.${index + 1}`} />
                     <Form.Item
                       {...restField}
                       name={[name, "response"]}
@@ -796,7 +788,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                         },
                       ]}
                       label={
-                        application.enrollment_question_response[index].registered_enrollement_question?.question
+                        application.enrollment_question_response[index].registered_enrollment_question?.question
                       }
                       layout="vertical"
                     >
@@ -808,7 +800,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             )}
           </Form.List>
 
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider orientation="left" orientationMargin={0} style={{marginTop:32}}>
             <Typography.Title level={3}>
               Eléments du dossier
             </Typography.Title>
@@ -820,7 +812,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               <Card
                 title={
                   <Space>
-                    {/* <Badge count={index + 1} /> */}
+                    <Badge count=" " />
                     <FileOutlined />
                     <Typography.Title level={5} style={{ marginBottom: 0 }}>
                       {application.application_documents?.[index].required_document?.title}
@@ -863,16 +855,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                       { value: "validated", label: "Validé" },
                     ]}
                   />
-                </Form.Item>
-
-                <Form.Item
-                  {...restField}
-                  hidden
-                  name={[name, "required_document"]}
-                  label="Document"
-                  rules={[{ required: true }]}
-                >
-                  <InputNumber />
                 </Form.Item>
               </Card>
             ))}

@@ -1,5 +1,10 @@
 import api from "@/lib/fetcher";
-import { Application, ApplicationFormDataType } from "@/lib/types";
+import {
+  Application,
+  ApplicationDocument,
+  ApplicationFormDataType,
+  EnrollmentQA,
+} from "@/lib/types";
 import dayjs from "dayjs";
 
 export async function getApplications() {
@@ -70,7 +75,6 @@ export async function getRejectedApplications(searchParams?: {
   return res.data.results as Application[];
 }
 
-
 export async function createApplication(params: ApplicationFormDataType) {
   const res = await api.post(`/apparitorat/application/`, {
     academic_year: params.year_id,
@@ -113,8 +117,6 @@ export async function createApplication(params: ApplicationFormDataType) {
     year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
     diploma_number: params.diploma_number || null,
     diploma_percentage: params.diploma_percentage || null,
-    diploma_file: params.diploma_file || null,
-    other_documents: params.other_documents || null,
     is_foreign_registration: params.is_foreign_registration,
     former_matricule: params.former_matricule || "",
     type_of_enrollment: params.type_of_enrollment || null,
@@ -126,7 +128,7 @@ export async function createApplication(params: ApplicationFormDataType) {
     status: "pending",
     avatar: params.avatar || null,
     is_former_student: params.is_former_student || false,
-    application_documents:params.application_documents
+    application_documents: params.application_documents,
   });
   return res.data;
 }
@@ -146,6 +148,8 @@ export async function updateApplication({
     | "departement"
     | "class_year"
     | "spoken_language"
+    | "application_documents"
+    | "enrollment_question_response"
   > & {
     year_id: number;
     cycle_id: number;
@@ -154,9 +158,18 @@ export async function updateApplication({
     department_id: number;
     class_id: number;
     spoken_languages: { language: string }[];
+    application_documents: Array<
+      Omit<ApplicationDocument, "required_document"> & {
+        required_document: number | null;
+      }
+    >;
+    enrollment_question_response: Array<
+      Omit<EnrollmentQA, "registered_enrollment_question"> & {
+        registered_enrollment_question: number | null;
+      }
+    >;
   };
 }) {
-
   const res = await api.put(`/apparitorat/application/${id}/`, {
     ...params,
     academic_year: params.year_id,
@@ -170,6 +183,8 @@ export async function updateApplication({
     spoken_language: formatLanguages(params.spoken_languages),
     date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
     year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
+    application_documents: params.application_documents,
+    enrollment_question_response: params.enrollment_question_response,
   });
   return res.data;
 }
@@ -249,4 +264,23 @@ export function parseLanguages(
     .map((lang) => lang.trim())
     .filter((lang) => lang !== "")
     .map((lang) => ({ language: lang }));
+}
+
+export function formatApplicationDocumentsForEdition(
+  docs: ApplicationDocument[]
+) {
+  return docs.map((doc) => ({
+    ...doc,
+    required_document: doc.required_document?.id || null,
+  }));
+}
+
+export function formatEnrollmentQuestionResponseForEdition(
+  questionsResponses: EnrollmentQA[]
+) {
+  return questionsResponses.map((qa) => ({
+    ...qa,
+    registered_enrollment_question:
+      qa.registered_enrollment_question?.id || null,
+  }));
 }

@@ -2,14 +2,16 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getHSLColor } from "@/lib/utils";
-import { getEnrollments } from "@/lib/api";
+import { getYearEnrollments } from "@/lib/api";
 import {
+  AppstoreOutlined,
   DownOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   FilterOutlined,
   MoreOutlined,
   PrinterOutlined,
+  UnorderedListOutlined,
   UserAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -19,6 +21,7 @@ import {
   Button,
   Dropdown,
   Input,
+  Radio,
   Select,
   Space,
   Table,
@@ -60,8 +63,8 @@ type StudentType = {
 export function StudentsList() {
   const router = useRouter();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["enrollments"],
-    queryFn: getEnrollments,
+    queryKey: ["year_enrollments"],
+    queryFn: getYearEnrollments,
   });
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
@@ -75,6 +78,7 @@ export function StudentsList() {
         <header className="flex  pb-3">
           <Space>
             <Input.Search placeholder="Rechercher ..." />
+             <Select placeholder="Cycle" showSearch />
             <Select placeholder="Faculté" showSearch />
             <Select placeholder="Département" showSearch />
             <Select placeholder="Promotion" showSearch />
@@ -109,6 +113,14 @@ export function StudentsList() {
                 Exporter
               </Button>
             </Dropdown>
+            <Radio.Group>
+              <Radio.Button value="grid">
+                <AppstoreOutlined />
+              </Radio.Button>
+              <Radio.Button value="list">
+                <UnorderedListOutlined />
+              </Radio.Button>
+            </Radio.Group>
           </Space>
         </header>
       )}

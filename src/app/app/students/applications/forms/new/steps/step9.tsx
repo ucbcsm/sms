@@ -12,11 +12,9 @@ import {
   Checkbox,
   Flex,
   Form,
-  Input,
   InputNumber,
   Select,
   Space,
-  Switch,
   Typography,
   Upload,
 } from "antd";
@@ -85,7 +83,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
               <Card
                 title={
                   <Space>
-                    {/* <Badge count={index + 1} /> */}
+                    <Badge count=" " />
                     <FileOutlined />
                     <Typography.Title level={5} style={{ marginBottom: 0 }}>
                       {required_documents?.[index].title}
