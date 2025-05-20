@@ -22,6 +22,7 @@ import { Step6 } from "./steps/step6";
 import { Step7 } from "./steps/step7";
 import { Step8 } from "./steps/step8";
 import { Step9 } from "./steps/step9";
+import { Step10 } from "./steps/step10";
 import { CloseOutlined } from "@ant-design/icons";
 import { useApplicationStepsData } from "@/hooks/useApplicationStepsData";
 
@@ -75,8 +76,12 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       content: <Step8 setStep={setStep} />,
     },
     {
+      title:"Eléments du dosier",
+      content:<Step9 setStep={setStep}/>
+    },
+    {
       title: "Confirmation",
-      content: <Step9 setStep={setStep} />,
+      content: <Step10 setStep={setStep} />,
     },
   ]);
 

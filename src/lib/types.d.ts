@@ -1,4 +1,5 @@
 import { ST } from "next/dist/shared/lib/utils";
+import { title } from "process";
 import { number, z } from "zod";
 
 /**
@@ -228,7 +229,7 @@ export type Classroom = z.infer<typeof Classroom>;
 
 export const Course = z.object({
   id: z.number(),
-  faculty: Faculty.nullable(),
+  faculties: z.array(Faculty),
   name: z.string(),
   code: z.string(),
   course_type: z.enum([
@@ -277,11 +278,19 @@ export type StudentPreviousStudy = z.infer<typeof StudentPreviousStudy>;
 
 export const EnrollmentQA = z.object({
   id: z.number(),
-  question: z.string(),
+  registered_enrollement_question: EnrollmentQuestion.nullable(),
   response: z.string(),
 });
 
 export type EnrollmentQA = z.infer<typeof EnrollmentQA>;
+
+export const EnrollmentQuestion = z.object({
+  id: z.number(),
+  question: z.string(),
+  enabled: z.boolean(),
+});
+
+export type EnrollmentQuestion = z.infer<typeof EnrollmentQuestion>;
 
 export const TestCourse = z.object({
   id: z.number(),
@@ -343,6 +352,7 @@ export const StudentInfo = z.object({
   is_foreign_registration: z.boolean().nullable(),
   former_matricule: z.string().nullable(),
   house: House.nullable(),
+  application_documents: z.array(ApplicationDocument),
 });
 
 export const PrematureEnd = {
@@ -384,6 +394,7 @@ export type ApplicationFormDataType = Omit<
   | "common_enrollment_infos"
   | "date_of_submission"
   | "spoken_language"
+  | "application_documents"
 > & {
   year_id: number;
   cycle_id: number;
@@ -393,8 +404,12 @@ export type ApplicationFormDataType = Omit<
   class_id: number;
   spoken_languages: { language: string }[];
   student_previous_studies: Omit<StudentPreviousStudy, "id">[];
-  enrollment_q_a: Omit<EnrollmentQA, "id">[];
+  enrollment_q_a: Omit<EnrollmentQA, "id"|"registered_enrollement_question">[];
   test_result: Omit<TestResult, "id">[];
+  application_documents: Omit<
+    ApplicationDocument,
+    "id" | "required_document"
+  >[];
 };
 
 const Step1ApplicationFormDataType = z.object({
@@ -490,9 +505,44 @@ export type Step7ApplicationFormDataType = z.infer<
 >;
 
 const Step8ApplicationFormDataType = z.object({
-  enrollment_q_a: z.array(EnrollmentQA.omit({ id: true })),
+  enrollment_q_a: z.array(
+    EnrollmentQA.omit({
+      id: true,
+      registered_enrollement_question: true,
+    }).merge(z.object({ registered_enrollement_question: z.number() }))
+  ),
 });
 
 export type Step8ApplicationFormDataType = z.infer<
   typeof Step8ApplicationFormDataType
 >;
+
+const Step9ApplicationFormDataType = z.object({
+  application_documents: z.array(
+    ApplicationDocument.omit({ id: true, required_document: true }).merge(
+      z.object({ required_document: z.number() })
+    )
+  ),
+});
+
+export type Step9ApplicationFormDataType = z.infer<
+  typeof Step9ApplicationFormDataType
+>;
+
+export const ApplicationDocument = z.object({
+  id: z.number(),
+  exist: z.boolean(),
+  status: z.enum(["pending", "rejected", "validated"]),
+  file_url: z.string().nullable(),
+  required_document: RequiredDocument.nullable(),
+});
+
+export type ApplicationDocument = z.infer<typeof ApplicationDocument>;
+
+export const RequiredDocument = z.object({
+  id: z.number(),
+  title: z.string(),
+  enabled: z.boolean(),
+});
+
+export type RequiredDocument = z.infer<typeof RequiredDocument>;

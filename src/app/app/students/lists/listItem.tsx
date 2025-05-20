@@ -28,7 +28,6 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
   const toggleEdit = () => {
     setOpenEdit(true);
   };
-  console.log(item)
   return (
     <>
       <EditApplicationForm

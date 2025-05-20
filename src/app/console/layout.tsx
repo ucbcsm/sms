@@ -4,6 +4,7 @@ import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
 import {
   ApartmentOutlined,
+  CheckCircleOutlined,
   ClockCircleOutlined,
   CloseOutlined,
   HomeOutlined,
@@ -186,6 +187,12 @@ export default function ConsoleLayout({
                       className: "normal-case",
                     },
                   ],
+                },
+                {
+                  key: "/console/enrollment-form",
+                  label: "Formulaire d'inscription",
+                  icon: <CheckCircleOutlined />,
+                  className: "normal-case",
                 },
                 {
                   key: "/console/classrooms",

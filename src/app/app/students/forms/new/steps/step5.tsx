@@ -119,7 +119,7 @@ export const Step5: FC<Props> = ({ setStep }) => {
           max={100}
         />
       </Form.Item>
-      <Form.Item label="Fichier du diplôme" name="diploma_file">
+      {/* <Form.Item label="Fichier du diplôme" name="diploma_file">
         <Upload>
           <Button icon={<UploadOutlined />}>Télécharger le fichier</Button>
         </Upload>
@@ -128,7 +128,7 @@ export const Step5: FC<Props> = ({ setStep }) => {
         <Upload>
           <Button icon={<UploadOutlined />}>Télécharger les documents</Button>
         </Upload>
-      </Form.Item>
+      </Form.Item> */}
       <Flex justify="space-between" align="center">
         <Palette />
         <Form.Item

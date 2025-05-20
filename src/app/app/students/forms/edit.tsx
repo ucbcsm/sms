@@ -19,10 +19,12 @@ import {
   Upload,
   Badge,
   Alert,
+  Card,
 } from "antd";
 import {
   CloseOutlined,
   DeleteOutlined,
+  FileOutlined,
   PlusCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
@@ -775,15 +777,15 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                     <Badge count={`Q.${index + 1}`} />
                     <Form.Item
                       {...restField}
-                      name={[name, "question"]}
-                      hidden
+                      name={[name, "registered_enrollement_question"]}
+                      // hidden
                       rules={[
                         {
                           required: true,
                         },
                       ]}
                     >
-                      <Input />
+                      <InputNumber />
                     </Form.Item>
                     <Form.Item
                       {...restField}
@@ -794,7 +796,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                         },
                       ]}
                       label={
-                        application.enrollment_question_response[index].question
+                        application.enrollment_question_response[index].registered_enrollement_question?.question
                       }
                       layout="vertical"
                     >
@@ -806,6 +808,77 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             )}
           </Form.List>
 
+          <Divider orientation="left" orientationMargin={0}>
+            <Typography.Title level={3}>
+              Eléments du dossier
+            </Typography.Title>
+          </Divider>
+<Form.List name={["application_documents"]}>
+        {(fields, { add, remove }) => (
+          <>
+            {fields.map(({ key, name, ...restField }, index) => (
+              <Card
+                title={
+                  <Space>
+                    {/* <Badge count={index + 1} /> */}
+                    <FileOutlined />
+                    <Typography.Title level={5} style={{ marginBottom: 0 }}>
+                      {application.application_documents?.[index].required_document?.title}
+                    </Typography.Title>
+                  </Space>
+                }
+                key={key}
+                style={{ marginBottom: 24 }}
+              >
+                <Form.Item
+                  {...restField}
+                  name={[name, "exist"]}
+                  label="Document physique"
+                  rules={[]}
+                  valuePropName="checked"
+                  style={{ marginTop: 8 }}
+                >
+                  <Checkbox />
+                </Form.Item>
+                <Form.Item
+                  {...restField}
+                  name={[name, "file_url"]}
+                  label="Version électronique"
+                  rules={[]}
+                >
+                  <Upload>
+                    <Button icon={<UploadOutlined />}>Téléverser</Button>
+                  </Upload>
+                </Form.Item>
+                <Form.Item
+                  {...restField}
+                  name={[name, "status"]}
+                  rules={[{}]}
+                  label="Vérification"
+                >
+                  <Select
+                    options={[
+                      { value: "pending", label: "En attente" },
+                      { value: "rejected", label: "Rejeté" },
+                      { value: "validated", label: "Validé" },
+                    ]}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  {...restField}
+                  hidden
+                  name={[name, "required_document"]}
+                  label="Document"
+                  rules={[{ required: true }]}
+                >
+                  <InputNumber />
+                </Form.Item>
+              </Card>
+            ))}
+          </>
+        )}
+      </Form.List>
           <Alert
             showIcon
             message="Statut de la candidature"

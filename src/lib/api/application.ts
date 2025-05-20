@@ -126,6 +126,7 @@ export async function createApplication(params: ApplicationFormDataType) {
     status: "pending",
     avatar: params.avatar || null,
     is_former_student: params.is_former_student || false,
+    application_documents:params.application_documents
   });
   return res.data;
 }

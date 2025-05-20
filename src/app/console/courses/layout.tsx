@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  MoreOutlined,
-  PlusCircleOutlined,
-} from "@ant-design/icons";
+import { MoreOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
@@ -20,11 +17,17 @@ import { Palette } from "@/components/palette";
 import Link from "next/link";
 import BackButton from "@/components/backButton";
 import { ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
-export default function CoursesLayout({children}:Readonly<{children:ReactNode}>) {
+export default function CoursesLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+
+  const pathname = usePathname();
+  const router = useRouter();
 
   return (
     <Layout>
@@ -56,7 +59,19 @@ export default function CoursesLayout({children}:Readonly<{children:ReactNode}>)
             <Palette />
           </Space>
         </Layout.Header>
-        <Card>
+        <Card
+          tabList={[
+            { key: "/console/courses", label: "Cours" },
+            {
+              key: "/console/courses/evaluation-form",
+              label: "Formulaire d'évaluation",
+            },
+          ]}
+          activeTabKey={pathname}
+          onTabChange={(key) => {
+            router.push(key);
+          }}
+        >
           {children}
         </Card>
         <Layout.Footer

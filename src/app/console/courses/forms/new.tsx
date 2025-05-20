@@ -139,10 +139,11 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
         >
           <Select options={getCourseTypesAsOptions} />
         </Form.Item>
-        <Form.Item name="faculty_id" label="Pour faculté" rules={[]}>
+        <Form.Item name="faculty_id" label="Pour facultés" rules={[]}>
           <Select
             placeholder="Sélectionnez une faculté"
             options={getCurrentFacultiesAsOptions(faculties)}
+            mode="multiple"
           />
         </Form.Item>
       </Modal>

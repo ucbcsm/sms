@@ -7,6 +7,7 @@ import {
   Step6ApplicationFormDataType,
   Step7ApplicationFormDataType,
   Step8ApplicationFormDataType,
+  Step9ApplicationFormDataType,
 } from "@/lib/types";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import { useEffect, useState } from "react";
@@ -20,7 +21,8 @@ export const useApplicationStepsData = () => {
       Step5ApplicationFormDataType &
       Step6ApplicationFormDataType &
       Step7ApplicationFormDataType &
-      Step8ApplicationFormDataType
+      Step8ApplicationFormDataType &
+      Step9ApplicationFormDataType
   >();
 
   const removeData = () => {
@@ -32,6 +34,7 @@ export const useApplicationStepsData = () => {
     localStorage.removeItem("d6");
     localStorage.removeItem("d7");
     localStorage.removeItem("d8");
+    localStorage.removeItem("d9");
   };
 
   useEffect(() => {
@@ -43,6 +46,7 @@ export const useApplicationStepsData = () => {
     const savedData6 = localStorage.getItem("d6");
     const savedData7 = localStorage.getItem("d7");
     const savedData8 = localStorage.getItem("d8");
+    const savedData9 = localStorage.getItem("d9");
     if (
       typeof savedData1 === "string" &&
       typeof savedData2 === "string" &&
@@ -51,7 +55,8 @@ export const useApplicationStepsData = () => {
       typeof savedData5 === "string" &&
       typeof savedData6 === "string" &&
       typeof savedData7 === "string" &&
-      typeof savedData8 === "string"
+      typeof savedData8 === "string" &&
+      typeof savedData9 === "string"
     ) {
       const raw1 = decompressFromEncodedURIComponent(savedData1);
       const raw2 = decompressFromEncodedURIComponent(savedData2);
@@ -61,6 +66,7 @@ export const useApplicationStepsData = () => {
       const raw6 = decompressFromEncodedURIComponent(savedData6);
       const raw7 = decompressFromEncodedURIComponent(savedData7);
       const raw8 = decompressFromEncodedURIComponent(savedData8);
+      const raw9 = decompressFromEncodedURIComponent(savedData9);
 
       const data1 = JSON.parse(raw1) as Step1ApplicationFormDataType;
       const data2 = JSON.parse(raw2) as Step2ApplicationFormDataType;
@@ -70,6 +76,7 @@ export const useApplicationStepsData = () => {
       const data6 = JSON.parse(raw6) as Step6ApplicationFormDataType;
       const data7 = JSON.parse(raw7) as Step7ApplicationFormDataType;
       const data8 = JSON.parse(raw8) as Step8ApplicationFormDataType;
+      const data9 = JSON.parse(raw9) as Step9ApplicationFormDataType;
 
       setSData({
         ...data1,
@@ -80,6 +87,7 @@ export const useApplicationStepsData = () => {
         ...data6,
         ...data7,
         ...data8,
+        ...data9,
       });
     }
   }, []);

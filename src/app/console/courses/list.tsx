@@ -162,10 +162,10 @@ export const ListCourses = () => {
           title: "Code",
         },
         {
-          key: "faculty",
-          dataIndex: "faculty",
-          title: "Faculté",
-          render: (_, record, __) => record.faculty?.name,
+          key: "faculties",
+          dataIndex: "faculties",
+          title: "Facultés",
+          render: (_, record, __) => record.faculties.map(faculty=>faculty.acronym).join(', '),
         },
         {
           key: "course_type",
