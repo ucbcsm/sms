@@ -16,17 +16,26 @@ import {
 import { Avatar, Button, Dropdown, List, Typography } from "antd";
 import { FC, useState } from "react";
 import { EditApplicationForm } from "../forms/edit";
-import { DeleteApplicationForm } from "../forms/delete";
+import { DeleteApplicationForm } from "../forms/decisions/delete";
+import { RejectApplicationForm } from "../forms/decisions/reject";
+import { ValidateApplicationForm } from "../forms/decisions/validate";
 
 type ListItemApplicationProps = {
   item: Application;
-  courses?: TestCourse[]
-  documents?:RequiredDocument[]
+  courses?: TestCourse[];
+  documents?: RequiredDocument[];
 };
 
-export const ListItemApplication: FC<ListItemApplicationProps> = ({ item, courses, documents }) => {
+export const ListItemApplication: FC<ListItemApplicationProps> = ({
+  item,
+  courses,
+  documents,
+}) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const [openReject, setOpenReject] = useState<boolean>(false);
+  const [openValidate, setOpenValidate] = useState<boolean>(false);
+
   const toggleEdit = () => {
     setOpenEdit(true);
   };
@@ -36,6 +45,8 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item, course
         application={item}
         open={openEdit}
         setOpen={setOpenEdit}
+        setOpenReject={setOpenReject}
+        setOpenValidate={setOpenValidate}
         courses={courses}
         documents={documents}
       />
@@ -43,6 +54,16 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item, course
         application={item}
         open={openDelete}
         setOpen={setOpenDelete}
+      />
+      <RejectApplicationForm
+        application={item}
+        open={openReject}
+        setOpen={setOpenReject}
+      />
+      <ValidateApplicationForm
+        application={item}
+        open={openValidate}
+        setOpen={setOpenValidate}
       />
       <List.Item
         extra={
@@ -60,7 +81,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item, course
                   icon: <CheckOutlined />,
                 },
                 {
-                  key: "rejecte",
+                  key: "reject",
                   label: "Rejeter",
                   icon: <CloseOutlined />,
                 },
@@ -76,6 +97,10 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item, course
                   toggleEdit();
                 } else if (key === "delete") {
                   setOpenDelete(true);
+                } else if (key === "reject") {
+                  setOpenReject(true);
+                } else if (key === "validate") {
+                  setOpenValidate(true);
                 }
               },
             }}

@@ -59,6 +59,8 @@ type EditApplicationFormProps = {
   documents?: RequiredDocument[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  setOpenValidate: Dispatch<SetStateAction<boolean>>;
+  setOpenReject: Dispatch<SetStateAction<boolean>>;
 };
 
 export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
@@ -67,6 +69,8 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
   documents,
   open,
   setOpen,
+  setOpenReject,
+  setOpenValidate,
 }) => {
   const {
     token: { colorPrimary },
@@ -187,7 +191,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
     }
   }, [application, courses]);
 
-
   const getInitialRequiredDocuments = () => {
     return documents?.map((item) => ({
       exist: false,
@@ -207,7 +210,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       });
     }
   }, [application, documents]);
-
 
   return (
     <>
@@ -255,13 +257,13 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
           >
             <Palette />
             <Space>
-              <Button
+              {/* <Button
                 onClick={() => setOpen(false)}
                 style={{ boxShadow: "none" }}
                 disabled={isPending}
               >
                 Annuler
-              </Button>
+              </Button> */}
               <Button
                 type="primary"
                 onClick={() => form.submit()}
@@ -270,6 +272,24 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                 disabled={isPending}
               >
                 Sauvegarder
+              </Button>
+              <Button
+                type="dashed"
+                variant="dashed"
+                style={{ boxShadow: "none" }}
+                disabled={isPending}
+                onClick={() => setOpenValidate(true)}
+              >
+                Sauvegarder et valider
+              </Button>
+              <Button
+                type="dashed"
+                danger
+                style={{ boxShadow: "none" }}
+                disabled={isPending}
+                onClick={() => setOpenReject(true)}
+              >
+                Sauvegarder et rejeter
               </Button>
             </Space>
           </div>
@@ -1043,7 +1063,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
           <Alert
             showIcon
             message="Frais d'inscription"
-            type={application.enrollment_fees==="paid"?"success":"error"}
+            type={application.enrollment_fees === "paid" ? "success" : "error"}
             description={
               <Form.Item
                 name="enrollment_fees"
@@ -1053,7 +1073,10 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                 style={{ marginBottom: 0 }}
               >
                 <Select
-                  options={[{value:"paid",label:"Payé"},{value:"unpaid", label:"Non payé"}]}
+                  options={[
+                    { value: "paid", label: "Payé" },
+                    { value: "unpaid", label: "Non payé" },
+                  ]}
                   variant="filled"
                   style={{ width: 120 }}
                 />
@@ -1078,6 +1101,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                   options={getApplicationStatusAsOptions}
                   variant="filled"
                   style={{ width: 120 }}
+                  disabled
                 />
               </Form.Item>
             }
