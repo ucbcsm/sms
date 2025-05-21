@@ -8,12 +8,9 @@ import {
   DownOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
-  FilterOutlined,
   MoreOutlined,
   PrinterOutlined,
   UnorderedListOutlined,
-  UserAddOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -30,35 +27,6 @@ import {
 } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-type StudentType = {
-  id: string | number;
-  key: string;
-  avatar: string;
-  firstname: string;
-  lastname: string;
-  surname: string;
-  matricule: string;
-  sex: "M" | "F";
-  promotion: string;
-  status: "active" | "abandon" | "dismissed";
-};
-
-// const data: StudentType[] = Array.from({ length: 100 }, (_, index) => {
-//   const id = (index + 1).toString();
-//   return {
-//     id,
-//     key: id,
-//     firstname: "Kahindo",
-//     lastname: "Lwanzo",
-//     surname: "Alfred" + id,
-//     sex: "M",
-//     status: "active",
-//     avatar: "",
-//     matricule: `0024${13 + index}`,
-//     promotion: "L1 Genie informatique",
-//   };
-// });
 
 export function StudentsList() {
   const router = useRouter();

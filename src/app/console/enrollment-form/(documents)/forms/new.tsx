@@ -1,6 +1,16 @@
 "use client";
 import React, { useState } from "react";
-import { Button, Form, Input, message, Modal, Switch } from "antd";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Switch,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createRequiredDocument } from "@/lib/api";
@@ -86,10 +96,23 @@ export const NewRequiredDocumentForm: React.FC = () => {
         >
           <Input placeholder="Elément du dossier" />
         </Form.Item>
-
-        <Form.Item name="enabled" label="Visible">
-          <Switch />
-        </Form.Item>
+        <Row gutter={[16, 16]}>
+          <Col span={12}>
+            <Form.Item
+              name="required"
+              label="Obligatoire"
+              valuePropName="checked"
+              layout="horizontal"
+            >
+              <Checkbox />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item name="enabled" label="Visible" layout="horizontal">
+              <Switch />
+            </Form.Item>
+          </Col>
+        </Row>
       </Modal>
     </>
   );

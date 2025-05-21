@@ -14,6 +14,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
+  Checkbox,
   Dropdown,
   List,
   message,
@@ -30,7 +31,7 @@ import { EditRequiredDocumentForm } from "./forms/edit";
 
 type ListItemProps = {
   item: RequiredDocument;
-  index:number
+  index: number;
 };
 
 const ListItem: FC<ListItemProps> = ({ item, index }) => {
@@ -59,6 +60,7 @@ const ListItem: FC<ListItemProps> = ({ item, index }) => {
                     params: {
                       enabled: checked,
                       title: item.title,
+                      required: item.required,
                     },
                   },
                   {
@@ -114,10 +116,46 @@ const ListItem: FC<ListItemProps> = ({ item, index }) => {
       >
         <List.Item.Meta
           title={item.title}
-           avatar={<Avatar size={44} icon={<FileOutlined/>}>E{index}</Avatar>}
+          avatar={
+            <Avatar size={44} icon={<FileOutlined />}>
+              E{index}
+            </Avatar>
+          }
           description={
             <>
-              <Typography.Text type="secondary" style={{ marginRight: 4 }}>
+              <Typography.Text type="secondary">Obligatoire:</Typography.Text>{" "}
+              <Checkbox
+                checked={item.required}
+                onChange={(e) => {
+                  mutateAsync(
+                    {
+                      id: item.id,
+                      params: {
+                        enabled: item.enabled,
+                        title: item.title,
+                        required: e.target.checked,
+                      },
+                    },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries({
+                          queryKey: ["required-documents"],
+                        });
+                        messageApi.success("Elément modifié avec succès !");
+                      },
+                      onError: () => {
+                        messageApi.error(
+                          "Une erreur s'est produite lors de la modification de l'élément."
+                        );
+                      },
+                    }
+                  );
+                }}
+              />
+              <Typography.Text
+                type="secondary"
+                style={{ marginRight: 4, marginLeft: 4 }}
+              >
                 Visibilité:
               </Typography.Text>
               <Typography.Text type={item.enabled ? "success" : "warning"}>
@@ -148,6 +186,8 @@ export const ListRequiredDocuments = () => {
     return <DataFetchErrorResult />;
   }
 
+  console.log(documents);
+
   return (
     <List
       header={
@@ -165,7 +205,9 @@ export const ListRequiredDocuments = () => {
       }
       loading={isPending}
       dataSource={documents}
-      renderItem={(item, index) => <ListItem key={item.id} item={item} index={index+1} />}
+      renderItem={(item, index) => (
+        <ListItem key={item.id} item={item} index={index + 1} />
+      )}
     />
   );
 };

@@ -6,10 +6,18 @@ export async function getRequiredDocuments() {
   return res.data.results as RequiredDocument[];
 }
 
-export async function createRequiredDocument(params: Omit<RequiredDocument, "id">) {
+export async function getEnabledRequiredDocuments() {
+  const res = await api.get(`/apparitorat/required-document/?enabled=true`);
+  return res.data.results as RequiredDocument[];
+}
+
+export async function createRequiredDocument(
+  params: Omit<RequiredDocument, "id">
+) {
   const res = await api.post(`/apparitorat/required-document/`, {
     title: params.title,
     enabled: params.enabled || false,
+    required: params.enabled || false,
   });
   return res.data;
 }
@@ -24,6 +32,7 @@ export async function updateRequiredDocument({
   const res = await api.put(`/apparitorat/required-document/${id}/`, {
     title: params.title,
     enabled: params.enabled,
+    required: params.required,
   });
   return res.data;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { getHSLColor } from "@/lib/utils";
-import { Application } from "@/lib/types";
+import { Application, RequiredDocument, TestCourse } from "@/lib/types";
 import {
   getApplicationStatusName,
   getApplicationStatusTypographyType,
@@ -20,9 +20,11 @@ import { DeleteApplicationForm } from "../forms/delete";
 
 type ListItemApplicationProps = {
   item: Application;
+  courses?: TestCourse[]
+  documents?:RequiredDocument[]
 };
 
-export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
+export const ListItemApplication: FC<ListItemApplicationProps> = ({ item, courses, documents }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const toggleEdit = () => {
@@ -34,6 +36,8 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
         application={item}
         open={openEdit}
         setOpen={setOpenEdit}
+        courses={courses}
+        documents={documents}
       />
       <DeleteApplicationForm
         application={item}

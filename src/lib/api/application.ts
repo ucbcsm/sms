@@ -185,6 +185,7 @@ export async function updateApplication({
     year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
     application_documents: params.application_documents,
     enrollment_question_response: params.enrollment_question_response,
+    admission_test_result: params.admission_test_result,
   });
   return res.data;
 }

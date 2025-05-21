@@ -6,7 +6,9 @@ export async function getYearEnrollments() {
   return res.data.results as Enrollment[];
 }
 
-export async function createEnrollment() {
+export async function createEnrollment(
+  params: Omit<Enrollment, "id"| "user"|""> & {  }
+) {
   const res = await api.post(`/apparitorat/year-enrollment/`);
   return res.data;
 }

@@ -1,6 +1,16 @@
-'use client'
-import { AppstoreOutlined, UnorderedListOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Dropdown, Flex, Layout, Radio, Space, Tabs, theme, Typography } from "antd"
+"use client";
+import { UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Card,
+  Dropdown,
+  Flex,
+  Layout,
+  Space,
+  Tabs,
+  theme,
+  Typography,
+} from "antd";
 import { usePathname, useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { ListNewApplications } from "./applications/lists/new_applications";
@@ -15,7 +25,6 @@ export default function StudentsLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -32,7 +41,8 @@ export default function StudentsLayout({
   const pathname = usePathname();
   const router = useRouter();
 
-  return <Layout>
+  return (
+    <Layout>
       <Layout.Sider
         width={360}
         theme="light"
@@ -81,9 +91,9 @@ export default function StudentsLayout({
           </Dropdown>
         </Flex>
         <Tabs
-          tabBarStyle={{ paddingLeft: 28, marginTop: 0 }}
-          tabPosition="bottom"
-          type="card"
+          tabBarStyle={{ paddingLeft: 28, marginBottom: 0 }}
+          // tabPosition="bottom"
+
           items={[
             {
               key: "waiting",
@@ -128,22 +138,7 @@ export default function StudentsLayout({
             <Palette />
           </Space>
         </Layout.Header>
-        <Card
-          tabBarExtraContent=""
-          tabList={[
-            {
-              key: "/app/students",
-              label: "Admis",
-            },
-            { key: "/app/students/tests", label: "Tests" },
-          ]}
-          activeTabKey={pathname}
-          onTabChange={(key) => {
-            router.push(key);
-          }}
-        >
-          {children}
-        </Card>
+        <Card>{children}</Card>
         <Layout.Footer
           style={{
             display: "flex",
@@ -160,5 +155,6 @@ export default function StudentsLayout({
           </Space>
         </Layout.Footer>
       </Layout.Content>
-    </Layout>;
+    </Layout>
+  );
 }

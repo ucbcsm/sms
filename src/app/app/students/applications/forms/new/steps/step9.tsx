@@ -97,7 +97,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
                   {...restField}
                   name={[name, "exist"]}
                   label="Document physique"
-                  rules={[]}
+                  rules={[{ required: required_documents?.[index].required }]}
                   valuePropName="checked"
                   style={{ marginTop: 8 }}
                 >

@@ -1,4 +1,3 @@
-import { ST } from "next/dist/shared/lib/utils";
 import { title } from "process";
 import { number, z } from "zod";
 
@@ -250,7 +249,6 @@ export const Enrollment = z.object({
   field: Field,
   departement: Department,
   class_year: Class,
-  // period: Period,
   common_enrollment_infos: StudentInfo,
   type_of_enrollment: z.enum(["new_application", "reapplication"]).nullable(),
   enrollment_fees: z.enum(["paid", "unpaid"]).nullable(),
@@ -298,6 +296,7 @@ export const TestCourse = z.object({
   name: z.string(),
   max_value: z.number(),
   description: z.string(),
+  enabled: z.boolean(),
 });
 
 export type TestCourse = z.infer<typeof TestCourse>;
@@ -539,6 +538,7 @@ export const RequiredDocument = z.object({
   id: z.number(),
   title: z.string(),
   enabled: z.boolean(),
+  required:z.boolean(),
 });
 
 export type RequiredDocument = z.infer<typeof RequiredDocument>;

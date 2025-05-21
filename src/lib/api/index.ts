@@ -15,3 +15,4 @@ export * from "./application";
 export * from "./year-enrollment";
 export * from "./required-document";
 export * from "./enrollment-question";
+export * from "./test-course"

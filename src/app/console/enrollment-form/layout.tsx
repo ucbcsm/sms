@@ -61,6 +61,10 @@ export default function CoursesLayout({
               label: "Autres questions",
             },
             {
+              key: "/console/enrollment-form/tests",
+              label: "Matières des tests",
+            },
+            {
               key: "/console/enrollment-form/fees",
               label: "Frais d'inscription",
             },

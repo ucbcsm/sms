@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 import {
   Button,
   Form,
@@ -28,7 +28,7 @@ import {
   PlusCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Application } from "@/lib/types";
+import { Application, RequiredDocument, TestCourse } from "@/lib/types";
 import { Palette } from "@/components/palette";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -46,6 +46,7 @@ import {
   getDepartments,
   getFaculties,
   getFields,
+  getTestCoursesByFacAsOptions,
   parseLanguages,
   updateApplication,
 } from "@/lib/api";
@@ -54,12 +55,16 @@ import dayjs from "dayjs";
 
 type EditApplicationFormProps = {
   application: Application;
+  courses?: TestCourse[];
+  documents?: RequiredDocument[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
   application,
+  courses,
+  documents,
   open,
   setOpen,
 }) => {
@@ -119,7 +124,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       spoken_languages: { language: string }[];
     }
   ) => {
-    console.log("EditedValues", values);
     mutateAsync(
       {
         id: Number(application?.id),
@@ -127,8 +131,13 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
           ...values,
           year_id: application.academic_year.id,
           type_of_enrollment: application.type_of_enrollment,
-          application_documents:formatApplicationDocumentsForEdition(values.application_documents),
-          enrollment_question_response:formatEnrollmentQuestionResponseForEdition(values.enrollment_question_response)
+          application_documents: formatApplicationDocumentsForEdition(
+            values.application_documents
+          ),
+          enrollment_question_response:
+            formatEnrollmentQuestionResponseForEdition(
+              values.enrollment_question_response
+            ),
         },
       },
       {
@@ -145,6 +154,61 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       }
     );
   };
+
+  const getInitialAdmissionResultFromTestCourses = () => {
+    const testCourses = courses?.filter(
+      (course) => course.faculty.id === application.faculty.id
+    );
+    return testCourses?.map((item) => ({
+      course_test: item.id,
+      result: undefined,
+    }));
+  };
+
+  const formatAdmissionResultFromApplication = () => {
+    return application.admission_test_result.map((item) => ({
+      id: item.id,
+      course_test: item.course_test.id,
+      result: item.result,
+    }));
+  };
+
+  useEffect(() => {
+    if (application.admission_test_result?.length === 0) {
+      const admissionTestResult = getInitialAdmissionResultFromTestCourses();
+      form.setFieldsValue({
+        admission_test_result: admissionTestResult,
+      });
+    } else if (application.admission_test_result?.length > 0) {
+      const admissionTestResult = formatAdmissionResultFromApplication();
+      form.setFieldsValue({
+        admission_test_result: admissionTestResult,
+      });
+    }
+  }, [application, courses]);
+
+
+  const getInitialRequiredDocuments = () => {
+    return documents?.map((item) => ({
+      exist: false,
+      file_url: null,
+      status: "pending",
+      required_document: item,
+    }));
+  };
+
+  useEffect(() => {
+    if (application.application_documents.length === 0) {
+      const requiredDocuments = getInitialRequiredDocuments();
+      form.setFieldsValue({ application_documents: requiredDocuments });
+    } else if (application.application_documents.length > 0) {
+      form.setFieldsValue({
+        application_documents: application.application_documents,
+      });
+    }
+  }, [application, documents]);
+
+
   return (
     <>
       {contextHolder}
@@ -212,7 +276,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
         }
       >
         <Form
-          // layout="vertical"
           form={form}
           name="form_in_drawer"
           initialValues={{
@@ -775,10 +838,10 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
           </Divider>
           <Form.List name={["enrollment_question_response"]}>
             {(fields, { add, remove }) => (
-              <>
+              <div className="b-4">
                 {fields.map(({ key, name, ...restField }, index) => (
-                  <div className="py-4" key={key}>
-                    <Badge color="lime" count={`Q.${index + 1}`} />
+                  <div className="py-6" key={key}>
+                    {/* <Typography.Text>{application.enrollment_question_response[index].registered_enrollment_question?.question}</Typography.Text> */}
                     <Form.Item
                       {...restField}
                       name={[name, "response"]}
@@ -788,7 +851,17 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                         },
                       ]}
                       label={
-                        application.enrollment_question_response[index].registered_enrollment_question?.question
+                        <>
+                          <Badge
+                            color="lime"
+                            count={`${index + 1}`}
+                            style={{ marginRight: 6 }}
+                          />
+                          {
+                            application.enrollment_question_response[index]
+                              .registered_enrollment_question?.question
+                          }
+                        </>
                       }
                       layout="vertical"
                     >
@@ -796,71 +869,199 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                     </Form.Item>
                   </div>
                 ))}
+              </div>
+            )}
+          </Form.List>
+
+          <Divider
+            orientation="left"
+            orientationMargin={0}
+            style={{ marginTop: 32 }}
+          >
+            <Typography.Title level={3}>Eléments du dossier</Typography.Title>
+          </Divider>
+
+          <Form.List name={["application_documents"]}>
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }, index) => (
+                  <Card
+                    title={
+                      <Space>
+                        <Badge color="blue" count=" " />
+                        <FileOutlined />
+
+                        <Typography.Title level={5} style={{ marginBottom: 0 }}>
+                          {application.application_documents?.length > 0
+                            ? application.application_documents?.[index]
+                                .required_document?.title
+                            : documents?.[index].title}
+                        </Typography.Title>
+                      </Space>
+                    }
+                    key={key}
+                    style={{ marginBottom: 24 }}
+                  >
+                    <Form.Item
+                      {...restField}
+                      name={[name, "exist"]}
+                      label="Document physique"
+                      rules={[]}
+                      valuePropName="checked"
+                      style={{ marginTop: 8 }}
+                    >
+                      <Checkbox />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "file_url"]}
+                      label="Version électronique"
+                      rules={[]}
+                    >
+                      <Upload>
+                        <Button icon={<UploadOutlined />}>Téléverser</Button>
+                      </Upload>
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "status"]}
+                      rules={[{}]}
+                      label="Vérification"
+                    >
+                      <Select
+                        options={[
+                          { value: "pending", label: "En attente" },
+                          { value: "rejected", label: "Rejeté" },
+                          { value: "validated", label: "Validé" },
+                        ]}
+                      />
+                    </Form.Item>
+                  </Card>
+                ))}
               </>
             )}
           </Form.List>
 
-          <Divider orientation="left" orientationMargin={0} style={{marginTop:32}}>
+          <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>
-              Eléments du dossier
+              Resultats aux tests de sélection
             </Typography.Title>
           </Divider>
-<Form.List name={["application_documents"]}>
-        {(fields, { add, remove }) => (
-          <>
-            {fields.map(({ key, name, ...restField }, index) => (
-              <Card
-                title={
-                  <Space>
-                    <Badge count=" " />
-                    <FileOutlined />
-                    <Typography.Title level={5} style={{ marginBottom: 0 }}>
-                      {application.application_documents?.[index].required_document?.title}
-                    </Typography.Title>
-                  </Space>
-                }
-                key={key}
-                style={{ marginBottom: 24 }}
+
+          <Form.List name={"admission_test_result"}>
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Flex
+                    align="end"
+                    key={key}
+                    gap={16}
+                    style={{ marginBottom: 20 }}
+                  >
+                    <Form.Item
+                      {...restField}
+                      name={[name, "course_test"]}
+                      // label="Matière"
+                      rules={[{ required: true }]}
+                      style={{ flex: 1 }}
+                      layout="vertical"
+                    >
+                      <Select
+                        placeholder="Matière"
+                        options={getTestCoursesByFacAsOptions(
+                          application.faculty.id,
+                          courses
+                        )}
+                        disabled
+                        variant="borderless"
+                        suffixIcon=""
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "result"]}
+                      // label="Resultat"
+                      rules={[{ required: true }]}
+                      layout="vertical"
+                    >
+                      <InputNumber
+                        min={0}
+                        max={
+                          courses?.find(
+                            (course) =>
+                              course.id ===
+                              form.getFieldValue([
+                                "admission_test_result",
+                                name,
+                                "course_test",
+                              ])
+                          )?.max_value
+                        }
+                        step={0.01}
+                        placeholder="Resultat"
+                        suffix={
+                          <Typography.Text>
+                            /
+                            {
+                              courses?.find(
+                                (course) =>
+                                  course.id ===
+                                  form.getFieldValue([
+                                    "admission_test_result",
+                                    name,
+                                    "course_test",
+                                  ])
+                              )?.max_value
+                            }
+                          </Typography.Text>
+                        }
+                      />
+                    </Form.Item>
+                    {/* <Button
+                      danger
+                      type="text"
+                      onClick={() => remove(name)}
+                      icon={<CloseOutlined />}
+                      style={{ boxShadow: "none", marginBottom: 0 }}
+                    /> */}
+                  </Flex>
+                ))}
+                {/* <Form.Item style={{ marginTop: 24 }}>
+                  <Button
+                    type="link"
+                    onClick={() => add()}
+                    icon={<PlusCircleOutlined />}
+                    block
+                  >
+                    Ajouter un resultat de test
+                  </Button>
+                </Form.Item> */}
+              </>
+            )}
+          </Form.List>
+
+          <Alert
+            showIcon
+            message="Frais d'inscription"
+            type={application.enrollment_fees==="paid"?"success":"error"}
+            description={
+              <Form.Item
+                name="enrollment_fees"
+                label="Observation"
+                rules={[{ required: true }]}
+                status="error"
+                style={{ marginBottom: 0 }}
               >
-                <Form.Item
-                  {...restField}
-                  name={[name, "exist"]}
-                  label="Document physique"
-                  rules={[]}
-                  valuePropName="checked"
-                  style={{ marginTop: 8 }}
-                >
-                  <Checkbox />
-                </Form.Item>
-                <Form.Item
-                  {...restField}
-                  name={[name, "file_url"]}
-                  label="Version électronique"
-                  rules={[]}
-                >
-                  <Upload>
-                    <Button icon={<UploadOutlined />}>Téléverser</Button>
-                  </Upload>
-                </Form.Item>
-                <Form.Item
-                  {...restField}
-                  name={[name, "status"]}
-                  rules={[{}]}
-                  label="Vérification"
-                >
-                  <Select
-                    options={[
-                      { value: "pending", label: "En attente" },
-                      { value: "rejected", label: "Rejeté" },
-                      { value: "validated", label: "Validé" },
-                    ]}
-                  />
-                </Form.Item>
-              </Card>
-            ))}
-          </>
-        )}
-      </Form.List>
+                <Select
+                  options={[{value:"paid",label:"Payé"},{value:"unpaid", label:"Non payé"}]}
+                  variant="filled"
+                  style={{ width: 120 }}
+                />
+              </Form.Item>
+            }
+            style={{ marginTop: 36 }}
+          />
+
           <Alert
             showIcon
             message="Statut de la candidature"

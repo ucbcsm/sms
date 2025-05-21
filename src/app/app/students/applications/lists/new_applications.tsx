@@ -2,8 +2,11 @@
 
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
+  getEnabledRequiredDocuments,
+  getEnabledTestCourses,
   getPendingApplications,
   getRejectedApplications,
+  getTestCourses,
   getValidatedApplications,
 } from "@/lib/api";
 import { SearchOutlined } from "@ant-design/icons";
@@ -53,9 +56,21 @@ export const ListNewApplications: FC = () => {
       getValidatedApplications({ student_tab_type: queryKey[2] }),
   });
 
+  const { data: test_courses } = useQuery({
+    queryKey: ["test_courses", "enabled"],
+    queryFn: getEnabledTestCourses,
+  });
+
+  const { data: required_documents } = useQuery({
+    queryKey: ["required_documents", "enabled"],
+    queryFn: getEnabledRequiredDocuments,
+  });
+
   return (
     <Tabs
-      tabBarStyle={{ paddingLeft: 28, marginBottom: 0 }}
+      tabPosition="bottom"
+      type="card"
+      tabBarStyle={{ paddingLeft: 28, marginTop: 0 }}
       items={[
         {
           key: "pending",
@@ -76,7 +91,7 @@ export const ListNewApplications: FC = () => {
                 paddingLeft: 28,
                 paddingRight: 12,
                 paddingBottom: 28,
-                paddingTop: 12,
+                paddingTop: 20,
               }}
             >
               {pendingApplications && (
@@ -91,7 +106,12 @@ export const ListNewApplications: FC = () => {
                   <List
                     dataSource={pendingApplications}
                     renderItem={(item) => (
-                      <ListItemApplication key={item.id} item={item} />
+                      <ListItemApplication
+                        key={item.id}
+                        item={item}
+                        courses={test_courses}
+                        documents={required_documents}
+                      />
                     )}
                   />
                 </>
@@ -112,7 +132,7 @@ export const ListNewApplications: FC = () => {
                 paddingLeft: 28,
                 paddingRight: 12,
                 paddingBottom: 28,
-                paddingTop: 12,
+                paddingTop: 20,
               }}
             >
               {rejectedApplications && (
@@ -127,7 +147,12 @@ export const ListNewApplications: FC = () => {
                   <List
                     dataSource={rejectedApplications}
                     renderItem={(item) => (
-                      <ListItemApplication key={item.id} item={item} />
+                      <ListItemApplication
+                        key={item.id}
+                        item={item}
+                        courses={test_courses}
+                        documents={required_documents}
+                      />
                     )}
                   />
                 </>
@@ -148,7 +173,7 @@ export const ListNewApplications: FC = () => {
                 paddingLeft: 28,
                 paddingRight: 12,
                 paddingBottom: 28,
-                paddingTop: 12,
+                paddingTop: 20,
               }}
             >
               {validatedApplications && (
@@ -163,7 +188,12 @@ export const ListNewApplications: FC = () => {
                   <List
                     dataSource={validatedApplications}
                     renderItem={(item) => (
-                      <ListItemApplication key={item.id} item={item} />
+                      <ListItemApplication
+                        key={item.id}
+                        item={item}
+                        courses={test_courses}
+                        documents={required_documents}
+                      />
                     )}
                   />
                 </>

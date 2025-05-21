@@ -46,7 +46,9 @@ export const ListReApplications: FC = () => {
 
   return (
     <Tabs
-      tabBarStyle={{ paddingLeft: 28, marginBottom: 0 }}
+      tabBarStyle={{ paddingLeft: 28, marginTop: 0 }}
+      type="card"
+      tabPosition="bottom"
       items={[
         {
           key: "pending",
@@ -67,7 +69,7 @@ export const ListReApplications: FC = () => {
                 paddingLeft: 28,
                 paddingRight: 12,
                 paddingBottom: 28,
-                paddingTop: 12,
+                paddingTop: 20,
               }}
             >
               {pendingApplications && (
@@ -103,7 +105,7 @@ export const ListReApplications: FC = () => {
                 paddingLeft: 28,
                 paddingRight: 12,
                 paddingBottom: 28,
-                paddingTop: 12,
+                paddingTop: 20,
               }}
             >
               {rejectedApplications && (
@@ -139,7 +141,7 @@ export const ListReApplications: FC = () => {
                 paddingLeft: 28,
                 paddingRight: 12,
                 paddingBottom: 28,
-                paddingTop: 12,
+                paddingTop: 20,
               }}
             >
               {validatedApplications && (
