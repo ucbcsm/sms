@@ -75,22 +75,28 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
                   label: "Voir",
                   icon: <EyeOutlined />,
                 },
-                {
-                  key: "validate",
-                  label: "Accepter",
-                  icon: <CheckOutlined />,
-                },
-                {
-                  key: "reject",
-                  label: "Rejeter",
-                  icon: <CloseOutlined />,
-                },
-                {
-                  key: "delete",
-                  label: "Supprimer",
-                  icon: <DeleteOutlined />,
-                  danger: true,
-                },
+                item.status === "pending"
+                  ? {
+                      key: "validate",
+                      label: "Accepter",
+                      icon: <CheckOutlined />,
+                    }
+                  : null,
+                item.status === "pending"
+                  ? {
+                      key: "reject",
+                      label: "Rejeter",
+                      icon: <CloseOutlined />,
+                    }
+                  : null,
+                item.status === "pending"
+                  ? {
+                      key: "delete",
+                      label: "Supprimer",
+                      icon: <DeleteOutlined />,
+                      danger: true,
+                    }
+                  : null,
               ],
               onClick: ({ key }) => {
                 if (key === "edit") {

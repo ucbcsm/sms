@@ -256,42 +256,55 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             }}
           >
             <Palette />
-            <Space>
-              {/* <Button
-                onClick={() => setOpen(false)}
-                style={{ boxShadow: "none" }}
-                disabled={isPending}
-              >
-                Annuler
-              </Button> */}
-              <Button
-                type="primary"
-                onClick={() => form.submit()}
-                loading={isPending}
-                style={{ boxShadow: "none" }}
-                disabled={isPending}
-              >
-                Sauvegarder
-              </Button>
-              <Button
-                type="dashed"
-                variant="dashed"
-                style={{ boxShadow: "none" }}
-                disabled={isPending}
-                onClick={() => setOpenValidate(true)}
-              >
-                Sauvegarder et valider
-              </Button>
-              <Button
-                type="dashed"
-                danger
-                style={{ boxShadow: "none" }}
-                disabled={isPending}
-                onClick={() => setOpenReject(true)}
-              >
-                Sauvegarder et rejeter
-              </Button>
-            </Space>
+
+            {application.status === "pending" && (
+              <Space>
+                <Button
+                  type="primary"
+                  onClick={() => form.submit()}
+                  loading={isPending}
+                  style={{ boxShadow: "none" }}
+                  disabled={isPending}
+                >
+                  Sauvegarder
+                </Button>
+                <Button
+                  type="dashed"
+                  variant="dashed"
+                  style={{ boxShadow: "none" }}
+                  disabled={isPending}
+                  onClick={() => setOpenValidate(true)}
+                >
+                  Sauvegarder et valider
+                </Button>
+                <Button
+                  type="dashed"
+                  danger
+                  style={{ boxShadow: "none" }}
+                  disabled={isPending}
+                  onClick={() => setOpenReject(true)}
+                >
+                  Sauvegarder et rejeter
+                </Button>
+              </Space>
+            )}
+            {application.status === "rejected" && (
+              <Space>
+                <Typography.Text type="danger">
+                  Cette candidature a été rejetée. Nous la gardons juste comme
+                  archive
+                </Typography.Text>
+              </Space>
+            )}
+            {application.status === "validated" && (
+              <Space>
+                <Typography.Text type="success">
+                  Cette candidature est valide. Vous pouvez la gérer
+                  complètement depuis depuis le menu étudiants. Ici nous la
+                  gardons juste comme une archive
+                </Typography.Text>
+              </Space>
+            )}
           </div>
         }
       >
@@ -315,15 +328,16 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             ),
           }}
           onFinish={onFinish}
-          disabled={isPending}
+          disabled={isPending || application.status!=="pending"}
           style={{ maxWidth: 520, margin: "auto" }}
         >
-          <Alert
+          {application.status==="pending"&&<Alert
             showIcon
             closable
             message="Veuillez examiner les informations avec soin."
             description="Tout formulaire qui contiendrait de faux renseignements ne doit pas étre validé!"
-          />
+            
+          />}
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>
               Informations personnelles
@@ -1101,7 +1115,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                   options={getApplicationStatusAsOptions}
                   variant="filled"
                   style={{ width: 120 }}
-                  disabled
+                  // disabled
                 />
               </Form.Item>
             }
