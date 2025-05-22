@@ -2,8 +2,13 @@
 
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
+  getClasses,
+  getCycles,
+  getDepartments,
   getEnabledRequiredDocuments,
   getEnabledTestCourses,
+  getFaculties,
+  getFields,
   getPendingApplications,
   getRejectedApplications,
   getTestCourses,
@@ -66,6 +71,31 @@ export const ListNewApplications: FC = () => {
     queryFn: getEnabledRequiredDocuments,
   });
 
+  const { data: cycles } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: getCycles,
+  });
+
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const { data: fields } = useQuery({
+    queryKey: ["fields"],
+    queryFn: getFields,
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getDepartments,
+  });
+
+  const { data: classes } = useQuery({
+    queryKey: ["classes"],
+    queryFn: getClasses,
+  });
+
   return (
     <Tabs
       tabPosition="bottom"
@@ -111,6 +141,11 @@ export const ListNewApplications: FC = () => {
                         item={item}
                         courses={test_courses}
                         documents={required_documents}
+                        cycles={cycles}
+                        faculties={faculties}
+                        fields={fields}
+                        departments={departments}
+                        classes={classes}
                       />
                     )}
                   />
@@ -152,6 +187,11 @@ export const ListNewApplications: FC = () => {
                         item={item}
                         courses={test_courses}
                         documents={required_documents}
+                        cycles={cycles}
+                        faculties={faculties}
+                        fields={fields}
+                        departments={departments}
+                        classes={classes}
                       />
                     )}
                   />
@@ -193,6 +233,11 @@ export const ListNewApplications: FC = () => {
                         item={item}
                         courses={test_courses}
                         documents={required_documents}
+                        cycles={cycles}
+                        faculties={faculties}
+                        fields={fields}
+                        departments={departments}
+                        classes={classes}
                       />
                     )}
                   />

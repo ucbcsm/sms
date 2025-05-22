@@ -524,6 +524,39 @@ export type Step9ApplicationFormDataType = z.infer<
   typeof Step9ApplicationFormDataType
 >;
 
+
+export type ApplicationEditFormDataType = Omit<
+    Application,
+    | "id"
+    | "academic_year"
+    | "cycle"
+    | "faculty"
+    | "field"
+    | "departement"
+    | "class_year"
+    | "spoken_language"
+    | "application_documents"
+    | "enrollment_question_response"
+  > & {
+    year_id: number;
+    cycle_id: number;
+    faculty_id: number;
+    field_id: number;
+    department_id: number;
+    class_id: number;
+    spoken_languages: { language: string }[];
+    application_documents: Array<
+      Omit<ApplicationDocument, "required_document"> & {
+        required_document: number | null;
+      }
+    >;
+    enrollment_question_response: Array<
+      Omit<EnrollmentQA, "registered_enrollment_question"> & {
+        registered_enrollment_question: number | null;
+      }
+    >;
+  };
+
 export const ApplicationDocument = z.object({
   id: z.number(),
   exist: z.boolean(),

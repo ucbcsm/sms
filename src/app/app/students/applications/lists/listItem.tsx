@@ -1,7 +1,19 @@
 "use client";
 
 import { getHSLColor } from "@/lib/utils";
-import { Application, RequiredDocument, TestCourse } from "@/lib/types";
+import {
+  Application,
+  ApplicationDocument,
+  ApplicationEditFormDataType,
+  Class,
+  Cycle,
+  Department,
+  EnrollmentQA,
+  Faculty,
+  Field,
+  RequiredDocument,
+  TestCourse,
+} from "@/lib/types";
 import {
   getApplicationStatusName,
   getApplicationStatusTypographyType,
@@ -24,17 +36,37 @@ type ListItemApplicationProps = {
   item: Application;
   courses?: TestCourse[];
   documents?: RequiredDocument[];
+  cycles?: Cycle[];
+  faculties?: Faculty[];
+  fields?: Field[];
+  departments?: Department[];
+  classes?: Class[];
 };
 
 export const ListItemApplication: FC<ListItemApplicationProps> = ({
   item,
   courses,
   documents,
+  cycles,
+  faculties,
+  fields,
+  departments,
+  classes,
 }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
+  const [editedApplication, setEditedApplication] = useState<
+    | (Omit<
+        ApplicationEditFormDataType,
+        "application_documents" | "enrollment_question_response"
+      > & {
+        application_documents: Array<ApplicationDocument>;
+        enrollment_question_response: Array<EnrollmentQA>;
+      })
+    | null
+  >(null);
 
   const toggleEdit = () => {
     setOpenEdit(true);
@@ -49,6 +81,12 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
         setOpenValidate={setOpenValidate}
         courses={courses}
         documents={documents}
+        cycles={cycles}
+        faculties={faculties}
+        fields={fields}
+        departments={departments}
+        classes={classes}
+        setEditedApplication={setEditedApplication}
       />
       <DeleteApplicationForm
         application={item}
@@ -64,6 +102,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
         application={item}
         open={openValidate}
         setOpen={setOpenValidate}
+        editedApplication={editedApplication}
       />
       <List.Item
         extra={

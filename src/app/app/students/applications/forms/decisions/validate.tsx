@@ -2,8 +2,18 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Form, Input, message, Modal, Checkbox } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateApplication } from "@/lib/api"; // <-- Remplacer par la fonction d'API de validation
-import { Application } from "@/lib/types";
+import {
+  formatApplicationDocumentsForEdition,
+  formatEnrollmentQuestionResponseForEdition,
+  validateApplication,
+  validateEditedApplication,
+} from "@/lib/api";
+import {
+  Application,
+  ApplicationDocument,
+  ApplicationEditFormDataType,
+  EnrollmentQA,
+} from "@/lib/types";
 
 type FormDataType = {
   confirmation: string;
@@ -14,16 +24,32 @@ type ValidateStudentRegistrationFormProps = {
   application: Application;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  editedApplication:
+    | (Omit<
+        ApplicationEditFormDataType,
+        "application_documents" | "enrollment_question_response"
+      > & {
+        application_documents: Array<ApplicationDocument>;
+        enrollment_question_response: Array<EnrollmentQA>;
+      })
+    | null;
 };
 
 export const ValidateApplicationForm: FC<
   ValidateStudentRegistrationFormProps
-> = ({ application, open, setOpen }) => {
+> = ({ application, open, setOpen, editedApplication }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: updateApplication, // <-- Fonction pour valider l'inscription
+    mutationFn: validateApplication,
+  });
+
+  const {
+    mutateAsync: mutateAsyncEditedApplication,
+    isPending: isPendingEdited,
+  } = useMutation({
+    mutationFn: validateEditedApplication,
   });
 
   const onFinish = (values: FormDataType) => {
@@ -34,18 +60,55 @@ export const ValidateApplicationForm: FC<
       return;
     }
     if (values.confirmation.trim() === "Je confirme") {
-      // mutateAsync({id:application.id,params:{...application}}, {
-      //     onSuccess: () => {
-      //         queryClient.invalidateQueries({ queryKey: ["applications"] });
-      //         messageApi.success("Inscription validée avec succès !");
-      //         setOpen(false);
-      //     },
-      //     onError: () => {
-      //         messageApi.error(
-      //             "Une erreur s'est produite lors de la validation de l'inscription."
-      //         );
-      //     },
-      // });
+      if (editedApplication) {
+        mutateAsyncEditedApplication(
+          {
+            oldParams: application,
+            newParams: {
+              ...editedApplication,
+              year_id: application.academic_year.id,
+              type_of_enrollment: application.type_of_enrollment,
+              application_documents: formatApplicationDocumentsForEdition(
+                editedApplication.application_documents
+              ),
+              enrollment_question_response:
+                formatEnrollmentQuestionResponseForEdition(
+                  editedApplication.enrollment_question_response
+                ),
+            },
+          },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({ queryKey: ["applications"] });
+              queryClient.invalidateQueries({ queryKey: ["year_enrollments"] });
+              messageApi.success("Inscription validée avec succès !");
+              setOpen(false);
+            },
+            onError: () => {
+              messageApi.error(
+                "Une erreur s'est produite lors de la validation de l'inscription."
+              );
+            },
+          }
+        );
+      } else {
+        mutateAsync(
+          { ...application },
+          {
+            onSuccess: () => {
+              queryClient.invalidateQueries({ queryKey: ["applications"] });
+              queryClient.invalidateQueries({ queryKey: ["year_enrollments"] });
+              messageApi.success("Inscription validée avec succès !");
+              setOpen(false);
+            },
+            onError: () => {
+              messageApi.error(
+                "Une erreur s'est produite lors de la validation de l'inscription."
+              );
+            },
+          }
+        );
+      }
     } else {
       messageApi.error(
         'Vous devez écrire exactement "Je confirme" pour valider.'
@@ -66,25 +129,25 @@ export const ValidateApplicationForm: FC<
           autoFocus: true,
           htmlType: "submit",
           style: { boxShadow: "none" },
-          disabled: isPending,
-          loading: isPending,
+          disabled: isPending || isPendingEdited,
+          loading: isPending || isPendingEdited,
           danger: false,
         }}
         cancelButtonProps={{
           style: { boxShadow: "none" },
-          disabled: isPending,
+          disabled: isPending || isPendingEdited,
         }}
         onCancel={() => setOpen(false)}
         destroyOnClose
-        closable={{ disabled: isPending }}
-        maskClosable={!isPending}
+        closable={{ disabled: isPending || isPendingEdited }}
+        maskClosable={!isPending || !isPendingEdited}
         modalRender={(dom) => (
           <Form
             form={form}
             layout="vertical"
             name="validate_student_registration_form"
             onFinish={onFinish}
-            disabled={isPending}
+            disabled={isPending || isPendingEdited}
             initialValues={{ validated: false }}
           >
             {dom}

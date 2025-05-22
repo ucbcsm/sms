@@ -28,24 +28,31 @@ import {
   PlusCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { Application, RequiredDocument, TestCourse } from "@/lib/types";
+import {
+  Application,
+  ApplicationDocument,
+  ApplicationEditFormDataType,
+  Class,
+  Cycle,
+  Department,
+  EnrollmentQA,
+  Faculty,
+  Field,
+  RequiredDocument,
+  TestCourse,
+} from "@/lib/types";
 import { Palette } from "@/components/palette";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   formatApplicationDocumentsForEdition,
   formatEnrollmentQuestionResponseForEdition,
   getApplicationStatusAlertType,
   getApplicationStatusAsOptions,
-  getClasses,
   getCurrentClassesAsOptions,
   getCurrentCyclesAsOptions,
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
   getCurrentFieldsAsOptions,
-  getCycles,
-  getDepartments,
-  getFaculties,
-  getFields,
   getTestCoursesByFacAsOptions,
   parseLanguages,
   updateApplication,
@@ -57,20 +64,43 @@ type EditApplicationFormProps = {
   application: Application;
   courses?: TestCourse[];
   documents?: RequiredDocument[];
+  cycles?: Cycle[];
+  faculties?: Faculty[];
+  fields?: Field[];
+  departments?: Department[];
+  classes?: Class[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   setOpenValidate: Dispatch<SetStateAction<boolean>>;
   setOpenReject: Dispatch<SetStateAction<boolean>>;
+  setEditedApplication: Dispatch<
+    SetStateAction<
+      | (Omit<
+          ApplicationEditFormDataType,
+          "application_documents" | "enrollment_question_response"
+        > & {
+          application_documents: Array<ApplicationDocument>;
+          enrollment_question_response: Array<EnrollmentQA>;
+        })
+      | null
+    >
+  >;
 };
 
 export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
   application,
   courses,
   documents,
+  cycles,
+  faculties,
+  fields,
+  departments,
+  classes,
   open,
   setOpen,
   setOpenReject,
   setOpenValidate,
+  setEditedApplication,
 }) => {
   const {
     token: { colorPrimary },
@@ -78,31 +108,6 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
-
-  const { data: cycles } = useQuery({
-    queryKey: ["cycles"],
-    queryFn: getCycles,
-  });
-
-  const { data: faculties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
-
-  const { data: fields } = useQuery({
-    queryKey: ["fields"],
-    queryFn: getFields,
-  });
-
-  const { data: departments } = useQuery({
-    queryKey: ["departments"],
-    queryFn: getDepartments,
-  });
-
-  const { data: classes } = useQuery({
-    queryKey: ["classes"],
-    queryFn: getClasses,
-  });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateApplication,
@@ -165,7 +170,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
     );
     return testCourses?.map((item) => ({
       course_test: item.id,
-      result: undefined,
+      result: null,
     }));
   };
 
@@ -273,7 +278,13 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                   variant="dashed"
                   style={{ boxShadow: "none" }}
                   disabled={isPending}
-                  onClick={() => setOpenValidate(true)}
+                  onClick={() => {
+                    setOpenValidate(true);
+                    const formValues = form.getFieldsValue();
+                    setEditedApplication({
+                      ...formValues,
+                    });
+                  }}
                 >
                   Sauvegarder et valider
                 </Button>
@@ -328,16 +339,17 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             ),
           }}
           onFinish={onFinish}
-          disabled={isPending || application.status!=="pending"}
+          disabled={isPending || application.status !== "pending"}
           style={{ maxWidth: 520, margin: "auto" }}
         >
-          {application.status==="pending"&&<Alert
-            showIcon
-            closable
-            message="Veuillez examiner les informations avec soin."
-            description="Tout formulaire qui contiendrait de faux renseignements ne doit pas étre validé!"
-            
-          />}
+          {application.status === "pending" && (
+            <Alert
+              showIcon
+              closable
+              message="Veuillez examiner les informations avec soin."
+              description="Tout formulaire qui contiendrait de faux renseignements ne doit pas étre validé!"
+            />
+          )}
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>
               Informations personnelles
@@ -1015,7 +1027,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                       {...restField}
                       name={[name, "result"]}
                       // label="Resultat"
-                      rules={[{ required: true }]}
+                      rules={[]}
                       layout="vertical"
                     >
                       <InputNumber
@@ -1115,7 +1127,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                   options={getApplicationStatusAsOptions}
                   variant="filled"
                   style={{ width: 120 }}
-                  // disabled
+                  disabled
                 />
               </Form.Item>
             }

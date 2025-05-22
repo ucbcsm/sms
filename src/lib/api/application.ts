@@ -2,8 +2,10 @@ import api from "@/lib/fetcher";
 import {
   Application,
   ApplicationDocument,
+  ApplicationEditFormDataType,
   ApplicationFormDataType,
   EnrollmentQA,
+  TestResult,
 } from "@/lib/types";
 import dayjs from "dayjs";
 
@@ -138,37 +140,7 @@ export async function updateApplication({
   params,
 }: {
   id: number;
-  params: Omit<
-    Application,
-    | "id"
-    | "academic_year"
-    | "cycle"
-    | "faculty"
-    | "field"
-    | "departement"
-    | "class_year"
-    | "spoken_language"
-    | "application_documents"
-    | "enrollment_question_response"
-  > & {
-    year_id: number;
-    cycle_id: number;
-    faculty_id: number;
-    field_id: number;
-    department_id: number;
-    class_id: number;
-    spoken_languages: { language: string }[];
-    application_documents: Array<
-      Omit<ApplicationDocument, "required_document"> & {
-        required_document: number | null;
-      }
-    >;
-    enrollment_question_response: Array<
-      Omit<EnrollmentQA, "registered_enrollment_question"> & {
-        registered_enrollment_question: number | null;
-      }
-    >;
-  };
+  params: ApplicationEditFormDataType
 }) {
   const res = await api.put(`/apparitorat/application/${id}/`, {
     ...params,
@@ -188,6 +160,125 @@ export async function updateApplication({
     admission_test_result: params.admission_test_result,
   });
   return res.data;
+}
+
+export async function rejectApplication(params: Application) {
+  const res = await api.put(`/apparitorat/application/${params.id}/`, {
+    ...params,
+    academic_year: params.academic_year.id,
+    cycle: params.cycle.id,
+    faculty: params.faculty.id,
+    field: params.field.id,
+    departement: params.departement.id,
+    class_year: params.class_year.id,
+    avatar: params.avatar || null,
+    application_documents: formatApplicationDocumentsForEdition(
+      params.application_documents
+    ),
+    enrollment_question_response: formatEnrollmentQuestionResponseForEdition(
+      params.enrollment_question_response
+    ),
+    admission_test_result: formatAdmissionTestResultsForEdition(
+      params.admission_test_result
+    ),
+    status: "rejected",
+  });
+  return res.data;
+}
+
+export async function validateApplication(params: Application) {
+  const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
+    ...params,
+    academic_year: params.academic_year.id,
+    cycle: params.cycle.id,
+    faculty: params.faculty.id,
+    field: params.field.id,
+    departement: params.departement.id,
+    class_year: params.class_year.id,
+    application_documents: formatApplicationDocumentsForEdition(
+      params.application_documents
+    ),
+    enrollment_question_response: formatEnrollmentQuestionResponseForEdition(
+      params.enrollment_question_response
+    ),
+    admission_test_result: formatAdmissionTestResultsForEdition(
+      params.admission_test_result
+    ),
+    type_of_enrollment: "new_application",
+    status: "enabled",
+  });
+
+  await api.put(`/apparitorat/application/${params.id}/`, {
+    ...params,
+    academic_year: params.academic_year.id,
+    cycle: params.cycle.id,
+    faculty: params.faculty.id,
+    field: params.field.id,
+    departement: params.departement.id,
+    class_year: params.class_year.id,
+    avatar: params.avatar || null,
+    application_documents: formatApplicationDocumentsForEdition(
+      params.application_documents
+    ),
+    enrollment_question_response: formatEnrollmentQuestionResponseForEdition(
+      params.enrollment_question_response
+    ),
+    admission_test_result: formatAdmissionTestResultsForEdition(
+      params.admission_test_result
+    ),
+    status: "validated",
+  });
+
+  return resEnrollement.data;
+}
+
+export async function validateEditedApplication({
+  oldParams,
+  newParams,
+}: {
+  oldParams: Application;
+  newParams: ApplicationEditFormDataType
+}) {
+  const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
+    ...newParams,
+    academic_year: newParams.year_id,
+    cycle: newParams.cycle_id,
+    faculty: newParams.faculty_id,
+    field: newParams.field_id,
+    departement: newParams.department_id,
+    class_year: newParams.class_id,
+    avatar: newParams.avatar || null,
+    former_matricule: newParams.former_matricule || "",
+    spoken_language: formatLanguages(newParams.spoken_languages),
+    date_of_birth: dayjs(newParams.date_of_birth).format("YYYY-MM-DD"),
+    year_of_diploma_obtained: dayjs(newParams.year_of_diploma_obtained).year(),
+    application_documents: newParams.application_documents,
+    enrollment_question_response: newParams.enrollment_question_response,
+    admission_test_result: newParams.admission_test_result,
+    type_of_enrollment: "new_application",
+    status: "enabled",
+  });
+
+  await api.put(`/apparitorat/application/${oldParams.id}/`, {
+    ...newParams,
+    academic_year: newParams.year_id,
+    cycle: newParams.cycle_id,
+    faculty: newParams.faculty_id,
+    field: newParams.field_id,
+    departement: newParams.department_id,
+    class_year: newParams.class_id,
+    avatar: newParams.avatar || null,
+    former_matricule: newParams.former_matricule || "",
+    spoken_language: formatLanguages(newParams.spoken_languages),
+    date_of_birth: dayjs(newParams.date_of_birth).format("YYYY-MM-DD"),
+    year_of_diploma_obtained: dayjs(newParams.year_of_diploma_obtained).year(),
+    application_documents: newParams.application_documents,
+    enrollment_question_response: newParams.enrollment_question_response,
+    admission_test_result: newParams.admission_test_result,
+    status: "validated",
+  });
+
+  return resEnrollement.data;
 }
 
 export async function deleteApplication(id: number) {
@@ -283,5 +374,13 @@ export function formatEnrollmentQuestionResponseForEdition(
     ...qa,
     registered_enrollment_question:
       qa.registered_enrollment_question?.id || null,
+  }));
+}
+
+export function formatAdmissionTestResultsForEdition(results: TestResult[]) {
+  return results.map((res) => ({
+    ...res,
+    result: res.result || null,
+    course_test: res.course_test?.id || null,
   }));
 }

@@ -116,10 +116,10 @@ export function StudentsList() {
           title: "Matricule",
           dataIndex: "matricule",
           key: "matricule",
-          width: 92,
-          render: (value, record) => (
+          width: 80,
+          render: (_, record) => (
             <Link href={`/app/student/${record.id}`}>
-              {record.user.matricule}
+              {record.user.matricule.padStart(6, "0")}
             </Link>
           ),
           align: "center",
@@ -140,7 +140,7 @@ export function StudentsList() {
           title: "Sexe",
           dataIndex: "sex",
           key: "gender",
-          width: 58,
+          width: 56,
           render: (_, record, __) => `${record.common_enrollment_infos.gender}`,
           align: "center",
         },

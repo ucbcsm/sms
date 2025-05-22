@@ -28,7 +28,7 @@ export default function Page() {
           <header className="flex pb-3">
             <Space>
               <Typography.Title level={5} style={{ marginBottom: 0 }}>
-                Documents du dossier
+                Eléments du dossier
               </Typography.Title>
             </Space>
             <div className="flex-1" />
@@ -57,12 +57,12 @@ export default function Page() {
         ]}
         columns={[
           {
-            title: "Nom du document",
+            title: "Intitulé",
             dataIndex: "name",
             key: "name",
           },
           {
-            title: "Type",
+            title: "Doc physique",
             dataIndex: "Dépo",
             key: "type",
             render: () => <Checkbox />,
@@ -119,12 +119,12 @@ export default function Page() {
                 </Space>
               );
             },
-            width: 50,
           },
           {
             key: "status",
             dataIndex: "status",
-            title: "Statut du fichier",
+            title: "Statut de verification",
+            ellipsis: true,
             render: (_, record) => {
               let color = "";
               switch (record.status) {
