@@ -1,22 +1,22 @@
 "use client";
 import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
-import { getHSLColor } from "@/lib/utils";
-import { EditOutlined, MoreOutlined } from "@ant-design/icons";
+import { getYearEnrollment } from "@/lib/api";
+import { MoreOutlined } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import {
-  Avatar,
   Button,
   Card,
-  Descriptions,
   Dropdown,
-  Flex,
-  Image,
+  Form,
   Layout,
+  Skeleton,
   Space,
   theme,
   Typography,
 } from "antd";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { ProfileDetails } from "./profile/profileDetails";
 
 export default function StudentLayout({
   children,
@@ -28,6 +28,17 @@ export default function StudentLayout({
   const { studentId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
+
+  const {
+    data: enrolledStudent,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["enrollment", studentId],
+    queryFn: ({ queryKey }) => getYearEnrollment(Number(queryKey[1])),
+    enabled: !!studentId,
+  });
+
   return (
     <Layout>
       <Layout.Content
@@ -49,9 +60,16 @@ export default function StudentLayout({
         >
           <Space>
             <BackButton />
-            <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Nom complet (étudiant)
-            </Typography.Title>
+            {!isPending ? (
+              <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                {`${enrolledStudent?.user.first_name} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.surname}`}{" "}
+                (étudiant)
+              </Typography.Title>
+            ) : (
+              <Form>
+                <Skeleton.Input active />
+              </Form>
+            )}
           </Space>
           <div className="flex-1" />
           <Space>
@@ -119,6 +137,7 @@ export default function StudentLayout({
               <Button type="text" icon={<MoreOutlined />} />
             </Dropdown>
           }
+          // tabProps={{tabPosition:"bottom"}}
         >
           {children}
         </Card>
@@ -144,216 +163,7 @@ export default function StudentLayout({
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <Flex
-          justify="space-between"
-          align="center"
-          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
-        >
-          <Typography.Title level={5} className="">
-            Profile
-          </Typography.Title>
-          <Button
-            type="link"
-            icon={<EditOutlined />}
-            title="Modifier le profile"
-          >
-            Modifier
-          </Button>
-        </Flex>
-        <Space
-          direction="vertical"
-          size="middle"
-          style={{
-            padding: "40px 0 28px 28px",
-            width: "100%",
-            height: "calc(100vh - 108px)",
-            overflowY: "auto",
-          }}
-        >
-          {/* Avatar */}
-          <div style={{ textAlign: "center", marginBottom: 28 }}>
-            <Image
-              height={100}
-              width={100}
-              src="https://images.pexels.com/photos/11276496/pexels-photo-11276496.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-              className=" bg-gray-400 object-cover rounded-full"
-              style={{ marginBottom: 16 }}
-            />
-            <Typography.Title level={4}>Nom Etudiant</Typography.Title>
-            <Typography.Text type="secondary">Matr. 20230001</Typography.Text>
-          </div>
-          <Descriptions
-            title="Informations personnelles"
-            column={1}
-            items={[
-              {
-                key: "sex",
-                label: "Sexe",
-                children: "Masculin",
-              },
-              {
-                key: "name",
-                label: "Nom",
-                children: "Kahindo",
-              },
-              {
-                key: "postnom",
-                label: "Postnom",
-                children: "Lwanzo",
-              },
-              {
-                key: "prenom",
-                label: "Prénom",
-                children: "Alfred",
-              },
-              {
-                key: "email",
-                label: "Email",
-                children: (
-                  <a href="mailto:john.doe@example.com">john.doe@example.com</a>
-                ),
-              },
-              {
-                key: "telephone",
-                label: "Téléphone",
-                children: <a href="tel:+243999999999">+243 999 999 999</a>,
-              },
-              {
-                key: "lieu_naissance",
-                label: "Lieu de naissance",
-                children: "Bafwasende",
-              },
-              {
-                key: "date_naissance",
-                label: "Date de naissance",
-                children: "01 Janvier 2000",
-              },
-              {
-                key: "nationalite",
-                label: "Nationalité",
-                children: "Congo Kinshasa",
-              },
-              {
-                key: "ville",
-                label: "Ville",
-                children: "Beni",
-              },
-              {
-                key: "adresse",
-                label: "Adresse",
-                children: "123 Rue Exemple, Kinshasa",
-              },
-            ]}
-          />
-
-          <Descriptions
-            title="Parents"
-            column={1}
-            items={[
-              {
-                key: "nom_pere",
-                label: "Nom du père",
-                children: "Kahindo Senior",
-              },
-              {
-                key: "nom_mere",
-                label: "Nom de la mère",
-                children: "Lwanzo Marie",
-              },
-              {
-                key: "contact_pere",
-                label: "Contact du père",
-                children: "+243 888 888 888",
-              },
-              {
-                key: "contact_mere",
-                label: "Contact de la mère",
-                children: "+243 777 777 777",
-              },
-              {
-                key: "adresse_parents",
-                label: "Adresse des parents",
-                children: "456 Rue Parentale, Goma",
-              },
-            ]}
-          />
-
-          <Descriptions
-            title="Filières"
-            column={1}
-            items={[
-              {
-                key: "domaine",
-                label: "Domaine",
-                children: "Sciences et Technologies",
-              },
-              {
-                key: "faculte",
-                label: "Faculté",
-                children: "Faculté des Sciences Informatiques",
-              },
-              {
-                key: "departement",
-                label: "Département",
-                children: "Informatique",
-              },
-              {
-                key: "specialisation",
-                label: "Spécialisation",
-                children: "Développement Logiciel",
-              },
-            ]}
-          />
-
-          <Descriptions
-            // title={<Divider orientation="left" orientationMargin={0}>Camarades</Divider>}
-            column={1}
-            items={[
-              {
-                key: "friends",
-                label: "",
-                children: (
-                  <Avatar.Group
-                    size="large"
-                    max={{
-                      count: 5,
-                      style: {
-                        color: "#f56a00",
-                        backgroundColor: "#fde3cf",
-                        cursor: "pointer",
-                      },
-                      popover: { trigger: "click" },
-                    }}
-                    style={{ marginTop: 16 }}
-                  >
-                    <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-                    <Avatar style={{ backgroundColor: getHSLColor("K") }}>
-                      K
-                    </Avatar>
-                    <Avatar style={{ backgroundColor: getHSLColor("M") }}>
-                      M
-                    </Avatar>
-                    <Avatar style={{ backgroundColor: getHSLColor("S") }}>
-                      S
-                    </Avatar>
-                    <Avatar style={{ backgroundColor: getHSLColor("P") }}>
-                      P
-                    </Avatar>
-                    <Avatar style={{ backgroundColor: getHSLColor("R") }}>
-                      R
-                    </Avatar>
-                    <Avatar style={{ backgroundColor: getHSLColor("Q") }}>
-                      Q
-                    </Avatar>
-                    <Avatar style={{ backgroundColor: getHSLColor("J") }}>
-                      J
-                    </Avatar>
-                  </Avatar.Group>
-                ),
-              },
-            ]}
-          />
-        </Space>
+        <ProfileDetails data={enrolledStudent} isError={isError} />
       </Layout.Sider>
     </Layout>
   );

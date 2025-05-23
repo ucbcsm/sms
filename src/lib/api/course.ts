@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { Course } from "@/lib/types";
+import { Course } from "@/types";
 
 export async function getCouses() {
   const res = await api.get(`/faculty/available-course/`);

@@ -1,6 +1,6 @@
 "use client";
 import { Palette } from "@/components/palette";
-import { Step2ApplicationFormDataType } from "@/lib/types";
+import { Step2ApplicationFormDataType } from "@/types";
 import { Button, Flex, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,

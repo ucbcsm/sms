@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { Faculty } from "@/lib/types";
+import { Faculty } from "@/types";
 
 export async function getFaculties() {
   const res = await api.get(`/main_config/faculty/`);

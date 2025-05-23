@@ -14,7 +14,7 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createRequiredDocument } from "@/lib/api";
-import { RequiredDocument } from "@/lib/types";
+import { RequiredDocument } from "@/types";
 
 type FormDataType = Omit<RequiredDocument, "id">;
 

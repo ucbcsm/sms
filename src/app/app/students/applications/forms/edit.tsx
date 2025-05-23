@@ -40,7 +40,7 @@ import {
   Field,
   RequiredDocument,
   TestCourse,
-} from "@/lib/types";
+} from "@/types";
 import { Palette } from "@/components/palette";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -617,7 +617,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             name="current_neighborhood"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Quartier ou Avenue et No" />
+            <Input.TextArea placeholder="Quartier ou Avenue et No" />
           </Form.Item>
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>
@@ -757,16 +757,14 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                     <Form.Item
                       {...restField}
                       name={[name, "study_year_and_faculty"]}
-                      label="Année d'études et faculté"
+                      label="Faculté/Département"
                       rules={[
                         {
                           required: true,
-                          message:
-                            "Veuillez entrer l'année d'études et faculté",
                         },
                       ]}
                     >
-                      <Input placeholder="Année d'études et faculté" />
+                      <Input placeholder="Faculté/Département" />
                     </Form.Item>
                     <Form.Item
                       {...restField}

@@ -2,7 +2,7 @@
 
 import { Palette } from "@/components/palette";
 import { getRequiredDocuments } from "@/lib/api";
-import { Step9ApplicationFormDataType } from "@/lib/types";
+import { Step9ApplicationFormDataType } from "@/types";
 import { FileOutlined, UploadOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {

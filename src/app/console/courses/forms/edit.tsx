@@ -8,7 +8,7 @@ import {
   getCourseTypesAsOptions,
   getCurrentFacultiesAsOptions,
 } from "@/lib/api";
-import { Course, Faculty } from "@/lib/types";
+import { Course, Faculty } from "@/types";
 
 type FormDataType = Omit<Course, "id" | "faculty"> & { faculty_id: number };
 

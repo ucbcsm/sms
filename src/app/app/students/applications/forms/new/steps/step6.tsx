@@ -1,7 +1,7 @@
 "use client";
 
 import { Palette } from "@/components/palette";
-import { Step6ApplicationFormDataType } from "@/lib/types";
+import { Step6ApplicationFormDataType } from "@/types";
 import { DeleteOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import { Badge, Button, Divider, Flex, Form, Input, Space, Typography } from "antd";
 import {
@@ -90,15 +90,14 @@ export const Step6: FC<Props> = ({ setStep }) => {
                 <Form.Item
                   {...restField}
                   name={[name, "study_year_and_faculty"]}
-                  label="Année d'études et faculté"
+                  label="Faculté/Département"
                   rules={[
                     {
                       required: true,
-                      message: "Veuillez entrer l'année d'études et faculté",
                     },
                   ]}
                 >
-                  <Input placeholder="Année d'études et faculté" />
+                  <Input placeholder="Faculté/Departement" />
                 </Form.Item>
                 <Form.Item
                   {...restField}

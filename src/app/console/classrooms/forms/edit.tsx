@@ -12,7 +12,7 @@ import {
   Row,
   Select,
 } from "antd";
-import { Classroom } from "@/lib/types";
+import { Classroom } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getClassroomsAsOptions, updateClassroom } from "@/lib/api";
 

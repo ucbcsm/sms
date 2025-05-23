@@ -17,7 +17,7 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
-import { Step5ApplicationFormDataType, Year } from "@/lib/types";
+import { Step5ApplicationFormDataType, Year } from "@/types";
 import { countries } from "@/lib/data/countries";
 import { Palette } from "@/components/palette";
 import dayjs from "dayjs";
@@ -119,16 +119,7 @@ export const Step5: FC<Props> = ({ setStep }) => {
           max={100}
         />
       </Form.Item>
-      {/* <Form.Item label="Fichier du diplôme" name="diploma_file">
-        <Upload>
-          <Button icon={<UploadOutlined />}>Télécharger le fichier</Button>
-        </Upload>
-      </Form.Item>
-      <Form.Item label="Autres documents" name="other_documents">
-        <Upload>
-          <Button icon={<UploadOutlined />}>Télécharger les documents</Button>
-        </Upload>
-      </Form.Item> */}
+    
       <Flex justify="space-between" align="center">
         <Palette />
         <Form.Item

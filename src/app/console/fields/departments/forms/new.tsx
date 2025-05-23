@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Department, Faculty } from "@/lib/types";
+import { Department, Faculty } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createDepartment, getCurrentFacultiesAsOptions } from "@/lib/api";
 

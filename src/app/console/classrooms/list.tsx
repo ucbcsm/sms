@@ -13,7 +13,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import { NewClassroomForm } from "./forms/new";
-import { Classroom } from "@/lib/types";
+import { Classroom } from "@/types";
 import { FC, useState } from "react";
 import { DeleteClassroomForm } from "./forms/delete";
 import { EditClassroomForm } from "./forms/edit";

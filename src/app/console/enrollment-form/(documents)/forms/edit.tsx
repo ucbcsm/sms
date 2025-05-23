@@ -4,7 +4,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import { Checkbox, Col, Form, Input, message, Modal, Row, Switch } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateRequiredDocument } from "@/lib/api";
-import { RequiredDocument } from "@/lib/types";
+import { RequiredDocument } from "@/types";
 
 type FormDataType = Omit<RequiredDocument, "id">;
 

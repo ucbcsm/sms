@@ -4,7 +4,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Form, Input, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCurrency } from "@/lib/api";
-import { Currency } from "@/lib/types";
+import { Currency } from "@/types";
 
 type FormDataType = {
     validate: string;

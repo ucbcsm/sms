@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { Cycle } from "@/lib/types";
+import { Cycle } from "@/types";
 
 export async function getCycles() {
   const res = await api.get(`/main_config/cycle/`);

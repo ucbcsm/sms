@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { TestCourse } from "@/lib/types";
+import { TestCourse } from "@/types";
 
 export async function getTestCourses() {
   const res = await api.get(`/apparitorat/admission-test-course/?get_all=true`);

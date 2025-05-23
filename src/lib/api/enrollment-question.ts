@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { EnrollmentQuestion } from "@/lib/types";
+import { EnrollmentQuestion } from "@/types";
 
 export async function getEnrollmentQuestions() {
   const res = await api.get(`/apparitorat/registered-enrollment-question/?get_all=true`);

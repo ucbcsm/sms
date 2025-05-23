@@ -2,7 +2,7 @@
 
 import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
-import { Institute } from "@/lib/types";
+import { Institute } from "@/types";
 import { createInstitution } from "@/lib/api";
 import { LockOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";

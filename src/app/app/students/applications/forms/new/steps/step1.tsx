@@ -2,7 +2,7 @@
 
 import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
-import { Step1ApplicationFormDataType } from "@/lib/types";
+import { Step1ApplicationFormDataType } from "@/types";
 import { CloseOutlined } from "@ant-design/icons";
 import {
   Button,

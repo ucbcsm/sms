@@ -13,7 +13,7 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Year } from "@/lib/types";
+import { Year } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createYear } from "@/lib/api";
 

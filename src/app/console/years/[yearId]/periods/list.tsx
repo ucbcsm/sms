@@ -2,7 +2,7 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Cycle, Period } from "@/lib/types";
+import { Cycle, Period } from "@/types";
 import { getPeriods, getPeriodTypeName } from "@/lib/api/period";
 import {
   DeleteOutlined,

@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { Year } from "@/lib/types";
+import { Year } from "@/types";
 import dayjs from "dayjs";
 
 export async function getYears() {

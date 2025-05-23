@@ -13,7 +13,7 @@ import {
   ApplicationDocument,
   ApplicationEditFormDataType,
   EnrollmentQA,
-} from "@/lib/types";
+} from "@/types";
 
 type FormDataType = {
   confirmation: string;

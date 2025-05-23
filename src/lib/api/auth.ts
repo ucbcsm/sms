@@ -1,6 +1,6 @@
 "use server";
 import { authApi } from "@/lib/fetcher";
-import { User } from "@/lib/types";
+import { User } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

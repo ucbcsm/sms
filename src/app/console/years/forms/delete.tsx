@@ -3,7 +3,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Form, Input, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteYear } from "@/lib/api";
-import { Year } from "@/lib/types";
+import { Year } from "@/types";
 
 type FormDataType = {
     validate: string;

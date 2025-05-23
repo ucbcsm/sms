@@ -4,7 +4,7 @@ import { Button, Form, Input, message, Modal, Select, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createPaymentMethod } from "@/lib/api";
-import { PaymentMethod } from "@/lib/types";
+import { PaymentMethod } from "@/types";
 import {
   getPaymentMethod,
   getPaymentMethodsAsOptionsWithDisabled,

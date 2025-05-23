@@ -6,7 +6,7 @@ import {
   ApplicationFormDataType,
   EnrollmentQA,
   TestResult,
-} from "@/lib/types";
+} from "@/types";
 import dayjs from "dayjs";
 
 export async function getApplications() {

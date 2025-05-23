@@ -1,6 +1,6 @@
 "use client";
 import { useYid } from "@/hooks/useYid";
-import { Step7ApplicationFormDataType } from "@/lib/types";
+import { Step7ApplicationFormDataType } from "@/types";
 import {
   getClasses,
   getCurrentClassesAsOptions,

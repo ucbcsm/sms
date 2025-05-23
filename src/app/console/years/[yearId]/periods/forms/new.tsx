@@ -13,7 +13,7 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Cycle, Period } from "@/lib/types";
+import { Cycle, Period } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createPeriod,

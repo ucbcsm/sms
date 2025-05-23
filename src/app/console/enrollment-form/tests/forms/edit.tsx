@@ -12,7 +12,7 @@ import {
   Select,
   Switch,
 } from "antd";
-import { Faculty, TestCourse } from "@/lib/types";
+import { Faculty, TestCourse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCurrentFacultiesAsOptions, updateTestCourse } from "@/lib/api";
 

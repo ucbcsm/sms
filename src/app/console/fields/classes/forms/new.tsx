@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button, Form, Input, InputNumber, message, Modal, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Class, Cycle } from "@/lib/types";
+import { Class, Cycle } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClass, getCurrentCyclesAsOptions } from "@/lib/api";
 import {

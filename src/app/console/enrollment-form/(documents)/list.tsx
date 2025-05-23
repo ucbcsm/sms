@@ -1,6 +1,6 @@
 "use client";
 
-import { RequiredDocument } from "@/lib/types";
+import { RequiredDocument } from "@/types";
 import { getRequiredDocuments, updateRequiredDocument } from "@/lib/api";
 import {
   DeleteOutlined,

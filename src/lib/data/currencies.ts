@@ -1,4 +1,4 @@
-import { Currency } from "@/lib/types";
+import { Currency } from "@/types";
 
 export const availableCurrencies: Omit<Currency, "id" | "enabled">[] = [
   {

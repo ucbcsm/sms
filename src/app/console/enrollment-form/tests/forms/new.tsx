@@ -14,7 +14,7 @@ import {
   Switch,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { TestCourse, Faculty } from "@/lib/types";
+import { TestCourse, Faculty } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTestCourse, getCurrentFacultiesAsOptions } from "@/lib/api";
 

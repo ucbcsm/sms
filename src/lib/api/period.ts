@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { Period } from "@/lib/types";
+import { Period } from "@/types";
 import dayjs from "dayjs";
 
 export async function getPeriods() {

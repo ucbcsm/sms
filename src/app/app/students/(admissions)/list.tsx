@@ -177,9 +177,9 @@ export function StudentsList() {
         {
           key: "actions",
           title: "Actions",
-          render: () => (
+          render: (_, record,__) => (
             <Space>
-              <Button type="dashed">Gérer</Button>
+              <Button type="dashed" onClick={()=>router.push(`/app/student/${record.id}`)}>Gérer</Button>
               <Dropdown
                 menu={{
                   items: [

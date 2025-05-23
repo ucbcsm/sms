@@ -5,7 +5,7 @@ import { Button, Form, Input, message, Modal, Switch } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createEnrollmentQuestion } from "@/lib/api";
-import { EnrollmentQuestion } from "@/lib/types";
+import { EnrollmentQuestion } from "@/types";
 
 type FormDataType = Omit<EnrollmentQuestion, "id">;
 

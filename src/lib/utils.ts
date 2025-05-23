@@ -28,3 +28,20 @@ export const getHSLColor = (name: string) => {
 
   return `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`;
 };
+
+export const getMaritalStatusName = (
+  value: "single" | "married" | "divorced" | "widowed" | string
+) => {
+  switch (value) {
+    case "single":
+      return "Célibataire";
+    case "married":
+      return "Marié(e)";
+    case "divorced":
+      return "Divorcé(e)";
+    case "widowed":
+      return "Veuf(ve)";
+    default:
+      return "Inconnu";
+  }
+};

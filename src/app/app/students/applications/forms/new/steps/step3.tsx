@@ -1,7 +1,7 @@
 "use client";
 import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
-import { Step3ApplicationFormDataType } from "@/lib/types";
+import { Step3ApplicationFormDataType } from "@/types";
 import { Button, Checkbox, Flex, Form, Input, Select, Space } from "antd";
 import {
   compressToEncodedURIComponent,

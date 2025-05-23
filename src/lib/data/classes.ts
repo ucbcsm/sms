@@ -1,4 +1,4 @@
-import { Class } from "@/lib/types";
+import { Class } from "@/types";
 
 type classLMD = Omit<Class, "id" | "cycle"> & {
   cycle_name: "Licence" | "Master" | "Doctorat";

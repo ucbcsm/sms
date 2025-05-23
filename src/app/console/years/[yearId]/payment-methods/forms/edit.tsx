@@ -4,7 +4,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import { Form, Input, message, Modal, Select, Switch } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updatePaymentMethod } from "@/lib/api";
-import { PaymentMethod } from "@/lib/types";
+import { PaymentMethod } from "@/types";
 import { getPaymentMethod, getPaymentMethodsAsOptionsWithDisabled } from "@/lib/data/paymentMethods";
 
 type FormDataType = Omit<PaymentMethod, "id">;

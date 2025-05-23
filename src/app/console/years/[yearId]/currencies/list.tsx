@@ -1,6 +1,6 @@
 "use client";
 
-import { Currency } from "@/lib/types";
+import { Currency } from "@/types";
 import { getCurrencies, updateCurrency } from "@/lib/api";
 import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";

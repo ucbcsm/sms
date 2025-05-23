@@ -1,6 +1,6 @@
 "use client";
 import { Palette } from "@/components/palette";
-import { Step4ApplicationFormDataType } from "@/lib/types";
+import { Step4ApplicationFormDataType } from "@/types";
 import { Button, Flex, Form, Input, Space } from "antd";
 import {
   compressToEncodedURIComponent,
@@ -60,7 +60,7 @@ export const Step4: FC<Props> = ({ setStep }) => {
         name="current_neighborhood"
         rules={[{ required: true }]}
       >
-        <Input placeholder="Quartier ou Avenue et No" />
+        <Input.TextArea placeholder="Quartier ou Avenue et No" />
       </Form.Item>
       <Flex justify="space-between" align="center">
         <Palette />

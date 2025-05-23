@@ -2,7 +2,7 @@
 
 import React, { Dispatch, SetStateAction } from "react";
 import { Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { Department, Faculty } from "@/lib/types";
+import { Department, Faculty } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCurrentFacultiesAsOptions, updateDepartment } from "@/lib/api";
 

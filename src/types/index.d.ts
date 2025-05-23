@@ -253,6 +253,7 @@ export const Enrollment = z.object({
   type_of_enrollment: z.enum(["new_application", "reapplication"]).nullable(),
   enrollment_fees: z.enum(["paid", "unpaid"]).nullable(),
   status: z.enum(["enabled", "disabled"]).nullable(),
+  date_of_enrollment:z.date()
 });
 
 export type Enrollment = z.infer<typeof Enrollment>;
@@ -351,6 +352,8 @@ export const StudentInfo = z.object({
   house: House.nullable(),
   application_documents: z.array(ApplicationDocument),
 });
+
+export type StudentInfo =z.infer<typeof StudentInfo>
 
 export const PrematureEnd = {
   id: number(),

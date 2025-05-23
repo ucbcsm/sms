@@ -7,6 +7,7 @@ import { ConfigProvider, ThemeConfig } from "antd";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { useEffect } from "react";
 
+
 const queryClient = new QueryClient();
 
 const themeConfig: ThemeConfig = {
@@ -26,14 +27,16 @@ export default function ClientProvider({
   }, []);
 
   return (
-    <NuqsAdapter>
-      <ConfigProvider theme={themeConfig}>
-        <AntdRegistry>
-          <QueryClientProvider client={queryClient}>
-            {children}
-          </QueryClientProvider>
-        </AntdRegistry>
-      </ConfigProvider>
-    </NuqsAdapter>
+    <>
+      <NuqsAdapter>
+        <ConfigProvider theme={themeConfig}>
+          <AntdRegistry>
+            <QueryClientProvider client={queryClient}>
+              {children}
+            </QueryClientProvider>
+          </AntdRegistry>
+        </ConfigProvider>
+      </NuqsAdapter>
+    </>
   );
 }

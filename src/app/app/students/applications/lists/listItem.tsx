@@ -13,7 +13,7 @@ import {
   Field,
   RequiredDocument,
   TestCourse,
-} from "@/lib/types";
+} from "@/types";
 import {
   getApplicationStatusName,
   getApplicationStatusTypographyType,

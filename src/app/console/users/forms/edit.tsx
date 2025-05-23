@@ -13,7 +13,7 @@ import {
 } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUser } from "@/lib/api";
-import { User } from "@/lib/types";
+import { User } from "@/types";
 
 type EditUserFormProps = {
     user: User;

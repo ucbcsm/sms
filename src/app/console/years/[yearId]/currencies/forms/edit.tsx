@@ -4,7 +4,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import {  Form, Input, message, Modal, Select, Switch } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateCurrency } from "@/lib/api";
-import { Currency } from "@/lib/types";
+import { Currency } from "@/types";
 import { getCurrenciesAsOptionsWithDisabled, getCurrency } from "@/lib/data/currencies";
 
 type FormDataType = Omit<Currency, "id">;

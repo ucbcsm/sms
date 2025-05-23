@@ -2,7 +2,7 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getFaculties, getTestCourses, updateTestCourse } from "@/lib/api";
-import { Faculty, TestCourse } from "@/lib/types";
+import { Faculty, TestCourse } from "@/types";
 import {
   DeleteOutlined,
   DownOutlined,

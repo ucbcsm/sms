@@ -2,7 +2,7 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Course, Faculty } from "@/lib/types";
+import { Course, Faculty } from "@/types";
 import {
   getCourseTypeName,
   getCouses,

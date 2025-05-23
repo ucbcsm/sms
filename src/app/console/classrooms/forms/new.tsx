@@ -14,7 +14,7 @@ import {
   Select,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import { Classroom } from "@/lib/types";
+import { Classroom } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createClassroom, getClassroomsAsOptions } from "@/lib/api";
 

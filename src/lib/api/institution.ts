@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { Institute } from "@/lib/types";
+import { Institute } from "@/types";
 import axios from "axios";
 
 /**

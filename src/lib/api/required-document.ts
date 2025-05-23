@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { RequiredDocument } from "@/lib/types";
+import { RequiredDocument } from "@/types";
 
 export async function getRequiredDocuments() {
   const res = await api.get(`/apparitorat/required-document/?get_all=true`);

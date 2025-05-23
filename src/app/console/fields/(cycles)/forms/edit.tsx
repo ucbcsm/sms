@@ -3,7 +3,7 @@ import { Button, Form, Input, InputNumber, message, Modal, Select } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateCycle } from "@/lib/api";
-import { Cycle } from "@/lib/types";
+import { Cycle } from "@/types";
 import {
   getCycleLMD,
   getCyclesLMDAsOptionsWithDisabled,

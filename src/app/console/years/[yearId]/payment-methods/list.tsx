@@ -17,7 +17,7 @@ import { getPaymentMethods, updatePaymentMethod } from "@/lib/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { FC, useState } from "react";
 import { NewPaymentMethodForm } from "./forms/new";
-import { PaymentMethod } from "@/lib/types";
+import { PaymentMethod } from "@/types";
 import { EditPaymentMethodForm } from "./forms/edit";
 import { DeletePaymentMethodForm } from "./forms/delete";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";

@@ -1,6 +1,6 @@
 "use client";
 
-import { EnrollmentQuestion } from "@/lib/types";
+import { EnrollmentQuestion } from "@/types";
 import { getEnrollmentQuestions, updateEnrollmentQuestion } from "@/lib/api";
 import {
   DeleteOutlined,

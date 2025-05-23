@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { PaymentMethod } from "@/lib/types";
+import { PaymentMethod } from "@/types";
 
 export async function getPaymentMethods() {
   const res = await api.get(`/main_config/payment-method/`);

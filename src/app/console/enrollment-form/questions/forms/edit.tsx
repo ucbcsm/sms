@@ -4,7 +4,7 @@ import React, { Dispatch, FC, SetStateAction } from "react";
 import { Form, Input, message, Modal, Switch } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateEnrollmentQuestion } from "@/lib/api";
-import { EnrollmentQuestion } from "@/lib/types";
+import { EnrollmentQuestion } from "@/types";
 
 type FormDataType = Omit<EnrollmentQuestion, "id">;
 
