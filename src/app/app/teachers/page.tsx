@@ -16,7 +16,7 @@ import {
   theme,
   Typography,
 } from "antd";
-import { StaffList } from "./list";
+import { ListTeachers } from "./list";
 import Link from "next/link";
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
@@ -55,27 +55,8 @@ export default function Page() {
             <Palette/>
           </Space>
         </Layout.Header>
-        <Card
-          tabBarExtraContent={
-            <Radio.Group>
-              <Radio.Button value="grid">
-                <AppstoreOutlined />
-              </Radio.Button>
-              <Radio.Button value="list">
-                <UnorderedListOutlined />
-              </Radio.Button>
-            </Radio.Group>
-          }
-          tabList={[
-            {
-              key: "all",
-              label: "Tous",
-            },
-            { key: "permanents", label: "Permanents" },
-            { key: "Visiteurs", label: "Visiteurs" },
-          ]}
-        >
-          <StaffList />
+        <Card>
+          <ListTeachers />
         </Card>
         <Layout.Footer
           style={{ display:"flex", background: colorBgContainer, padding: " 24px 0" }}

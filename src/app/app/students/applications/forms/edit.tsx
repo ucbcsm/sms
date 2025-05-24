@@ -508,7 +508,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
                   <Button
                     type="link"
                     onClick={() => add()}
-                    icon="+"
+                    icon={<PlusCircleOutlined />}
                     block
                     style={{
                       display: "flex",

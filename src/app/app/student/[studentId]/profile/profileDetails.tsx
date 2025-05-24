@@ -1,18 +1,17 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { Enrollment } from "@/types";
-import { getHSLColor, getMaritalStatusName } from "@/lib/utils";
+import { getHSLColor, getMaritalStatusName, percentageFormatter } from "@/lib/utils";
 import { Avatar, Descriptions, Flex, Image, Space, Typography } from "antd";
 import { FC } from "react";
 import { EditStudentProfileForm } from "./edit";
-import { formatLanguages, parseLanguages } from "@/lib/api";
 
 type ProfileDetailsProps = {
   data?: Enrollment;
   isError: boolean;
 };
 
-export const ProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }) => {
+export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }) => {
   if (isError) {
     return <DataFetchErrorResult />;
   }
@@ -303,9 +302,7 @@ export const ProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }) => {
               {
                 key: "diploma_percent",
                 label: "Pourcentage du diplome",
-                children: `${
-                  data?.common_enrollment_infos.diploma_percentage || ""
-                }%`,
+                children:  percentageFormatter(Number(data?.common_enrollment_infos.diploma_percentage)),
               },
               {
                 key: "country",

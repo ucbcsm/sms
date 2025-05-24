@@ -56,3 +56,14 @@
 //  https://ciucbc.pythonanywhere.com/api/v01/apparitorat/enrollment/,
 //  https://ciucbc.pythonanywhere.com/api/v01/apparitorat/common-enrollment-infos/
 //  https://ciucbc.pythonanywhere.com/api/v01/apparitorat/premature-end/
+
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/available-course
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/course-student-assignation
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/teaching-unit
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/taught-course
+
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/teachers
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/hour-record
+
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/physical-attendance-check
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/student-attendance-status

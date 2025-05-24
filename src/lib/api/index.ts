@@ -16,3 +16,5 @@ export * from "./year-enrollment";
 export * from "./required-document";
 export * from "./enrollment-question";
 export * from "./test-course"
+export * from "./student-info"
+export * from "./teacher"

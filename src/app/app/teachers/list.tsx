@@ -1,10 +1,15 @@
 import { getHSLColor } from "@/lib/utils";
 import {
+  AppstoreOutlined,
+  DeleteOutlined,
   DownOutlined,
+  EditOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   FilterOutlined,
+  MoreOutlined,
   PrinterOutlined,
+  UnorderedListOutlined,
   UploadOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
@@ -13,233 +18,251 @@ import {
   Button,
   Dropdown,
   Input,
+  Radio,
+  Select,
   Space,
   Table,
-  TableColumnType,
+  Tag,
 } from "antd";
 import { useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { NewStaffForm } from "./forms/new";
+import { useQuery } from "@tanstack/react-query";
+import { getTeachers } from "@/lib/api";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { DataFetchErrorResult } from "@/components/errorResult";
+import Link from "next/link";
 
-type TeacherType = {
-  id: string | number;
-  key: string;
-  avatar: string;
-  firstname: string;
-  lastname: string;
-  surname: string;
-  matricule: string;
-  sex: "M" | "F";
-  email: string;
-  phone: string;
-  role: string;
-  type:"Permanent" | "Visiteur";
-  status: "active" | "abandon" | "dismissed";
-};
-
-const columns: TableColumnType<TeacherType>[] = [
-  {
-    title: "Photo",
-    dataIndex: "firstname",
-    key: "image",
-    render: (value, record) => (
-      <Avatar
-        style={{
-          backgroundColor: getHSLColor(
-            `${record.firstname} ${record.lastname} ${record.surname}`
-          ),
-        }}
-      >
-        {record?.firstname?.charAt(0).toUpperCase()}
-        {record?.lastname?.charAt(0).toUpperCase()}
-      </Avatar>
-    ),
-    width: 58,
-    align: "center",
-  },
-  {
-    title: "Matricule",
-    dataIndex: "matricule",
-    key: "matricule",
-    width: 92,
-    render: (value) => value,
-    align: "center",
-  },
-  {
-    title: "Noms",
-    dataIndex: "lastname",
-    key: "name",
-    render: (value, record) =>
-      `${record.firstname} ${record.lastname} ${record.surname}`,
-    ellipsis: true,
-  },
-  {
-    title: "Sexe",
-    dataIndex: "sex",
-    key: "sex",
-    width: 58,
-    render: (value) => value,
-    align: "center",
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    key: "name",
-    render: (value) => `${value}`,
-    ellipsis: true,
-  },
-  {
-    title: "Téléphone",
-    dataIndex: "phone",
-    key: "name",
-    render: (value) => `${value}`,
-    ellipsis: true,
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-    key: "name",
-    render: (value) => `${value}`,
-    ellipsis: true,
-  },
- 
-  {
-    title: "Statut",
-    dataIndex: "status",
-    key: "name",
-    render: (value) => `${value}`,
-    ellipsis: true,
-    width: 80,
-  }
-  // {
-  //   title: "Rôle",
-  //   dataIndex: "role",
-  //   render: (value) => `${value}`,
-  //   key: "class",
-  //   ellipsis: true,
-  // },
-];
-
-const data: TeacherType[] = Array.from({ length: 100 }, (_, index) => {
-  const id = (index + 1).toString();
-  return {
-    id,
-    key: id,
-    firstname: "Kasereka",
-    lastname: "Vitswamba",
-    surname: "Otty" + id,
-    sex: "M",
-    email: `oty${id}@gmail.com`,
-    phone: "24378888888" + id,
-    role: "enseignant",
-    status: "active",
-    avatar: "",
-    type: "Permanent",
-    matricule: `0024${13 + index}`,
-    promotion: "L1 Genie informatique",
-  };
-});
-
-export function StaffList() {
+export function ListTeachers() {
   const router = useRouter();
-  const [newTeacher, setNewTeacher] = useQueryState(
-    "new",
-    parseAsBoolean.withDefault(false)
-  );
+
+  const {
+    data: teachers,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["teachers"],
+    queryFn: getTeachers,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  if (isPending) {
+    return <DataFetchPendingSkeleton variant="table" />;
+  }
+
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
 
   return (
     <>
-    <Table
-      title={() => (
-        <header className="flex  pb-3">
-          <Space>
-            <Input.Search placeholder="Rechercher ..." />
-            <Button icon={<FilterOutlined />} style={{ boxShadow: "none" }}>
-              Filtrer
-            </Button>
-          </Space>
-          <div className="flex-1" />
-          <Space>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "new",
-                    label: "Un nouveau enseignant",
-                    icon: <UserAddOutlined />,
-                  },
-                  {
-                    key: "import",
-                    label: "Importer un fichier CSV",
-                    icon: <UploadOutlined />,
-                  },
-                ],
-                onClick:({key}) => {
-                  if (key === "new") {
-                    setNewTeacher(true);
-                  } else {
-                   
-                  }
-                }
-              }}
-             
-            >
-              <Button
-                icon={<UserAddOutlined />}
-                type="primary"
-                style={{ boxShadow: "none" }}
-                variant="dashed"
+      <Table
+        title={() => (
+          <header className="flex  pb-3">
+            <Space>
+              <Input.Search placeholder="Rechercher ..." />
+              <Select placeholder="Faculté" showSearch />
+              <Select
+                placeholder="Catégorie"
+                options={[
+                  { value: "all", label: "Tous" },
+                  { value: "permanent", label: "Permanents" },
+                  { value: "visitor", label: "Visiteurs" },
+                ]}
+                showSearch
+              />
+              <Select
+                placeholder="Genre"
+                options={[
+                  { value: "all", label: "Tous" },
+                  { value: "M", label: "Masculin" },
+                  { value: "F", label: "Féminin" },
+                ]}
+              />
+            </Space>
+            <div className="flex-1" />
+            <Space>
+              <NewStaffForm />
+              <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
+                Imprimer
+              </Button>
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "pdf",
+                      label: "PDF",
+                      icon: <FilePdfOutlined />,
+                      title: "Exporter en pdf",
+                    },
+                    {
+                      key: "excel",
+                      label: "EXCEL",
+                      icon: <FileExcelOutlined />,
+                      title: "Exporter ver excel",
+                    },
+                  ],
+                }}
               >
-                Ajouter
-              </Button>
-            </Dropdown>
-            <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
-              Imprimer
-            </Button>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "pdf",
-                    label: "PDF",
-                    icon: <FilePdfOutlined />,
-                    title: "Exporter en pdf",
-                  },
-                  {
-                    key: "excel",
-                    label: "EXCEL",
-                    icon: <FileExcelOutlined />,
-                    title: "Exporter ver excel",
-                  },
-                ],
-              }}
-            >
-              <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                Exporter
-              </Button>
-            </Dropdown>
-          </Space>
-        </header>
-      )}
-      columns={columns}
-      dataSource={data}
-      rowClassName={`bg-[#f5f5f5] odd:bg-white hover:cursor-pointer`}
-      rowSelection={{
-        type: "checkbox",
-      }}
-      size="small"
-      pagination={{
-        defaultPageSize: 25,
-        pageSizeOptions: [25, 50, 75, 100],
-        size: "small",
-      }}
-      onRow={(record) => ({
-        onClick: () => {
-          router.push(`/app/teacher/${record.id}`); // Navigate to the teacher details page
-        },
-      })}
-    />
-    <NewStaffForm open={newTeacher} setOpen={setNewTeacher}/>
+                <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
+                  Exporter
+                </Button>
+              </Dropdown>
+              <Radio.Group>
+                <Radio.Button value="grid">
+                  <AppstoreOutlined />
+                </Radio.Button>
+                <Radio.Button value="list">
+                  <UnorderedListOutlined />
+                </Radio.Button>
+              </Radio.Group>
+            </Space>
+          </header>
+        )}
+        columns={[
+          {
+            title: "Photo",
+            dataIndex: "avatar",
+            key: "avatar",
+            render: (_, record, __) => (
+              <Avatar
+                style={{
+                  backgroundColor: getHSLColor(
+                    `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                  ),
+                }}
+              >
+                {record.user.first_name?.charAt(0).toUpperCase()}
+                {record.user.last_name?.charAt(0).toUpperCase()}
+              </Avatar>
+            ),
+            width: 58,
+            align: "center",
+          },
+          {
+            title: "Matricule",
+            dataIndex: "matricule",
+            key: "matricule",
+            width: 92,
+            render: (_, record, __) => (
+              <Link href={`/app/teacher/${record.id}`}>
+                {record.user.matricule}
+              </Link>
+            ),
+            align: "center",
+          },
+          {
+            title: "Noms",
+            dataIndex: "lastname",
+            key: "name",
+            render: (_, record, __) => (
+              <Link href={`/app/teacher/${record.id}`}>
+                {record.user.first_name} {record.user.last_name}{" "}
+                {record.user.surname}
+              </Link>
+            ),
+            ellipsis: true,
+          },
+          {
+            title: "Sexe",
+            dataIndex: "gender",
+            key: "gender",
+            width: 58,
+            render: (value) => value,
+            align: "center",
+          },
+          {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+            render: (_, record, __) => record.user.email || "",
+            ellipsis: true,
+          },
+          {
+            title: "Téléphone",
+            dataIndex: "phone_number_1",
+            key: "phone_number_1",
+            render: (value) => `${value}`,
+            ellipsis: true,
+          },
+          {
+            title: "Catégorie",
+            dataIndex: "category",
+            key: "category",
+            render: (_, record, __) =>
+              record.user.is_permanent_teacher ? "Permanent" : "Visiteur",
+            ellipsis: true,
+          },
+
+          {
+            title: "Statut",
+            dataIndex: "status",
+            key: "status",
+            render: (_, record, __) => (
+              <Tag
+                color={record.user.is_active ? "green" : "red"}
+                style={{ border: 0, width: "100%" }}
+              >
+                {record.user.is_active ? "Actif" : "Inactif"}
+              </Tag>
+            ),
+            width: 80,
+          },
+          {
+            key: "actions",
+            title: "Actions",
+            dataIndex: "actions",
+            width: 120,
+            render: (_, record, __) => (
+              <Space>
+                <Button
+                  type="dashed"
+                  onClick={() => router.push(`/app/teacher/${record.id}`)}
+                  style={{ boxShadow: "none" }}
+                >
+                  Gérer
+                </Button>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: "edit",
+                        label: "Modifier",
+                        icon: <EditOutlined />,
+                      },
+                      {
+                        key: "delete",
+                        label: "Supprimer",
+                        danger: true,
+                        icon: <DeleteOutlined />,
+                      },
+                    ],
+                  }}
+                >
+                  <Button type="text" icon={<MoreOutlined />} />
+                </Dropdown>
+              </Space>
+            ),
+          },
+        ]}
+        dataSource={teachers}
+        rowClassName={`bg-[#f5f5f5] odd:bg-white `}
+        rowSelection={{
+          type: "checkbox",
+        }}
+        size="small"
+        pagination={{
+          defaultPageSize: 25,
+          pageSizeOptions: [25, 50, 75, 100],
+          size: "small",
+        }}
+        // onRow={(record) => ({
+        //   onClick: () => {
+        //     router.push(`/app/teacher/${record.id}`); // Navigate to the teacher details page
+        //   },
+        // })}
+      />
     </>
   );
 }

@@ -16,7 +16,7 @@ import {
   Typography,
 } from "antd";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { ProfileDetails } from "./profile/profileDetails";
+import { StudentProfileDetails } from "./profile/profileDetails";
 
 export default function StudentLayout({
   children,
@@ -163,7 +163,7 @@ export default function StudentLayout({
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <ProfileDetails data={enrolledStudent} isError={isError} />
+        <StudentProfileDetails data={enrolledStudent} isError={isError} />
       </Layout.Sider>
     </Layout>
   );

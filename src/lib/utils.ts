@@ -45,3 +45,12 @@ export const getMaritalStatusName = (
       return "Inconnu";
   }
 };
+
+
+export function percentageFormatter(value: number) {
+  return new Intl.NumberFormat("fr", {
+    style: "percent",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value / 100);
+}

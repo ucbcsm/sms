@@ -28,13 +28,13 @@ export const Step3: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       onFinish={(values) => {
         
         setNewTeacher(null)
         setStep(null);
         localStorage.clear();
       }}
+      style={{ maxWidth: 520, margin: "auto" }}
     >
       <Form.Item
         label="Type de personnel"

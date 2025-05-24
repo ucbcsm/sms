@@ -2,21 +2,23 @@
 
 import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
-import { EditOutlined, MoreOutlined } from "@ant-design/icons";
+import { getDepartments, getFaculties, getTeacher } from "@/lib/api";
+import { MoreOutlined } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Button,
   Card,
-  Descriptions,
   Dropdown,
-  Flex,
-  Image,
+  Form,
   Layout,
+  Skeleton,
   Space,
   theme,
   Typography,
 } from "antd";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { TeacherProfileDetails } from "./profile/profileDetails";
 
 export default function TeacherLayout({
   children,
@@ -27,6 +29,27 @@ export default function TeacherLayout({
   const { teacherId } = useParams();
   const router = useRouter();
   const pathname = usePathname();
+
+  const {
+    data: teacher,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["teacher", teacherId],
+    queryFn: ({ queryKey }) => getTeacher(Number(queryKey[1])),
+    enabled: !!teacherId,
+  });
+
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getDepartments,
+  });
+
   return (
     <Layout>
       <Layout.Content
@@ -48,9 +71,16 @@ export default function TeacherLayout({
         >
           <Space>
             <BackButton />
-            <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Nom complet de (enseignant)
-            </Typography.Title>
+            {!isPending ? (
+              <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                {teacher?.user.first_name} {teacher?.user.last_name}{" "}
+                {teacher?.user.surname} (enseignant)
+              </Typography.Title>
+            ) : (
+              <Form>
+                <Skeleton.Input active />
+              </Form>
+            )}
           </Space>
           <div className="flex-1" />
           <Space>
@@ -68,14 +98,13 @@ export default function TeacherLayout({
               label: "Cours",
             },
             {
-                key: `/app/teacher/${teacherId}/documents`,
-                label: "Documents",
-              },
+              key: `/app/teacher/${teacherId}/documents`,
+              label: "Documents",
+            },
             {
               key: `/app/teacher/${teacherId}/evaluations`,
               label: "Évaluations",
             },
-           
           ]}
           defaultActiveTabKey={pathname}
           activeTabKey={pathname}
@@ -121,108 +150,13 @@ export default function TeacherLayout({
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <Flex
-          justify="space-between"
-          align="center"
-          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
-        >
-          <Typography.Title level={5} className="">
-            Profile
-          </Typography.Title>
-          <Button
-            type="link"
-            icon={<EditOutlined />}
-            title="Modifier le profile"
-          >
-            Modifier
-          </Button>
-        </Flex>
-        <Space
-          direction="vertical"
-          size="middle"
-          style={{
-            padding: "40px 0 28px 28px",
-            width: "100%",
-            height: "calc(100vh - 108px)",
-            overflowY: "auto",
-          }}
-        >
-          {/* Avatar */}
-          <div style={{ textAlign: "center", marginBottom: 28 }}>
-          
-            <Image height={100} width={100} src="https://images.pexels.com/photos/31600507/pexels-photo-31600507/free-photo-of-casual-portrait-of-young-adult-in-state-college.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"   
-              alt="Avatar de l'enseignant"
-              style={{
-                marginBottom: 28,
-                objectFit:"cover"
-              }} className="rounded-full" />
-            <Typography.Title level={4}>Nom Enseignant</Typography.Title>
-            <Typography.Text type="secondary">ID: 20230001</Typography.Text>
-          </div>
-          <Descriptions
-            title="Informations personnelles"
-            column={1}
-            items={[
-              {
-                key: "sex",
-                label: "Genre",
-                children: "Homme",
-              },
-              {
-                key: "name",
-                label: "Nom",
-                children: "Kahindo",
-              },
-              {
-                key: "postnom",
-                label: "Postnom",
-                children: "Lwanzo",
-              },
-              {
-                key: "prenom",
-                label: "Prénom",
-                children: "Alfred",
-              },
-              {
-                key: "email",
-                label: "Email",
-                children: (
-                  <a href="mailto:john.doe@example.com">john.doe@example.com</a>
-                ),
-              },
-              {
-                key: "telephone",
-                label: "Téléphone",
-                children: <a href="tel:+243999999999">+243 999 999 999</a>,
-              },
-              {
-                key: "lieu_naissance",
-                label: "Lieu de naissance",
-                children: "Bafwasende",
-              },
-              {
-                key: "date_naissance",
-                label: "Date de naissance",
-                children: "01 Janvier 1980",
-              },
-              {
-                key: "nationalite",
-                label: "Nationalité",
-                children: "Congo Kinshasa",
-              },
-              {
-                key: "ville",
-                label: "Ville",
-                children: "Beni",
-              },
-              {
-                key: "adresse",
-                label: "Adresse",
-                children: "123 Rue Exemple, Kinshasa",
-              },
-            ]}
-          />
-        </Space>
+        <TeacherProfileDetails
+          teacher={teacher}
+          isError={isError}
+          isPending={isPending}
+          departments={departments}
+          faculties={faculties}
+        />
       </Layout.Sider>
     </Layout>
   );

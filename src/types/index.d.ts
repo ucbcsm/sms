@@ -193,6 +193,7 @@ export const User = z.object({
   last_name: z.string().nullable(),
   is_staff: z.boolean(),
   is_active: z.boolean(),
+  is_permanent_teacher:z.boolean(),
   date_joined: z.string().datetime(),
   surname: z.string().nullable(),
   username: z.string(),
@@ -578,3 +579,23 @@ export const RequiredDocument = z.object({
 });
 
 export type RequiredDocument = z.infer<typeof RequiredDocument>;
+
+export const Teacher = z.object({
+  id: z.number(),
+  user: User,
+  assigned_faculties: z.array(Faculty),
+  assigned_departements: z.array(Department),
+  gender: z.enum(["M", "F"]),
+  origin: z.string(),
+  academic_title: z.string(),
+  academic_grade: z.string(),
+  other_responsabilities: z.string().nullable(),
+  nationality: z.string(),
+  phone_number_1: z.string(),
+  phone_number_2: z.string().nullable(),
+  marital_status: z.enum(["single", "married", "divorced", "widowed"]),
+  field_of_study: z.string(),
+  education_level: z.string(),
+});
+
+export type Teacher = z.infer<typeof Teacher>;

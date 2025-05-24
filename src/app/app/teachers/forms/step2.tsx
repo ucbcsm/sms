@@ -49,7 +49,6 @@ export const Step2: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
@@ -57,6 +56,7 @@ export const Step2: FC<Props> = ({ setStep }) => {
         localStorage.setItem("dt2", compressedData);
         setStep(2);
       }}
+      style={{ maxWidth: 520, margin: "auto" }}
     >
     <Form.Item
       label="Domaine d'étude"

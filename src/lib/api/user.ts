@@ -1,4 +1,4 @@
-import { authApi } from "@/lib/fetcher";
+import api, { authApi } from "@/lib/fetcher";
 import { User } from "@/types";
 
 export async function getUsers() {
@@ -11,16 +11,10 @@ export async function updateUser({
   params,
 }: {
   id: number;
-  params: Omit<User, "id">;
+  params: Partial<Omit<User, "id">>;
 }) {
-  const res = await authApi.put(`/users/${id}`, {
+  const res = await api.patch(`/account/users/${id}/`, {
     ...params,
   });
-
-  return res.data;
-}
-
-export async function deleteUser(id: number) {
-  const res = await authApi.delete(`/users/${id}/`);
   return res.data;
 }

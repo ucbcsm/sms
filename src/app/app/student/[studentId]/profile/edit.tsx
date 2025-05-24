@@ -1,13 +1,25 @@
 "use client";
 
 import { Palette } from "@/components/palette";
-import { parseLanguages, updateYearEnrollment } from "@/lib/api";
+import {
+  formatAdmissionTestResultsForEdition,
+  formatApplicationDocumentsForEdition,
+  formatEnrollmentQuestionResponseForEdition,
+  parseLanguages,
+  updateStudentInfo,
+} from "@/lib/api";
 import { countries } from "@/lib/data/countries";
 import { Enrollment } from "@/types";
-import { CloseOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Alert,
+  Badge,
   Button,
   Checkbox,
   DatePicker,
@@ -42,35 +54,58 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: updateYearEnrollment,
+    mutationFn: updateStudentInfo,
   });
 
   const onFinish = (values: any) => {
-    mutateAsync(
-      {
-        id: Number(data?.id),
-        params: {
-          ...values,
-          oldUserInfo:data?.user,
-             previous_university_studies: data?.common_enrollment_infos.previous_university_studies,
-            enrollment_question_response:data?.common_enrollment_infos.enrollment_question_response,
-            admission_test_result: data?.common_enrollment_infos.admission_test_result,
-            application_documents: data?.common_enrollment_infos.application_documents,
+    if (!data) {
+      messageApi.error("Aucune donnée disponible pour la mise à jour.");
+    } else {
+      mutateAsync(
+        {
+          id: Number(data?.common_enrollment_infos.id),
+          params: {
+            ...values,
+            user: {
+                id: data?.user.id,
+                first_name: values.first_name,
+                last_name: values.last_name,
+                surname: values.surname,
+                email: values.email,
+                avatar: data?.user.avatar,
+                matricule: data?.user.matricule,
+                pending_avatar: data?.user.pending_avatar,
+            },
+            application_documents: formatApplicationDocumentsForEdition(
+              data?.common_enrollment_infos.application_documents
+            ),
+            enrollment_question_response:
+              formatEnrollmentQuestionResponseForEdition(
+                data?.common_enrollment_infos.enrollment_question_response
+              ),
+
+            admission_test_result: formatAdmissionTestResultsForEdition(
+              data?.common_enrollment_infos.admission_test_result
+            ),
+          },
         },
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["applications"] });
-          messageApi.success("Candidature mise à jour avec succès.");
-          setOpen(false);
-        },
-        onError: () => {
-          messageApi.error(
-            "Une erreur est survenue lors de la mise à jour de la candidature."
-          );
-        },
-      }
-    );
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["year_enrollments"] });
+            queryClient.invalidateQueries({
+              queryKey: ["enrollment", `${data.id}`],
+            });
+            messageApi.success("Profil étudiant mise à jour avec succès.");
+            setOpen(false);
+          },
+          onError: () => {
+            messageApi.error(
+              "Une erreur est survenue lors de la mise à jour du profil étudiant."
+            );
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -90,7 +125,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
         open={open}
         title={
           <div className="text-white">
-            Profile:{" "}
+             Info étudiant:{" "}
             <Typography.Text
               type="warning"
               style={{ textTransform: "uppercase" }}
@@ -139,15 +174,6 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               >
                 Sauvegarder
               </Button>
-              <Button
-                type="dashed"
-                variant="dashed"
-                style={{ boxShadow: "none" }}
-                disabled={isPending}
-                onClick={() => {}}
-              >
-                Sauvegarder et fermer
-              </Button>
             </Space>
           </div>
         }
@@ -183,7 +209,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
                 status="error"
                 style={{ marginBottom: 0 }}
               >
-                <Input variant="filled" style={{ width: 120 }} disabled/>
+                <Input variant="filled" style={{ width: 120 }} disabled />
               </Form.Item>
             }
             style={{ marginTop: 8 }}
@@ -322,7 +348,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
                   <Button
                     type="link"
                     onClick={() => add()}
-                    icon="+"
+                    icon={<PlusCircleOutlined />}
                     block
                     style={{
                       display: "flex",
@@ -525,6 +551,111 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               max={100}
             />
           </Form.Item>
+
+          <Divider orientation="left" orientationMargin={0}>
+            <Typography.Title level={3}>
+              Occupations après les humanités
+            </Typography.Title>
+          </Divider>
+          <Form.Item
+            label="Activités professionnelles"
+            name="professional_activity"
+            rules={[]}
+          >
+            <Input.TextArea placeholder="Activités professionnelles" />
+          </Form.Item>
+
+          <Divider orientation="left" orientationMargin={0}>
+            <Typography.Title level={3}>
+              Études universitaires précédentes
+            </Typography.Title>
+          </Divider>
+          <Form.List name="previous_university_studies">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }, index) => (
+                  <div className="py-4" key={key}>
+                    <Badge count={index + 1} />
+                    <Form.Item
+                      {...restField}
+                      name={[name, "academic_year"]}
+                      label="Année académique"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Veuillez entrer l'année académique",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Année académique" />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "institution"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Veuillez entrer l'établissement",
+                        },
+                      ]}
+                      label="Établissement"
+                    >
+                      <Input placeholder="Établissement" />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "study_year_and_faculty"]}
+                      label="Faculté/Département"
+                      rules={[
+                        {
+                          required: true,
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Faculté/Département" />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "result"]}
+                      label="Résultat"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Veuillez entrer le résultat",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Résultat" />
+                    </Form.Item>
+                    <Button
+                      danger
+                      block
+                      onClick={() => remove(name)}
+                      icon={<DeleteOutlined />}
+                      style={{ boxShadow: "none" }}
+                    >
+                      Supprimer
+                    </Button>
+                  </div>
+                ))}
+                <Form.Item style={{ marginTop: 24 }}>
+                  <Button
+                    type="link"
+                    onClick={() => add()}
+                    icon={<PlusCircleOutlined />}
+                    block
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    Ajouter une ligne
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
         </Form>
       </Drawer>
     </>

@@ -52,7 +52,6 @@ export const Step1: FC<Props> = ({ setStep }) => {
   return (
     <Form
       form={form}
-      style={{ width: 500 }}
       onFinish={(values) => {
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
@@ -60,6 +59,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
         localStorage.setItem("dt1", compressedData);
         setStep(1);
       }}
+      style={{ maxWidth: 520, margin: "auto" }}
     >
       <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
         <Input placeholder="Nom" />
