@@ -20,7 +20,7 @@ import {
 } from "antd";
 import { Options, useQueryState } from "nuqs";
 import { CloseOutlined } from "@ant-design/icons";
-import { useApplicationStepsData } from "@/hooks/useApplicationStepsData";
+import { useApplicationStepsData } from "@/hooks/use-application-steps-data";
 
 type Props = {
   open: boolean;

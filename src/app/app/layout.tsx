@@ -2,7 +2,7 @@
 
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
-import { useYid } from "@/hooks/useYid";
+import { useYid } from "@/hooks/use-yid";
 import { logout } from "@/lib/api/auth";
 import {
   DashboardOutlined,
@@ -44,7 +44,7 @@ export default function AppLayout({
   } = theme.useToken();
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
-  const {removeYid}=useYid()
+  const { removeYid } = useYid();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -158,8 +158,8 @@ export default function AppLayout({
                   await logout()
                     .then(() => {
                       messageApi.success("Déconnexion réussie!");
-                      removeYid()
-                      router.push("/auth/login");
+                      removeYid();
+                      window.location.href = "/auth/login";
                     })
                     .catch((error) => {
                       console.log(

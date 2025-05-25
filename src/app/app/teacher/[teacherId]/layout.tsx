@@ -151,7 +151,7 @@ export default function TeacherLayout({
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
         <TeacherProfileDetails
-          teacher={teacher}
+          data={teacher}
           isError={isError}
           isPending={isPending}
           departments={departments}

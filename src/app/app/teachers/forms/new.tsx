@@ -15,24 +15,33 @@ import {
 } from "antd";
 import { parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
 
-import {
-  CloseOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import { CloseOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Step1 } from "./step1";
 import { Step2 } from "./step2";
 import { Step3 } from "./step3";
+import { useTeacherStepsData } from "@/hooks/use-teacher-steps-data";
+import { Department, Faculty } from "@/types";
 
-type Props = {};
+type NewTeacherFormProps = {
+  departments?: Department[];
+  faculties?: Faculty[];
+};
 
-export const NewStaffForm: FC<Props> = ({}) => {
-  const {token:{colorPrimary}}=theme.useToken()
+export const NewTeacherForm: FC<NewTeacherFormProps> = ({
+  departments,
+  faculties,
+}) => {
+  const {
+    token: { colorPrimary },
+  } = theme.useToken();
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const [newTeacher, setNewTeacher] = useQueryState(
     "new",
     parseAsBoolean.withDefault(false)
   );
   const [cancel, setCancel] = useState<boolean>(false);
+  const { removeData } = useTeacherStepsData();
+
   const [steps] = useState<
     ReadonlyArray<{ title: string; content: ReactNode }>
   >([
@@ -42,7 +51,13 @@ export const NewStaffForm: FC<Props> = ({}) => {
     },
     {
       title: "Etudes et titres académiques",
-      content: <Step2 setStep={setStep} />,
+      content: (
+        <Step2
+          setStep={setStep}
+          departments={departments}
+          faculties={faculties}
+        />
+      ),
     },
     {
       title: "Confirmation",
@@ -72,7 +87,7 @@ export const NewStaffForm: FC<Props> = ({}) => {
       {/* </Dropdown> */}
 
       <Drawer
-        styles={{header:{background:colorPrimary, color:"#fff"}}}
+        styles={{ header: { background: colorPrimary, color: "#fff" } }}
         width={`100%`}
         title="Nouvel enseignant"
         onClose={onClose}
@@ -81,13 +96,13 @@ export const NewStaffForm: FC<Props> = ({}) => {
         extra={
           <Space>
             <Steps
-                current={step}
-                items={getStepItems()}
-                onChange={(current) => setStep(current)}
-                percent={(step / (steps.length - 1)) * 100}
-              />
+              current={step}
+              items={getStepItems()}
+              onChange={(current) => setStep(current)}
+              percent={(step / (steps.length - 1)) * 100}
+            />
             <Button
-              style={{ boxShadow: "none", color:"#fff" }}
+              style={{ boxShadow: "none", color: "#fff" }}
               onClick={() => {
                 setCancel(true);
               }}
@@ -98,7 +113,7 @@ export const NewStaffForm: FC<Props> = ({}) => {
               title="Annuler l'enregistrement"
               open={cancel}
               onOk={() => {
-                localStorage.clear();
+                removeData();
                 setNewTeacher(false);
                 setStep(null);
                 setCancel(false);
@@ -130,13 +145,10 @@ export const NewStaffForm: FC<Props> = ({}) => {
           />
           <Card
             title={
-              <Typography.Title level={5}>
-                {steps[step].title}
-              </Typography.Title>
+              <Typography.Title level={5}>{steps[step].title}</Typography.Title>
             }
             variant="borderless"
             style={{ boxShadow: "none" }}
-           
           >
             {steps[step].content}
           </Card>

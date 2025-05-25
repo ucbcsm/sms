@@ -1,6 +1,6 @@
 "use client";
 import { Palette } from "@/components/palette";
-import { useApplicationStepsData } from "@/hooks/useApplicationStepsData";
+import { useApplicationStepsData } from "@/hooks/use-application-steps-data";
 import { createApplication } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Space, Checkbox, Alert, message, Flex } from "antd";

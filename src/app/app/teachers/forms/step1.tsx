@@ -1,3 +1,6 @@
+'use client'
+import { countries } from "@/lib/data/countries";
+import { Step1TeacherFormDataType } from "@/types";
 import { Button, DatePicker, Form, Input, Radio, Select, Space } from "antd";
 import dayjs from "dayjs";
 import {
@@ -6,7 +9,6 @@ import {
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
-import { z } from "zod";
 
 type Props = {
   setStep: (
@@ -15,28 +17,28 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-const formSchema = z.object({
-    first_name: z.string(),
-    last_name: z.string(),
-    surname: z.string(),
-    gender: z.enum(["M", "F"]),
-    place_of_birth: z.string(),
-    date_of_birth: z.string(),
-    nationality: z.string(),
-    city: z.string(),
-    adress: z.string(),
-    marital_status: z.enum(["single", "married", "divorced", "widowed"]),
-    religious_affiliation: z.string(),
-    physical_ability: z.enum(["normal", "disabled"]),
-    email: z.string().email("Adresse email invalide"),
-    phone_number_1: z.string(),
-    phone_number_2: z.string().optional(),
-});
+// const formSchema = z.object({
+//     first_name: z.string(),
+//     last_name: z.string(),
+//     surname: z.string(),
+//     gender: z.enum(["M", "F"]),
+//     place_of_birth: z.string(),
+//     date_of_birth: z.string(),
+//     nationality: z.string(),
+//     city: z.string(),
+//     adress: z.string(),
+//     marital_status: z.enum(["single", "married", "divorced", "widowed"]),
+//     religious_affiliation: z.string(),
+//     physical_ability: z.enum(["normal", "disabled"]),
+//     email: z.string().email("Adresse email invalide"),
+//     phone_number_1: z.string(),
+//     phone_number_2: z.string().optional(),
+// });
 
-type FormSchemaType = z.infer<typeof formSchema>;
+// type FormSchemaType = z.infer<typeof formSchema>;
 
 export const Step1: FC<Props> = ({ setStep }) => {
-  const [form] = Form.useForm<FormSchemaType>();
+  const [form] = Form.useForm<Step1TeacherFormDataType>();
 
   useEffect(() => {
     const savedData = localStorage.getItem("dt1");
@@ -103,17 +105,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
       >
         <Select
           placeholder="Nationalité"
-          options={[
-            { value: "afghanistan", label: "Afghanistan" },
-            { value: "afrique_du_sud", label: "Afrique du Sud" },
-            { value: "albanie", label: "Albanie" },
-            { value: "algerie", label: "Algérie" },
-            { value: "allemagne", label: "Allemagne" },
-            { value: "andorre", label: "Andorre" },
-            { value: "angola", label: "Angola" },
-            { value: "zambie", label: "Zambie" },
-            { value: "zimbabwe", label: "Zimbabwe" },
-          ]}
+          options={countries}
           showSearch
         />
       </Form.Item>

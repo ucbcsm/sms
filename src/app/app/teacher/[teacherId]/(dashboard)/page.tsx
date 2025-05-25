@@ -34,6 +34,11 @@ export default function Page() {
             title="Info professionnelles"
             column={1}
             items={[
+               {
+                key: "education_level",
+                label: "Niveau d'étude",
+                children: teacher?.education_level,
+              },
               {
                 key: "departement",
                 label: "Domaine d'étude",

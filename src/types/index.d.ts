@@ -193,7 +193,7 @@ export const User = z.object({
   last_name: z.string().nullable(),
   is_staff: z.boolean(),
   is_active: z.boolean(),
-  is_permanent_teacher:z.boolean(),
+  is_permanent_teacher: z.boolean(),
   date_joined: z.string().datetime(),
   surname: z.string().nullable(),
   username: z.string(),
@@ -254,7 +254,7 @@ export const Enrollment = z.object({
   type_of_enrollment: z.enum(["new_application", "reapplication"]).nullable(),
   enrollment_fees: z.enum(["paid", "unpaid"]).nullable(),
   status: z.enum(["enabled", "disabled"]).nullable(),
-  date_of_enrollment:z.date()
+  date_of_enrollment: z.date(),
 });
 
 export type Enrollment = z.infer<typeof Enrollment>;
@@ -354,7 +354,7 @@ export const StudentInfo = z.object({
   application_documents: z.array(ApplicationDocument),
 });
 
-export type StudentInfo =z.infer<typeof StudentInfo>
+export type StudentInfo = z.infer<typeof StudentInfo>;
 
 export const PrematureEnd = {
   id: number(),
@@ -396,6 +396,7 @@ export type ApplicationFormDataType = Omit<
   | "date_of_submission"
   | "spoken_language"
   | "application_documents"
+  | "date_of_enrollment"
 > & {
   year_id: number;
   cycle_id: number;
@@ -405,7 +406,7 @@ export type ApplicationFormDataType = Omit<
   class_id: number;
   spoken_languages: { language: string }[];
   student_previous_studies: Omit<StudentPreviousStudy, "id">[];
-  enrollment_q_a: Omit<EnrollmentQA, "id"|"registered_enrollment_question">[];
+  enrollment_q_a: Omit<EnrollmentQA, "id" | "registered_enrollment_question">[];
   test_result: Omit<TestResult, "id">[];
   application_documents: Omit<
     ApplicationDocument,
@@ -528,38 +529,37 @@ export type Step9ApplicationFormDataType = z.infer<
   typeof Step9ApplicationFormDataType
 >;
 
-
 export type ApplicationEditFormDataType = Omit<
-    Application,
-    | "id"
-    | "academic_year"
-    | "cycle"
-    | "faculty"
-    | "field"
-    | "departement"
-    | "class_year"
-    | "spoken_language"
-    | "application_documents"
-    | "enrollment_question_response"
-  > & {
-    year_id: number;
-    cycle_id: number;
-    faculty_id: number;
-    field_id: number;
-    department_id: number;
-    class_id: number;
-    spoken_languages: { language: string }[];
-    application_documents: Array<
-      Omit<ApplicationDocument, "required_document"> & {
-        required_document: number | null;
-      }
-    >;
-    enrollment_question_response: Array<
-      Omit<EnrollmentQA, "registered_enrollment_question"> & {
-        registered_enrollment_question: number | null;
-      }
-    >;
-  };
+  Application,
+  | "id"
+  | "academic_year"
+  | "cycle"
+  | "faculty"
+  | "field"
+  | "departement"
+  | "class_year"
+  | "spoken_language"
+  | "application_documents"
+  | "enrollment_question_response"
+> & {
+  year_id: number;
+  cycle_id: number;
+  faculty_id: number;
+  field_id: number;
+  department_id: number;
+  class_id: number;
+  spoken_languages: { language: string }[];
+  application_documents: Array<
+    Omit<ApplicationDocument, "required_document"> & {
+      required_document: number | null;
+    }
+  >;
+  enrollment_question_response: Array<
+    Omit<EnrollmentQA, "registered_enrollment_question"> & {
+      registered_enrollment_question: number | null;
+    }
+  >;
+};
 
 export const ApplicationDocument = z.object({
   id: z.number(),
@@ -575,7 +575,7 @@ export const RequiredDocument = z.object({
   id: z.number(),
   title: z.string(),
   enabled: z.boolean(),
-  required:z.boolean(),
+  required: z.boolean(),
 });
 
 export type RequiredDocument = z.infer<typeof RequiredDocument>;
@@ -599,3 +599,32 @@ export const Teacher = z.object({
 });
 
 export type Teacher = z.infer<typeof Teacher>;
+
+export const Step1TeacherFormDataType = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  surname: z.string(),
+  email: z.string().email(),
+  gender: z.enum(["M", "F"]),
+  origin: z.string(),
+  nationality: z.string(),
+  phone_number_1: z.string(),
+  phone_number_2: z.string().nullable(),
+  marital_status: z.enum(["single", "married", "divorced", "widowed"]),
+  religious_affiliation: z.string(),
+  physical_ability: z.enum(["normal", "disabled"]),
+});
+
+export type Step1TeacherFormDataType = z.infer<typeof Step1TeacherFormDataType>;
+
+export const Step2TeacherFormDataType = z.object({
+  field_of_study: z.string(),
+  academic_title: z.string(),
+  academic_grade: z.string(),
+  education_level: z.string(),
+  assigned_faculties: z.array(z.number()),
+  assigned_departements: z.array(z.number()),
+  other_responsabilities: z.string(),
+});
+
+export type Step2TeacherFormDataType = z.infer<typeof Step2TeacherFormDataType>;

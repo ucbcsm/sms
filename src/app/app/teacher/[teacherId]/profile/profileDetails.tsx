@@ -1,3 +1,4 @@
+"use client";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getHSLColor, getMaritalStatusName } from "@/lib/utils";
@@ -16,14 +17,14 @@ import { FC } from "react";
 import { EditTeacherProfileForm } from "./edit";
 
 type TeacherProfileDetailsProps = {
-  teacher?: Teacher;
+  data?: Teacher;
   isPending: boolean;
   isError: boolean;
   faculties?: Faculty[];
   departments?: Department[];
 };
 export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
-  teacher,
+  data,
   isError,
   isPending,
   departments,
@@ -33,7 +34,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
     return <DataFetchErrorResult />;
   }
 
-  if (teacher) {
+  if (data) {
     return (
       <>
         <Flex
@@ -45,7 +46,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
             Profile
           </Typography.Title>
           <EditTeacherProfileForm
-            teacher={teacher}
+            teacher={data}
             departments={departments}
             faculties={faculties}
           />
@@ -62,11 +63,11 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
         >
           {/* Avatar */}
           <div style={{ textAlign: "center", marginBottom: 28 }}>
-            {teacher?.user.avatar ? (
+            {data?.user.avatar ? (
               <Image
                 height={100}
                 width={100}
-                src={teacher?.user.avatar || ""}
+                src={data?.user.avatar || ""}
                 alt="Avatar de l'enseignant"
                 style={{
                   marginBottom: 28,
@@ -79,19 +80,19 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
                 size={100}
                 style={{
                   background: getHSLColor(
-                    `${teacher?.user.first_name} ${teacher?.user.last_name} ${teacher?.user.surname}`
+                    `${data?.user.first_name} ${data?.user.last_name} ${data?.user.surname}`
                   ),
                   marginBottom: 16,
                 }}
               >
-                {`${teacher?.user.first_name?.[0]}${teacher?.user.last_name?.[0]}`}
+                {`${data?.user.first_name?.[0]}${data?.user.last_name?.[0]}`}
               </Avatar>
             )}
             <Typography.Title level={4}>
-              {teacher?.user.first_name} {teacher?.user.last_name}
+              {data?.user.first_name} {data?.user.last_name}
             </Typography.Title>
             <Typography.Text type="secondary">
-              ID: {teacher?.user.matricule.padStart(6, "0")}
+              ID: {data?.user.matricule.padStart(6, "0")}
             </Typography.Text>
           </div>
           <Descriptions
@@ -101,54 +102,64 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
               {
                 key: "name",
                 label: "Nom",
-                children: teacher?.user.first_name || "",
+                children: data?.user.first_name || "",
               },
               {
                 key: "postnom",
                 label: "Postnom",
-                children: teacher?.user.last_name || "",
+                children: data?.user.last_name || "",
               },
               {
                 key: "prenom",
                 label: "Prénom",
-                children: teacher?.user.surname || "",
+                children: data?.user.surname || "",
               },
               {
                 key: "sex",
                 label: "Genre",
-                children: teacher?.gender === "M" ? "Homme" : "Femme",
+                children: data?.gender === "M" ? "Homme" : "Femme",
               },
               {
                 key: "nationalite",
                 label: "Nationalité",
-                children: teacher?.nationality,
+                children: data?.nationality,
               },
               {
                 key: "marital_status",
                 label: "État civil",
-                children: getMaritalStatusName(`${teacher?.marital_status}`),
+                children: getMaritalStatusName(`${data?.marital_status}`),
               },
-              // {
-              //   key: "lieu_naissance",
-              //   label: "Lieu de naissance",
-              //   children: "Bafwasende",
-              // },
-              // {
-              //   key: "date_naissance",
-              //   label: "Date de naissance",
-              //   children: "01 Janvier 1980",
-              // },
+              {
+                key: "physical_ability",
+                label: "Aptitude physique",
+                children: "",
+              },
+              {
+                key: "religious_affiliation",
+                label: "Affiliation religieuse",
+                children: "",
+              },
+              {
+                key: "lieu_naissance",
+                label: "Lieu de naissance",
+                children: "",
+              },
+              {
+                key: "date_naissance",
+                label: "Date de naissance",
+                children: "",
+              },
 
-              // {
-              //   key: "ville",
-              //   label: "Ville",
-              //   children: "Beni",
-              // },
-              // {
-              //   key: "adresse",
-              //   label: "Adresse",
-              //   children: "123 Rue Exemple, Kinshasa",
-              // },
+              {
+                key: "ville",
+                label: "Ville",
+                children: "",
+              },
+              {
+                key: "adresse",
+                label: "Adresse",
+                children: "",
+              },
             ]}
           />
           <Descriptions
@@ -159,17 +170,15 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
                 key: "email",
                 label: "Email",
                 children: (
-                  <a href={`mailto:${teacher?.user.email}`}>
-                    {teacher?.user.email}
-                  </a>
+                  <a href={`mailto:${data?.user.email}`}>{data?.user.email}</a>
                 ),
               },
               {
                 key: "phone_number_1",
                 label: "Téléphone 1",
                 children: (
-                  <a href={`tel:${teacher?.phone_number_1}`}>
-                    {teacher?.phone_number_1}
+                  <a href={`tel:${data?.phone_number_1}`}>
+                    {data?.phone_number_1}
                   </a>
                 ),
               },
@@ -177,8 +186,8 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
                 key: "phone_number_2",
                 label: "Téléphone 2",
                 children: (
-                  <a href={`tel:${teacher?.phone_number_2}`}>
-                    {teacher?.phone_number_2}
+                  <a href={`tel:${data?.phone_number_2}`}>
+                    {data?.phone_number_2}
                   </a>
                 ),
               },

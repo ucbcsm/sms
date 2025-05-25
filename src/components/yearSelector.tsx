@@ -1,7 +1,7 @@
 "use client";
 
 import { NewYearForm } from "@/app/console/years/forms/new";
-import { useYid } from "@/hooks/useYid";
+import { useYid } from "@/hooks/use-yid";
 import {
   getYears,
   getYearsAsOptions,

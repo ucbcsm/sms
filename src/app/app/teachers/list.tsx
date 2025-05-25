@@ -25,10 +25,9 @@ import {
   Tag,
 } from "antd";
 import { useRouter } from "next/navigation";
-import { parseAsBoolean, useQueryState } from "nuqs";
-import { NewStaffForm } from "./forms/new";
+import { NewTeacherForm } from "./forms/new";
 import { useQuery } from "@tanstack/react-query";
-import { getTeachers } from "@/lib/api";
+import { getDepartments, getFaculties, getTeachers } from "@/lib/api";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
@@ -45,6 +44,16 @@ export function ListTeachers() {
     queryFn: getTeachers,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+  });
+
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getDepartments,
   });
 
   if (isPending) {
@@ -83,7 +92,7 @@ export function ListTeachers() {
             </Space>
             <div className="flex-1" />
             <Space>
-              <NewStaffForm />
+              <NewTeacherForm departments={departments} faculties={faculties} />
               <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
                 Imprimer
               </Button>

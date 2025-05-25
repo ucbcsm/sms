@@ -24,7 +24,7 @@ import { Step8 } from "./steps/step8";
 import { Step9 } from "./steps/step9";
 import { Step10 } from "./steps/step10";
 import { CloseOutlined } from "@ant-design/icons";
-import { useApplicationStepsData } from "@/hooks/useApplicationStepsData";
+import { useApplicationStepsData } from "@/hooks/use-application-steps-data";
 
 type Props = {
   open: boolean;

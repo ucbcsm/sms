@@ -1,5 +1,5 @@
 "use client";
-import { useYid } from "@/hooks/useYid";
+import { useYid } from "@/hooks/use-yid";
 import { Step7ApplicationFormDataType } from "@/types";
 import {
   getClasses,

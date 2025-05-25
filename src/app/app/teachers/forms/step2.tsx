@@ -1,39 +1,44 @@
+'use client'
+import { getCurrentDepartmentsAsOptions, getCurrentFacultiesAsOptions } from "@/lib/api";
+import { Department, Faculty, Step2TeacherFormDataType } from "@/types";
 import { Button, Form, Input, Select, Space } from "antd";
+import { get } from "http";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
-import { z } from "zod";
 
 type Props = {
   setStep: (
     value: number | ((old: number) => number | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
+  faculties?:Faculty[];
+  departments?:Department[]
 };
 
-const formSchema = z.object({
-  field_of_study: z.string().nonempty("Le domaine d'étude est requis"),
-  education_level: z.enum(["bachelor", "master", "phd"], {
-    required_error: "Le niveau d'éducation est requis",
-  }),
-  academic_title: z.string().nonempty("Le titre académique est requis"),
-  academic_grade: z.string().nonempty("Le grade académique est requis"),
-  assigned_faculties: z
-    .array(z.enum(["science", "arts", "engineering"]))
-    .nonempty("Au moins une faculté assignée est requise"),
-  assigned_departements: z
-    .array(z.enum(["math", "physics", "chemistry"]))
-    .nonempty("Au moins un département assigné est requis"),
-  other_responsabilities: z.string().optional(),
-});
+// const formSchema = z.object({
+//   field_of_study: z.string().nonempty("Le domaine d'étude est requis"),
+//   education_level: z.enum(["bachelor", "master", "phd"], {
+//     required_error: "Le niveau d'éducation est requis",
+//   }),
+//   academic_title: z.string().nonempty("Le titre académique est requis"),
+//   academic_grade: z.string().nonempty("Le grade académique est requis"),
+//   assigned_faculties: z
+//     .array(z.enum(["science", "arts", "engineering"]))
+//     .nonempty("Au moins une faculté assignée est requise"),
+//   assigned_departements: z
+//     .array(z.enum(["math", "physics", "chemistry"]))
+//     .nonempty("Au moins un département assigné est requis"),
+//   other_responsabilities: z.string().optional(),
+// });
 
-type FormSchemaType = z.infer<typeof formSchema>;
+// type FormSchemaType = z.infer<typeof formSchema>;
 
-export const Step2: FC<Props> = ({ setStep }) => {
-  const [form] = Form.useForm<FormSchemaType>();
+export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
+  const [form] = Form.useForm<Step2TeacherFormDataType>();
 
   useEffect(() => {
     const savedData = localStorage.getItem("dt2");
@@ -58,34 +63,37 @@ export const Step2: FC<Props> = ({ setStep }) => {
       }}
       style={{ maxWidth: 520, margin: "auto" }}
     >
-    <Form.Item
-      label="Domaine d'étude"
-      name="field_of_study"
-      rules={[{ required: true }]}
-    >
-      <Select
-        placeholder="Domaine d'étude"
-        options={[
-        { value: "humanities", label: "Sciences humaines" },
-        { value: "literature_and_languages", label: "Lettres et langues" },
-        { value: "social_sciences", label: "Sciences sociales" },
-        { value: "law", label: "Droit" },
-        { value: "economics_and_management", label: "Économie et gestion" },
-        { value: "natural_sciences", label: "Sciences exactes" },
-        { value: "mathematics", label: "Mathématiques" },
-        { value: "computer_science", label: "Informatique" },
-        { value: "engineering", label: "Sciences de l’ingénieur" },
-        { value: "health", label: "Santé" },
-        { value: "medicine", label: "Médecine" },
-        { value: "education", label: "Éducation" },
-        { value: "arts", label: "Arts" },
-        { value: "architecture", label: "Architecture" },
-        { value: "environmental_sciences", label: "Sciences de l’environnement" },
-        { value: "agricultural_sciences", label: "Agronomie" },
-        ]}
-      />
-    </Form.Item>
-      {/* <Form.Item
+      <Form.Item
+        label="Domaine d'étude"
+        name="field_of_study"
+        rules={[{ required: true }]}
+      >
+        <Select
+          placeholder="Domaine d'étude"
+          options={[
+            { value: "humanities", label: "Sciences humaines" },
+            { value: "literature_and_languages", label: "Lettres et langues" },
+            { value: "social_sciences", label: "Sciences sociales" },
+            { value: "law", label: "Droit" },
+            { value: "economics_and_management", label: "Économie et gestion" },
+            { value: "natural_sciences", label: "Sciences exactes" },
+            { value: "mathematics", label: "Mathématiques" },
+            { value: "computer_science", label: "Informatique" },
+            { value: "engineering", label: "Sciences de l’ingénieur" },
+            { value: "health", label: "Santé" },
+            { value: "medicine", label: "Médecine" },
+            { value: "education", label: "Éducation" },
+            { value: "arts", label: "Arts" },
+            { value: "architecture", label: "Architecture" },
+            {
+              value: "environmental_sciences",
+              label: "Sciences de l’environnement",
+            },
+            { value: "agricultural_sciences", label: "Agronomie" },
+          ]}
+        />
+      </Form.Item>
+      <Form.Item
         label="Niveau d'éducation"
         name="education_level"
         rules={[{ required: true }]}
@@ -98,7 +106,7 @@ export const Step2: FC<Props> = ({ setStep }) => {
             { value: "phd", label: "Doctorat" },
           ]}
         />
-      </Form.Item> */}
+      </Form.Item>
       <Form.Item
         label="Titre académique"
         name="academic_title"
@@ -176,11 +184,7 @@ export const Step2: FC<Props> = ({ setStep }) => {
         <Select
           mode="multiple"
           placeholder="Facultés assignées"
-          options={[
-            { value: "science", label: "Sciences" },
-            { value: "arts", label: "Arts" },
-            { value: "engineering", label: "Ingénierie" },
-          ]}
+          options={getCurrentFacultiesAsOptions(faculties)}
         />
       </Form.Item>
       <Form.Item
@@ -191,11 +195,7 @@ export const Step2: FC<Props> = ({ setStep }) => {
         <Select
           mode="multiple"
           placeholder="Départements assignés"
-          options={[
-            { value: "math", label: "Mathématiques" },
-            { value: "physics", label: "Physique" },
-            { value: "chemistry", label: "Chimie" },
-          ]}
+          options={getCurrentDepartmentsAsOptions(departments)}
         />
       </Form.Item>
       <Form.Item

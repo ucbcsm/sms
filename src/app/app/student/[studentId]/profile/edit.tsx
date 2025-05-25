@@ -14,6 +14,7 @@ import {
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
+  LockOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -52,6 +53,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const [editMatricule, setEditMatricule] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateStudentInfo,
@@ -67,14 +69,14 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
           params: {
             ...values,
             user: {
-                id: data?.user.id,
-                first_name: values.first_name,
-                last_name: values.last_name,
-                surname: values.surname,
-                email: values.email,
-                avatar: data?.user.avatar,
-                matricule: data?.user.matricule,
-                pending_avatar: data?.user.pending_avatar,
+              id: data?.user.id,
+              first_name: values.first_name,
+              last_name: values.last_name,
+              surname: values.surname,
+              email: values.email,
+              avatar: data?.user.avatar,
+              matricule: values.matricule,
+              pending_avatar: data?.user.pending_avatar,
             },
             application_documents: formatApplicationDocumentsForEdition(
               data?.common_enrollment_infos.application_documents
@@ -96,6 +98,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               queryKey: ["enrollment", `${data.id}`],
             });
             messageApi.success("Profil étudiant mise à jour avec succès.");
+            setEditMatricule(false);
             setOpen(false);
           },
           onError: () => {
@@ -125,7 +128,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
         open={open}
         title={
           <div className="text-white">
-             Info étudiant:{" "}
+            Info étudiant:{" "}
             <Typography.Text
               type="warning"
               style={{ textTransform: "uppercase" }}
@@ -213,6 +216,13 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               </Form.Item>
             }
             style={{ marginTop: 8 }}
+            action={
+              <Button
+                type="link"
+                icon={!editMatricule ? <EditOutlined /> : <LockOutlined />}
+                onClick={() => setEditMatricule((prev) => !prev)}
+              />
+            }
           />
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>Identité</Typography.Title>

@@ -9,7 +9,7 @@ import {
 import { countries } from "@/lib/data/countries";
 
 import { Department, Faculty, Teacher } from "@/types";
-import { CloseOutlined, EditOutlined } from "@ant-design/icons";
+import { CloseOutlined, EditOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Alert,
@@ -45,6 +45,8 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const is_permanent_teacher = Form.useWatch('is_permanent_teacher', form);
+  const [editMatricule, setEditMatricule] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateTeacher,
@@ -66,7 +68,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               surname: values.surname,
               email: values.email,
               avatar: teacher?.user.avatar,
-              matricule: teacher?.user.matricule,
+              matricule: values.matricule,
               pending_avatar: teacher?.user.pending_avatar,
             },
           },
@@ -78,6 +80,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               queryKey: ["teacher", `${teacher.id}`],
             });
             messageApi.success("Profil enseignant mise à jour avec succès.");
+            setEditMatricule(false);
             setOpen(false);
           },
           onError: () => {
@@ -166,6 +169,13 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           initialValues={{
             ...teacher,
             ...teacher?.user,
+            assigned_departements: teacher?.assigned_departements?.map(
+              (dept) => dept.id
+            ),
+            assigned_faculties: teacher?.assigned_faculties?.map(
+              (fac) => fac.id
+            ),
+            is_permanent_teacher: teacher?.user.is_permanent_teacher,
           }}
           onFinish={onFinish}
           disabled={isPending}
@@ -183,11 +193,44 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
                 status="error"
                 style={{ marginBottom: 0 }}
               >
-                <Input variant="filled" style={{ width: 120 }} disabled />
+                <Input
+                  variant="filled"
+                  style={{ width: 120 }}
+                  disabled={!editMatricule}
+                />
               </Form.Item>
             }
             style={{ marginTop: 8 }}
+            action={
+              <Button
+                type="link"
+                icon={!editMatricule ? <EditOutlined /> : <LockOutlined />}
+                onClick={() => setEditMatricule((prev) => !prev)}
+              />
+            }
           />
+          <Form.Item
+            label="Type de personnel"
+            name="is_permanent_teacher"
+            rules={[{ required: true }]}
+            style={{marginTop:24}}
+          >
+            <Radio.Group
+              options={[
+                { value: true, label: "Permanent" },
+                { value: false, label: "Visiteur" },
+              ]}
+            />
+          </Form.Item>
+          {is_permanent_teacher === false && (
+            <Form.Item
+              name="origin"
+              label="Origine"
+              rules={[{ required: true }]}
+            >
+              <Input placeholder="Institution d'origine" />
+            </Form.Item>
+          )}
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>Identité</Typography.Title>
           </Divider>
