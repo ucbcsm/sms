@@ -183,7 +183,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
         >
           <Alert
             showIcon
-            message="Identifiant professionnelle"
+            message="Identifiant administratif"
             type="info"
             description={
               <Form.Item
