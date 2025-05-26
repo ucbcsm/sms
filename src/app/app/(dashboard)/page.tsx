@@ -34,10 +34,16 @@ export default function Page() {
   } = theme.useToken();
 
   const [statTab, setStatTab] = useQueryState(
-    "tab", parseAsStringEnum(["students","teachers"]).withDefault("students")
+    "tab",
+    parseAsStringEnum(["students", "teachers"]).withDefault("students")
   );
 
-  const [dashTab, setDashTab]=useQueryState("dash_tab", parseAsStringEnum(["faculty","department", "enrollment"]).withDefault("faculty"))
+  const [dashTab, setDashTab] = useQueryState(
+    "dash_tab",
+    parseAsStringEnum(["faculty", "department", "enrollment"]).withDefault(
+      "faculty"
+    )
+  );
 
   return (
     <Layout>
@@ -77,7 +83,7 @@ export default function Page() {
             ]}
             tabBarExtraContent={<Button type="link">Voir plus</Button>}
             onTabChange={(key) => {
-              setStatTab(key as "teachers" |"students");
+              setStatTab(key as "teachers" | "students");
             }}
             activeTabKey={statTab}
           >
@@ -119,19 +125,30 @@ export default function Page() {
                 key: "enrollment",
                 label: (
                   <>
-                    Candidatures en attente <Badge count={41} color="red" overflowCount={9} />
+                    Candidatures en attente{" "}
+                    <Badge count={41} color="red" overflowCount={9} />
                   </>
                 ),
               },
             ]}
             activeTabKey={dashTab}
-            onTabChange={(key)=>{
-              setDashTab(key as "faculty"|"department"| "enrollment")
+            onTabChange={(key) => {
+              setDashTab(key as "faculty" | "department" | "enrollment");
             }}
           >
-            <div style={{display:dashTab==="faculty"?"block":"none"}}><FacultiesStatistics/></div>
-            <div style={{display:dashTab==="department"?"block":"none"}}><DepartmentsStatistics/></div>
-            <div style={{display:dashTab==="enrollment"?"block":"none"}}><EnrollmentsStatistics/></div>
+            <div style={{ display: dashTab === "faculty" ? "block" : "none" }}>
+              <FacultiesStatistics />
+            </div>
+            <div
+              style={{ display: dashTab === "department" ? "block" : "none" }}
+            >
+              <DepartmentsStatistics />
+            </div>
+            <div
+              style={{ display: dashTab === "enrollment" ? "block" : "none" }}
+            >
+              <EnrollmentsStatistics />
+            </div>
           </Card>
         </Flex>
         <Layout.Footer

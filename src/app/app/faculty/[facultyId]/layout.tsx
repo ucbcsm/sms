@@ -12,9 +12,11 @@ import {
   Button,
   Card,
   Dropdown,
+  Form,
   Layout,
   List,
   Radio,
+  Skeleton,
   Space,
   theme,
   Typography,
@@ -25,8 +27,12 @@ import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getFaculty } from "@/lib/api";
 
-export default function FacultyLayout({children}:Readonly<{children:ReactNode}>) {
+export default function FacultyLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -34,6 +40,16 @@ export default function FacultyLayout({children}:Readonly<{children:ReactNode}>)
   const { facultyId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
+
+  const {
+    data: faculty,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["faculty", facultyId],
+    queryFn: ({ queryKey }) => getFaculty(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
 
   return (
     <Layout>
@@ -56,9 +72,15 @@ export default function FacultyLayout({children}:Readonly<{children:ReactNode}>)
         >
           <Space>
             <BackButton />
-            <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Nom de la Faculté
-            </Typography.Title>
+            {!isPending ? (
+              <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                {faculty?.name} (Faculté)
+              </Typography.Title>
+            ) : (
+              <Form>
+                <Skeleton.Input active />
+              </Form>
+            )}
           </Space>
           <div className="flex-1" />
           <Space>
@@ -71,7 +93,7 @@ export default function FacultyLayout({children}:Readonly<{children:ReactNode}>)
               <Button
                 type="dashed"
                 title="Programmer un cours"
-                style={{boxShadow:"none"}}
+                style={{ boxShadow: "none" }}
               >
                 Programmer
               </Button>
@@ -117,7 +139,6 @@ export default function FacultyLayout({children}:Readonly<{children:ReactNode}>)
           }}
         >
           {children}
-          
         </Card>
         <Layout.Footer
           style={{

@@ -1,7 +1,7 @@
 'use client'
 import { countries } from "@/lib/data/countries";
 import { Step1TeacherFormDataType } from "@/types";
-import { Button, DatePicker, Form, Input, Radio, Select, Space } from "antd";
+import { Button, Checkbox, DatePicker, Form, Input, Radio, Select, Space } from "antd";
 import dayjs from "dayjs";
 import {
   compressToEncodedURIComponent,
@@ -99,24 +99,27 @@ export const Step1: FC<Props> = ({ setStep }) => {
         />
       </Form.Item>
       <Form.Item
+        label="Est-il étranger?"
+        name="is_foreign_country_teacher"
+        valuePropName="checked"
+      >
+        <Checkbox />
+      </Form.Item>
+      <Form.Item
         label="Nationalité"
         name="nationality"
         rules={[{ required: true }]}
       >
-        <Select
-          placeholder="Nationalité"
-          options={countries}
-          showSearch
-        />
+        <Select placeholder="Nationalité" options={countries} showSearch />
       </Form.Item>
       <Form.Item
-        label="Ville actuelle"
-        name="city"
+        label="Ville ou Térritoire"
+        name="city_or_territory"
         rules={[{ required: true }]}
       >
-        <Input placeholder="Ville actuelle" />
+        <Input placeholder="Ville/Térritoire" />
       </Form.Item>
-      <Form.Item label="Adresse" name="adress" rules={[{ required: true }]}>
+      <Form.Item label="Adresse" name="address" rules={[{ required: true }]}>
         <Input.TextArea placeholder="Quartier ou Avenue et No" />
       </Form.Item>
       <Form.Item
@@ -136,7 +139,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
       <Form.Item
         label="Affiliation religieuse"
         name="religious_affiliation"
-        rules={[{ required: true }]}
+        rules={[]}
       >
         <Input placeholder="Affiliation religieuse" />
       </Form.Item>
@@ -162,11 +165,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
       >
         <Input placeholder="Téléphone 1" />
       </Form.Item>
-      <Form.Item
-        label="Téléphone 2"
-        name="phone_number_2"
-        rules={[{ required: false }]}
-      >
+      <Form.Item label="Téléphone 2" name="phone_number_2" rules={[]}>
         <Input placeholder="Numéro de téléphone 2" />
       </Form.Item>
       <Form.Item

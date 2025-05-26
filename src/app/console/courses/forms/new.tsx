@@ -1,17 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  message,
-  Modal,
-  Radio,
-  Row,
-  Select,
-} from "antd";
+import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -21,7 +11,9 @@ import {
 } from "@/lib/api";
 import { Course, Faculty } from "@/types";
 
-type FormDataType = Omit<Course, "id" | "faculty"> & { faculty_id: number };
+type FormDataType = Omit<Course, "id" | "faculties"> & {
+  faculties: number[];
+};
 
 type NewCourseFormProps = {
   faculties?: Faculty[];
@@ -139,7 +131,7 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
         >
           <Select options={getCourseTypesAsOptions} />
         </Form.Item>
-        <Form.Item name="faculty_id" label="Pour facultés" rules={[]}>
+        <Form.Item name="faculties" label="Pour facultés" rules={[]}>
           <Select
             placeholder="Sélectionnez une faculté"
             options={getCurrentFacultiesAsOptions(faculties)}

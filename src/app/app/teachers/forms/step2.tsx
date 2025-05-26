@@ -1,8 +1,10 @@
-'use client'
-import { getCurrentDepartmentsAsOptions, getCurrentFacultiesAsOptions } from "@/lib/api";
+"use client";
+import {
+  getCurrentDepartmentsAsOptions,
+  getCurrentFacultiesAsOptions,
+} from "@/lib/api";
 import { Department, Faculty, Step2TeacherFormDataType } from "@/types";
 import { Button, Form, Input, Select, Space } from "antd";
-import { get } from "http";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -15,8 +17,8 @@ type Props = {
     value: number | ((old: number) => number | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
-  faculties?:Faculty[];
-  departments?:Department[]
+  faculties?: Faculty[];
+  departments?: Department[];
 };
 
 // const formSchema = z.object({
@@ -34,7 +36,6 @@ type Props = {
 //     .nonempty("Au moins un département assigné est requis"),
 //   other_responsabilities: z.string().optional(),
 // });
-
 // type FormSchemaType = z.infer<typeof formSchema>;
 
 export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
@@ -64,36 +65,6 @@ export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
       style={{ maxWidth: 520, margin: "auto" }}
     >
       <Form.Item
-        label="Domaine d'étude"
-        name="field_of_study"
-        rules={[{ required: true }]}
-      >
-        <Select
-          placeholder="Domaine d'étude"
-          options={[
-            { value: "humanities", label: "Sciences humaines" },
-            { value: "literature_and_languages", label: "Lettres et langues" },
-            { value: "social_sciences", label: "Sciences sociales" },
-            { value: "law", label: "Droit" },
-            { value: "economics_and_management", label: "Économie et gestion" },
-            { value: "natural_sciences", label: "Sciences exactes" },
-            { value: "mathematics", label: "Mathématiques" },
-            { value: "computer_science", label: "Informatique" },
-            { value: "engineering", label: "Sciences de l’ingénieur" },
-            { value: "health", label: "Santé" },
-            { value: "medicine", label: "Médecine" },
-            { value: "education", label: "Éducation" },
-            { value: "arts", label: "Arts" },
-            { value: "architecture", label: "Architecture" },
-            {
-              value: "environmental_sciences",
-              label: "Sciences de l’environnement",
-            },
-            { value: "agricultural_sciences", label: "Agronomie" },
-          ]}
-        />
-      </Form.Item>
-      <Form.Item
         label="Niveau d'éducation"
         name="education_level"
         rules={[{ required: true }]}
@@ -101,9 +72,48 @@ export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
         <Select
           placeholder="Niveau d'éducation"
           options={[
-            { value: "bachelor", label: "Licence" },
-            { value: "master", label: "Master" },
-            { value: "phd", label: "Doctorat" },
+            { value: "Licence", label: "Licence" },
+            { value: "Master", label: "Master" },
+            { value: "Doctorat", label: "Doctorat" },
+          ]}
+        />
+      </Form.Item>
+      <Form.Item
+        label="Domaine d'étude"
+        name="field_of_study"
+        rules={[{ required: true }]}
+      >
+        <Select
+          placeholder="Domaine d'étude"
+          options={[
+            { value: "Sciences humaines", label: "Sciences humaines" },
+            {
+              value: "Lettres et langues",
+              label: "Lettres et langues",
+            },
+            { value: "Sciences sociales", label: "Sciences sociales" },
+            { value: "Droit", label: "Droit" },
+            {
+              value: "Économie et gestion",
+              label: "Économie et gestion",
+            },
+            { value: "Sciences exactes", label: "Sciences exactes" },
+            { value: "Mathématiques", label: "Mathématiques" },
+            { value: "Informatique", label: "Informatique" },
+            {
+              value: "Sciences de l’ingénieur",
+              label: "Sciences de l’ingénieur",
+            },
+            { value: "Santé", label: "Santé" },
+            { value: "Médecine", label: "Médecine" },
+            { value: "Éducation", label: "Éducation" },
+            { value: "Arts", label: "Arts" },
+            { value: "Architecture", label: "Architecture" },
+            {
+              value: "Sciences de l’environnement",
+              label: "Sciences de l’environnement",
+            },
+            { value: "Agronomie", label: "Agronomie" },
           ]}
         />
       </Form.Item>
@@ -115,24 +125,30 @@ export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
         <Select
           placeholder="Titre académique"
           options={[
-            { value: "bachelor", label: "Licence / Bachelor" },
+            { value: "Licence / Bachelor", label: "Licence / Bachelor" },
             {
-              value: "professional_bachelor",
+              value: "Licence Professionnelle",
               label: "Licence Professionnelle",
             },
-            { value: "master", label: "Master" },
-            { value: "research_master", label: "Master Recherche" },
-            { value: "professional_master", label: "Master Professionnel" },
-            { value: "engineer_degree", label: "Ingénieur diplômé" },
-            { value: "specialized_master", label: "Mastère Spécialisé (MS)" },
-            { value: "mba", label: "MBA (Master of Business Administration)" },
-            { value: "phd", label: "Doctorat / PhD" },
+            { value: "Master", label: "Master" },
+            { value: "Master Recherche", label: "Master Recherche" },
+            { value: "Master Professionnel", label: "Master Professionnel" },
+            { value: "Ingénieur diplômé", label: "Ingénieur diplômé" },
             {
-              value: "professional_doctorate",
+              value: "Mastère Spécialisé (MS)",
+              label: "Mastère Spécialisé (MS)",
+            },
+            {
+              value: "MBA (Master of Business Administration)",
+              label: "MBA (Master of Business Administration)",
+            },
+            { value: "Doctorat / PhD", label: "Doctorat / PhD" },
+            {
+              value: "Doctorat Professionnel",
               label: "Doctorat Professionnel",
             },
             {
-              value: "hdr",
+              value: "Habilitation à diriger des recherches (HDR)",
               label: "Habilitation à diriger des recherches (HDR)",
             },
           ]}
@@ -147,32 +163,47 @@ export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
           placeholder="Grade académique"
           options={[
             {
-              value: "teaching_assistant",
+              value: "Assistant d’enseignement / Moniteur",
               label: "Assistant d’enseignement / Moniteur",
             },
-            { value: "research_assistant", label: "Assistant de recherche" },
             {
-              value: "lecturer",
+              value: "Assistant de recherche",
+              label: "Assistant de recherche",
+            },
+            {
+              value: "Chargé de cours / Chargé d’enseignement",
               label: "Chargé de cours / Chargé d’enseignement",
             },
             {
-              value: "associate_lecturer",
+              value: "Attaché temporaire d’enseignement et de recherche (ATER)",
               label: "Attaché temporaire d’enseignement et de recherche (ATER)",
             },
-            { value: "associate_professor", label: "Maître de conférences" },
-            { value: "full_professor", label: "Professeur des universités" },
-            { value: "emeritus_professor", label: "Professeur émérite" },
             {
-              value: "researcher",
+              value: "Maître de conférences",
+              label: "Maître de conférences",
+            },
+            {
+              value: "Professeur des universités",
+              label: "Professeur des universités",
+            },
+            { value: "Professeur émérite", label: "Professeur émérite" },
+            {
+              value: "Chargé de recherche (CNRS, INRAE, etc.)",
               label: "Chargé de recherche (CNRS, INRAE, etc.)",
             },
-            { value: "senior_researcher", label: "Directeur de recherche" },
-            { value: "doctoral_candidate", label: "Doctorant / Doctorante" },
             {
-              value: "postdoctoral_fellow",
+              value: "Directeur de recherche",
+              label: "Directeur de recherche",
+            },
+            {
+              value: "Doctorant / Doctorante",
+              label: "Doctorant / Doctorante",
+            },
+            {
+              value: "Postdoctorant / Postdoctorante",
               label: "Postdoctorant / Postdoctorante",
             },
-            { value: "adjunct_professor", label: "Professeur associé" },
+            { value: "Professeur associé", label: "Professeur associé" },
           ]}
         />
       </Form.Item>

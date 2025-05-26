@@ -7,13 +7,13 @@ export async function getCouses() {
 }
 
 export async function createCourse(
-  params: Omit<Course, "id" | "faculty"> & { faculty_id?: number }
+  params: Omit<Course, "id" | "faculties"> & { faculties: number[] }
 ) {
   const res = await api.post(`/faculty/available-course/`, {
     name: params.name,
     code: params.code,
     course_type: params.course_type,
-    faculty: params.faculty_id || null,
+    faculties: params.faculties,
   });
   return res.data;
 }
@@ -23,13 +23,13 @@ export async function updateCourse({
   params,
 }: {
   id: number;
-  params: Omit<Course, "id" | "faculty"> & { faculty_id?: number };
+  params: Omit<Course, "id" | "faculties"> & { faculties: number[] };
 }) {
   const res = await api.put(`/faculty/available-course/${id}/`, {
     name: params.name,
     code: params.code,
     course_type: params.course_type,
-    faculty: params.faculty_id || null,
+    faculties: params.faculties,
   });
   return res.data;
 }

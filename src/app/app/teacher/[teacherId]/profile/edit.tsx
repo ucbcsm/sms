@@ -14,6 +14,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Alert,
   Button,
+  Checkbox,
   DatePicker,
   Divider,
   Drawer,
@@ -26,6 +27,7 @@ import {
   theme,
   Typography,
 } from "antd";
+import dayjs from "dayjs";
 import { FC, useState } from "react";
 
 type EditTeacherProfileFormProps = {
@@ -45,7 +47,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const is_permanent_teacher = Form.useWatch('is_permanent_teacher', form);
+  const is_permanent_teacher = Form.useWatch("is_permanent_teacher", form);
   const [editMatricule, setEditMatricule] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
@@ -61,6 +63,10 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           id: Number(teacher.id),
           params: {
             ...values,
+            date_of_birth: dayjs(values.date_of_birth).format("YYYY-MM-DD"),
+            institution_of_origin: values.is_permanent_teacher
+              ? ""
+              : values.institution_of_origin,
             user: {
               id: teacher?.user.id,
               first_name: values.first_name,
@@ -70,6 +76,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               avatar: teacher?.user.avatar,
               matricule: values.matricule,
               pending_avatar: teacher?.user.pending_avatar,
+              is_permanent_teacher: values.is_permanent_teacher,
             },
           },
         },
@@ -176,6 +183,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               (fac) => fac.id
             ),
             is_permanent_teacher: teacher?.user.is_permanent_teacher,
+            date_of_birth: dayjs(`${teacher?.date_of_birth}`, "YYYY-MM-DD"),
           }}
           onFinish={onFinish}
           disabled={isPending}
@@ -213,7 +221,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             label="Type de personnel"
             name="is_permanent_teacher"
             rules={[{ required: true }]}
-            style={{marginTop:24}}
+            style={{ marginTop: 24 }}
           >
             <Radio.Group
               options={[
@@ -224,7 +232,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           </Form.Item>
           {is_permanent_teacher === false && (
             <Form.Item
-              name="origin"
+              name="institution_of_origin"
               label="Origine"
               rules={[{ required: true }]}
             >
@@ -275,13 +283,6 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             />
           </Form.Item>
           <Form.Item
-            label="Nationalité"
-            name="nationality"
-            rules={[{ required: true }]}
-          >
-            <Select placeholder="Nationalité" options={countries} showSearch />
-          </Form.Item>
-          <Form.Item
             label="État civil"
             name="marital_status"
             rules={[{ required: true }]}
@@ -294,6 +295,34 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
                 { value: "widowed", label: "Veuf(ve)" },
               ]}
             />
+          </Form.Item>
+          <Form.Item
+            label="Est-il étranger?"
+            name="is_foreign_country_teacher"
+            valuePropName="checked"
+          >
+            <Checkbox />
+          </Form.Item>
+          <Form.Item
+            label="Nationalité"
+            name="nationality"
+            rules={[{ required: true }]}
+          >
+            <Select placeholder="Nationalité" options={countries} showSearch />
+          </Form.Item>
+          <Form.Item
+            label="Ville ou Térritoire"
+            name="city_or_territory"
+            rules={[{ required: true }]}
+          >
+            <Input placeholder="Ville ou Térritoire" />
+          </Form.Item>
+          <Form.Item
+            label="Adresse"
+            name="address"
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea placeholder="Quartier ou Avenue et No" />
           </Form.Item>
           <Form.Item
             label="Affiliation religieuse"
@@ -345,7 +374,20 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               Etudes et titres académiques
             </Typography.Title>
           </Divider>
-
+          <Form.Item
+            label="Niveau d'éducation"
+            name="education_level"
+            rules={[{ required: true }]}
+          >
+            <Select
+              placeholder="Niveau d'éducation"
+              options={[
+                { value: "Licence", label: "Licence" },
+                { value: "Master", label: "Master" },
+                { value: "Doctorat", label: "Doctorat" },
+              ]}
+            />
+          </Form.Item>
           <Form.Item
             label="Domaine d'étude"
             name="field_of_study"
@@ -354,31 +396,31 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             <Select
               placeholder="Domaine d'étude"
               options={[
-                { value: "humanities", label: "Sciences humaines" },
+                { value: "Sciences humaines", label: "Sciences humaines" },
                 {
-                  value: "literature_and_languages",
+                  value: "Lettres et langues",
                   label: "Lettres et langues",
                 },
-                { value: "social_sciences", label: "Sciences sociales" },
-                { value: "law", label: "Droit" },
+                { value: "Sciences sociales", label: "Sciences sociales" },
+                { value: "Droit", label: "Droit" },
                 {
-                  value: "economics_and_management",
+                  value: "Économie et gestion",
                   label: "Économie et gestion",
                 },
-                { value: "natural_sciences", label: "Sciences exactes" },
-                { value: "mathematics", label: "Mathématiques" },
-                { value: "computer_science", label: "Informatique" },
-                { value: "engineering", label: "Sciences de l’ingénieur" },
-                { value: "health", label: "Santé" },
-                { value: "medicine", label: "Médecine" },
-                { value: "education", label: "Éducation" },
-                { value: "arts", label: "Arts" },
-                { value: "architecture", label: "Architecture" },
+                { value: "Sciences exactes", label: "Sciences exactes" },
+                { value: "Mathématiques", label: "Mathématiques" },
+                { value: "Informatique", label: "Informatique" },
+                { value: "Sciences de l’ingénieur", label: "Sciences de l’ingénieur" },
+                { value: "Santé", label: "Santé" },
+                { value: "Médecine", label: "Médecine" },
+                { value: "Éducation", label: "Éducation" },
+                { value: "Arts", label: "Arts" },
+                { value: "Architecture", label: "Architecture" },
                 {
-                  value: "environmental_sciences",
+                  value: "Sciences de l’environnement",
                   label: "Sciences de l’environnement",
                 },
-                { value: "agricultural_sciences", label: "Agronomie" },
+                { value: "Agronomie", label: "Agronomie" },
               ]}
             />
           </Form.Item>
@@ -390,30 +432,30 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             <Select
               placeholder="Titre académique"
               options={[
-                { value: "bachelor", label: "Licence / Bachelor" },
+                { value: "Licence / Bachelor", label: "Licence / Bachelor" },
                 {
-                  value: "professional_bachelor",
+                  value: "Licence Professionnelle",
                   label: "Licence Professionnelle",
                 },
-                { value: "master", label: "Master" },
-                { value: "research_master", label: "Master Recherche" },
-                { value: "professional_master", label: "Master Professionnel" },
-                { value: "engineer_degree", label: "Ingénieur diplômé" },
+                { value: "Master", label: "Master" },
+                { value: "Master Recherche", label: "Master Recherche" },
+                { value: "Master Professionnel", label: "Master Professionnel" },
+                { value: "Ingénieur diplômé", label: "Ingénieur diplômé" },
                 {
-                  value: "specialized_master",
+                  value: "Mastère Spécialisé (MS)",
                   label: "Mastère Spécialisé (MS)",
                 },
                 {
-                  value: "mba",
+                  value: "MBA (Master of Business Administration)",
                   label: "MBA (Master of Business Administration)",
                 },
-                { value: "phd", label: "Doctorat / PhD" },
+                { value: "Doctorat / PhD", label: "Doctorat / PhD" },
                 {
-                  value: "professional_doctorate",
+                  value: "Doctorat Professionnel",
                   label: "Doctorat Professionnel",
                 },
                 {
-                  value: "hdr",
+                  value: "Habilitation à diriger des recherches (HDR)",
                   label: "Habilitation à diriger des recherches (HDR)",
                 },
               ]}
@@ -428,45 +470,45 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               placeholder="Grade académique"
               options={[
                 {
-                  value: "teaching_assistant",
+                  value: "Assistant d’enseignement / Moniteur",
                   label: "Assistant d’enseignement / Moniteur",
                 },
                 {
-                  value: "research_assistant",
+                  value: "Assistant de recherche",
                   label: "Assistant de recherche",
                 },
                 {
-                  value: "lecturer",
+                  value: "Chargé de cours / Chargé d’enseignement",
                   label: "Chargé de cours / Chargé d’enseignement",
                 },
                 {
-                  value: "associate_lecturer",
+                  value: "Attaché temporaire d’enseignement et de recherche (ATER)",
                   label:
                     "Attaché temporaire d’enseignement et de recherche (ATER)",
                 },
                 {
-                  value: "associate_professor",
+                  value: "Maître de conférences",
                   label: "Maître de conférences",
                 },
                 {
-                  value: "full_professor",
+                  value: "Professeur des universités",
                   label: "Professeur des universités",
                 },
-                { value: "emeritus_professor", label: "Professeur émérite" },
+                { value: "Professeur émérite", label: "Professeur émérite" },
                 {
-                  value: "researcher",
+                  value: "Chargé de recherche (CNRS, INRAE, etc.)",
                   label: "Chargé de recherche (CNRS, INRAE, etc.)",
                 },
-                { value: "senior_researcher", label: "Directeur de recherche" },
+                { value: "Directeur de recherche", label: "Directeur de recherche" },
                 {
-                  value: "doctoral_candidate",
+                  value: "Doctorant / Doctorante",
                   label: "Doctorant / Doctorante",
                 },
                 {
-                  value: "postdoctoral_fellow",
+                  value: "Postdoctorant / Postdoctorante",
                   label: "Postdoctorant / Postdoctorante",
                 },
-                { value: "adjunct_professor", label: "Professeur associé" },
+                { value: "Professeur associé", label: "Professeur associé" },
               ]}
             />
           </Form.Item>

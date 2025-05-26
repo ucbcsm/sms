@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Col, Form, Input, message, Modal, Row, Select } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -10,7 +10,9 @@ import {
 } from "@/lib/api";
 import { Course, Faculty } from "@/types";
 
-type FormDataType = Omit<Course, "id" | "faculty"> & { faculty_id: number };
+type FormDataType = Omit<Course, "id" | "faculties"> & {
+  faculties: number[];
+};
 
 type EditCourseFormProps = {
   course: Course;
@@ -81,7 +83,12 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
             layout="vertical"
             form={form}
             name="edit_course"
-            initialValues={{ faculty_id: course.faculty?.id, ...course }}
+            initialValues={{
+              ...course,
+              faculties: course.faculties.map(
+                (fac) => fac.id
+              ),
+            }}
             onFinish={onFinish}
           >
             {dom}
@@ -130,10 +137,11 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
         >
           <Select options={getCourseTypesAsOptions} />
         </Form.Item>
-        <Form.Item name="faculty_id" label="Pour faculté" rules={[]}>
+        <Form.Item name="faculties" label="Pour facultés" rules={[]}>
           <Select
             placeholder="Sélectionnez une faculté"
             options={getCurrentFacultiesAsOptions(faculties)}
+            mode="multiple"
           />
         </Form.Item>
       </Modal>

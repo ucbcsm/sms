@@ -23,10 +23,7 @@ export async function createTeacher(
     last_name: string;
     surname: string;
     email: string;
-    origin: string;
-    religious_affiliation: string;
-    physical_ability: "normal" | "disabled";
-    avatar:string|null
+    avatar: string | null;
   }
 ) {
   const res = await api.post(`/faculty/teachers/`, params);
@@ -52,8 +49,10 @@ export async function updateTeacher({
       last_name: string;
       surname: string;
       email: string;
-      religious_affiliation: string;
-      physical_ability: "normal" | "disabled";
+      avatar: string | null;
+      matricule: string;
+      is_permanent_teacher: boolean;
+      
     };
   };
 }) {

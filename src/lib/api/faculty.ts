@@ -6,6 +6,11 @@ export async function getFaculties() {
   return res.data.results as Faculty[];
 }
 
+export async function getFaculty(id: number) {
+  const res = await api.get(`/main_config/faculty/${id}/`);
+  return res.data as Faculty;
+}
+
 export async function createFaculty(params: Omit<Faculty, "id"|"field">&{field_id:number}) {
   const res = await api.post(`/main_config/faculty/`, {
     name: params?.name,

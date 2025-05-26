@@ -125,6 +125,11 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
                 children: data?.nationality,
               },
               {
+                key: "stranger",
+                label: "Etranger?",
+                children: data?.is_foreign_country_teacher ? "Oui" : "Non",
+              },
+              {
                 key: "marital_status",
                 label: "État civil",
                 children: getMaritalStatusName(`${data?.marital_status}`),
@@ -132,33 +137,40 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
               {
                 key: "physical_ability",
                 label: "Aptitude physique",
-                children: "",
+                children:
+                  data?.physical_ability === "disabled"
+                    ? "Handicapé"
+                    : "Normal",
               },
               {
                 key: "religious_affiliation",
                 label: "Affiliation religieuse",
-                children: "",
+                children: data?.religious_affiliation || "",
               },
               {
-                key: "lieu_naissance",
+                key: "place_of_birth",
                 label: "Lieu de naissance",
-                children: "",
+                children: data?.place_of_birth || "",
               },
               {
                 key: "date_naissance",
                 label: "Date de naissance",
-                children: "",
+                children:
+                  data?.date_of_birth &&
+                  new Intl.DateTimeFormat("fr", {
+                    dateStyle: "long",
+                  }).format(new Date(`${data?.date_of_birth}`)),
               },
 
               {
-                key: "ville",
+                key: "city",
                 label: "Ville",
-                children: "",
+                children: data?.city_or_territory || "",
               },
               {
-                key: "adresse",
+                key: "address",
                 label: "Adresse",
-                children: "",
+                children: data?.address || "",
               },
             ]}
           />

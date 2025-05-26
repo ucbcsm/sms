@@ -20,7 +20,7 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Dropdown, Input, Select, Space, Table } from "antd";
+import { Button, Dropdown, Input, Select, Space, Table, Tag } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { DeleteCourseForm } from "./forms/delete";
@@ -165,7 +165,13 @@ export const ListCourses = () => {
           key: "faculties",
           dataIndex: "faculties",
           title: "Facultés",
-          render: (_, record, __) => record.faculties.map(faculty=>faculty.acronym).join(', '),
+          render: (_, record, __) =>
+            record.faculties.map((fac) => (
+              <Tag key={fac.id} style={{ border: 0 }}>
+                {fac.acronym}
+              </Tag>
+            )),
+          ellipsis: true,
         },
         {
           key: "course_type",

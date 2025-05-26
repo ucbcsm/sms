@@ -3,6 +3,7 @@ import { useTeacherStepsData } from "@/hooks/use-teacher-steps-data";
 import { createTeacher } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Space, Checkbox, Alert, Radio, Input } from "antd";
+import dayjs from "dayjs";
 import { Options, parseAsBoolean, useQueryState } from "nuqs";
 import { FC } from "react";
 import { z } from "zod";
@@ -19,13 +20,17 @@ const formSchema = z.object({
   certified: z.boolean().refine((val) => val === true, {
     message: "Vous devez certifier que les renseignements sont exacts.",
   }),
+  institution_of_origin: z.string().refine((val) => val !== "", {
+    message:
+      "L'institution d'origine est requise pour les enseignants visiteurs.",
+  }),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
 export const Step3: FC<Props> = ({ setStep }) => {
   const [form] = Form.useForm<FormSchemaType>();
-  const is_permanent_teacher = Form.useWatch('is_permanent_teacher', form);
+  const is_permanent_teacher = Form.useWatch("is_permanent_teacher", form);
   const [newTeacher, setNewTeacher] = useQueryState("new", parseAsBoolean);
   const { data: sdata, removeData } = useTeacherStepsData();
 
@@ -36,7 +41,7 @@ export const Step3: FC<Props> = ({ setStep }) => {
   });
 
   const onFinish = (values: FormSchemaType) => {
-    console.log(sdata)
+    console.log(sdata);
     if (sdata) {
       mutateAsync(
         {
@@ -44,7 +49,9 @@ export const Step3: FC<Props> = ({ setStep }) => {
           assigned_faculties: sdata.assigned_faculties,
           assigned_departements: sdata.assigned_departements,
           gender: sdata.gender,
-          origin: values.is_permanent_teacher?"": sdata.origin,
+          institution_of_origin: values.is_permanent_teacher
+            ? ""
+            : values.institution_of_origin,
           academic_title: sdata.academic_title,
           academic_grade: sdata.academic_grade,
           other_responsabilities: sdata.other_responsabilities,
@@ -60,7 +67,12 @@ export const Step3: FC<Props> = ({ setStep }) => {
           email: sdata.email,
           religious_affiliation: sdata.religious_affiliation,
           physical_ability: sdata.physical_ability,
-          avatar:null
+          avatar: null,
+          place_of_birth: sdata.place_of_birth,
+          date_of_birth: dayjs(sdata.date_of_birth).format("YYYY-MM-DD") ,
+          city_or_territory: sdata.city_or_territory,
+          address: sdata.address,
+          is_foreign_country_teacher: sdata.is_foreign_country_teacher,
         },
         {
           onSuccess: () => {
@@ -93,8 +105,18 @@ export const Step3: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-      {is_permanent_teacher===false && (
-        <Form.Item name="origin" label="Origine" rules={[{ required: true }]}>
+      {is_permanent_teacher === false && (
+        <Form.Item
+          name="institution_of_origin"
+          label="Origine"
+          rules={[
+            {
+              required: true,
+              message:
+                "L'institution d'origine est requise pour les enseignants visiteurs.",
+            },
+          ]}
+        >
           <Input placeholder="Institution d'origine" />
         </Form.Item>
       )}
@@ -141,3 +163,4 @@ export const Step3: FC<Props> = ({ setStep }) => {
     </Form>
   );
 };
+// This code defines a React component for a form step in a teacher registration process.
