@@ -2,10 +2,8 @@
 
 import {
   AppstoreOutlined,
-  EditOutlined,
   MoreOutlined,
   PlusCircleOutlined,
-  PlusOutlined,
   RightOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
@@ -14,9 +12,11 @@ import {
   Button,
   Card,
   Dropdown,
+  Form,
   Layout,
   List,
   Radio,
+  Skeleton,
   Space,
   theme,
   Typography,
@@ -26,6 +26,8 @@ import Link from "next/link";
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getDepartment } from "@/lib/api";
 
 export default function DepartmentLayout({
   children,
@@ -38,6 +40,16 @@ export default function DepartmentLayout({
   const { departmentId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
+
+  const {
+    data: department,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["department", departmentId],
+    queryFn: ({ queryKey }) => getDepartment(Number(queryKey[1])),
+    enabled: !!departmentId,
+  });
 
   return (
     <Layout>
@@ -60,9 +72,15 @@ export default function DepartmentLayout({
         >
           <Space>
             <BackButton />
-            <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Nom du Département
-            </Typography.Title>
+            {!isPending ? (
+              <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                {department?.name} (Département)
+              </Typography.Title>
+            ) : (
+              <Form>
+                <Skeleton.Input active />
+              </Form>
+            )}
           </Space>
           <div className="flex-1" />
           <Space>
@@ -72,11 +90,7 @@ export default function DepartmentLayout({
         <Card
           tabBarExtraContent={
             <Space>
-              
-              <Button
-                type="dashed"
-                title="Programmer un cours"
-              >
+              <Button type="dashed" title="Programmer un cours">
                 Programmer
               </Button>
               <Radio.Group>

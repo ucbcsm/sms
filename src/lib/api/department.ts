@@ -6,6 +6,18 @@ export async function getDepartments() {
   return res.data.results as Department[];
 }
 
+export async function getDepartmentsByFacultyId(facultyId: number) {
+  const res = await api.get(
+    `/main_config/departement/?faculty__id=${facultyId}`
+  );
+  return res.data.results as Department[];
+}
+
+export async function getDepartment(id: number) {
+  const res = await api.get(`/main_config/departement/${id}/`);
+  return res.data as Department;
+}
+
 export async function createDepartment(
   params: Omit<Department, "id" | "faculty"> & { faculty_id: number }
 ) {

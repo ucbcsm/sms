@@ -1,5 +1,10 @@
 "use client";
 
+import { DataFetchErrorResult } from "@/components/errorResult";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { useYid } from "@/hooks/use-yid";
+import { getTeachersByFaculty } from "@/lib/api";
+import { getHSLColor } from "@/lib/utils";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -10,9 +15,28 @@ import {
   PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 
 export default function Page() {
+  const { facultyId } = useParams();
+  const router = useRouter();
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["teachers", facultyId],
+    queryFn: ({ queryKey }) => getTeachersByFaculty(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
+
+  if (isPending) {
+    return <DataFetchPendingSkeleton variant="table" />;
+  }
+
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
+
   return (
     <Table
       title={() => (
@@ -50,116 +74,131 @@ export default function Page() {
           </Space>
         </header>
       )}
-      dataSource={[
-        {
-          key: "1",
-          avatar: "https://i.pravatar.cc/150?img=5",
-          matricule: "T2021001",
-          name: "Prof. Kabasele Mwamba",
-          email: "kabasele.mwamba@example.com",
-          phone: "+243 81 234 5678",
-          courses: ["Mathématiques", "Physique"],
-        },
-        {
-          key: "2",
-          avatar: "https://i.pravatar.cc/150?img=6",
-          matricule: "T2020002",
-          name: "Prof. Mbuyi Tshibanda",
-          email: "mbuyi.tshibanda@example.com",
-          phone: "+243 99 876 5432",
-          courses: ["Chimie", "Biologie"],
-        },
-        {
-          key: "3",
-          avatar: "https://i.pravatar.cc/150?img=7",
-          matricule: "T2022003",
-          name: "Prof. Nzinga Lunda",
-          email: "nzinga.lunda@example.com",
-          phone: "+243 85 112 3344",
-          courses: ["Histoire", "Géographie"],
-        },
-        {
-          key: "4",
-          avatar: "https://i.pravatar.cc/150?img=8",
-          matricule: "T2019004",
-          name: "Prof. Ilunga Kalala",
-          email: "ilunga.kalala@example.com",
-          phone: "+243 97 556 7788",
-          courses: ["Philosophie", "Littérature"],
-        },
-      ]}
+      dataSource={data}
       columns={[
         {
-          title: "Avatar",
+          title: "Photo",
           dataIndex: "avatar",
           key: "avatar",
-          render: (avatar) => <Avatar src={avatar} />,
-          width: 50,
+          render: (_, record, __) => (
+            <Avatar
+              style={{
+                backgroundColor: getHSLColor(
+                  `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                ),
+              }}
+            >
+              {record.user.first_name?.charAt(0).toUpperCase()}
+              {record.user.last_name?.charAt(0).toUpperCase()}
+            </Avatar>
+          ),
+
+          width: 58,
         },
         {
           title: "Matricule",
           dataIndex: "matricule",
           key: "matricule",
+          width: 92,
+          render: (_, record, __) => (
+            <Link href={`/app/teacher/${record.id}`}>
+              {record.user.matricule.padStart(6,"0")}
+            </Link>
+          ),
+          align: "center",
         },
         {
-          title: "Nom",
-          dataIndex: "name",
+          title: "Noms",
+          dataIndex: "lastname",
           key: "name",
+          render: (_, record, __) => (
+            <Link href={`/app/teacher/${record.id}`}>
+              {record.user.first_name} {record.user.last_name}{" "}
+              {record.user.surname}
+            </Link>
+          ),
+          ellipsis: true,
+        },
+        {
+          title: "Sexe",
+          dataIndex: "gender",
+          key: "gender",
+          width: 58,
+          render: (value) => value,
+          align: "center",
         },
         {
           title: "Email",
           dataIndex: "email",
           key: "email",
+          render: (_, record, __) => record.user.email || "",
+          ellipsis: true,
         },
         {
           title: "Téléphone",
-          dataIndex: "phone",
-          key: "phone",
+          dataIndex: "phone_number_1",
+          key: "phone_number_1",
+          render: (value) => `${value}`,
+          ellipsis: true,
         },
         {
-          title: "Cours",
-          dataIndex: "courses",
-          key: "courses",
-          render: (_, record) => (
-            <Space wrap>
-              {record.courses.map((course, index) => (
-                <Tag
-                  color="blue"
-                  key={index}
-                  bordered={false}
-                  style={{ borderRadius: 10 }}
-                >
-                  {course}
-                </Tag>
-              ))}
-            </Space>
+          title: "Catégorie",
+          dataIndex: "category",
+          key: "category",
+          render: (_, record, __) =>
+            record.user.is_permanent_teacher ? "Permanent" : "Visiteur",
+          ellipsis: true,
+        },
+
+        {
+          title: "Statut",
+          dataIndex: "status",
+          key: "status",
+          render: (_, record, __) => (
+            <Tag
+              color={record.user.is_active ? "green" : "red"}
+              style={{ border: 0, width: "100%" }}
+            >
+              {record.user.is_active ? "Actif" : "Inactif"}
+            </Tag>
           ),
-          align: "start",
+          width: 80,
         },
         {
-          title: "",
           key: "actions",
-          render: (_, record) => (
+          title: "Actions",
+          dataIndex: "actions",
+          width: 120,
+          render: (_, record, __) => (
             <Space>
-              <Button style={{ boxShadow: "none" }}>Gérer</Button>
+              <Button
+                type="dashed"
+                onClick={() => router.push(`/app/teacher/${record.id}`)}
+                style={{ boxShadow: "none" }}
+              >
+                Gérer
+              </Button>
               <Dropdown
                 menu={{
                   items: [
-                    { key: "1", label: "Modifier", icon: <EditOutlined /> },
-                    {
-                      key: "2",
-                      label: "Supprimer",
-                      danger: true,
-                      icon: <DeleteOutlined />,
-                    },
+                    // {
+                    //   key: "edit",
+                    //   label: "Modifier",
+                    //   icon: <EditOutlined />,
+                    // },
+                    // {
+                    //   key: "delete",
+                    //   label: "Supprimer",
+                    //   danger: true,
+                    //   icon: <DeleteOutlined />,
+                    // },
                   ],
                 }}
               >
-                <Button icon={<MoreOutlined />} type="text" />
+                <Button type="text" icon={<MoreOutlined />} />
               </Dropdown>
             </Space>
           ),
-          width: 50,
         },
       ]}
       rowKey="key"

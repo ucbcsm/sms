@@ -156,7 +156,7 @@ export function ListTeachers() {
             width: 92,
             render: (_, record, __) => (
               <Link href={`/app/teacher/${record.id}`}>
-                {record.user.matricule}
+                {record.user.matricule.padStart(6,"0")}
               </Link>
             ),
             align: "center",

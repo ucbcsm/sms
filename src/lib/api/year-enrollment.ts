@@ -1,10 +1,34 @@
 import api from "@/lib/fetcher";
 import { Enrollment } from "@/types";
 
-export async function getYearEnrollments() {
-  const res = await api.get(`/apparitorat/year-enrollment/`);
+export async function getYearEnrollments(yearId: number) {
+  const res = await api.get(
+    `/apparitorat/year-enrollment/?academic_year__id=${yearId}`
+  );
   return res.data.results as Enrollment[];
 }
+
+export async function getYearEnrollmentsByFacultyId(
+  yearId: number,
+  facultyId: number
+) {
+  const res = await api.get(
+    `/apparitorat/year-enrollment/?academic_year__id=${yearId}&faculty__id=${facultyId}`
+  );
+  return res.data.results as Enrollment[];
+}
+
+export async function getYearEnrollmentsByDepatmentId(
+  yearId: number,
+  depatmentId: number
+) {
+ const res = await api.get(
+    `/apparitorat/year-enrollment/?academic_year__id=${yearId}&departement__id=${depatmentId}`
+  );
+  return res.data.results as Enrollment[];
+
+}
+
 
 export async function getYearEnrollment(id: number) {
   const res = await api.get(`/apparitorat/year-enrollment/${id}`);

@@ -6,6 +6,11 @@ export async function getCouses() {
   return res.data.results as Course[];
 }
 
+export async function getCoursesByFacultyId(facultyId: number) {
+  const res = await api.get(`/faculty/available-course/?faculties__id=${facultyId}`);
+  return res.data.results as Course[];
+}
+
 export async function createCourse(
   params: Omit<Course, "id" | "faculties"> & { faculties: number[] }
 ) {

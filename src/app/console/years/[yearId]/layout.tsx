@@ -36,6 +36,7 @@ export default function YearLayout({
   const { data: year, isPending } = useQuery({
     queryKey: ["year", yearId],
     queryFn: async ({ queryKey }) => getYearById(Number(queryKey[1])),
+    enabled:!!yearId
   });
 
   return (

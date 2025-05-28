@@ -232,7 +232,7 @@ export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
       <Form.Item
         label="Autres responsabilités/Charge administrative"
         name="other_responsabilities"
-        rules={[{ required: false }]}
+        rules={[]}
       >
         <Input.TextArea placeholder="Autres responsabilités/Charge administrative" />
       </Form.Item>

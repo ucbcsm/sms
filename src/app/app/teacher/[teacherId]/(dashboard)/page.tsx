@@ -1,5 +1,6 @@
 "use client";
 
+import { DataFetchErrorResult } from "@/components/errorResult";
 import { getTeacher } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -26,62 +27,14 @@ export default function Page() {
     queryFn: ({ queryKey }) => getTeacher(Number(queryKey[1])),
     enabled: !!teacherId,
   });
+
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
+
   return (
     <Row gutter={24}>
-      <Col span={6}>
-        <Card loading={isPending}>
-          <Descriptions
-            title="Info professionnelles"
-            column={1}
-            items={[
-               {
-                key: "education_level",
-                label: "Niveau d'étude",
-                children: teacher?.education_level,
-              },
-              {
-                key: "departement",
-                label: "Domaine d'étude",
-                children: teacher?.field_of_study,
-              },
-              {
-                key: "specialisation",
-                label: "Titre académique",
-                children: teacher?.academic_title,
-              },
-              {
-                key: "experience",
-                label: "Grade académique",
-                children: teacher?.academic_grade,
-              },
-              {
-                key: "experience",
-                label: "Facultés assignées",
-                children: teacher?.assigned_faculties
-                  .map((fac) => fac.name)
-                  .join(", "),
-              },
-              {
-                key: "experience",
-                label: "Départements assignés",
-                children: teacher?.assigned_departements
-                  .map((dep) => dep.name)
-                  .join(", "),
-              },
-              {
-                key: "experience",
-                label: "Autres responsabilités",
-                children: teacher?.other_responsabilities,
-              },
-              {
-                key: "origin",
-                label: "Origine",
-                children: teacher?.origin,
-              },
-            ]}
-          />
-        </Card>
-      </Col>
+     
       <Col span={18}>
         <Row gutter={[24, 24]}>
           <Col span={8}>
@@ -135,6 +88,60 @@ export default function Page() {
             </Card>
           </Col>
         </Row>
+      </Col>
+       <Col span={6}>
+        <Card loading={isPending}>
+          <Descriptions
+            title="Info professionnelles"
+            column={1}
+            items={[
+              {
+                key: "education_level",
+                label: "Niveau d'étude",
+                children: teacher?.education_level,
+              },
+              {
+                key: "departement",
+                label: "Domaine d'étude",
+                children: teacher?.field_of_study,
+              },
+              {
+                key: "specialisation",
+                label: "Titre académique",
+                children: teacher?.academic_title,
+              },
+              {
+                key: "experience",
+                label: "Grade académique",
+                children: teacher?.academic_grade,
+              },
+              {
+                key: "experience",
+                label: "Facultés assignées",
+                children: teacher?.assigned_faculties
+                  .map((fac) => fac.name)
+                  .join(", "),
+              },
+              {
+                key: "experience",
+                label: "Départements assignés",
+                children: teacher?.assigned_departements
+                  .map((dep) => dep.name)
+                  .join(", "),
+              },
+              {
+                key: "experience",
+                label: "Autres responsabilités",
+                children: teacher?.other_responsabilities,
+              },
+              {
+                key: "origin",
+                label: "Origine",
+                children: teacher?.institution_of_origin,
+              },
+            ]}
+          />
+        </Card>
       </Col>
     </Row>
   );

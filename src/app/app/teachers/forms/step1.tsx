@@ -83,14 +83,14 @@ export const Step1: FC<Props> = ({ setStep }) => {
       <Form.Item
         label="Lieu de naissance"
         name="place_of_birth"
-        rules={[{ required: true }]}
+        rules={[]}
       >
         <Input placeholder="Lieu de naissance" />
       </Form.Item>
       <Form.Item
         label="Date de naissance"
         name="date_of_birth"
-        rules={[{ required: true }]}
+        rules={[]}
       >
         <DatePicker
           placeholder="DD/MM/YYYY"
@@ -115,11 +115,11 @@ export const Step1: FC<Props> = ({ setStep }) => {
       <Form.Item
         label="Ville ou Térritoire"
         name="city_or_territory"
-        rules={[{ required: true }]}
+        rules={[]}
       >
         <Input placeholder="Ville/Térritoire" />
       </Form.Item>
-      <Form.Item label="Adresse" name="address" rules={[{ required: true }]}>
+      <Form.Item label="Adresse" name="address" rules={[]}>
         <Input.TextArea placeholder="Quartier ou Avenue et No" />
       </Form.Item>
       <Form.Item
@@ -155,7 +155,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-      <Form.Item label="Email" name="email" rules={[{ required: true }]}>
+      <Form.Item label="Email" name="email" rules={[{ required: true, type:"email" }]}>
         <Input placeholder="Email" />
       </Form.Item>
       <Form.Item

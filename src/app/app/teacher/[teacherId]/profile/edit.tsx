@@ -410,7 +410,10 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
                 { value: "Sciences exactes", label: "Sciences exactes" },
                 { value: "Mathématiques", label: "Mathématiques" },
                 { value: "Informatique", label: "Informatique" },
-                { value: "Sciences de l’ingénieur", label: "Sciences de l’ingénieur" },
+                {
+                  value: "Sciences de l’ingénieur",
+                  label: "Sciences de l’ingénieur",
+                },
                 { value: "Santé", label: "Santé" },
                 { value: "Médecine", label: "Médecine" },
                 { value: "Éducation", label: "Éducation" },
@@ -439,7 +442,10 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
                 },
                 { value: "Master", label: "Master" },
                 { value: "Master Recherche", label: "Master Recherche" },
-                { value: "Master Professionnel", label: "Master Professionnel" },
+                {
+                  value: "Master Professionnel",
+                  label: "Master Professionnel",
+                },
                 { value: "Ingénieur diplômé", label: "Ingénieur diplômé" },
                 {
                   value: "Mastère Spécialisé (MS)",
@@ -482,7 +488,8 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
                   label: "Chargé de cours / Chargé d’enseignement",
                 },
                 {
-                  value: "Attaché temporaire d’enseignement et de recherche (ATER)",
+                  value:
+                    "Attaché temporaire d’enseignement et de recherche (ATER)",
                   label:
                     "Attaché temporaire d’enseignement et de recherche (ATER)",
                 },
@@ -499,7 +506,10 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
                   value: "Chargé de recherche (CNRS, INRAE, etc.)",
                   label: "Chargé de recherche (CNRS, INRAE, etc.)",
                 },
-                { value: "Directeur de recherche", label: "Directeur de recherche" },
+                {
+                  value: "Directeur de recherche",
+                  label: "Directeur de recherche",
+                },
                 {
                   value: "Doctorant / Doctorante",
                   label: "Doctorant / Doctorante",

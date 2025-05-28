@@ -22,17 +22,19 @@ import {
   Select,
   Space,
   Table,
-  TableColumnType,
   Tag,
 } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useYid } from "@/hooks/use-yid";
 
 export function StudentsList() {
   const router = useRouter();
+  const { yid } = useYid();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["year_enrollments"],
-    queryFn: getYearEnrollments,
+    queryKey: ["year_enrollments", `${yid}`],
+    queryFn: ({ queryKey }) => getYearEnrollments(Number(queryKey[1])),
+    enabled: !!yid,
   });
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
@@ -95,7 +97,7 @@ export function StudentsList() {
       columns={[
         {
           title: "Photo",
-          dataIndex: "firstname",
+          dataIndex: "avatar",
           key: "image",
           render: (value, record) => (
             <Avatar

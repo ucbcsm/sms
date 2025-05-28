@@ -18,3 +18,4 @@ export * from "./enrollment-question";
 export * from "./test-course"
 export * from "./student-info"
 export * from "./teacher"
+export * from "./taught-course"

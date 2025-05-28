@@ -128,8 +128,9 @@ export default function FacultyLayout({
               key: `/app/faculty/${facultyId}/departments`,
               label: "Départements",
             },
+            { key: `/app/faculty/${facultyId}/taught-courses`, label: "Cours" },
             { key: `/app/faculty/${facultyId}/classes`, label: "Promotions" },
-            { key: `/app/faculty/${facultyId}/courses`, label: "Cours" },
+            { key: `/app/faculty/${facultyId}/courses`, label: "Catalogue des cours" },
             { key: `/app/faculty/${facultyId}/teachers`, label: "Enseignants" },
           ]}
           defaultActiveTabKey={pathname}

@@ -241,6 +241,35 @@ export const Course = z.object({
 
 export type Course = z.infer<typeof Course>;
 
+export const TeachingUnit = z.object({
+  id: z.number(),
+  name: z.string(),
+  code: z.string(),
+  category: z.enum(["required", "optional", "free", "transversal"]),
+});
+
+export type TeachingUnit = z.infer<typeof TeachingUnit>;
+
+export const TaughtCourse = z.object({
+  id: z.number(),
+  teacher: Teacher.nullable(),
+  academic_year: Year.nullable(),
+  teaching_unit: TeachingUnit.nullable(),
+  period: Period.nullable(),
+  available_course: Course,
+  faculty: Faculty,
+  departement: Department,
+  credit_count: z.number().nullable(),
+  theoretical_hours: z.number().nullable(),
+  practical_hours: z.number().nullable(),
+  max_value: z.number().nullable(),
+  start_date: z.date().nullable(),
+  end_date: z.date().nullable(),
+  status: z.enum(["pending", "progress", "finished", "suspended"]).nullable(),
+});
+
+export type TaughtCourse = z.infer<typeof TaughtCourse>;
+
 export const Enrollment = z.object({
   id: z.number(),
   user: User,

@@ -1,5 +1,8 @@
 "use client";
 
+import { DataFetchErrorResult } from "@/components/errorResult";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { getDepartmentsByFacultyId } from "@/lib/api";
 import {
     DeleteOutlined,
     DownOutlined,
@@ -9,11 +12,29 @@ import {
     MoreOutlined,
     PrinterOutlined,
 } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import { Button, Dropdown, Input, Space, Table} from "antd";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 export default function Page() {
     const router =useRouter()
+    const {facultyId}=useParams()
+    
+    const { data, isPending, isError } = useQuery({
+    queryKey: ["departments", facultyId],
+    queryFn: ({ queryKey }) =>
+      getDepartmentsByFacultyId(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
+
+   if (isPending) {
+     return <DataFetchPendingSkeleton variant="table" />;
+   }
+
+   if (isError) {
+     return <DataFetchErrorResult />;
+   }
+
     return (
         <Table
             title={() => (
@@ -51,36 +72,7 @@ export default function Page() {
                     </Space>
                 </header>
             )}
-            dataSource={[
-                {
-                    key: "1",
-                    name: "Informatique",
-                    head: "Dr. Alice Dupont",
-                    programs: 6,
-                    students: 400,
-                },
-                {
-                    key: "2",
-                    name: "Mathématiques",
-                    head: "Dr. Jean Martin",
-                    programs: 6,
-                    students: 250,
-                },
-                {
-                    key: "3",
-                    name: "Physique",
-                    head: "Dr. Clara Bernard",
-                    programs: 6,
-                    students: 300,
-                },
-                {
-                    key: "4",
-                    name: "Chimie",
-                    head: "Dr. Pierre Durand",
-                    programs: 6,
-                    students: 150,
-                },
-            ]}
+            dataSource={data}
             columns={[
                 {
                     title: "Nom du département",

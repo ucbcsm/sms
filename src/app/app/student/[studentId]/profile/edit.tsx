@@ -1,6 +1,7 @@
 "use client";
 
 import { Palette } from "@/components/palette";
+import { useYid } from "@/hooks/use-yid";
 import {
   formatAdmissionTestResultsForEdition,
   formatApplicationDocumentsForEdition,
@@ -51,6 +52,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
     token: { colorPrimary },
   } = theme.useToken();
   const [open, setOpen] = useState<boolean>(false);
+  const { yid } = useYid();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [editMatricule, setEditMatricule] = useState<boolean>(false);
@@ -93,7 +95,9 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
         },
         {
           onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["year_enrollments"] });
+            queryClient.invalidateQueries({
+              queryKey: ["year_enrollments", `${yid}`],
+            });
             queryClient.invalidateQueries({
               queryKey: ["enrollment", `${data.id}`],
             });

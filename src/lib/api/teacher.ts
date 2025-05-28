@@ -7,6 +7,11 @@ export async function getTeachers() {
   return res.data.results as Teacher[];
 }
 
+export async function getTeachersByFaculty(facultyId:number) {
+  const res = await api.get(`/faculty/teachers/?assigned_faculties__id=${facultyId}`);
+  return res.data.results as Teacher[];
+}
+
 export async function getTeacher(id: number) {
   const res = await api.get(`/faculty/teachers/${id}/`);
   return res.data as Teacher;

@@ -1,5 +1,6 @@
 "use client";
 
+import { DataFetchErrorResult } from "@/components/errorResult";
 import { getYearEnrollment } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -27,6 +28,11 @@ export default function Page() {
     queryFn: ({ queryKey }) => getYearEnrollment(Number(queryKey[1])),
     enabled: !!studentId,
   });
+
+  if (isError) {
+      return <DataFetchErrorResult />;
+    }
+
   return (
     <Row gutter={24}>
       <Col span={18}>
