@@ -59,8 +59,8 @@
 
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/available-course
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/course-student-assignation
-// https://ciucbc.pythonanywhere.com/api/v01/faculty/teaching-unit
-// https://ciucbc.pythonanywhere.com/api/v01/faculty/taught-course
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/teaching-unit "OK"
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/taught-course "OK"
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/departement-program/
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/course-program/
 

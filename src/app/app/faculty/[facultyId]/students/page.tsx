@@ -6,6 +6,7 @@ import { useYid } from "@/hooks/use-yid";
 import { getYearEnrollmentsByFacultyId } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
 import {
+  AppstoreOutlined,
   DeleteOutlined,
   DownOutlined,
   EditOutlined,
@@ -13,9 +14,19 @@ import {
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Input,
+  Radio,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
@@ -72,6 +83,14 @@ export default function Page() {
                 Exporter
               </Button>
             </Dropdown>
+            <Radio.Group>
+              <Radio.Button value="grid">
+                <AppstoreOutlined />
+              </Radio.Button>
+              <Radio.Button value="list">
+                <UnorderedListOutlined />
+              </Radio.Button>
+            </Radio.Group>
           </Space>
         </header>
       )}
@@ -123,7 +142,7 @@ export default function Page() {
           dataIndex: "promotion",
           render: (_, record, __) => `${record.class_year.acronym}`,
           key: "class",
-          width:86,
+          width: 86,
           ellipsis: true,
         },
         {

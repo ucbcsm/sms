@@ -7,8 +7,10 @@ export async function getTeachers() {
   return res.data.results as Teacher[];
 }
 
-export async function getTeachersByFaculty(facultyId:number) {
-  const res = await api.get(`/faculty/teachers/?assigned_faculties__id=${facultyId}`);
+export async function getTeachersByFaculty(facultyId: number) {
+  const res = await api.get(
+    `/faculty/teachers/?assigned_faculties__id=${facultyId}`
+  );
   return res.data.results as Teacher[];
 }
 
@@ -57,7 +59,6 @@ export async function updateTeacher({
       avatar: string | null;
       matricule: string;
       is_permanent_teacher: boolean;
-      
     };
   };
 }) {
@@ -67,4 +68,14 @@ export async function updateTeacher({
   });
   await updateUser({ id: params.user.id, params: { ...params.user } });
   return res.data;
+}
+
+export function getTeachersAsOptions(teachers?: Teacher[]) {
+  return teachers?.map((teacher) => {
+    return {
+      value: teacher.id,
+      label: `${teacher.user.first_name} ${teacher.user.last_name} ${teacher.user.surname} (${teacher.user.matricule})`,
+      disabled: !teacher.user.is_active,
+    };
+  });
 }

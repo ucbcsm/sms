@@ -246,6 +246,9 @@ export const TeachingUnit = z.object({
   name: z.string(),
   code: z.string(),
   category: z.enum(["required", "optional", "free", "transversal"]),
+  departement:Department.nullable(),
+  cycle:Cycle.nullable(),
+  credit_count:z.number().nullable(),
 });
 
 export type TeachingUnit = z.infer<typeof TeachingUnit>;

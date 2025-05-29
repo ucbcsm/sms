@@ -44,6 +44,12 @@ export async function deleteCourse(id: number) {
   return res.data;
 }
 
+export function getCoursesAsOptions(courses?: Course[]) {
+  return courses?.map((course) => {
+    return { value: course.id, label: course.name };
+  });
+}
+
 export const getCourseTypesAsOptions = [
   { value: "theoretical", label: "Théorique" },
   { value: "practical", label: "Pratique" },

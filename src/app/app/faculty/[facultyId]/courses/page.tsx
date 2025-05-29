@@ -4,22 +4,42 @@ import { DeleteCourseForm } from "@/app/console/courses/forms/delete";
 import { EditCourseForm } from "@/app/console/courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getCoursesByFacultyId, getCourseTypeName } from "@/lib/api";
+import {
+  getCoursesByFacultyId,
+  getCourseTypeName,
+  getCycles,
+  getDepartmentsByFacultyId,
+  getFaculties,
+  getFaculty,
+} from "@/lib/api";
 import { Course, Faculty } from "@/types";
 import {
-    DeleteOutlined,
-    DownOutlined,
-    EditOutlined,
-    FileExcelOutlined,
-    FilePdfOutlined,
-    MoreOutlined,
-    PlusOutlined,
-    PrinterOutlined,
+  DeleteOutlined,
+  DownOutlined,
+  EditOutlined,
+  FileExcelOutlined,
+  FilePdfOutlined,
+  MoreOutlined,
+  PlusOutlined,
+  PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Input,
+  List,
+  Row,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
+import { ListTeachingUnits } from "./teaching-units/list";
+import { NewCourseForm } from "@/app/console/courses/forms/new";
 
 type ActionsBarProps = {
   record: Course;
@@ -74,107 +94,116 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
 };
 
 export default function Page() {
-    const {facultyId}=useParams()
-     const { data, isPending, isError } = useQuery({
+  const { facultyId } = useParams();
+  const { data, isPending, isError } = useQuery({
     queryKey: ["courses", facultyId],
-    queryFn: ({ queryKey }) =>
-      getCoursesByFacultyId(Number(queryKey[1])),
+    queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
     enabled: !!facultyId,
   });
 
-   if (isPending) {
-     return <DataFetchPendingSkeleton variant="table" />;
-   }
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
 
-   if (isError) {
-     return <DataFetchErrorResult />;
-   }
-    return (
-      <Table
-        title={() => (
-          <header className="flex pb-3">
-            <Space>
-              <Input.Search placeholder="Rechercher un cours dans le catalogue ..." />
-            </Space>
-            <div className="flex-1" />
-            <Space>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                style={{ boxShadow: "none" }}
-              >
-                Ajouter
-              </Button>
-              <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
-                Imprimer
-              </Button>
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: "pdf",
-                      label: "PDF",
-                      icon: <FilePdfOutlined />,
-                      title: "Exporter en PDF",
-                    },
-                    {
-                      key: "excel",
-                      label: "EXCEL",
-                      icon: <FileExcelOutlined />,
-                      title: "Exporter vers Excel",
-                    },
-                  ],
-                }}
-              >
-                <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                  Exporter
+  if (isPending) {
+    return <DataFetchPendingSkeleton variant="table" />;
+  }
+
+  if (isError) {
+    return <DataFetchErrorResult />;
+  }
+  return (
+    <Row gutter={[24, 24]}>
+      <Col>
+        <Table
+          title={() => (
+            <header className="flex pb-3">
+              <Space>
+                <Input.Search placeholder="Rechercher un cours dans le catalogue ..." />
+              </Space>
+              <div className="flex-1" />
+              <Space>
+                <NewCourseForm
+                  faculties={faculties?.filter(
+                    (fac) => fac.id === Number(facultyId)
+                  )}
+                />
+                <Button
+                  icon={<PrinterOutlined />}
+                  style={{ boxShadow: "none" }}
+                >
+                  Imprimer
                 </Button>
-              </Dropdown>
-            </Space>
-          </header>
-        )}
-        dataSource={data}
-        columns={[
-          {
-            title: "Titre du cours",
-            dataIndex: "title",
-            key: "title",
-            render: (_, record, __) => record.name,
-          },
-          {
-            title: "Code",
-            dataIndex: "code",
-            key: "code",
-            width:100,
-          },
-          {
-            title: "Nature",
-            dataIndex: "course_type",
-            key: "type",
-            render: (_, record, __) =>getCourseTypeName(record.course_type),
-            // width:100,
-            ellipsis:true
-          },
-          {
-            title: "",
-            key: "actions",
-            render: (_, record, __) => {
-              return <ActionsBar record={record} />;
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: "pdf",
+                        label: "PDF",
+                        icon: <FilePdfOutlined />,
+                        title: "Exporter en PDF",
+                      },
+                      {
+                        key: "excel",
+                        label: "EXCEL",
+                        icon: <FileExcelOutlined />,
+                        title: "Exporter vers Excel",
+                      },
+                    ],
+                  }}
+                >
+                  <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
+                    Exporter
+                  </Button>
+                </Dropdown>
+              </Space>
+            </header>
+          )}
+          dataSource={data}
+          columns={[
+            {
+              title: "Titre du cours",
+              dataIndex: "title",
+              key: "title",
+              render: (_, record, __) => record.name,
             },
-            width: 50,
-          },
-        ]}
-        rowKey="key"
-        rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-        rowSelection={{
-          type: "checkbox",
-        }}
-        size="small"
-        pagination={{
-          defaultPageSize: 25,
-          pageSizeOptions: [25, 50, 75, 100],
-          size: "small",
-        }}
-      />
-    );
+            {
+              title: "Code",
+              dataIndex: "code",
+              key: "code",
+              width: 100,
+            },
+            {
+              title: "Nature",
+              dataIndex: "course_type",
+              key: "type",
+              render: (_, record, __) => getCourseTypeName(record.course_type),
+              // width:100,
+              ellipsis: true,
+            },
+            {
+              title: "",
+              key: "actions",
+              render: (_, record, __) => {
+                return <ActionsBar record={record} faculties={faculties?.filter(fac=>fac.id===Number(facultyId))} />;
+              },
+              width: 50,
+            },
+          ]}
+          rowKey="key"
+          rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+          rowSelection={{
+            type: "checkbox",
+          }}
+          size="small"
+          pagination={{
+            defaultPageSize: 25,
+            pageSizeOptions: [25, 50, 75, 100],
+            size: "small",
+          }}
+        />
+      </Col>
+    </Row>
+  );
 }

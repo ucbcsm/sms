@@ -16,9 +16,20 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import {
+  Avatar,
+  Button,
+  Col,
+  Dropdown,
+  Input,
+  Row,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
+import { ListStaffOfficer } from "./staff";
 
 export default function Page() {
   const { facultyId } = useParams();
@@ -102,7 +113,7 @@ export default function Page() {
           width: 92,
           render: (_, record, __) => (
             <Link href={`/app/teacher/${record.id}`}>
-              {record.user.matricule.padStart(6,"0")}
+              {record.user.matricule.padStart(6, "0")}
             </Link>
           ),
           align: "center",

@@ -28,7 +28,8 @@ import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getFaculty } from "@/lib/api";
+import { getCycles, getDepartmentsByFacultyId, getFaculty } from "@/lib/api";
+import { ListTeachingUnits } from "./courses/teaching-units/list";
 
 export default function FacultyLayout({
   children,
@@ -50,6 +51,16 @@ export default function FacultyLayout({
     queryFn: ({ queryKey }) => getFaculty(Number(queryKey[1])),
     enabled: !!facultyId,
   });
+
+  const { data: cycles } = useQuery({
+        queryKey: ["cycles"],
+        queryFn: getCycles,
+      });
+   const { data: departments } = useQuery({
+       queryKey: ["departments", facultyId],
+       queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
+       enabled: !!facultyId,
+     });
 
   return (
     <Layout>
@@ -88,36 +99,6 @@ export default function FacultyLayout({
           </Space>
         </Layout.Header>
         <Card
-          tabBarExtraContent={
-            <Space>
-              <Button
-                type="dashed"
-                title="Programmer un cours"
-                style={{ boxShadow: "none" }}
-              >
-                Programmer
-              </Button>
-              <Radio.Group>
-                <Radio.Button value="grid">
-                  <AppstoreOutlined />
-                </Radio.Button>
-                <Radio.Button value="list">
-                  <UnorderedListOutlined />
-                </Radio.Button>
-              </Radio.Group>
-              <Dropdown
-                menu={{
-                  items: [
-                    { key: "1", label: "Action 1" },
-                    { key: "2", label: "Action 2" },
-                    { key: "3", label: "Action 3" },
-                  ],
-                }}
-              >
-                <Button icon={<MoreOutlined />} />
-              </Dropdown>
-            </Space>
-          }
           tabList={[
             {
               key: `/app/faculty/${facultyId}`,
@@ -128,9 +109,14 @@ export default function FacultyLayout({
               key: `/app/faculty/${facultyId}/departments`,
               label: "Départements",
             },
-            { key: `/app/faculty/${facultyId}/taught-courses`, label: "Cours" },
-            { key: `/app/faculty/${facultyId}/classes`, label: "Promotions" },
-            { key: `/app/faculty/${facultyId}/courses`, label: "Catalogue des cours" },
+            {
+              key: `/app/faculty/${facultyId}/taught-courses`,
+              label: "Cours programmés",
+            },
+            {
+              key: `/app/faculty/${facultyId}/courses`,
+              label: "Catalogue des cours",
+            },
             { key: `/app/faculty/${facultyId}/teachers`, label: "Enseignants" },
           ]}
           defaultActiveTabKey={pathname}
@@ -162,66 +148,7 @@ export default function FacultyLayout({
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <Card
-          variant="borderless"
-          title="Personnel"
-          style={{ boxShadow: "none" }}
-          extra={
-            <Button
-              type="link"
-              icon={<PlusCircleOutlined />}
-              title="Ajouter un membre du personnel"
-            >
-              Ajouter
-            </Button>
-          }
-        >
-          <List
-            dataSource={[
-              {
-                id: "1",
-                name: "Dr. Alfred L.",
-                role: "Responsable",
-              },
-              {
-                id: "2",
-                name: "Mme. Sophie K.",
-                role: "Secrétaire académique",
-              },
-              {
-                id: "3",
-                name: "M. Jean P.",
-                role: "Chargé des finances",
-              },
-              {
-                id: "4",
-                name: "Mme. Claire T.",
-                role: "Coordonnatrice des cours",
-              },
-              {
-                id: "5",
-                name: "M. David M.",
-                role: "Technicien informatique",
-              },
-            ]}
-            renderItem={(item, index) => (
-              <List.Item
-                key={item.id}
-                extra={<Button type="text" icon={<RightOutlined />} />}
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-                    />
-                  }
-                  title={<Link href="#">{item.name}</Link>}
-                  description={item.role}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
+        <ListTeachingUnits cycles={cycles} departments={departments}/>
       </Layout.Sider>
     </Layout>
   );

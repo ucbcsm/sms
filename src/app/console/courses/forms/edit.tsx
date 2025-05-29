@@ -9,6 +9,7 @@ import {
   getCurrentFacultiesAsOptions,
 } from "@/lib/api";
 import { Course, Faculty } from "@/types";
+import { filterOption } from "@/lib/utils";
 
 type FormDataType = Omit<Course, "id" | "faculties"> & {
   faculties: number[];
@@ -137,11 +138,13 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
         >
           <Select options={getCourseTypesAsOptions} />
         </Form.Item>
-        <Form.Item name="faculties" label="Pour facultés" rules={[]}>
+        <Form.Item name="faculties" label="Pour facultés" rules={[{required:true}]}>
           <Select
             placeholder="Sélectionnez une faculté"
+            showSearch
             options={getCurrentFacultiesAsOptions(faculties)}
             mode="multiple"
+            filterOption={filterOption}
           />
         </Form.Item>
       </Modal>

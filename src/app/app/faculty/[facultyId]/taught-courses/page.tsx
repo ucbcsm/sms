@@ -1,18 +1,29 @@
 "use client";
 
-import { DeleteCourseForm } from "@/app/console/courses/forms/delete";
-import { EditCourseForm } from "@/app/console/courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import {
-  getCourseTypeName,
+  getCoursesByFacultyId,
+  getDepartmentsByFacultyId,
+  getFaculties,
+  getPeriods,
   getTaughtCoursesByFacultyId,
+  getTeachersByFaculty,
+  getTeachingUnitsByfaculty,
   getYearStatusColor,
   getYearStatusName,
 } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
-import { Faculty, TaughtCourse } from "@/types";
+import {
+  Course,
+  Department,
+  Faculty,
+  Period,
+  TaughtCourse,
+  Teacher,
+  TeachingUnit,
+} from "@/types";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -20,37 +31,69 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
-  PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
-import { record } from "zod";
+import { NewTaughtCourseForm } from "./forms/new";
+import { DeleteTaughtCourseForm } from "./forms/delete";
+import { EditTaughtCourseForm } from "./forms/edit";
+import { useRouter } from "next/navigation";
 
 type ActionsBarProps = {
   record: TaughtCourse;
+  taughtCourse: TaughtCourse | null;
+  departments?: Department[];
   faculties?: Faculty[];
+  courses?: Course[];
+  teachers?: Teacher[];
+  periods?: Period[];
+  teachingUnits?: TeachingUnit[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
+const ActionsBar: FC<ActionsBarProps> = ({
+  record,
+  faculties,
+  departments,
+  periods,
+  teachers,
+  teachingUnits,
+  courses,
+}) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const router = useRouter();
+  const { facultyId } = useParams();
 
   return (
     <Space size="middle">
-      {/* <EditCourseForm
-        course={record}
+      <EditTaughtCourseForm
+        taughtCourse={record}
         faculties={faculties}
+        departments={departments}
+        periods={periods}
+        teachers={teachers}
+        courses={courses}
+        teachingUnits={teachingUnits}
         open={openEdit}
         setOpen={setOpenEdit}
       />
-      <DeleteCourseForm
-        course={record}
+      <DeleteTaughtCourseForm
+        taughtCourse={record}
         open={openDelete}
         setOpen={setOpenDelete}
-      /> */}
+      />
+      <Button
+        type="dashed"
+        style={{ boxShadow: "none" }}
+        onClick={() =>
+          router.push(`/app/faculty/${facultyId}/taught-courses/${record.id}`)
+        }
+      >
+        Gérer
+      </Button>
       <Dropdown
         menu={{
           items: [
@@ -91,6 +134,40 @@ export default function Page() {
     enabled: !!yid && !!facultyId,
   });
 
+  const { data: courses } = useQuery({
+    queryKey: ["courses", facultyId],
+    queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ["departments", facultyId],
+    queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
+
+  const { data: teachers } = useQuery({
+    queryKey: ["teachers", facultyId],
+    queryFn: ({ queryKey }) => getTeachersByFaculty(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
+
+  const { data: periods } = useQuery({
+    queryKey: ["periods"],
+    queryFn: getPeriods,
+  });
+
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const { data: teachingUnits } = useQuery({
+    queryKey: ["teaching-units", facultyId],
+    queryFn: ({ queryKey }) => getTeachingUnitsByfaculty(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
+
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
@@ -98,7 +175,7 @@ export default function Page() {
   if (isError) {
     return <DataFetchErrorResult />;
   }
-  console.log(data);
+
   return (
     <Table
       title={() => (
@@ -108,13 +185,21 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <Button
+            <NewTaughtCourseForm
+              faculties={faculties}
+              teachingUnits={teachingUnits}
+              periods={periods}
+              courses={courses}
+              departments={departments}
+              teachers={teachers}
+            />
+            {/* <Button
               type="primary"
               icon={<PlusOutlined />}
               style={{ boxShadow: "none" }}
             >
               Ajouter
-            </Button>
+            </Button> */}
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -159,6 +244,14 @@ export default function Page() {
           width: 100,
         },
         {
+          title: "UE",
+          dataIndex: "teaching_unit",
+          key: "teaching_unit",
+          width: 50,
+          render: (_, record, __) => record?.teaching_unit?.code,
+          ellipsis: true,
+        },
+        {
           title: "Crédits",
           dataIndex: "credits",
           key: "credits",
@@ -167,21 +260,31 @@ export default function Page() {
           render: (_, record, __) => record.credit_count,
         },
         {
-          title: "Heures théorique",
-          dataIndex: "hours",
+          title: "Heures",
           key: "hours",
-          //   width: 68,
-          render: (_, record, __) => record.theoretical_hours,
-          ellipsis: true,
-        },
-        {
-          title: "Heures pratique",
           dataIndex: "hours",
-          key: "hours",
-          //   width: 68,
-          render: (_, record, __) => record.practical_hours,
-          ellipsis: true,
+          render: (_, record, __) =>
+            `${
+              Number(record.theoretical_hours) + Number(record.practical_hours)
+            }`,
+            width:64
         },
+        // {
+        //   title: "Heures théorique",
+        //   dataIndex: "theoretical_hours",
+        //   key: "theoretical_hours",
+        //   //   width: 68,
+        //   render: (_, record, __) => record.theoretical_hours,
+        //   ellipsis: true,
+        // },
+        // {
+        //   title: "Heures pratique",
+        //   dataIndex: "practical_hours",
+        //   key: "practical_hours",
+        //   //   width: 68,
+        //   render: (_, record, __) => record.practical_hours,
+        //   ellipsis: true,
+        // },
         {
           title: "Date de début",
           dataIndex: "start_date",
@@ -222,7 +325,7 @@ export default function Page() {
           dataIndex: "period",
           key: "period",
           render: (_, record, __) => record.period?.acronym,
-          width: 100,
+          width: 64,
           ellipsis: true,
         },
         {
@@ -231,16 +334,18 @@ export default function Page() {
           key: "teacher",
           render: (_, record, __) => (
             <Space>
-              <Avatar
-                style={{
-                  backgroundColor: getHSLColor(
-                    `${record.teacher?.user.first_name} ${record.teacher?.user.last_name} ${record.teacher?.user.surname}`
-                  ),
-                }}
-              >
-                {record.teacher?.user.first_name?.charAt(0).toUpperCase()}
-                {record.teacher?.user.last_name?.charAt(0).toUpperCase()}
-              </Avatar>{" "}
+              {record.teacher && (
+                <Avatar
+                  style={{
+                    backgroundColor: getHSLColor(
+                      `${record.teacher?.user.first_name} ${record.teacher?.user.last_name} ${record.teacher?.user.surname}`
+                    ),
+                  }}
+                >
+                  {record.teacher?.user.first_name?.charAt(0).toUpperCase()}
+                  {record.teacher?.user.last_name?.charAt(0).toUpperCase()}
+                </Avatar>
+              )}{" "}
               {record.teacher?.user.surname}
             </Space>
           ),
@@ -265,9 +370,20 @@ export default function Page() {
           title: "",
           key: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} />;
+            return (
+              <ActionsBar
+                record={record}
+                taughtCourse={record}
+                faculties={faculties}
+                departments={departments}
+                courses={courses}
+                periods={periods}
+                teachers={teachers}
+                teachingUnits={teachingUnits}
+              />
+            );
           },
-          width: 50,
+          width: 120,
         },
       ]}
       rowKey="key"

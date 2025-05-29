@@ -19,7 +19,7 @@ import { useParams, useRouter } from "next/navigation";
 export default function Page() {
     const router =useRouter()
     const {facultyId}=useParams()
-    
+
     const { data, isPending, isError } = useQuery({
     queryKey: ["departments", facultyId],
     queryFn: ({ queryKey }) =>
@@ -79,33 +79,33 @@ export default function Page() {
                     dataIndex: "name",
                     key: "name",
                 },
-                {
-                    title: "Programmes",
-                    dataIndex: "programs",
-                    key: "programs",
-                },
-                {
-                    title: "Etudiants",
-                    dataIndex: "students",
-                    key: "students",
-                    align: "end",
-                },
+                // {
+                //     title: "Programmes",
+                //     dataIndex: "programs",
+                //     key: "programs",
+                // },
+                // {
+                //     title: "Etudiants",
+                //     dataIndex: "students",
+                //     key: "students",
+                //     align: "end",
+                // },
                 {
                     title: "Actions",
                     key: "actions",
                     render: (_, record) => (
                         <Space>
-                            <Button style={{ boxShadow: "none" }} onClick={()=>{router.push(`/app/department/1`)}}>Voir détails</Button>
+                            <Button style={{ boxShadow: "none" }} onClick={()=>{router.push(`/app/department/1`)}}>Gérer</Button>
                             <Dropdown
                                 menu={{
                                     items: [
-                                        { key: "1", label: "Modifier", icon: <EditOutlined /> },
-                                        {
-                                            key: "2",
-                                            label: "Supprimer",
-                                            danger: true,
-                                            icon: <DeleteOutlined />,
-                                        },
+                                        // { key: "1", label: "Modifier", icon: <EditOutlined /> },
+                                        // {
+                                        //     key: "2",
+                                        //     label: "Supprimer",
+                                        //     danger: true,
+                                        //     icon: <DeleteOutlined />,
+                                        // },
                                     ],
                                 }}
                             >

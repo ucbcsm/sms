@@ -46,6 +46,16 @@ export const getMaritalStatusName = (
   }
 };
 
+export const filterOption = (
+  input: string,
+  option:
+    | {
+        value: number;
+        label: string;
+      }
+    | undefined
+) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
+
 
 export function percentageFormatter(value: number) {
   return new Intl.NumberFormat("fr", {
