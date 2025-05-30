@@ -273,6 +273,30 @@ export const TaughtCourse = z.object({
 
 export type TaughtCourse = z.infer<typeof TaughtCourse>;
 
+
+export const DepartmentProgram = z.object({
+  id: z.number(),
+  departement: Department,
+  courses_of_program: z.array(CourseProgram),
+  name: z.string(),
+  credit_count: z.number().nullable(),
+  duration: z.number().nullable(),
+  description: z.string().nullable(),
+});
+
+export type DepartmentProgram = z.infer<typeof DepartmentProgram>;
+
+export const CourseProgram = z.object({
+  id: z.number(),
+  theoretical_hours: z.number().nullable(),
+  practical_hours: z.number().nullable(),
+  credit_count: z.number().nullable(),
+  max_value: z.number().nullable(),
+  available_course: Course.nullable(),
+});
+
+export type CourseProgram = z.infer<typeof CourseProgram>;
+
 export const Enrollment = z.object({
   id: z.number(),
   user: User,

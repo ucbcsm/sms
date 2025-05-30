@@ -90,28 +90,9 @@ export default function DepartmentLayout({
         <Card
           tabBarExtraContent={
             <Space>
-              <Button type="dashed" title="Programmer un cours">
-                Programmer
+              <Button type="dashed" title="Programmer un cours" style={{boxShadow:"none"}}>
+                Programmer un cours
               </Button>
-              <Radio.Group>
-                <Radio.Button value="grid">
-                  <AppstoreOutlined />
-                </Radio.Button>
-                <Radio.Button value="list">
-                  <UnorderedListOutlined />
-                </Radio.Button>
-              </Radio.Group>
-              <Dropdown
-                menu={{
-                  items: [
-                    { key: "1", label: "Action 1" },
-                    { key: "2", label: "Action 2" },
-                    { key: "3", label: "Action 3" },
-                  ],
-                }}
-              >
-                <Button icon={<MoreOutlined />} />
-              </Dropdown>
             </Space>
           }
           tabList={[

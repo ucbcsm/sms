@@ -1,5 +1,5 @@
 import api from "@/lib/fetcher";
-import { Course } from "@/types";
+import { Course, CourseProgram } from "@/types";
 
 export async function getCouses() {
   const res = await api.get(`/faculty/available-course/`);
@@ -49,6 +49,7 @@ export function getCoursesAsOptions(courses?: Course[]) {
     return { value: course.id, label: course.name };
   });
 }
+
 
 export const getCourseTypesAsOptions = [
   { value: "theoretical", label: "Théorique" },
