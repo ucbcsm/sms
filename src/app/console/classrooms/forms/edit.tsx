@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { Classroom } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getClassroomsAsOptions, updateClassroom } from "@/lib/api";
+import { getRoomsTypeAsOptions, updateClassroom } from "@/lib/api";
 
 type FormDataType = Omit<Classroom, "id">;
 
@@ -136,7 +136,7 @@ export const EditClassroomForm: React.FC<EditClassroomFormProps> = ({
             >
               <Select
                 placeholder="Sélectionnez un type"
-                options={getClassroomsAsOptions}
+                options={getRoomsTypeAsOptions}
               />
             </Form.Item>
           </Col>

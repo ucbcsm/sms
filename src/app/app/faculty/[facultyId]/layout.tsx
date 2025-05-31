@@ -1,28 +1,14 @@
 "use client";
-
 import {
-  AppstoreOutlined,
-  MoreOutlined,
-  PlusCircleOutlined,
-  RightOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
-import {
-  Avatar,
-  Button,
   Card,
-  Dropdown,
   Form,
   Layout,
-  List,
-  Radio,
   Skeleton,
   Space,
   theme,
   Typography,
 } from "antd";
 
-import Link from "next/link";
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";

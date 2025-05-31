@@ -26,6 +26,7 @@ import {
   Teacher,
   TeachingUnit,
   TaughtCourse,
+  Classroom,
 } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -36,6 +37,7 @@ import {
   getCurrentPeriodsAsOptions,
   getTeachersAsOptions,
   getTeachingUnitsAsOptions,
+  getClassroomsAsOptionsWithDisabled,
 } from "@/lib/api";
 import { Palette } from "@/components/palette";
 import dayjs from "dayjs";
@@ -52,6 +54,7 @@ type EditTaughtCourseFormProps = {
   teachers?: Teacher[];
   periods?: Period[];
   teachingUnits?: TeachingUnit[];
+  classrooms?: Classroom[];
 };
 
 export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
@@ -64,6 +67,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
   teachers,
   periods,
   teachingUnits,
+  classrooms,
 }) => {
   const {
     token: { colorPrimary },
@@ -96,6 +100,8 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
         end_date: taughtCourse.end_date ? dayjs(taughtCourse.end_date) : null,
         teacher_id: taughtCourse.teacher?.id,
         status: taughtCourse.status,
+        assistants: taughtCourse.assistants?.map((a) => a.id),
+        class_room_id: taughtCourse.class_room?.id,
       });
     } else {
       form.resetFields();
@@ -166,7 +172,16 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
               onFinish={onFinish}
               disabled={isPending}
             >
-              <Form.Item name="available_course_id" label="Cours" rules={[]}>
+              <Form.Item
+                name="available_course_id"
+                label="Cours"
+                rules={[
+                  {
+                    required: true,
+                    message: "Veuillez sélectionner un cours.",
+                  },
+                ]}
+              >
                 <Select
                   options={getCoursesAsOptions(courses)}
                   allowClear
@@ -304,12 +319,32 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
               <Form.Item name="teacher_id" label="Enseignant" rules={[]}>
                 <Select
                   options={getTeachersAsOptions(teachers)}
-                allowClear
+                  allowClear
                   showSearch
                   filterOption={filterOption}
                 />
               </Form.Item>
-              <Form.Item name="status" label="Statut">
+              <Form.Item name="assistants" label="Assistants" rules={[]}>
+                <Select
+                  options={getTeachersAsOptions(teachers)}
+                  showSearch
+                  filterOption={filterOption}
+                  mode="multiple"
+                />
+              </Form.Item>
+              <Form.Item
+                name="class_room_id"
+                label="Salle de classe"
+                rules={[]}
+              >
+                <Select
+                  options={getClassroomsAsOptionsWithDisabled(classrooms)}
+                  showSearch
+                  filterOption={filterOption}
+                  allowClear
+                />
+              </Form.Item>
+              <Form.Item name="status" label="Statut du cours">
                 <Select
                   options={[
                     { value: "pending", label: "En attente" },

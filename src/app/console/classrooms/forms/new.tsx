@@ -16,7 +16,7 @@ import {
 import { PlusOutlined } from "@ant-design/icons";
 import { Classroom } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClassroom, getClassroomsAsOptions } from "@/lib/api";
+import { createClassroom, getRoomsTypeAsOptions } from "@/lib/api";
 
 type FormDataType = Omit<Classroom, "id">;
 
@@ -135,7 +135,7 @@ export const NewClassroomForm: React.FC = () => {
           >
             <Select
             placeholder="Sélectionnez un type"
-            options={getClassroomsAsOptions}
+            options={getRoomsTypeAsOptions}
             />
           </Form.Item>
             </Col>

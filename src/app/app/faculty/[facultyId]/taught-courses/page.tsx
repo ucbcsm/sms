@@ -4,6 +4,7 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import {
+  getClassrooms,
   getCoursesByFacultyId,
   getDepartmentsByFacultyId,
   getFaculties,
@@ -16,6 +17,7 @@ import {
 } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
 import {
+  Classroom,
   Course,
   Department,
   Faculty,
@@ -51,6 +53,7 @@ type ActionsBarProps = {
   teachers?: Teacher[];
   periods?: Period[];
   teachingUnits?: TeachingUnit[];
+  classrooms?: Classroom[];
 };
 
 const ActionsBar: FC<ActionsBarProps> = ({
@@ -61,11 +64,11 @@ const ActionsBar: FC<ActionsBarProps> = ({
   teachers,
   teachingUnits,
   courses,
+  classrooms,
 }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const router = useRouter();
-  const { facultyId } = useParams();
 
   return (
     <Space size="middle">
@@ -77,6 +80,7 @@ const ActionsBar: FC<ActionsBarProps> = ({
         teachers={teachers}
         courses={courses}
         teachingUnits={teachingUnits}
+        classrooms={classrooms}
         open={openEdit}
         setOpen={setOpenEdit}
       />
@@ -88,9 +92,7 @@ const ActionsBar: FC<ActionsBarProps> = ({
       <Button
         type="dashed"
         style={{ boxShadow: "none" }}
-        onClick={() =>
-          router.push(`/app/faculty/${facultyId}/taught-courses/${record.id}`)
-        }
+        onClick={() => router.push(`/app/taught-course/${record.id}`)}
       >
         Gérer
       </Button>
@@ -168,6 +170,11 @@ export default function Page() {
     enabled: !!facultyId,
   });
 
+  const { data: classrooms } = useQuery({
+    queryKey: ["classrooms"],
+    queryFn: getClassrooms,
+  });
+
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
@@ -192,6 +199,7 @@ export default function Page() {
               courses={courses}
               departments={departments}
               teachers={teachers}
+              classrooms={classrooms}
             />
             {/* <Button
               type="primary"
@@ -267,7 +275,7 @@ export default function Page() {
             `${
               Number(record.theoretical_hours) + Number(record.practical_hours)
             }`,
-            width:64
+          width: 64,
         },
         // {
         //   title: "Heures théorique",
@@ -380,6 +388,7 @@ export default function Page() {
                 periods={periods}
                 teachers={teachers}
                 teachingUnits={teachingUnits}
+                classrooms={classrooms}
               />
             );
           },

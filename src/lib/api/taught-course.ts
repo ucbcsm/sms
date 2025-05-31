@@ -12,6 +12,11 @@ export async function getTaughtCoursesByFacultyId(
   return res.data.results as TaughtCourse[];
 }
 
+export async function getTaughtCours(taughtCourseId: number) {
+  const res = await api.get(`/faculty/taught-course/${taughtCourseId}/`);
+  return res.data as TaughtCourse;
+}
+
 export async function createTaughtCourse(
   data: Omit<
     TaughtCourse,
@@ -23,6 +28,8 @@ export async function createTaughtCourse(
     | "available_course"
     | "faculty"
     | "departement"
+    | "class_room"
+    | "assistants"
   > & {
     teacher_id?: number;
     academic_year_id: number;
@@ -31,6 +38,8 @@ export async function createTaughtCourse(
     available_course_id: number;
     faculty_id: number;
     department_id: number;
+    class_room_id?: number;
+    assistants?: number[];
   }
 ) {
   const res = await api.post("/faculty/taught-course/", {
@@ -50,6 +59,8 @@ export async function createTaughtCourse(
       : null,
     end_date: data.end_date ? dayjs(data.end_date).format("YYYY-MM-DD") : null,
     status: data.status || "pending",
+    class_room: data.class_room_id || null,
+    assistants: data.assistants || [],
   });
 
   return res.data as TaughtCourse;
@@ -72,6 +83,8 @@ export async function updateTaughtCourse(
     | "available_course"
     | "faculty"
     | "departement"
+    | "class_room"
+    | "assistants"
   > & {
     teacher_id?: number;
     academic_year_id: number;
@@ -80,6 +93,8 @@ export async function updateTaughtCourse(
     available_course_id: number;
     faculty_id: number;
     department_id: number;
+    class_room_id?: number;
+    assistants?: number[];
   }
 ) {
   const res = await api.put(`/faculty/taught-course/${id}/`, {
@@ -99,6 +114,8 @@ export async function updateTaughtCourse(
       : null,
     end_date: data.end_date ? dayjs(data.end_date).format("YYYY-MM-DD") : null,
     status: data.status || "pending",
+    class_room: data.class_room_id || null,
+    assistants: data.assistants || [],
   });
   return res.data;
 }

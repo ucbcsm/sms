@@ -53,7 +53,7 @@ export async function deleteClassroom(id: number) {
   return res.data;
 }
 
-export const getClassroomsAsOptions=[
+export const getRoomsTypeAsOptions = [
   { value: "amphitheater", label: "Amphithéâtre" },
   { value: "classroom", label: "Salle de cours" },
   { value: "laboratory", label: "Laboratoire" },
@@ -62,7 +62,23 @@ export const getClassroomsAsOptions=[
   { value: "chapel", label: "Chapelle" },
   { value: "office", label: "Bureau" },
   { value: "other", label: "Autre" },
-]
+];
+
+export function getClassroomsAsOptions(classrooms?: Classroom[]) {
+  return classrooms?.map((classroom) => {
+    return { value: classroom.id, label: classroom.name };
+  });
+}
+
+export function getClassroomsAsOptionsWithDisabled(classrooms?: Classroom[]) {
+  return classrooms?.map((classroom) => {
+    return {
+      value: classroom.id,
+      label: classroom.name,
+      disabled: classroom.status === "occupied",
+    };
+  });
+}
 
 export function getClassroomTypeName(
   type:
@@ -94,5 +110,3 @@ export function getClassroomTypeName(
       return "Inconnu";
   }
 }
-
-

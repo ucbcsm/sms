@@ -22,6 +22,7 @@ import { parseAsBoolean, useQueryState } from "nuqs";
 
 import { CloseOutlined, UserAddOutlined } from "@ant-design/icons";
 import {
+  Classroom,
   Course,
   Department,
   Faculty,
@@ -32,6 +33,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createTaughtCourse,
+  getClassroomsAsOptionsWithDisabled,
   getCoursesAsOptions,
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
@@ -50,6 +52,7 @@ type NewTaughtCourseFormProps = {
   teachers?: Teacher[];
   periods?: Period[];
   teachingUnits?: TeachingUnit[];
+  classrooms?: Classroom[];
 };
 
 export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
@@ -59,6 +62,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
   teachers,
   periods,
   teachingUnits,
+  classrooms,
 }) => {
   const {
     token: { colorPrimary },
@@ -333,7 +337,27 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   filterOption={filterOption}
                 />
               </Form.Item>
-              <Form.Item name="status" label="Statut">
+              <Form.Item name="assistants" label="Assistants" rules={[]}>
+                <Select
+                  options={getTeachersAsOptions(teachers)}
+                  showSearch
+                  filterOption={filterOption}
+                  mode="multiple"
+                />
+              </Form.Item>
+              <Form.Item
+                name="class_room_id"
+                label="Salle de classe"
+                rules={[]}
+              >
+                <Select
+                  options={getClassroomsAsOptionsWithDisabled(classrooms)}
+                  showSearch
+                  filterOption={filterOption}
+                  allowClear
+                />
+              </Form.Item>
+              <Form.Item name="status" label="Statut du cours">
                 <Select
                   options={[
                     { value: "pending", label: "En attente" },

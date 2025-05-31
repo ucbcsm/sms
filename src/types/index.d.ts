@@ -256,6 +256,8 @@ export type TeachingUnit = z.infer<typeof TeachingUnit>;
 export const TaughtCourse = z.object({
   id: z.number(),
   teacher: Teacher.nullable(),
+  assistants: z.array(Teacher).nullable(),
+  class_room: Classroom.nullable(),
   academic_year: Year.nullable(),
   teaching_unit: TeachingUnit.nullable(),
   period: Period.nullable(),
