@@ -14,7 +14,7 @@ import {
 
 import { Button, Descriptions, Space, Tag } from "antd";
 import { FC, useState } from "react";
-import { getCourseTypeName, getYearStatusName } from "@/lib/api";
+import { getCourseTypeName, getTeachingUnitCategoryName, getYearStatusName } from "@/lib/api";
 import { EditOutlined } from "@ant-design/icons";
 import { EditTaughtCourseForm } from "@/app/app/faculty/[facultyId]/taught-courses/forms/edit";
 
@@ -102,6 +102,48 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
                 label: "Faculté",
                 children: data?.faculty.name || "",
               },
+              {
+                key: "classroom",
+                label: "Salle de classe",
+                children: `${data?.class_room?.name} ${
+                  data?.class_room?.code && `(${data?.class_room?.code})`}`,
+              },
+            ]}
+          />
+          <Descriptions
+            title="Équipe pédagogique"
+            column={1}
+            items={[
+              {
+                key: "teacher",
+                label: "Enseignant principal",
+                children: `${data.teacher?.user.first_name} ${data.teacher?.user.last_name} ${data.teacher?.user.surname}`,
+              },
+              {
+                key:"academic_title",
+                label:"Titre académique",
+                children:data.teacher?.academic_title
+              },
+              {
+                key: "email",
+                label: "Email",
+                children: data.teacher?.user.email || "",
+              },
+              {
+                key:"phone_number_1",
+                label: "Téléphone 1",
+                children: data.teacher?.phone_number_1 || "",
+              },
+               {
+                key:"phone_number_2",
+                label: "Téléphone 2",
+                children: data.teacher?.phone_number_2 || "",
+              },
+              {
+                key: "assistants",
+                label: "Assistants",
+                children: data.assistants?.map((ass) => `${ass.user.surname}, `),
+              },
             ]}
           />
           <Descriptions
@@ -163,6 +205,11 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
                 children: `${data.teaching_unit?.name} ${
                   data.teaching_unit?.code && `(${data.teaching_unit?.code})`
                 }`,
+              },
+               {
+                key: "teaching_unit_category",
+                label: "Catgorie UE",
+                children: getTeachingUnitCategoryName(data.teaching_unit?.category!),
               },
               {
                 key: "start_date",
