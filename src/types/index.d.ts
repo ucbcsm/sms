@@ -295,6 +295,25 @@ export const HourTracking = z.object({
 
 export type HourTracking = z.infer<typeof HourTracking>;
 
+export const AttendanceList = z.object({
+  id: z.number(),
+  course: TaughtCourse,
+  verified_by: User,
+  student_attendance_status: z.array(AttendanceListItem),
+  date: z.date(),
+  time: z.string().time(),
+});
+
+export type AttendanceList = z.infer<typeof AttendanceList>;
+
+export const AttendanceListItem = z.object({
+  id: z.number(),
+  student: PeriodEnrollment,
+  status: z.enum(["present", "absent", "justified"]),
+  note: z.string().nullable(),
+});
+
+export type AttendanceListItem = z.infer<typeof AttendanceListItem>;
 
 export const DepartmentProgram = z.object({
   id: z.number(),
@@ -336,6 +355,16 @@ export const Enrollment = z.object({
 });
 
 export type Enrollment = z.infer<typeof Enrollment>;
+
+export const PeriodEnrollment = z.object({
+  id: z.number(),
+  year_enrollment: Enrollment,
+  period: Period,
+  date_of_enrollment: z.string().date(),
+  status: z.enum(["validated", "pending", "rejected"]),
+});
+
+export type PeriodEnrollment = z.infer<typeof PeriodEnrollment>;
 
 export const House = z.object({
   id: z.number(),

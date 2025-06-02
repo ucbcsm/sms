@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 import {
   Button,
   Col,
@@ -28,7 +28,7 @@ import dayjs from "dayjs";
 type EditHourTrackingFormProps = {
   hourTracking: HourTracking;
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 type FormDataType = Omit<HourTracking, "id" | "course"> & {

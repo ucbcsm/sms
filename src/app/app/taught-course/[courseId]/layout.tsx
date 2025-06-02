@@ -175,7 +175,7 @@ export default function FacultyLayout({
             router.push(key);
           }}
           tabBarExtraContent={
-            <Space>
+            !isPending?<Space>
               <Typography.Text type="secondary">Statut:</Typography.Text>
               <Tag
                 color={getYearStatusColor(course?.status!)}
@@ -183,7 +183,7 @@ export default function FacultyLayout({
               >
                 {getYearStatusName(course?.status!)}
               </Tag>
-            </Space>
+            </Space>:<Skeleton.Input active/>
           }
         >
           {children}

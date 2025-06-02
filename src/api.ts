@@ -64,7 +64,7 @@
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/course-program/ "OK"
 
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/teachers "OK"
-// https://ciucbc.pythonanywhere.com/api/v01/faculty/hour-record
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/hour-record "OK"
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/course-student-assignation
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/physical-attendance-check
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/student-attendance-status

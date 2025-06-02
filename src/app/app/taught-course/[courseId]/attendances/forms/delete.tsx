@@ -2,21 +2,21 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Form, Input, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteHourTracking } from "@/lib/api";
-import { HourTracking } from "@/types";
+import { deleteAttendanceList } from "@/lib/api";
+import { AttendanceList } from "@/types";
 
 type FormDataType = {
   validate: string;
 };
 
-type DeleteHourTrackingFormProps = {
-  hourTracking: HourTracking;
+type DeleteAttendanceListFormProps = {
+  attendanceList: AttendanceList;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
-  hourTracking,
+export const DeleteAttendanceListForm: FC<DeleteAttendanceListFormProps> = ({
+  attendanceList,
   open,
   setOpen,
 }) => {
@@ -24,31 +24,25 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: deleteHourTracking,
+    mutationFn: deleteAttendanceList,
   });
 
   const onFinish = (values: FormDataType) => {
-    
-    const dateStr =
-      typeof hourTracking.date === "string" ? hourTracking.date : "";
-
-    if (values.validate === dateStr) {
-      mutateAsync(hourTracking.id, {
+    if (values.validate === `${attendanceList.date}`) {
+      mutateAsync(attendanceList.id, {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["course_hours_tracking"] });
-          messageApi.success("Suivi d'heures supprimé avec succès !");
+          queryClient.invalidateQueries({ queryKey: ["attendances-lists"] });
+          messageApi.success("Liste de présence supprimée avec succès !");
           setOpen(false);
         },
         onError: () => {
           messageApi.error(
-            "Une erreur s'est produite lors de la suppression du suivi d'heures."
+            "Une erreur s'est produite lors de la suppression de la liste de présence."
           );
         },
       });
     } else {
-      messageApi.error(
-        "La date saisie ne correspond pas à celle du suivi sélectionné."
-      );
+      messageApi.error("Le nom saisi ne correspond pas à la liste de présence.");
     }
   };
 
@@ -57,7 +51,7 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
       {contextHolder}
       <Modal
         open={open}
-        title="Suppression"
+        title={`Suppression de la liste de présence du ${new Intl.DateTimeFormat('fr-FR',{dateStyle:"long"} ).format(new Date(attendanceList.date))}`}
         centered
         okText="Supprimer"
         cancelText="Annuler"
@@ -81,7 +75,7 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
           <Form
             form={form}
             layout="vertical"
-            name="delete_hour_tracking_form"
+            name="delete_attendance_list_form"
             onFinish={onFinish}
             disabled={isPending}
             initialValues={{ enabled: true }}
@@ -93,26 +87,25 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
         <Alert
           message="Attention"
           description={
-            <>
-              Êtes-vous sûr de vouloir supprimer le suivi d'heures du{" "}
-              <b>{`${hourTracking.date}`}</b> pour le cours{" "}
+             <>
+              Êtes-vous sûr de vouloir supprimer la liste de présence du{" "}
+              <b>{`${attendanceList.date}`}</b> pour le cours{" "}
               <b>
-                {hourTracking.course?.available_course.name || ""}
+                {attendanceList.course?.available_course.name || ""}
               </b>
               ? Cette action est irréversible.
-            </>
-          }
+            </>}
           type="warning"
           showIcon
           style={{ border: 0 }}
         />
         <Form.Item
           name="validate"
-          label={`Veuillez saisir la date du suivi (YYYY-MM-DD) pour confirmer.`}
+          label="Veuillez saisir la date de la liste (YYYY-MM-DD) pour confirmer."
           rules={[{ required: true }]}
           style={{ marginTop: 24 }}
         >
-          <Input placeholder={`${hourTracking.date}`} />
+          <Input placeholder={`${attendanceList.date}`} />
         </Form.Item>
       </Modal>
     </>

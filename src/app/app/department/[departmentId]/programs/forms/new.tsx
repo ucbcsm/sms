@@ -241,7 +241,6 @@ export const NewDepartmentProgramForm: FC<NewDepartmentProgramFormProps> = ({
                   removerCourseRecord={removeCourseRecord}
                   editCourseRecord={editCourseRecord}
                   courses={courses}
-                  
                 />
               </Card>
             </Col>
@@ -317,7 +316,7 @@ export const NewDepartmentProgramForm: FC<NewDepartmentProgramFormProps> = ({
                             loading={isPending}
                             style={{ boxShadow: "none" }}
                           >
-                            Créer le programme
+                            Sauvegarder
                           </Button>
                         </Space>
                       </Form.Item>

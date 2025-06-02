@@ -92,7 +92,7 @@ export default function Page() {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <DatePicker placeholder="Date" />
+            <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY"  />
           </Space>
           <div className="flex-1" />
           <Space>
