@@ -150,23 +150,23 @@ export default function FacultyLayout({
             },
             {
               key: `/app/taught-course/${courseId}/students`,
-              label: "Étudiants",
+              label: "Étudiants inscrits",
             },
             {
-              key: `/app/taught-course/${courseId}/departments`,
-              label: "Présences",
+              key: `/app/taught-course/${courseId}/attendances`,
+              label: "Listes des présences",
             },
             {
-              key: `/app/taught-course/${courseId}/taught-courses`,
-              label: "Suivi des heures",
+              key: `/app/taught-course/${courseId}/hours-tracking`,
+              label: "Suivis des heures",
             },
             {
-              key: `/app/taught-course/${courseId}/courses`,
-              label: "Notes",
+              key: `/app/taught-course/${courseId}/assessments`,
+              label: "Notes (TD/TP & Examens)",
             },
             {
-              key: `/app/taught-course/${courseId}/teachers`,
-              label: "Evaluations",
+              key: `/app/taught-course/${courseId}/course-evaluations`,
+              label: "Evaluations du cours",
             },
           ]}
           defaultActiveTabKey={pathname}

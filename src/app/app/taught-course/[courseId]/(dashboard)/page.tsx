@@ -6,8 +6,10 @@ import {
   getClassrooms,
   getCoursesByFacultyId,
   getCourseTypeName,
+  getCumulativeHours,
   getDepartmentsByFacultyId,
   getFaculties,
+  getHoursTrackings,
   getPeriods,
   getTaughtCours,
   getTeachersByFaculty,
@@ -91,6 +93,12 @@ export default function Page() {
     queryFn: getClassrooms,
   });
 
+    const { data:hours } = useQuery({
+      queryKey: ["course_hours_tracking", courseId],
+      queryFn: ({ queryKey }) => getHoursTrackings(Number(queryKey[2])),
+      enabled: !!courseId,
+    });
+
   const getCourseProgressStatus = (
     status: "pending" | "progress" | "finished" | "suspended"
   ) => {
@@ -142,7 +150,7 @@ export default function Page() {
                 <Statistic
                   loading={isPending}
                   title="Heures"
-                  value={`0/${
+                  value={`${getCumulativeHours(hours)}/${
                     course?.theoretical_hours! + course?.practical_hours!
                   }`}
                 />
@@ -150,7 +158,7 @@ export default function Page() {
                   style={{ marginTop: 32 }}
                   type="link"
                   onClick={() =>
-                    router.push(`/app/taught-course/${courseId}/students`)
+                    router.push(`/app/taught-course/${courseId}/hours-tracking`)
                   }
                 >
                   Suivre
@@ -170,7 +178,7 @@ export default function Page() {
                   <Progress
                     type="dashboard"
                     percent={
-                      (20 /
+                      (getCumulativeHours(hours) /
                         (course.theoretical_hours! + course.practical_hours!)) *
                       100
                     }

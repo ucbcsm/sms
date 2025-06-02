@@ -105,8 +105,8 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
               {
                 key: "classroom",
                 label: "Salle de classe",
-                children: `${data?.class_room?.name} ${
-                  data?.class_room?.code && `(${data?.class_room?.code})`}`,
+                children: `${data?.class_room?.name||""} ${
+                  data?.class_room?.code? `(${data?.class_room?.code})`:""}`,
               },
             ]}
           />
@@ -123,6 +123,11 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
                 key:"academic_title",
                 label:"Titre académique",
                 children:data.teacher?.academic_title
+              },
+              {
+                key:"academic_grade",
+                label:"Grade académique",
+                children:data.teacher?.academic_grade
               },
               {
                 key: "email",

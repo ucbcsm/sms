@@ -275,6 +275,26 @@ export const TaughtCourse = z.object({
 
 export type TaughtCourse = z.infer<typeof TaughtCourse>;
 
+export const HourTracking = z.object({
+  id: z.number(),
+  course: TaughtCourse,
+  date: z.date(),
+  start_time: z.string().time(),
+  end_time: z.string().time(),
+  hours_completed: z.number(),
+  activity_type: z.enum([
+    "lecture", //Cours Magistral (CM)
+    "tutorial", //Travaux Dirigés (TD)
+    "practical", //Travaux Pratiques (TP)
+    "practical_tutorial", //Travaux Pratiques et Dirigés (TPD)
+  ]),
+  lesson: z.string().nullable(),
+  cp_validation: z.boolean(),
+  teacher_validation: z.boolean(),
+});
+
+export type HourTracking = z.infer<typeof HourTracking>;
+
 
 export const DepartmentProgram = z.object({
   id: z.number(),
