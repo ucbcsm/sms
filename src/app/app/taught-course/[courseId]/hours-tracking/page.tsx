@@ -75,7 +75,7 @@ export default function Page() {
   const { courseId } = useParams();
   const { data, isPending, isError } = useQuery({
     queryKey: ["course_hours_tracking", courseId],
-    queryFn: ({ queryKey }) => getHoursTrackings(Number(queryKey[2])),
+    queryFn: ({ queryKey }) => getHoursTrackings(Number(queryKey[1])),
     enabled: !!courseId,
   });
 

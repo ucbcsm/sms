@@ -43,6 +43,7 @@ import { NewTaughtCourseForm } from "./forms/new";
 import { DeleteTaughtCourseForm } from "./forms/delete";
 import { EditTaughtCourseForm } from "./forms/edit";
 import { useRouter } from "next/navigation";
+import { record } from "zod";
 
 type ActionsBarProps = {
   record: TaughtCourse;
@@ -358,6 +359,13 @@ export default function Page() {
             </Space>
           ),
           ellipsis: true,
+        },
+        {
+          key:"department",
+          dataIndex:"departement",
+          title:"Département",
+          render:(_,record)=>record.departement.name,
+          ellipsis:true
         },
         {
           title: "Statut",

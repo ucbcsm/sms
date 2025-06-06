@@ -4,6 +4,8 @@ import { EditTaughtCourseForm } from "@/app/app/faculty/[facultyId]/taught-cours
 import { DataFetchErrorResult } from "@/components/errorResult";
 import {
   getClassrooms,
+  getCourseEnrollments,
+  getCourseEnrollmentsCountByStatus,
   getCoursesByFacultyId,
   getCourseTypeName,
   getCumulativeHours,
@@ -18,7 +20,7 @@ import {
   getYearStatusName,
 } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
-import { EditOutlined, TeamOutlined } from "@ant-design/icons";
+import { EditOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
@@ -93,11 +95,19 @@ export default function Page() {
     queryFn: getClassrooms,
   });
 
-    const { data:hours } = useQuery({
-      queryKey: ["course_hours_tracking", courseId],
-      queryFn: ({ queryKey }) => getHoursTrackings(Number(queryKey[2])),
-      enabled: !!courseId,
-    });
+  const { data: hours } = useQuery({
+    queryKey: ["course_hours_tracking", courseId],
+    queryFn: ({ queryKey }) => getHoursTrackings(Number(queryKey[1])),
+    enabled: !!courseId,
+  });
+
+  const { data: enrollments, isPending: isPendingEnrollments } = useQuery({
+    queryKey: ["course_enrollments", courseId],
+    queryFn: ({ queryKey }) => getCourseEnrollments(Number(queryKey[1])),
+    enabled: !!courseId,
+  });
+
+
 
   const getCourseProgressStatus = (
     status: "pending" | "progress" | "finished" | "suspended"
@@ -130,7 +140,10 @@ export default function Page() {
                 <Statistic
                   loading={isPending}
                   title="Inscriptions"
-                  value={100}
+                  value={getCourseEnrollmentsCountByStatus(
+                    enrollments,
+                    "validated"
+                  )}
                 />
                 <Button
                   style={{ marginTop: 32 }}
@@ -139,7 +152,7 @@ export default function Page() {
                     router.push(`/app/taught-course/${courseId}/students`)
                   }
                 >
-                  Étudiants
+                  Inscrire
                 </Button>
               </Flex>
             </Card>

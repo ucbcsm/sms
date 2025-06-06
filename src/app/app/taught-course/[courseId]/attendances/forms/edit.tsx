@@ -1,6 +1,6 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import {
   Alert,
   Button,
@@ -17,20 +17,30 @@ import {
   DatePicker,
   Descriptions,
   Tag,
+  Statistic,
+  Progress,
+  Typography,
+  TimePicker,
 } from "antd";
-import { parseAsBoolean, useQueryState } from "nuqs";
-import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
-import { AttendanceList, TaughtCourse } from "@/types";
+import { BulbOutlined, CloseOutlined } from "@ant-design/icons";
+import { AttendanceList, AttendanceListItem, TaughtCourse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  createAttendanceList,
+  getAttendanceAbsentCount,
+  getAttendanceAbsentPercentage,
+  getAttendanceJustifiedCount,
+  getAttendanceJustifiedPercentage,
+  getAttendancePresentCount,
+  getAttendancePresentPercentage,
   getCourseTypeName,
   getTeachingUnitCategoryName,
   getYearStatusName,
+  updateAttendanceList,
 } from "@/lib/api";
 import { useParams } from "next/navigation";
 import dayjs from "dayjs";
 import { ListAttendanceListItem } from "./list";
+import { Palette } from "@/components/palette";
 
 type NewAttendanceListFormProps = {
   course?: TaughtCourse;
@@ -43,6 +53,7 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
   course,
   open,
   setOpen,
+  attendanceList,
 }) => {
   const {
     token: { colorPrimary },
@@ -52,7 +63,10 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
   const { courseId } = useParams();
 
   const [cancel, setCancel] = useState<boolean>(false);
-  const [selectedStudents, setSelectedStudents] = useState<number[]>([]);
+  const [attendanceItems, setAttendanceItems] = useState<
+    Omit<AttendanceListItem, "id" & { id?: number }>[]
+  >([]);
+
   const queryClient = useQueryClient();
 
   const onClose = () => {
@@ -60,24 +74,47 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
   };
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: createAttendanceList,
+    mutationFn: updateAttendanceList,
   });
+
+  const editAttendanceItemStatus = (
+    status: "present" | "absent" | "justified",
+    index: number
+  ) => {
+    const updatedItems = [...attendanceItems];
+    const item = attendanceItems?.[index];
+    if (item) {
+      updatedItems[index] = {
+        ...item,
+        status: status,
+      };
+      setAttendanceItems(updatedItems);
+    }
+  };
 
   const onFinish = (values: any) => {
     mutateAsync(
       {
-        ...values,
-        course_id: Number(courseId),
-        date: dayjs(values.date).format("YYYY-MM-DD"),
-        student_ids: selectedStudents,
+        id: attendanceList.id,
+        data: {
+          ...values,
+          course_id: Number(courseId),
+          student_attendance_status: attendanceItems.map((item) => ({
+            ...item,
+            student: item.student.id,
+          })),
+          verified_by_user_id: attendanceList.verified_by.id,
+        },
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["attendance-lists"] });
+          queryClient.invalidateQueries({
+            queryKey: ["attendances-lists", courseId],
+          });
           messageApi.success("Liste de présence créée avec succès !");
           setOpen(false);
           form.resetFields();
-          setSelectedStudents([]);
+          setAttendanceItems([]);
         },
         onError: () => {
           messageApi.error(
@@ -87,6 +124,17 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
       }
     );
   };
+
+  // Remplir le formulaire à chaque ouverture ou changement de la liste de présence
+  useEffect(() => {
+    if (attendanceList && open) {
+      form.setFieldsValue({
+        date: dayjs(attendanceList.date),
+        time: dayjs(attendanceList.time, "HH:mm"),
+      });
+      setAttendanceItems(attendanceList.student_attendance_status);
+    }
+  }, [attendanceList, open, form]);
 
   return (
     <>
@@ -112,7 +160,7 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
               onOk={() => {
                 setOpen(false);
                 setCancel(false);
-                setSelectedStudents([]);
+                setAttendanceItems([]);
               }}
               okButtonProps={{ style: { boxShadow: "none" } }}
               cancelButtonProps={{ style: { boxShadow: "none" } }}
@@ -133,7 +181,8 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         <div style={{ maxWidth: 1400, margin: "auto" }}>
           <Alert
             type="warning"
-            message="Vous modifiez une liste de présence existante."
+            icon={<BulbOutlined/>}
+            message="Instructions"
             description="Modifiez la date si nécessaire, puis mettez à jour avec précision les étudiants présents et absents."
             showIcon
             closable
@@ -236,50 +285,142 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
             <Col span={12}>
               <Card>
                 <ListAttendanceListItem
-                //  items={}
+                  items={attendanceItems}
+                  editRecordStatus={editAttendanceItemStatus}
                 />
               </Card>
+              <div
+                style={{
+                  display: "flex",
+                  // background: colorBgContainer,
+                  padding: "24px 0",
+                }}
+              >
+                <Typography.Text type="secondary">
+                  © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+                </Typography.Text>
+                <div className="flex-1" />
+                <Space>
+                  <Palette />
+                </Space>
+              </div>
             </Col>
             <Col span={6}>
-              <Card title="Informations complémentaires">
-                <Form
-                  form={form}
-                  name="form_new-attendance-list"
-                  initialValues={{
-                    date: dayjs(),
-                  }}
-                  onFinish={onFinish}
-                  disabled={isPending}
-                >
-                  <Form.Item
-                    name="date"
-                    label="Date de la séance"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Veuillez renseigner la date.",
-                      },
-                    ]}
+              <Flex vertical gap={16}>
+                <Card>
+                  <Form
+                    form={form}
+                    name="form_new-attendance-list"
+                    initialValues={{
+                      date: dayjs(),
+                    }}
+                    onFinish={onFinish}
+                    disabled={isPending}
+                    layout="vertical"
                   >
-                    <DatePicker format="DD/MM/YYYY" style={{ width: "100%" }} />
-                  </Form.Item>
-
-                  <Flex justify="flex-end" align="center">
-                    <Form.Item>
-                      <Space>
-                        <Button
-                          type="primary"
-                          htmlType="submit"
-                          loading={isPending}
-                          style={{ boxShadow: "none" }}
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <Form.Item
+                          name="date"
+                          label="Date de la séance"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Veuillez renseigner la date.",
+                            },
+                          ]}
                         >
-                          Sauvegarder
-                        </Button>
-                      </Space>
+                          <DatePicker
+                            format="DD/MM/YYYY"
+                            placeholder="DD/MM/YYYY"
+                            style={{ width: "100%" }}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          name="time"
+                          label="Heure"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Veuillez renseigner l'heure.",
+                            },
+                          ]}
+                        >
+                          <TimePicker
+                            format="HH:mm"
+                            style={{ width: "100%" }}
+                            placeholder="HH:mm"
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                    <Form.Item>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        loading={isPending}
+                        style={{ boxShadow: "none" }}
+                        block
+                      >
+                        Sauvegarder
+                      </Button>
                     </Form.Item>
+                  </Form>
+                </Card>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPending}
+                      title="Présences"
+                      value={getAttendancePresentCount(attendanceItems)}
+                    />
+
+                    <Progress
+                      type="circle"
+                      percent={getAttendancePresentPercentage(attendanceItems)}
+                      size={58}
+                        strokeColor="#52c41a"
+                    />
                   </Flex>
-                </Form>
-              </Card>
+                </Card>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPending}
+                      title="Absences"
+                      value={getAttendanceAbsentCount(attendanceItems)}
+                    />
+
+                    <Progress
+                      type="circle"
+                      percent={getAttendanceAbsentPercentage(attendanceItems)}
+                      size={58}
+                      strokeColor="#ff4d4f"
+                    />
+                  </Flex>
+                </Card>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPending}
+                      title="Justifications"
+                      value={getAttendanceJustifiedCount(attendanceItems)}
+                    />
+
+                    <Progress
+                      type="circle"
+                      percent={getAttendanceJustifiedPercentage(
+                        attendanceItems
+                      )}
+                      size={58}
+                        strokeColor="#faad14"
+                      
+                    />
+                  </Flex>
+                </Card>
+              </Flex>
             </Col>
           </Row>
         </div>

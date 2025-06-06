@@ -1,25 +1,33 @@
 "use client";
 
-import { Avatar, Button, Space, Table, Typography } from "antd";
+import { Avatar, Space, Table, Typography } from "antd";
 import { FC } from "react";
-// import { CourseInProgramActionsBar } from "./action-bar";
 import { AttendanceListItem } from "@/types";
 import { getHSLColor } from "@/lib/utils";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { AttendanceController } from "./controller";
 
 type ListAttendanceListItemProps = {
   items?: Omit<AttendanceListItem, "id" & { id?: number }>[];
+  editRecordStatus?: (
+   status: "present" | "absent" | "justified",
+    index: number
+  ) => void;
 };
 
 export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
   items,
+  editRecordStatus,
 }) => {
+
+
   return (
     <Table
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Typography.Title level={5} style={{marginBottom:0}}>Liste de présence</Typography.Title>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              Liste de présence
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
@@ -79,20 +87,17 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
           title: "Status",
           key: "actions",
           render: (_, record, index) => (
-            // <CourseInProgramActionsBar
-            //   record={record}
-            //   removerCourseRecord={removerCourseRecord}
-            //   editCourseRecord={editCourseRecord}
-            //   courses={courses}
-            //   index={index}
-            //   currentsCoursesOfProgram={coursesOfProgram}
-            // />
-            <></>
+            <AttendanceController
+              record={record}
+              index={index}
+              editRecordStatus={editRecordStatus!}
+            />
           ),
         },
       ]}
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       size="small"
+      pagination={false}
     />
   );
 };

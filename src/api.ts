@@ -66,5 +66,67 @@
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/teachers "OK"
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/hour-record "OK"
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/course-student-assignation
-// https://ciucbc.pythonanywhere.com/api/v01/faculty/physical-attendance-check
-// https://ciucbc.pythonanywhere.com/api/v01/faculty/student-attendance-status
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/physical-attendance-check "OK"
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/student-attendance-status "OK"
+
+
+// ################# Period enrollment #####################
+
+// POST:
+// {
+//   year_enrollments:[1,3,5],
+//   period:1,
+//   status:"Pending"
+
+// {
+
+// PUT - SIGLE:
+ 
+// {
+//   pk:1,
+//   year_enrollments:1,
+//   period:2,    
+//   status:"Validated"
+// }  
+
+// PUT - MULTIPLE:
+ 
+// {
+//   pk_list:[1,2],      
+//   status:"Validated"
+// }
+     
+ 
+
+
+// ################# Course enrollment from fac #####################
+
+
+
+// POST :
+// {
+//   payload:[
+//     { student:1,courses:[1],status:"Pending"},
+//     { student:1,courses:[1,9] ,status:"Pending"},
+//   ]
+// }
+
+// PUT - SIGLE:
+ 
+// {
+//   pk:1,
+//   student:1,
+//   course:2,    
+//   status:"Validated",
+//   mode:"SINGLE-UPDATE"
+// }  
+
+// PUT - MULTIPLE:
+ 
+// {
+//   pk_list:[1,2],      
+//   status:"Validated",
+//   mode:"MULTIPLE-UPDATE"
+// }
+
+  

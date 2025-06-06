@@ -3,13 +3,16 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
+  getAttendanceAbsentCount,
+  getAttendanceJustifiedCount,
+  getAttendancePresentCount,
   getAttendancesListByCourse,
-  getHoursTrackings,
-  getHourTrackingActivityTypeName,
+  getCourseEnrollments,
+  getCourseEnrollmentsByStatus,
   getTaughtCours,
 } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
-import { AttendanceList, HourTracking, TaughtCourse } from "@/types";
+import { AttendanceList, TaughtCourse } from "@/types";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -26,7 +29,6 @@ import {
   DatePicker,
   Dropdown,
   Space,
-  Switch,
   Table,
 } from "antd";
 import { useParams } from "next/navigation";
@@ -37,7 +39,7 @@ import { EditAttendanceListForm } from "./forms/edit";
 
 type ActionsBarProps = {
   record: AttendanceList;
-  course?:TaughtCourse
+  course?: TaughtCourse;
 };
 
 const ActionsBar: FC<ActionsBarProps> = ({ record, course }) => {
@@ -98,17 +100,21 @@ export default function Page() {
   const { courseId } = useParams();
   const { data, isPending, isError } = useQuery({
     queryKey: ["attendances-lists", courseId],
-    queryFn: ({ queryKey }) => getAttendancesListByCourse(Number(queryKey[2])),
+    queryFn: ({ queryKey }) => getAttendancesListByCourse(Number(queryKey[1])),
     enabled: !!courseId,
   });
 
-  const {
-      data: course,
-    } = useQuery({
-      queryKey: ["taught_courses", courseId],
-      queryFn: ({ queryKey }) => getTaughtCours(Number(queryKey[1])),
-      enabled: !!courseId,
-    });
+  const { data: course } = useQuery({
+    queryKey: ["taught_courses", courseId],
+    queryFn: ({ queryKey }) => getTaughtCours(Number(queryKey[1])),
+    enabled: !!courseId,
+  });
+
+  const { data: enrollments, isPending: isPendingEnrollments } = useQuery({
+    queryKey: ["course_enrollments", courseId],
+    queryFn: ({ queryKey }) => getCourseEnrollments(Number(queryKey[1])),
+    enabled: !!courseId,
+  });
 
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
@@ -127,7 +133,13 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewAttendanceListForm course={course} />
+            <NewAttendanceListForm
+              course={course}
+              courseEnrollements={getCourseEnrollmentsByStatus(
+                enrollments,
+                "validated"
+              )}
+            />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -179,22 +191,25 @@ export default function Page() {
           title: "Présences",
           dataIndex: "presence_count",
           key: "presence_count",
-          render: (_, record, __) => "",
+          render: (_, record, __) =>
+            getAttendancePresentCount(record.student_attendance_status),
         },
         {
           title: "Absences",
           dataIndex: "absence_count",
           key: "absence_count",
-          render: (_, record, __) => "",
+          render: (_, record, __) =>
+            getAttendanceAbsentCount(record.student_attendance_status),
         },
         {
           title: "Justifiées",
           dataIndex: "justified_count",
           key: "justified_count",
-          render: (_, record, __) => "",
+          render: (_, record, __) =>
+            getAttendanceJustifiedCount(record.student_attendance_status),
         },
         {
-          title: "Etudiants",
+          title: "Étudiants",
           dataIndex: "students",
           key: "students",
           render: (_, record, __) => record.student_attendance_status.length,

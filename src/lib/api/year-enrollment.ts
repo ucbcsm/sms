@@ -10,25 +10,38 @@ export async function getYearEnrollments(yearId: number) {
 
 export async function getYearEnrollmentsByFacultyId(
   yearId: number,
-  facultyId: number
+  facultyId: number,
 ) {
   const res = await api.get(
     `/apparitorat/year-enrollment/?academic_year__id=${yearId}&faculty__id=${facultyId}`
   );
+
   return res.data.results as Enrollment[];
 }
+
+export async function getAllYearEnrollmentsByFaculty(
+  yearId: number,
+  facultyId: number,
+) {
+  const res = await api.get(
+    `/apparitorat/year-enrollment/?academic_year__id=${yearId}&faculty__id=${facultyId}&get_all=true`
+  );
+
+  return  res.data as Enrollment[];
+}
+
+
+
 
 export async function getYearEnrollmentsByDepatmentId(
   yearId: number,
   depatmentId: number
 ) {
- const res = await api.get(
+  const res = await api.get(
     `/apparitorat/year-enrollment/?academic_year__id=${yearId}&departement__id=${depatmentId}`
   );
   return res.data.results as Enrollment[];
-
 }
-
 
 export async function getYearEnrollment(id: number) {
   const res = await api.get(`/apparitorat/year-enrollment/${id}`);

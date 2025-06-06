@@ -315,6 +315,16 @@ export const AttendanceListItem = z.object({
 
 export type AttendanceListItem = z.infer<typeof AttendanceListItem>;
 
+export const CourseEnrollment = z.object({
+  id: z.number(),
+  student: PeriodEnrollment,
+  date: z.date(),
+  course:TaughtCourse,
+  status: z.enum(["pending", "validated", "rejected"]).nullable(),
+})
+
+export type CourseEnrollment = z.infer<typeof CourseEnrollment>;
+
 export const DepartmentProgram = z.object({
   id: z.number(),
   departement: Department,

@@ -119,3 +119,12 @@ export async function updateTaughtCourse(
   });
   return res.data;
 }
+
+export function getTaughtCoursAsOptions(courses?: TaughtCourse[]) {
+  return courses?.map((course) => {
+    return {
+      value: course.id,
+      label: `${course.available_course.name} (${course.available_course.code})`,
+    };
+  });
+}

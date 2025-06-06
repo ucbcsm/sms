@@ -3,45 +3,44 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
-import { getYearEnrollmentsByFacultyId } from "@/lib/api";
+import { getPeriodEnrollmentsbyFaculty } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
 import {
   AppstoreOutlined,
-  ClockCircleOutlined,
   DownOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
   UnorderedListOutlined,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
-  Card,
   Dropdown,
   Input,
   Radio,
   Space,
   Table,
-  Tabs,
   Tag,
-  Typography,
 } from "antd";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
-  const { facultyId } = useParams();
+  const { facultyId, periodId } = useParams();
   const { yid } = useYid();
   const { data, isPending, isError } = useQuery({
-    queryKey: ["year_enrollments", `${yid}`, facultyId],
+    queryKey: ["period_enrollments", `${yid}`, facultyId, periodId],
     queryFn: ({ queryKey }) =>
-      getYearEnrollmentsByFacultyId(Number(queryKey[1]), Number(queryKey[2])),
-    enabled: !!yid && !!facultyId,
+      getPeriodEnrollmentsbyFaculty(
+        Number(queryKey[1]),
+        Number(queryKey[2]),
+        Number(queryKey[3])
+      ),
+    enabled: !!yid && !!facultyId && !!periodId,
   });
 
   if (isPending) {
@@ -105,15 +104,15 @@ export default function Page() {
           key: "avatar",
           render: (_, record) => (
             <Avatar
-              src={record.user.avatar || null}
+              src={record.year_enrollment.user.avatar || ""}
               style={{
                 backgroundColor: getHSLColor(
-                  `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                  `${record.year_enrollment.user.first_name} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.surname}`
                 ),
               }}
             >
-              {record?.user.first_name?.charAt(0).toUpperCase()}
-              {record?.user.last_name?.charAt(0).toUpperCase()}
+              {record.year_enrollment.user.first_name?.charAt(0).toUpperCase()}
+              {record.year_enrollment.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 56,
@@ -123,8 +122,8 @@ export default function Page() {
           dataIndex: "matricule",
           key: "matricule",
           render: (_, record) => (
-            <Link href={`/app/student/${record.id}`}>
-              {record.user.matricule.padStart(6, "0")}
+            <Link href={`/app/student/${record.year_enrollment.id}`}>
+              {record.year_enrollment.user.matricule.padStart(6, "0")}
             </Link>
           ),
           width: 80,
@@ -134,17 +133,19 @@ export default function Page() {
           title: "Noms",
           dataIndex: "name",
           key: "name",
-          render: (value, record) => (
-            <Link href={`/app/student/${record.id}`}>
-              {record.user.first_name} {record.user.last_name}{" "}
-              {record.user.surname}
+          render: (_, record) => (
+            <Link href={`/app/student/${record.year_enrollment.id}`}>
+              {record.year_enrollment.user.first_name}{" "}
+              {record.year_enrollment.user.last_name}{" "}
+              {record.year_enrollment.user.surname}
             </Link>
           ),
         },
         {
           title: "Promotion",
           dataIndex: "promotion",
-          render: (_, record, __) => `${record.class_year.acronym}`,
+          render: (_, record, __) =>
+            `${record.year_enrollment.class_year.acronym}`,
           key: "class",
           width: 86,
           ellipsis: true,
@@ -153,7 +154,8 @@ export default function Page() {
           title: "Département",
           dataIndex: "department",
           key: "department",
-          render: (_, record, __) => `${record.departement.name}`,
+          render: (_, record, __) =>
+            `${record.year_enrollment.departement.name}`,
           ellipsis: true,
         },
         {
@@ -164,10 +166,14 @@ export default function Page() {
           render: (_, record, __) => (
             <Tag
               bordered={false}
-              color={record.status === "enabled" ? "success" : "red"}
+              color={
+                record?.year_enrollment.status === "enabled" ? "success" : "red"
+              }
               className="w-full mr-0"
             >
-              {record.status === "enabled" ? "Actif" : "Abandon"}
+              {record?.year_enrollment?.status === "enabled"
+                ? "Actif"
+                : "Abandon"}
             </Tag>
           ),
           align: "start",
@@ -179,7 +185,7 @@ export default function Page() {
             <Space>
               <Button
                 type="dashed"
-                onClick={() => router.push(`/app/student/${record.id}`)}
+                onClick={() => router.push(`/app/student/${record.year_enrollment.id}`)}
               >
                 Gérer
               </Button>

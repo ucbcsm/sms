@@ -7,6 +7,11 @@ export async function getPeriods() {
   return res.data.results as Period[];
 }
 
+export async function getPeriodsByYear(yeardId:number) {
+  const res= await api.get(`/main_config/period/?academic_year__id=${yeardId}`)
+  return res.data.results as Period[]
+}
+
 export async function createPeriod(
   params: Omit<Period, "id" | "academic_year" | "cycle"> & { year_id: number, cycle_id:number }
 ) {
@@ -96,3 +101,5 @@ export function getCurrentPeriodsAsOptions(periods?: Period[]) {
     return { value: period.id, label: `${period.acronym} (${period.name})` };
   });
 }
+
+
