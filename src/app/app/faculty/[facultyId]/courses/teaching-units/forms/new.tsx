@@ -70,6 +70,7 @@ export const NewTeachingUnitForm: React.FC<NewTeachingUnitFormProps> = ({
           htmlType: "submit",
           style: { boxShadow: "none" },
           disabled: isPending,
+          loading:isPending,
         }}
         cancelButtonProps={{
           style: { boxShadow: "none" },

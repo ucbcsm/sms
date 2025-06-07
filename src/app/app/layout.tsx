@@ -19,7 +19,6 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import {
-  Avatar,
   Button,
   Dropdown,
   Image,
@@ -48,6 +47,8 @@ export default function AppLayout({
 
   const router = useRouter();
   const pathname = usePathname();
+
+ 
 
   return (
     <Layout>

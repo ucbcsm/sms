@@ -38,15 +38,15 @@ export default function FacultyLayout({
     enabled: !!facultyId,
   });
 
-  const { data: cycles } = useQuery({
-        queryKey: ["cycles"],
-        queryFn: getCycles,
-      });
-   const { data: departments } = useQuery({
-       queryKey: ["departments", facultyId],
-       queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
-       enabled: !!facultyId,
-     });
+  // const { data: cycles } = useQuery({
+  //       queryKey: ["cycles"],
+  //       queryFn: getCycles,
+  //     });
+  //  const { data: departments } = useQuery({
+  //      queryKey: ["departments", facultyId],
+  //      queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
+  //      enabled: !!facultyId,
+  //    });
 
   return (
     <Layout>
@@ -129,13 +129,13 @@ export default function FacultyLayout({
           </Space>
         </Layout.Footer>
       </Layout.Content>
-      <Layout.Sider
+      {/* <Layout.Sider
         width={280}
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
         <ListTeachingUnits cycles={cycles} departments={departments}/>
-      </Layout.Sider>
+      </Layout.Sider> */}
     </Layout>
   );
 }

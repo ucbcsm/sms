@@ -14,7 +14,6 @@ import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   getTeachingUnitCategoryName,
-  getTeachingUnits,
   getTeachingUnitsByfaculty,
 } from "@/lib/api";
 import { NewTeachingUnitForm } from "./forms/new";
@@ -108,7 +107,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
   });
   return (
     <Card
-        variant="borderless"
+        // variant="borderless"
       loading={isPending}
       title={
         !isPending ? (

@@ -17,7 +17,26 @@ export async function createCourseEnrollment(data: {
   }[];
 }) {
   const res = await api.post(`/faculty/course-enrollment-from-faculty/`, data);
-  return res.data as CourseEnrollment;
+  return res.data 
+}
+
+export async function updateSingleCourseEnrollment(data: {
+  id: number;
+  student_id: number;
+  course_id: number;
+  status: "pending" | "validated" | "rejected";
+}) {
+  const res = await api.put(
+    `/faculty/course-enrollment-from-student/${data.id}/`,
+    {
+      pk: data.id,
+      student: data.student_id,
+      course: data.course_id,
+      status: data.status,
+      mode: "SINGLE-UPDATE",
+    }
+  );
+  return res.data;
 }
 
 export async function updateCourseEnrollment(

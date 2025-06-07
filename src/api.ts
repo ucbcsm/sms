@@ -65,7 +65,7 @@
 
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/teachers "OK"
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/hour-record "OK"
-// https://ciucbc.pythonanywhere.com/api/v01/faculty/course-student-assignation
+// https://ciucbc.pythonanywhere.com/api/v01/faculty/course-student-assignation "OK"
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/physical-attendance-check "OK"
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/student-attendance-status "OK"
 
@@ -129,4 +129,7 @@
 //   mode:"MULTIPLE-UPDATE"
 // }
 
-  
+//   https://ciucbc.pythonanywhere.com/api/v01/account/users/
+// https://ciucbc.pythonanywhere.com/api/v01/account/roles/
+// https://ciucbc.pythonanywhere.com/api/v01/account/permission/
+// https://ciucbc.pythonanywhere.com/api/v01/account/group

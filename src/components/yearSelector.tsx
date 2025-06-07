@@ -10,8 +10,11 @@ import {
 } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Button,
+  Card,
+  Flex,
   Form,
-  Modal,
+  Progress,
   Radio,
   Select,
   Skeleton,
@@ -19,6 +22,10 @@ import {
   Tag,
   Typography,
 } from "antd";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { Palette } from "./palette";
+import { DataFetchErrorResult } from "./errorResult";
 
 type FormDataType = {
   yid: number;
@@ -27,7 +34,14 @@ type FormDataType = {
 export function YearSelector() {
   const [form] = Form.useForm();
   const { yid, setYid } = useYid();
-  const { data: years, isPending } = useQuery({
+  const [percent, setPercent] = useState(-50);
+  const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  const {
+    data: years,
+    isPending,
+    isError,
+  } = useQuery({
     queryKey: ["years"],
     queryFn: getYears,
   });
@@ -37,84 +51,164 @@ export function YearSelector() {
     window.location.reload();
   };
 
+  const checkYidInYears = () => {
+    const exists = years?.some((y) => y.id === yid);
+    return typeof exists === "boolean" ? !exists : false;
+  };
+
+  useEffect(() => {
+    timerRef.current = setTimeout(() => {
+      setPercent((prev) => {
+        const nextPercent = prev + 5;
+        return nextPercent > 150 ? 100 : nextPercent;
+      });
+    }, 200);
+    return () => clearTimeout(timerRef.current!);
+  }, [percent]);
+
+  if (isError) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          background: "#fff",
+          position: "fixed",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 99,
+          height: "100vh",
+          width: "100%",
+        }}
+      >
+        <div style={{ width: 560, margin: "auto" }}>
+          <DataFetchErrorResult />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <Modal
-        open={!isPending && yid ? false : true}
-        loading={isPending}
-        title={
-          !isPending ? (
-            <header style={{ display: "flex", alignItems: "center" }}>
-              <Space>
+      <div
+        className=""
+        style={{
+          display: isPending || typeof yid === "undefined" ? "flex" : "none",
+          flexDirection: "column",
+          background: "#fff",
+          position: "fixed",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 99,
+          height: "100vh",
+          width: "100%",
+        }}
+      >
+        {checkYidInYears() ? (
+          <div style={{ width: 440, margin: "auto" }}>
+            <Card
+              title={
                 <Typography.Title level={2} style={{ marginBottom: 0 }}>
                   Année
                 </Typography.Title>
-              </Space>
-              <div className="flex-1" />{" "}
-              <Space>
-                <NewYearForm buttonType="link" />
-              </Space>
-            </header>
-          ) : (
-            <Skeleton.Input block size="small" />
-          )
-        }
-        centered
-        okButtonProps={{
-          autoFocus: true,
-          htmlType: "submit",
-          style: { boxShadow: "none" },
-          loading: isPending,
-        }}
-        cancelButtonProps={{
-          style: { display: "none" },
-        }}
-        destroyOnClose
-        closable={false}
-        modalRender={(dom) => (
-          <Form
-            disabled={isPending}
-            key="select_year_id_as_yid"
-            layout="vertical"
-            form={form}
-            name="select_year_id_as_id"
-            onFinish={onFinish}
+              }
+              extra={<NewYearForm buttonType="link" />}
+            >
+              <Form
+                disabled={isPending}
+                key="select_year_id_as_yid"
+                layout="vertical"
+                form={form}
+                name="select_year_id_as_id"
+                onFinish={onFinish}
+              >
+                <Form.Item
+                  name="yid"
+                  // label="Année"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Veuillez sélectionner une année académique",
+                    },
+                  ]}
+                >
+                  <Radio.Group
+                    style={{ display: "flex", flexDirection: "column" }}
+                    options={years?.map((year) => ({
+                      value: year.id,
+                      label: (
+                        <Space>
+                          <Typography.Title
+                            level={5}
+                            style={{ marginBottom: 0 }}
+                          >
+                            {year.name}
+                          </Typography.Title>
+                          <Tag
+                            color={getYearStatusColor(year.status)}
+                            style={{ border: 0 }}
+                          >
+                            {getYearStatusName(year.status)}
+                          </Tag>
+                        </Space>
+                      ),
+                    }))}
+                  />
+                </Form.Item>
+                <Flex justify="space-between" align="center">
+                  <Palette />
+                  <Form.Item noStyle>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      style={{ boxShadow: "none" }}
+                      loading={isPending}
+                    >
+                      OK
+                    </Button>
+                  </Form.Item>
+                </Flex>
+              </Form>
+            </Card>
+            <Typography.Text type="secondary">
+              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            </Typography.Text>
+          </div>
+        ) : (
+          <Flex
+            vertical
+            className=""
+            style={{
+              width: 340,
+              margin: "auto",
+              alignItems: "center",
+            }}
           >
-            {dom}
-          </Form>
+            <Image
+              src="/ucbc-logo.png"
+              alt="logo ucbc"
+              height={180}
+              width={180}
+            />
+            <Progress
+              strokeColor={"#E84C37"}
+              percent={percent}
+              showInfo={false}
+            />
+            <Typography.Title type="secondary" level={3}>
+              Academic Workspace
+            </Typography.Title>
+            <Typography.Text type="secondary">
+              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            </Typography.Text>
+          </Flex>
         )}
-      >
-        <Form.Item
-          name="yid"
-          // label="Année"
-          rules={[
-            {
-              required: true,
-              message: "Veuillez sélectionner une année académique",
-            },
-          ]}
-        >
-          <Radio.Group
-            style={{ display: "flex", flexDirection: "column" }}
-            options={years?.map((year) => ({
-              value: year.id,
-              label: (
-                <Space>
-                  <Typography.Title level={5} style={{ marginBottom: 0 }}>
-                    {year.name}
-                  </Typography.Title>
-                  <Tag
-                    color={getYearStatusColor(year.status)}
-                    style={{ border: 0 }}
-                  >
-                    {getYearStatusName(year.status)}
-                  </Tag>
-                </Space>
-              ),
-            }))}
-          />
-        </Form.Item>
-      </Modal>
+      </div>
+
       {!isPending ? (
         <Select
           value={yid}

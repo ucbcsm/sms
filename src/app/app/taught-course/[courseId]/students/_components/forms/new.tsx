@@ -251,7 +251,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
                         showSearch
                         placeholder=""
                         disabled
-                        options={getTaughtCoursAsOptions([course!])}
+                        options={course&&getTaughtCoursAsOptions([{...course}])}
                         filterOption={filterOption}
                       />
                     </Form.Item>

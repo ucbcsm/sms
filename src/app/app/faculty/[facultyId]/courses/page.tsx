@@ -7,10 +7,7 @@ import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
   getCoursesByFacultyId,
   getCourseTypeName,
-  getCycles,
-  getDepartmentsByFacultyId,
   getFaculties,
-  getFaculty,
 } from "@/lib/api";
 import { Course, Faculty } from "@/types";
 import {
@@ -20,25 +17,20 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
-  PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
-  Card,
   Col,
   Dropdown,
   Input,
-  List,
   Row,
   Space,
   Table,
-  Tag,
 } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
-import { ListTeachingUnits } from "./teaching-units/list";
 import { NewCourseForm } from "@/app/console/courses/forms/new";
 
 type ActionsBarProps = {

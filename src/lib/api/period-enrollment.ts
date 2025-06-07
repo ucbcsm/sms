@@ -25,6 +25,21 @@ export async function createPeriodEnrollment(data: {
   return res.data;
 }
 
+export async function updateSinglePeriodEnrollment(data: {
+  id: number;
+  year_enrollment_id: number;
+  period_id: number;
+  status: "pending" | "validated" | "rejected";
+}) {
+  const res = await api.put(`/apparitorat/period-enrollment/${data.id}/`, {
+    pk: data.id,
+    year_enrollment: data.year_enrollment_id,
+    period: data.period_id,
+    status: data.status,
+  });
+  return res.data;
+}
+
 
 export const getPeriodEnrollmentsByStatus = (
   enrollments?: PeriodEnrollment[],

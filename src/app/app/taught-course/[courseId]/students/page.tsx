@@ -18,78 +18,102 @@ import {
   Avatar,
   Badge,
   Button,
+  Checkbox,
   Col,
   Dropdown,
   List,
   Row,
+  Space,
   Tabs,
+  theme,
   Typography,
 } from "antd";
 import { useParams } from "next/navigation";
-import { ListCourseStudents } from "./_components/list";
+import { ListCourseValidatedStudents } from "./_components/list-validated-enrollments";
 import { FC, useState } from "react";
 import { CourseEnrollment } from "@/types";
 import {
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
+  HourglassOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
 import { getHSLColor } from "@/lib/utils";
 import { useYid } from "@/hooks/use-yid";
+import { PendingSingleCourseEnrollmentForm } from "./_components/forms/decisions/pending";
+import { ValidateSingleCourseEnrollmentForm } from "./_components/forms/decisions/validate";
+import { RejectSingleCourseEnrollmentForm } from "./_components/forms/decisions/reject";
 
-type ListCourseItemProps = {
+type ListCourseEnrollmentItemProps = {
   item: CourseEnrollment;
 };
 
-const ListCourseItem: FC<ListCourseItemProps> = ({ item }) => {
-  const [openDelete, setOpenDelete] = useState<boolean>(false);
+const ListCourseEnrollmentItem: FC<ListCourseEnrollmentItemProps> = ({
+  item,
+}) => {
+  const {
+    token: { colorSuccessActive, colorWarningActive },
+  } = theme.useToken();
+  const [openPending, setOpenPending] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
 
   return (
     <>
-      {/* <ValidateCourseEnrollmentForm
+      <PendingSingleCourseEnrollmentForm
+        open={openPending}
+        setOpen={setOpenPending}
+        enrollment={item}
+      />
+      <ValidateSingleCourseEnrollmentForm
         open={openValidate}
         setOpen={setOpenValidate}
-        courseEnrollment={item}
+        enrollment={item}
       />
-      <RejectCourseEnrollmentForm
+      <RejectSingleCourseEnrollmentForm
         open={openReject}
         setOpen={setOpenReject}
-        courseEnrollment={item}
+        enrollment={item}
       />
-      <DeleteCourseEnrollmentForm
-        open={openDelete}
-        setOpen={setOpenDelete}
-        courseEnrollment={item}
-      /> */}
 
       <List.Item
         extra={
           <Dropdown
             menu={{
               items: [
-                {
-                  key: "validate",
-                  label: "Accepter",
-                  icon: <CheckOutlined />,
-                },
-                {
-                  key: "reject",
-                  label: "Rejeter",
-                  icon: <CloseOutlined />,
-                },
-                {
-                  key: "delete",
-                  label: "Supprimer",
-                  icon: <DeleteOutlined />,
-                  danger: true,
-                },
+                item.status === "pending" || item.status === "rejected"
+                  ? {
+                      key: "validate",
+                      label: "Accepter",
+                      icon: (
+                        <CheckOutlined style={{ color: colorSuccessActive }} />
+                      ),
+                    }
+                  : null,
+                item.status === "validated" || item.status === "rejected"
+                  ? {
+                      key: "pending",
+                      label: "Marquer en attente",
+                      icon: (
+                        <HourglassOutlined
+                          style={{ color: colorWarningActive }}
+                        />
+                      ),
+                    }
+                  : null,
+                item.status === "pending" || item.status === "validated"
+                  ? {
+                      key: "reject",
+                      label: "Rejeter",
+                      icon: <CloseOutlined />,
+                      danger: true,
+                    }
+                  : null,
               ],
               onClick: ({ key }) => {
-                if (key === "delete") {
-                  setOpenDelete(true);
+                if (key === "pending") {
+                  setOpenPending(true);
                 } else if (key === "reject") {
                   setOpenReject(true);
                 } else if (key === "validate") {
@@ -105,7 +129,7 @@ const ListCourseItem: FC<ListCourseItemProps> = ({ item }) => {
         <List.Item.Meta
           avatar={
             <Avatar
-              src={item.student.year_enrollment.user.avatar}
+              src={item.student.year_enrollment.user.avatar || null}
               style={{
                 backgroundColor: getHSLColor(
                   `${item.student.year_enrollment.user.first_name} ${item.student.year_enrollment.user.last_name} ${item.student.year_enrollment.user.surname}`
@@ -129,15 +153,18 @@ const ListCourseItem: FC<ListCourseItemProps> = ({ item }) => {
             </Typography.Text>
           }
           description={
-            <div style={{ cursor: "pointer" }}>
-              <Typography.Text
-                type={getApplicationStatusTypographyType(item.status!)}
-              >
-                {getApplicationStatusName(`${item.status}`)}
-              </Typography.Text>{" "}
-              : {item.student.year_enrollment.class_year.acronym}{" "}
-              {item.student.year_enrollment.departement.name}
-            </div>
+            <Space>
+              <Checkbox />
+              <div style={{ cursor: "pointer" }}>
+                <Typography.Text
+                  type={getApplicationStatusTypographyType(item.status!)}
+                >
+                  {getApplicationStatusName(`${item.status}`)}
+                </Typography.Text>{" "}
+                : {item.student.year_enrollment.class_year.acronym}{" "}
+                {item.student.year_enrollment.departement.name}
+              </div>
+            </Space>
           }
         />
       </List.Item>
@@ -149,7 +176,7 @@ export default function Page() {
   const { courseId } = useParams();
   const { yid } = useYid();
   const {
-    data: courseEnrollements,
+    data: courseEnrollments,
     isPending,
     isError,
   } = useQuery({
@@ -202,11 +229,8 @@ export default function Page() {
   return (
     <Row gutter={[24, 24]}>
       <Col span={16}>
-        <ListCourseStudents
-          courseEnrollments={getCourseEnrollmentsByStatus(
-            courseEnrollements,
-            "validated"
-          )}
+        <ListCourseValidatedStudents
+          courseEnrollments={courseEnrollments}
           course={course}
           periodEnrollments={periodEnrollements}
           departments={departments}
@@ -224,7 +248,7 @@ export default function Page() {
                 label: (
                   <Badge
                     count={getCourseEnrollmentsCountByStatus(
-                      courseEnrollements,
+                      courseEnrollments,
                       "pending"
                     )}
                     color="red"
@@ -237,16 +261,13 @@ export default function Page() {
                   <div>
                     <List
                       dataSource={getCourseEnrollmentsByStatus(
-                        courseEnrollements,
+                        courseEnrollments,
                         "pending"
                       )}
                       renderItem={(item) => (
-                        <ListCourseItem key={item.id} item={item} />
+                        <ListCourseEnrollmentItem key={item.id} item={item} />
                       )}
                     />
-                    {/* <ListCourseStudents
-                    data={getCourseEnrollmentsByStatus(data, "pending")}
-                  /> */}
                   </div>
                 ),
               },
@@ -257,16 +278,13 @@ export default function Page() {
                   <div>
                     <List
                       dataSource={getCourseEnrollmentsByStatus(
-                        courseEnrollements,
+                        courseEnrollments,
                         "rejected"
                       )}
                       renderItem={(item) => (
-                        <ListCourseItem key={item.id} item={item} />
+                        <ListCourseEnrollmentItem key={item.id} item={item} />
                       )}
                     />
-                    {/* <ListCourseStudents
-                    data={getCourseEnrollmentsByStatus(data, "rejected")}
-                  /> */}
                   </div>
                 ),
               },
