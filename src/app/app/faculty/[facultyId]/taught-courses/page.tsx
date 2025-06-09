@@ -104,7 +104,9 @@ const ActionsBar: FC<ActionsBarProps> = ({
         setOpen={setOpenDelete}
       />
       <Button
-        type="dashed"
+        // type="dashed"
+        color="primary"
+        variant="dashed"
         style={{ boxShadow: "none" }}
         onClick={() => router.push(`/app/taught-course/${record.id}`)}
       >

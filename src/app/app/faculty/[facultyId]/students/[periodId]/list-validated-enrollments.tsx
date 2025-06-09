@@ -61,7 +61,8 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
 
       <Space>
         <Button
-          type="dashed"
+          color="primary"
+          variant="dashed"
           style={{ boxShadow: "none" }}
           onClick={() => router.push(`/app/student/${item.year_enrollment.id}`)}
         >

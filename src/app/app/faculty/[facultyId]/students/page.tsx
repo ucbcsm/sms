@@ -176,7 +176,8 @@ export default function Page() {
               render: (_, record, __) => (
                 <Space>
                   <Button
-                    type="dashed"
+                    color="primary"
+                    variant="dashed"
                     onClick={() => router.push(`/app/student/${record.id}`)}
                     style={{boxShadow:"none"}}
                   >
