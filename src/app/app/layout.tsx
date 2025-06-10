@@ -4,6 +4,7 @@ import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
 import { useYid } from "@/hooks/use-yid";
 import { logout } from "@/lib/api/auth";
+import { useSessionStore } from "@/store";
 import {
   DashboardOutlined,
   DollarOutlined,
@@ -44,11 +45,12 @@ export default function AppLayout({
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
   const { removeYid } = useYid();
+  const {user}=useSessionStore()
 
   const router = useRouter();
   const pathname = usePathname();
 
- 
+ console.log(user)
 
   return (
     <Layout>

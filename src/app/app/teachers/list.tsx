@@ -260,7 +260,7 @@ export function ListTeachers() {
         rowSelection={{
           type: "checkbox",
         }}
-        rowKey={"id"}
+        rowKey="id"
         size="small"
         pagination={{
           defaultPageSize: 25,

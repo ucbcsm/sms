@@ -20,6 +20,8 @@ export default function Page() {
   const { studentId } = useParams();
   const {yid}=useYid()
 
+  
+
   const {
     data: enrolledStudent,
     isPending,

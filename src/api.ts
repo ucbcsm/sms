@@ -139,5 +139,5 @@
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/departement-dashboard/ (OK)
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/class-year-dashbord/
 
-// https://ciucbc.pythonanywhere.com/api/v01/teacher/teacher-dashbord/
+// https://ciucbc.pythonanywhere.com/api/v01/teacher/teacher-dashbord/ (OK)
 // https://ciucbc.pythonanywhere.com/api/v01/student/student-dashbord/ ...

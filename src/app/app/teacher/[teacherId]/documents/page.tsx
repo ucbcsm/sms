@@ -164,7 +164,7 @@ export default function Page() {
                         },
                     },
                 ]}
-                rowKey="key"
+                rowKey="id"
                 rowClassName={`bg-[#f5f5f5] odd:bg-white`}
                 rowSelection={{
                     type: "checkbox",
