@@ -1,6 +1,7 @@
 import { Teacher } from "@/types";
 import api from "../fetcher";
 import { updateUser } from "./user";
+import { number } from "zod";
 
 export async function getTeachers() {
   const res = await api.get(`/faculty/teachers/`);
@@ -78,4 +79,15 @@ export function getTeachersAsOptions(teachers?: Teacher[]) {
       disabled: !teacher.user.is_active,
     };
   });
+}
+
+
+export async function getTeacherDashboard(yearId: number, teacherId: number) {
+  const res = await api.get(
+    `/teacher/teacher-dashbord/?academic_year__id=${yearId}&teacher__id=${teacherId}`
+  );
+
+  return res.data as {
+    taught_course_count: number;
+  };
 }

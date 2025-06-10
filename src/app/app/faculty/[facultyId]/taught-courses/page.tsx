@@ -55,7 +55,6 @@ import { NewTaughtCourseForm } from "./forms/new";
 import { DeleteTaughtCourseForm } from "./forms/delete";
 import { EditTaughtCourseForm } from "./forms/edit";
 import { useRouter } from "next/navigation";
-import { record } from "zod";
 import { ListTeachingUnits } from "../courses/teaching-units/list";
 
 type ActionsBarProps = {

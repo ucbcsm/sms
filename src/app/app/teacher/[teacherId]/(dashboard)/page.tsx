@@ -1,7 +1,8 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { getTeacher } from "@/lib/api";
+import { useYid } from "@/hooks/use-yid";
+import { getTeacher, getTeacherDashboard } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
   Card,
@@ -17,6 +18,7 @@ import { useParams } from "next/navigation";
 
 export default function Page() {
   const { teacherId } = useParams();
+  const { yid } = useYid();
 
   const {
     data: teacher,
@@ -28,13 +30,22 @@ export default function Page() {
     enabled: !!teacherId,
   });
 
-  if (isError) {
+  const {
+    data: teacherDashboard,
+    isPending: isPendingDashboard,
+    isError: isErrorDashboard,
+  } = useQuery({
+    queryKey: ["teacher", yid, teacherId],
+    queryFn: ({ queryKey }) => getTeacherDashboard(yid!, Number(queryKey[2])),
+    enabled: !!yid && !!teacherId,
+  });
+
+  if (isError || isErrorDashboard) {
     return <DataFetchErrorResult />;
   }
 
   return (
     <Row gutter={24}>
-     
       <Col span={18}>
         <Row gutter={[24, 24]}>
           <Col span={8}>
@@ -70,9 +81,9 @@ export default function Page() {
           <Col span={8}>
             <Card>
               <Statistic
-                loading={isPending}
+                loading={isPendingDashboard}
                 title="Nombre de cours"
-                value={5}
+                value={teacherDashboard?.taught_course_count}
               />
             </Card>
           </Col>
@@ -89,7 +100,7 @@ export default function Page() {
           </Col>
         </Row>
       </Col>
-       <Col span={6}>
+      <Col span={6}>
         <Card loading={isPending}>
           <Descriptions
             title="Info professionnelles"

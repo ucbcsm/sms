@@ -1,9 +1,12 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { getDepartmentsByFacultyId, getFaculty } from "@/lib/api";
+import {
+  getDepartmentsByFacultyId,
+  getFaculty,
+  getFacultyDashboard,
+} from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
-import { EditOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Badge,
@@ -18,13 +21,14 @@ import {
   Skeleton,
   Space,
   Statistic,
-  Typography,
 } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { ListStaffOfficer } from "../teachers/staff";
+import { useYid } from "@/hooks/use-yid";
 
 export default function Page() {
   const { facultyId } = useParams();
+  const { yid } = useYid();
   const router = useRouter();
 
   const {
@@ -37,13 +41,23 @@ export default function Page() {
     enabled: !!facultyId,
   });
 
+  const {
+    data: facultyDashboard,
+    isPending: isPendingDashboard,
+    isError: isErrorDashboard,
+  } = useQuery({
+    queryKey: ["faculty_dashboard", yid, facultyId],
+    queryFn: ({ queryKey }) => getFacultyDashboard(yid!, Number(queryKey[2])),
+    enabled: !!yid && !!facultyId,
+  });
+
   const { data: departments } = useQuery({
     queryKey: ["departments", facultyId],
     queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
     enabled: !!facultyId,
   });
 
-  if (isError) {
+  if (isError || isErrorDashboard) {
     return <DataFetchErrorResult />;
   }
 
@@ -54,8 +68,12 @@ export default function Page() {
           <Col span={8}>
             <Card>
               <Flex justify="space-between">
-                <Statistic loading={isPending} title="Etudiants" value={"30"} />
-                {!isPending ? (
+                <Statistic
+                  loading={isPendingDashboard}
+                  title="Étudiants"
+                  value={facultyDashboard?.student_counter}
+                />
+                {!isPendingDashboard ? (
                   <Progress type="dashboard" percent={100} size={58} />
                 ) : (
                   <Skeleton.Avatar size={58} active />
@@ -66,9 +84,21 @@ export default function Page() {
           <Col span={8}>
             <Card>
               <Flex justify="space-between">
-                <Statistic loading={isPending} title="Hommes" value={"21"} />
-                {!isPending ? (
-                  <Progress type="dashboard" percent={57.9} size={58} />
+                <Statistic
+                  loading={isPendingDashboard}
+                  title="Hommes"
+                  value={facultyDashboard?.male_count}
+                />
+                {!isPendingDashboard ? (
+                  <Progress
+                    type="dashboard"
+                    percent={
+                      (facultyDashboard?.male_count! /
+                        facultyDashboard?.student_counter!) *
+                      100
+                    }
+                    size={58}
+                  />
                 ) : (
                   <Skeleton.Avatar size={58} active />
                 )}
@@ -78,11 +108,19 @@ export default function Page() {
           <Col span={8}>
             <Card>
               <Flex justify="space-between">
-                <Statistic loading={isPending} title="Femmes" value={"9"} />
-                {!isPending ? (
+                <Statistic
+                  loading={isPendingDashboard}
+                  title="Femmes"
+                  value={facultyDashboard?.female_count}
+                />
+                {!isPendingDashboard ? (
                   <Progress
                     type="dashboard"
-                    percent={42.0}
+                    percent={
+                      (facultyDashboard?.female_count! /
+                        facultyDashboard?.student_counter!) *
+                      100
+                    }
                     size={58}
                     strokeColor="cyan"
                   />
@@ -95,14 +133,11 @@ export default function Page() {
           <Col span={8}>
             <Card>
               <Flex justify="space-between">
-                <Statistic loading={isPending} title="Actifs" value={"30"} />
-              </Flex>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card>
-              <Flex justify="space-between">
-                <Statistic loading={isPending} title="Abandons" value={"0"} />
+                <Statistic
+                  loading={isPendingDashboard}
+                  title="Actifs"
+                  value={facultyDashboard?.actif_count}
+                />
               </Flex>
             </Card>
           </Col>
@@ -110,14 +145,25 @@ export default function Page() {
             <Card>
               <Flex justify="space-between">
                 <Statistic
-                  loading={isPending}
-                  title="Département"
-                  value={"2"}
+                  loading={isPendingDashboard}
+                  title="Abandons"
+                  value={facultyDashboard?.inactif_count}
                 />
               </Flex>
             </Card>
           </Col>
           <Col span={8}>
+            <Card>
+              <Flex justify="space-between">
+                <Statistic
+                  loading={isPendingDashboard}
+                  title="Département"
+                  value={facultyDashboard?.departement_count}
+                />
+              </Flex>
+            </Card>
+          </Col>
+          {/* <Col span={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic loading={isPending} title="Promotions" value={8} />
@@ -141,7 +187,7 @@ export default function Page() {
                 />
               </Flex>
             </Card>
-          </Col>
+          </Col> */}
           <Col span={24}>
             <Card title="Départements">
               {/* <Typography.Title level={5}></Typography.Title> */}
@@ -152,7 +198,8 @@ export default function Page() {
                     extra={
                       <Space>
                         <Button
-                          type="dashed"
+                          color="primary"
+                          variant="dashed"
                           style={{ boxShadow: "none" }}
                           onClick={() =>
                             router.push(`/app/department/${item.id}`)
@@ -185,7 +232,7 @@ export default function Page() {
       <Col span={8}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            <Card>
+            <Card loading={isPending}>
               <Descriptions
                 title="Détails sur la faculté"
                 // extra={

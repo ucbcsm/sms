@@ -47,3 +47,17 @@ export async function getYearEnrollment(id: number) {
   const res = await api.get(`/apparitorat/year-enrollment/${id}`);
   return res.data as Enrollment;
 }
+
+export async function getStudentDashboard(yearId: number, yearEnrollmentId: number) {
+  const res = await api.get(
+    `/student/student-dashbord/?academic_year__id=${yearId}&year_enrollment__id=${yearEnrollmentId}`
+  );
+  return res.data as {
+    student_counter: number;
+    male_count: number;
+    female_count: number;
+    actif_count: number;
+    inactif_count: number;
+    departement_count: number;
+  };
+}

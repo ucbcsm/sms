@@ -1,10 +1,10 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { getYearEnrollment } from "@/lib/api";
+import { useYid } from "@/hooks/use-yid";
+import { getStudentDashboard, getYearEnrollment } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Avatar,
   Card,
   Col,
   Descriptions,
@@ -18,6 +18,7 @@ import { useParams } from "next/navigation";
 
 export default function Page() {
   const { studentId } = useParams();
+  const {yid}=useYid()
 
   const {
     data: enrolledStudent,
@@ -29,7 +30,17 @@ export default function Page() {
     enabled: !!studentId,
   });
 
-  if (isError) {
+  const {
+    data: studentDashboard,
+    isPending: isPendingDashboard,
+    isError: isErrorDashboard,
+  } = useQuery({
+    queryKey: ["enrollment", yid, studentId],
+    queryFn: ({ queryKey }) => getStudentDashboard(yid!, Number(queryKey[2])),
+    enabled: !!yid && !!studentId,
+  });
+
+  if (isError ||isErrorDashboard) {
       return <DataFetchErrorResult />;
     }
 
@@ -40,7 +51,7 @@ export default function Page() {
           <Col span={8}>
             <Card>
               <Statistic
-                loading={isPending}
+                loading={isPendingDashboard}
                 title="Promotion actuelle"
                 value={enrolledStudent?.class_year.acronym}
               />
@@ -51,13 +62,13 @@ export default function Page() {
             <Card>
               <Flex justify="space-between">
                 <Statistic
-                  loading={isPending}
+                  loading={isPendingDashboard}
                   title="Statut académique"
                   value={
                     enrolledStudent?.status === "enabled" ? "Actif" : "Abandon"
                   }
                 />
-                {!isPending ? (
+                {!isPendingDashboard ? (
                   <Progress
                     type="dashboard"
                     size={58}
@@ -78,7 +89,7 @@ export default function Page() {
             <Card>
               <Flex justify="space-between">
                 <Statistic
-                  loading={isPending}
+                  loading={isPendingDashboard}
                   title="Frais d'inscription"
                   value={
                     enrolledStudent?.enrollment_fees === "paid"
@@ -86,7 +97,7 @@ export default function Page() {
                       : "Non payé"
                   }
                 />
-                {!isPending ? (
+                {!isPendingDashboard ? (
                   <Progress
                     type="dashboard"
                     percent={100}
@@ -103,7 +114,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          {/* <Col span={8}>
             <Card>
               <Statistic
                 loading={isPending}
@@ -117,9 +128,9 @@ export default function Page() {
                 }).format(500)}`}
               />
             </Card>
-          </Col>
+          </Col> */}
           
-          <Col span={8}>
+          {/* <Col span={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -127,7 +138,7 @@ export default function Page() {
                   title="Résultat S1"
                   value="60%"
                 />
-                {/* <Progress type="dashboard" percent={60} size={58} /> */}
+               
               </Flex>
             </Card>
           </Col>
@@ -139,7 +150,7 @@ export default function Page() {
                   title="Résultat S2"
                   value="62%"
                 />
-                {/* <Progress type="dashboard" percent={62} size={58} /> */}
+              
               </Flex>
             </Card>
           </Col>
@@ -151,10 +162,9 @@ export default function Page() {
                   title="Moyenne générale"
                   value="61%"
                 />
-                {/* <Progress type="dashboard" percent={61} size={58} /> */}
               </Flex>
             </Card>
-          </Col>
+          </Col> */}
 
           <Col span={8}>
             <Card>

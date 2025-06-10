@@ -12,6 +12,16 @@ export async function getTaughtCoursesByFacultyId(
   return res.data.results as TaughtCourse[];
 }
 
+export async function getTaughtCoursesByDepartment(
+  yearId: number,
+  departmentId: number
+) {
+  const res = await api.get(
+    `/faculty/taught-course/?academic_year__id=${yearId}&departement__id=${departmentId}`
+  );
+  return res.data.results as TaughtCourse[];
+}
+
 export async function getTaughtCours(taughtCourseId: number) {
   const res = await api.get(`/faculty/taught-course/${taughtCourseId}/`);
   return res.data as TaughtCourse;

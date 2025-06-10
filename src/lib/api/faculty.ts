@@ -49,3 +49,17 @@ export function getCurrentFacultiesAsOptions(faculties?: Faculty[]) {
     return { value: faculty.id, label: faculty.name };
   });
 }
+
+export async function getFacultyDashboard(yearId: number, facultyId: number) {
+  const res = await api.get(
+    `/faculty/faculty-dashbord/?academic_year__id=${yearId}&faculty__id=${facultyId}`
+  );
+  return res.data as {
+    student_counter: number;
+    male_count: number;
+    female_count: number;
+    actif_count: number;
+    inactif_count: number;
+    departement_count: number;
+  };
+}
