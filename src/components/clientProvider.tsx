@@ -21,6 +21,7 @@ export default function ClientProvider({
   session,
 }: Readonly<{ children: React.ReactNode; session: any }>) {
   const update = useSessionStore((state) => state.update);
+  console.log(session)
 
   useEffect(() => {
     update({ ...session });

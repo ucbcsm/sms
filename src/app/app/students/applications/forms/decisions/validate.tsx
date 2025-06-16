@@ -59,7 +59,7 @@ export const ValidateApplicationForm: FC<
       );
       return;
     }
-    if (values.confirmation.trim() === "Je confirme") {
+   
       if (editedApplication) {
         mutateAsyncEditedApplication(
           {
@@ -109,11 +109,6 @@ export const ValidateApplicationForm: FC<
           }
         );
       }
-    } else {
-      messageApi.error(
-        'Vous devez écrire exactement "Je confirme" pour valider.'
-      );
-    }
   };
 
   return (
@@ -138,7 +133,7 @@ export const ValidateApplicationForm: FC<
           disabled: isPending || isPendingEdited,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        // destroyOnClose
         closable={{ disabled: isPending || isPendingEdited }}
         maskClosable={!isPending || !isPendingEdited}
         modalRender={(dom) => (
@@ -161,16 +156,6 @@ export const ValidateApplicationForm: FC<
           showIcon
           style={{ border: 0 }}
         />
-        <Form.Item
-          name="confirmation"
-          label='Veuillez saisir "Je confirme" pour valider l’inscription.'
-          rules={[
-            { required: true, message: 'Veuillez saisir "Je confirme".' },
-          ]}
-          style={{ marginTop: 24 }}
-        >
-          <Input placeholder="Je confirme" />
-        </Form.Item>
         <Form.Item
           name="validated"
           valuePropName="checked"

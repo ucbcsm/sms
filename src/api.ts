@@ -134,7 +134,6 @@
 // https://ciucbc.pythonanywhere.com/api/v01/account/permission/
 // https://ciucbc.pythonanywhere.com/api/v01/account/group
 
-
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/faculty-dashbord/ (OK)
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/departement-dashboard/ (OK)
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/class-year-dashbord/

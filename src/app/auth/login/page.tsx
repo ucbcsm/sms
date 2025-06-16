@@ -14,5 +14,6 @@ export default async function Page() {
   if (auth?.user) {
     redirect("/app");
   }
+
   return <LoginForm />;
 }

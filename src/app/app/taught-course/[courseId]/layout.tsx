@@ -166,7 +166,7 @@ export default function FacultyLayout({
             },
             {
               key: `/app/taught-course/${courseId}/course-evaluations`,
-              label: "Evaluations du cours",
+              label: "Évaluations du cours",
             },
           ]}
           defaultActiveTabKey={pathname}

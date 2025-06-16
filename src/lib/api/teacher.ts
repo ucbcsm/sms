@@ -84,10 +84,23 @@ export function getTeachersAsOptions(teachers?: Teacher[]) {
 
 export async function getTeacherDashboard(yearId: number, teacherId: number) {
   const res = await api.get(
-    `/teacher/teacher-dashbord/?academic_year__id=${yearId}&teacher__id=${teacherId}`
+    `/teacher/teacher-dashboard/?academic_year__id=${yearId}&teacher__id=${teacherId}`
   );
 
   return res.data as {
     taught_course_count: number;
+  };
+}
+
+export async function getTeachersDashboard() {
+  const res = await api.get(`/faculty/teachers-dashboard/`);
+  return res.data as {
+    teachers_count: 2;
+    guest_teacher_count: 0;
+    permanent_teacher_count: 0;
+    male_count: 2;
+    female_count: 0;
+    actif_count: 2;
+    inactif_count: 0;
   };
 }

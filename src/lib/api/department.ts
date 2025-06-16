@@ -66,7 +66,7 @@ export async function getDepartmentDashboard(
   departmentId: number
 ) {
   const res = await api.get(
-    `/faculty/departement-dashbord/?academic_year__id=${yearId}&departement__id=${departmentId}`
+    `/faculty/departement-dashboard/?academic_year__id=${yearId}&departement__id=${departmentId}`
   );
   return res.data as {
     student_counter: number;

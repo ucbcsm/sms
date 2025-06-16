@@ -3,9 +3,12 @@
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
 import { useYid } from "@/hooks/use-yid";
+import { getFaculties } from "@/lib/api";
 import { logout } from "@/lib/api/auth";
 import { useSessionStore } from "@/store";
 import {
+  ApartmentOutlined,
+  BranchesOutlined,
   DashboardOutlined,
   DollarOutlined,
   LoadingOutlined,
@@ -15,10 +18,12 @@ import {
   QuestionOutlined,
   SafetyCertificateOutlined,
   SettingOutlined,
+  SubnodeOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import {
   Button,
   Dropdown,
@@ -27,6 +32,7 @@ import {
   Menu,
   message,
   Space,
+  Spin,
   theme,
   Typography,
 } from "antd";
@@ -45,12 +51,23 @@ export default function AppLayout({
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
   const { removeYid } = useYid();
-  const {user}=useSessionStore()
 
   const router = useRouter();
   const pathname = usePathname();
 
- console.log(user)
+  const { data: faculties, isPending: isPendingFacalties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const getFacltiesAsMenu = () => {
+    const facaltiesAsMenu = faculties?.map((fac) => ({
+      key: `/app/faculty/${fac.id}`,
+      label: fac.name,
+      icon: <SubnodeOutlined />,
+    }));
+    return facaltiesAsMenu;
+  };
 
   return (
     <Layout>
@@ -92,7 +109,7 @@ export default function AppLayout({
             },
             {
               key: "/app/students",
-              label: "Etudiants",
+              label: "Étudiants",
               icon: <UsergroupAddOutlined />,
             },
             {
@@ -104,6 +121,12 @@ export default function AppLayout({
               key: "/app/finances",
               label: "Finances",
               icon: <DollarOutlined />,
+            },
+            {
+              key: "",
+              label: "Filières",
+              icon: <BranchesOutlined />,
+              children: getFacltiesAsMenu(),
             },
             {
               key: "/app/jurys",
@@ -148,11 +171,7 @@ export default function AppLayout({
                 {
                   key: "logout",
                   label: "Déconnexion",
-                  icon: !isLoadingLogout ? (
-                    <LogoutOutlined />
-                  ) : (
-                    <LoadingOutlined />
-                  ),
+                  icon: <LogoutOutlined />,
                 },
               ],
               onClick: async ({ key }) => {
@@ -160,7 +179,6 @@ export default function AppLayout({
                   setIsLoadingLogout(true);
                   await logout()
                     .then(() => {
-                      messageApi.success("Déconnexion réussie!");
                       removeYid();
                       window.location.href = "/auth/login";
                     })
@@ -173,20 +191,17 @@ export default function AppLayout({
                       messageApi.error(
                         "Ouf, une erreur est survenue, Veuillez réessayer!"
                       );
-                    })
-                    .finally(() => {
                       setIsLoadingLogout(false);
                     });
                 }
               },
             }}
             trigger={["hover"]}
-            destroyPopupOnHide={true}
           >
             <Button
               disabled={isLoadingLogout}
               type="text"
-              icon={!isLoadingLogout ? <UserOutlined /> : <LoadingOutlined />}
+              icon={<UserOutlined />}
             />
           </Dropdown>
           <Link href="/console">
@@ -207,11 +222,46 @@ export default function AppLayout({
           }}
         >
           {children}
+           <div
+            className=""
+            style={{
+              display: isLoadingLogout ? "flex" : "none",
+              flexDirection: "column",
+              background: "#fff",
+              position: "fixed",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              zIndex: 99,
+              height: "100vh",
+              width: "100%",
+            }}
+          >
+            <div
+              style={{
+                width: 440,
+                margin: "auto",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Spin
+                indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+              />
+              <Typography.Title
+                type="secondary"
+                level={3}
+                style={{ marginTop: 10 }}
+              >
+                Déconnexion en cours ...
+              </Typography.Title>
+            </div>
+          </div>
         </div>
       </Layout.Content>
-      {/* <Layout.Footer style={{ textAlign: "center" }}>
-        © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-      </Layout.Footer> */}
     </Layout>
   );
 }

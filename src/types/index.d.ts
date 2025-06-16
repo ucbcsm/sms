@@ -192,6 +192,7 @@ export const User = z.object({
   first_name: z.string().nullable(),
   last_name: z.string().nullable(),
   is_staff: z.boolean(),
+  is_student: z.boolean(),
   is_active: z.boolean(),
   is_permanent_teacher: z.boolean(),
   date_joined: z.string().datetime(),

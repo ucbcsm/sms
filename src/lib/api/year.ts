@@ -92,3 +92,42 @@ export function getYearsAsOptions(years?: Year[]) {
     return { value: year.id, label: year.name };
   });
 }
+
+export async function getYearDashboard(yearId: number) {
+  const res = await api.get(
+    `/apparitorat/apparitorat-dashboard/?academic_year__id=${yearId}`
+  );
+  return res.data as {
+    year: Year;
+    student_counter: number;
+    male_count: number;
+    female_count: number;
+    actif_count: number;
+    inactif_count: number;
+    faculty_count: number;
+    departement_count: number;
+    class_room_count: number;
+  };
+}
+
+function dateDiffInDays(startDate: string, endDate: string): number {
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  // Calcul de la différence en millisecondes
+  const diffTime = end.getTime() - start.getTime()
+  // Conversion en jours (arrondi vers le bas)
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24))
+}
+
+export function getYearProgressPercent(startDate: string, endDate: string): number {
+ const today = new Date()
+  const start = new Date(startDate)
+  const end = new Date(endDate)
+  if (today <= start) return 0
+  if (today >= end) return 100
+
+  const totalDays = dateDiffInDays(startDate, endDate)
+  const daysPassed = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24))
+  const percent = (daysPassed / totalDays) * 100
+  return Math.round(percent) // Arrondi à l'entier le plus proche
+}

@@ -35,7 +35,6 @@ import { CourseEnrollment } from "@/types";
 import {
   CheckOutlined,
   CloseOutlined,
-  DeleteOutlined,
   HourglassOutlined,
   MoreOutlined,
 } from "@ant-design/icons";

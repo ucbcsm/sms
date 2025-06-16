@@ -1,47 +1,155 @@
-import { Card, Col, Flex, Progress, Row, Statistic } from "antd";
+import { getTeachersDashboard } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
+import { Card, Col, Flex, Progress, Row, Skeleton, Statistic } from "antd";
 
-export function TeachersStatistics(){
-    return <Row gutter={24}>
-    <Col span={6}>
-      <Card>
-        <Flex>
-          <Statistic title="Année" value={"2024-2025"} />
-          <Progress
-            type="line"
-            percent={20}
-            style={{ position: "absolute", right: 16, width: 100 }}
-          />
-        </Flex>
-      </Card>
-    </Col>
-    <Col span={6}>
-      <Card>
-        <Flex justify="space-between">
-          <Statistic title="Enseignants" value={50} />
-          <Progress type="dashboard" percent={100} size={58} />
-        </Flex>
-      </Card>
-    </Col>
-    <Col span={6}>
-      <Card>
-        <Flex justify="space-between">
-          <Statistic title="Hommes" value={25} />
-          <Progress type="dashboard" percent={50} size={58} />
-        </Flex>
-      </Card>
-    </Col>
-    <Col span={6}>
-      <Card>
-        <Flex justify="space-between">
-          <Statistic title="Femmes" value={25} />
-          <Progress
-            type="dashboard"
-            percent={50}
-            size={58}
-            strokeColor="cyan"
-          />
-        </Flex>
-      </Card>
-    </Col>
-  </Row>
+export function TeachersStatistics() {
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["teachers_dashboard"],
+    queryFn: getTeachersDashboard,
+  });
+  return (
+    <Row gutter={[16, 16]}>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic
+              loading={isPending}
+              title="Enseignants"
+              value={data?.teachers_count}
+            />
+            {!isPending ? (
+              <Progress type="dashboard" percent={100} size={58} />
+            ) : (
+              <Skeleton.Avatar size={58} active />
+            )}
+          </Flex>
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic
+              loading={isPending}
+              title="Hommes"
+              value={data?.male_count}
+            />
+            {!isPending ? (
+              <Progress
+                type="dashboard"
+                percent={(data?.male_count! / data?.teachers_count!) * 100}
+                size={58}
+              />
+            ) : (
+              <Skeleton.Avatar size={58} active />
+            )}
+          </Flex>
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic
+              loading={isPending}
+              title="Femmes"
+              value={data?.female_count}
+            />
+            {!isPending ? (
+              <Progress
+                type="dashboard"
+                percent={(data?.female_count! / data?.teachers_count!) * 100}
+                size={58}
+                strokeColor="cyan"
+              />
+            ) : (
+              <Skeleton.Avatar size={58} active />
+            )}
+          </Flex>
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic
+              loading={isPending}
+              title="Permanents"
+              value={data?.permanent_teacher_count}
+            />
+            {!isPending ? (
+              <Progress
+                type="dashboard"
+                percent={
+                  (data?.permanent_teacher_count! / data?.teachers_count!) * 100
+                }
+                size={58}
+                strokeColor="cyan"
+              />
+            ) : (
+              <Skeleton.Avatar size={58} active />
+            )}
+          </Flex>
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic
+              loading={isPending}
+              title="Visiteurs"
+              value={data?.guest_teacher_count}
+            />
+            {!isPending ? (
+              <Progress
+                type="dashboard"
+                percent={
+                  (data?.guest_teacher_count! / data?.teachers_count!) * 100
+                }
+                size={58}
+                strokeColor="cyan"
+              />
+            ) : (
+              <Skeleton.Avatar size={58} active />
+            )}
+          </Flex>
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic
+              loading={isPending}
+              title="Actifs"
+              value={data?.actif_count}
+            />
+            {!isPending ? (
+              <Progress
+                type="dashboard"
+                percent={(data?.actif_count! / data?.teachers_count!) * 100}
+                size={58}
+                strokeColor="cyan"
+              />
+            ) : (
+              <Skeleton.Avatar size={58} active />
+            )}
+          </Flex>
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic loading={isPending} title="Abandons" value={data?.inactif_count} />
+            {!isPending ? (
+              <Progress
+                type="dashboard"
+                percent={(data?.inactif_count!/data?.teachers_count!)*100}
+                size={58}
+                strokeColor="cyan"
+              />
+            ) : (
+              <Skeleton.Avatar size={58} active />
+            )}
+          </Flex>
+        </Card>
+      </Col>
+    </Row>
+  );
 }

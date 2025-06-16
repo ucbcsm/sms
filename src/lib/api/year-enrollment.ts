@@ -10,7 +10,7 @@ export async function getYearEnrollments(yearId: number) {
 
 export async function getYearEnrollmentsByFacultyId(
   yearId: number,
-  facultyId: number,
+  facultyId: number
 ) {
   const res = await api.get(
     `/apparitorat/year-enrollment/?academic_year__id=${yearId}&faculty__id=${facultyId}`
@@ -21,17 +21,14 @@ export async function getYearEnrollmentsByFacultyId(
 
 export async function getAllYearEnrollmentsByFaculty(
   yearId: number,
-  facultyId: number,
+  facultyId: number
 ) {
   const res = await api.get(
     `/apparitorat/year-enrollment/?academic_year__id=${yearId}&faculty__id=${facultyId}&get_all=true`
   );
 
-  return  res.data as Enrollment[];
+  return res.data as Enrollment[];
 }
-
-
-
 
 export async function getYearEnrollmentsByDepatmentId(
   yearId: number,
@@ -48,16 +45,14 @@ export async function getYearEnrollment(id: number) {
   return res.data as Enrollment;
 }
 
-export async function getStudentDashboard(yearId: number, yearEnrollmentId: number) {
+export async function getStudentDashboard(
+  yearId: number,
+  yearEnrollmentId: number
+) {
   const res = await api.get(
-    `/student/student-dashbord/?academic_year__id=${yearId}&year_enrollment__id=${yearEnrollmentId}`
+    `/student/student-dashboard/?academic_year__id=${yearId}&year_enrollment__id=${yearEnrollmentId}`
   );
   return res.data as {
-    student_counter: number;
-    male_count: number;
-    female_count: number;
-    actif_count: number;
-    inactif_count: number;
-    departement_count: number;
+    student_infos: Enrollment;
   };
 }

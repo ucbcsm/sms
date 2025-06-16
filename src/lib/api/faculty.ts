@@ -52,7 +52,7 @@ export function getCurrentFacultiesAsOptions(faculties?: Faculty[]) {
 
 export async function getFacultyDashboard(yearId: number, facultyId: number) {
   const res = await api.get(
-    `/faculty/faculty-dashbord/?academic_year__id=${yearId}&faculty__id=${facultyId}`
+    `/faculty/faculty-dashboard/?academic_year__id=${yearId}&faculty__id=${facultyId}`
   );
   return res.data as {
     student_counter: number;
