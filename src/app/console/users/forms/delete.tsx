@@ -2,7 +2,7 @@
 import React, { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Form, Input, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteUser } from "@/lib/api";
+// import { deleteUser } from "@/lib/api";
 import { User } from "@/types";
 
 type FormDataType = {
@@ -23,24 +23,24 @@ export const DeleteUserForm: FC<DeleteUserFormProps> = ({
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: deleteUser,
-  });
+  // const { mutateAsync, isPending } = useMutation({
+  //   mutationFn: deleteUser,
+  // });
 
   const onFinish = (values: FormDataType) => {
     if (values.validate === user.matricule) {
-      mutateAsync(user.id, {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["users"] });
-          messageApi.success("Utilisateur supprimé avec succès !");
-          setOpen(false);
-        },
-        onError: () => {
-          messageApi.error(
-            "Une erreur s'est produite lors de la suppression de l'utilisateur."
-          );
-        },
-      });
+      // mutateAsync(user.id, {
+      //   onSuccess: () => {
+      //     queryClient.invalidateQueries({ queryKey: ["users"] });
+      //     messageApi.success("Utilisateur supprimé avec succès !");
+      //     setOpen(false);
+      //   },
+      //   onError: () => {
+      //     messageApi.error(
+      //       "Une erreur s'est produite lors de la suppression de l'utilisateur."
+      //     );
+      //   },
+      // });
     } else {
       messageApi.error("Le matricule saisi ne correspond pas à l'utilisateur.");
     }
@@ -59,25 +59,25 @@ export const DeleteUserForm: FC<DeleteUserFormProps> = ({
           autoFocus: true,
           htmlType: "submit",
           style: { boxShadow: "none" },
-          disabled: isPending,
-          loading: isPending,
+          // disabled: isPending,
+          // loading: isPending,
           danger: true,
         }}
         cancelButtonProps={{
           style: { boxShadow: "none" },
-          disabled: isPending,
+          // disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
-        closable={{ disabled: isPending }}
-        maskClosable={!isPending}
+        destroyOnHidden
+        // closable={{ disabled: isPending }}
+        // maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
             form={form}
             layout="vertical"
             name="delete_user_form"
             onFinish={onFinish}
-            disabled={isPending}
+            // disabled={isPending}
             initialValues={{ enabled: true }}
           >
             {dom}
