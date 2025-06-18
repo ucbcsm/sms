@@ -114,7 +114,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           messageApi.success("Liste de présence créée avec succès !");
           setNewAttendance(false);
           form.resetFields();
-          setAttendanceItems([]);
+          setAttendanceItems(getAttendanceItemsFromCourseEnrollments(courseEnrollements!));
         },
         onError: () => {
           messageApi.error(

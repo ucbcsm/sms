@@ -95,6 +95,7 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
           ),
         },
       ]}
+      rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       size="small"
       pagination={false}
