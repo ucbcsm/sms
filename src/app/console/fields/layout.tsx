@@ -59,8 +59,8 @@ export default function FieldsLayout({
         <Card
           tabList={[
             { key: "/console/fields", label: "Domaines" },
-            { key: "/console/fields/faculties", label: "Facultés" },
-            { key: "/console/fields/departments", label: "Départements" },
+            { key: "/console/fields/faculties", label: "Filières" },
+            { key: "/console/fields/departments", label: "Mentions" },
             { key: "/console/fields/classes", label: "Promotions" },
           ]}
           activeTabKey={pathname}
