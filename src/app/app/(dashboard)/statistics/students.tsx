@@ -2,7 +2,16 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import { useYid } from "@/hooks/use-yid";
 import { getYearDashboard, getYearProgressPercent } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Flex, Progress, Row, Skeleton, Statistic } from "antd";
+import {
+  Badge,
+  Card,
+  Col,
+  Flex,
+  Progress,
+  Row,
+  Skeleton,
+  Statistic,
+} from "antd";
 
 export function StudentsStatistics() {
   const { yid } = useYid();
@@ -173,6 +182,19 @@ export function StudentsStatistics() {
               loading={isPending}
               title="Salles de classe"
               value={data?.class_room_count}
+            />
+          </Flex>
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card>
+          <Flex justify="space-between">
+            <Statistic
+              loading={isPending}
+              title="Candidatures en attente"
+              valueRender={() => (
+                <Badge count={41} color="red" overflowCount={9} />
+              )}
             />
           </Flex>
         </Card>
