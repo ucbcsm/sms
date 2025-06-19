@@ -4,6 +4,7 @@ import { getYearDashboard, getYearProgressPercent } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
   Badge,
+  Button,
   Card,
   Col,
   Flex,
@@ -12,9 +13,11 @@ import {
   Skeleton,
   Statistic,
 } from "antd";
+import { useRouter } from "next/navigation";
 
 export function StudentsStatistics() {
   const { yid } = useYid();
+  const router = useRouter();
   const { data, isPending, isError } = useQuery({
     queryKey: ["dashboard", `${yid}`],
     queryFn: ({ queryKey }) => getYearDashboard(Number(queryKey[1])),
@@ -196,6 +199,13 @@ export function StudentsStatistics() {
                 <Badge count={41} color="red" overflowCount={9} />
               )}
             />
+            <Button
+              type="primary"
+              style={{ boxShadow: "none" }}
+              onClick={() => router.push("/app/students")}
+            >
+              Gérer
+            </Button>
           </Flex>
         </Card>
       </Col>

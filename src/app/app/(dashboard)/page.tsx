@@ -85,7 +85,7 @@ export default function Page() {
               <StudentsStatistics />
             )}
           </Card>
-          <Card
+          {/* <Card
             title={
               <>
                 Candidatures en attente{" "}
@@ -98,7 +98,7 @@ export default function Page() {
             >
               <EnrollmentsStatistics />
             </div>
-          </Card>
+          </Card> */}
         </Flex>
         <Layout.Footer
           style={{
