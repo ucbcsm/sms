@@ -116,8 +116,9 @@ export type Field = z.infer<typeof Field>;
 
 export const Faculty = z.object({
   id: z.number(),
-  // coordinator: null,
-  // secretary: null,
+  coordinator: Teacher.nullable(),
+  secretary: Teacher.nullable(),
+  other_members: z.array(Teacher),
   field: Field,
   name: z.string(),
   acronym: z.string(),
@@ -130,7 +131,8 @@ export const Department = z.object({
   start_class_year: Class,
   end_class_year: Class,
   faculty: Faculty,
-  // chair_person: null,
+  director: Teacher.nullable(),
+  other_members: z.array(Teacher),
   name: z.string(),
   acronym: z.string(),
 });
@@ -247,9 +249,9 @@ export const TeachingUnit = z.object({
   name: z.string(),
   code: z.string(),
   category: z.enum(["required", "optional", "free", "transversal"]),
-  departement:Department.nullable(),
-  cycle:Cycle.nullable(),
-  credit_count:z.number().nullable(),
+  departement: Department.nullable(),
+  cycle: Cycle.nullable(),
+  credit_count: z.number().nullable(),
 });
 
 export type TeachingUnit = z.infer<typeof TeachingUnit>;
@@ -320,9 +322,9 @@ export const CourseEnrollment = z.object({
   id: z.number(),
   student: PeriodEnrollment,
   date: z.date(),
-  course:TaughtCourse,
+  course: TaughtCourse,
   status: z.enum(["pending", "validated", "rejected"]).nullable(),
-})
+});
 
 export type CourseEnrollment = z.infer<typeof CourseEnrollment>;
 

@@ -50,7 +50,7 @@ export default function DepartmentLayout({
     queryFn: ({ queryKey }) => getDepartment(Number(queryKey[1])),
     enabled: !!departmentId,
   });
-
+console.log(department)
   return (
     <Layout>
       <Layout.Content
@@ -141,7 +141,7 @@ export default function DepartmentLayout({
           </Space>
         </Layout.Footer>
       </Layout.Content>
-      <Layout.Sider
+      {/* <Layout.Sider
         width={280}
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
@@ -206,7 +206,7 @@ export default function DepartmentLayout({
             )}
           />
         </Card>
-      </Layout.Sider>
+      </Layout.Sider> */}
     </Layout>
   );
 }

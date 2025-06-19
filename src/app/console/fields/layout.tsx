@@ -48,7 +48,7 @@ export default function FieldsLayout({
           <Space>
             <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Gestion des cycles et filières
+              Gestion des domaines et filières
             </Typography.Title>
           </Space>
           <div className="flex-1" />

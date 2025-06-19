@@ -107,6 +107,7 @@ export async function getYearDashboard(yearId: number) {
     faculty_count: number;
     departement_count: number;
     class_room_count: number;
+    pending_application_count: number;
   };
 }
 

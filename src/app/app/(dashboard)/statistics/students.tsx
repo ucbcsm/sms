@@ -196,7 +196,7 @@ export function StudentsStatistics() {
               loading={isPending}
               title="Candidatures en attente"
               valueRender={() => (
-                <Badge count={41} color="red" overflowCount={9} />
+                <Badge count={data?.pending_application_count} color="red" overflowCount={9} />
               )}
             />
             <Button
