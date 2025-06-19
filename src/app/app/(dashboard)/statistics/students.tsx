@@ -191,7 +191,7 @@ export function StudentsStatistics() {
       </Col>
       <Col span={6}>
         <Card>
-          <Flex justify="space-between">
+          <Flex justify="space-between" align="flex-end">
             <Statistic
               loading={isPending}
               title="Candidatures en attente"
