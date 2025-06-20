@@ -9,7 +9,7 @@ export function TeachersStatistics() {
   });
   return (
     <Row gutter={[16, 16]}>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -25,7 +25,7 @@ export function TeachersStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -45,7 +45,7 @@ export function TeachersStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -66,7 +66,7 @@ export function TeachersStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -89,7 +89,7 @@ export function TeachersStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -112,7 +112,7 @@ export function TeachersStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -133,7 +133,7 @@ export function TeachersStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic loading={isPending} title="Abandons" value={data?.inactif_count} />

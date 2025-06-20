@@ -5,15 +5,13 @@ import { YearSelector } from "@/components/yearSelector";
 import { useYid } from "@/hooks/use-yid";
 import { getFaculties } from "@/lib/api";
 import { logout } from "@/lib/api/auth";
-import { useSessionStore } from "@/store";
 import {
-  ApartmentOutlined,
   BranchesOutlined,
   DashboardOutlined,
   DollarOutlined,
   LoadingOutlined,
   LogoutOutlined,
-  MoreOutlined,
+  MenuOutlined,
   NotificationOutlined,
   QuestionOutlined,
   SafetyCertificateOutlined,
@@ -100,7 +98,7 @@ export default function AppLayout({
           theme="light"
           defaultSelectedKeys={[pathname]}
           selectedKeys={[pathname]}
-          overflowedIndicator={<MoreOutlined />}
+          overflowedIndicator={<MenuOutlined />}
           items={[
             {
               key: "/app",
