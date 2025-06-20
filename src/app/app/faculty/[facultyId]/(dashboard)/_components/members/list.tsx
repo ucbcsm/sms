@@ -21,7 +21,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
             renderItem={(item) => (
               <List.Item
                 extra={
-                  faculty.coordinator.user.is_active ? (
+                  faculty?.coordinator?.user.is_active ? (
                     <Tag
                       color="green"
                       bordered={false}
@@ -45,20 +45,20 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                     <Avatar
                       style={{
                         backgroundColor: getHSLColor(
-                          `${faculty.coordinator.user.first_name} ${faculty.coordinator.user.last_name} ${faculty.coordinator.user.surname}`
+                          `${faculty?.coordinator?.user.first_name} ${faculty?.coordinator?.user.last_name} ${faculty?.coordinator?.user.surname}`
                         ),
                       }}
                     >
-                      {faculty.coordinator.user.first_name
+                      {faculty?.coordinator?.user.first_name
                         ?.charAt(0)
                         .toUpperCase()}
-                      {faculty.coordinator.user.last_name
+                      {faculty.coordinator?.user.last_name
                         ?.charAt(0)
                         .toUpperCase()}
                     </Avatar>
                   }
                   title={`${faculty.coordinator?.user.first_name} ${faculty.coordinator?.user.last_name} ${faculty.coordinator?.user.surname}`}
-                  description={faculty.coordinator.academic_title}
+                  description={faculty?.coordinator?.academic_title}
                 />
               </List.Item>
             )}
@@ -78,7 +78,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
             renderItem={(item) => (
               <List.Item
                 extra={
-                  faculty.secretary.user.is_active ? (
+                  faculty?.secretary?.user.is_active ? (
                     <Tag
                       color="green"
                       bordered={false}
@@ -102,20 +102,20 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                     <Avatar
                       style={{
                         backgroundColor: getHSLColor(
-                          `${faculty.secretary.user.first_name} ${faculty.secretary.user.last_name} ${faculty.secretary.user.surname}`
+                          `${faculty?.secretary?.user.first_name} ${faculty.secretary?.user.last_name} ${faculty.secretary?.user.surname}`
                         ),
                       }}
                     >
-                      {faculty.secretary.user.first_name
+                      {faculty?.secretary?.user.first_name
                         ?.charAt(0)
                         .toUpperCase()}
-                      {faculty.secretary.user.last_name
+                      {faculty?.secretary?.user.last_name
                         ?.charAt(0)
                         .toUpperCase()}
                     </Avatar>
                   }
                   title={`${faculty.secretary?.user.first_name} ${faculty.secretary?.user.last_name} ${faculty.secretary?.user.surname}`}
-                  description={faculty.secretary.academic_title}
+                  description={faculty.secretary?.academic_title}
                 />
               </List.Item>
             )}

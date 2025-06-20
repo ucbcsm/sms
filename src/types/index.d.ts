@@ -703,8 +703,8 @@ export type RequiredDocument = z.infer<typeof RequiredDocument>;
 export const Teacher = z.object({
   id: z.number(),
   user: User,
-  assigned_faculties: z.array(Faculty),
-  assigned_departements: z.array(Department),
+  // assigned_faculties: z.array(Faculty),
+  // assigned_departements: z.array(Department),
   gender: z.enum(["M", "F"]),
   institution_of_origin: z.string(),
   academic_title: z.string(),
