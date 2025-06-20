@@ -1,16 +1,33 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { Department, Faculty } from "@/types";
+import {
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Typography,
+} from "antd";
+import { Department, Faculty, Teacher } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentFacultiesAsOptions, updateDepartment } from "@/lib/api";
+import {
+  getCurrentFacultiesAsOptions,
+  getTeachersAsOptions,
+  updateDepartment,
+} from "@/lib/api";
+import { TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { filterOption } from "@/lib/utils";
 
 type FormDataType = Omit<Department, "id" | "faculty"> & { faculty_id: number };
 
 interface EditDepartmentFormProps {
   department: Department;
   faculties?: Faculty[];
+  teachers?: Teacher[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -18,6 +35,7 @@ interface EditDepartmentFormProps {
 export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
   department,
   faculties,
+  teachers,
   open,
   setOpen,
 }) => {
@@ -68,7 +86,7 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -77,7 +95,14 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
             layout="vertical"
             form={form}
             name="edit_department_form"
-            initialValues={{ faculty_id: department.faculty.id, ...department }}
+            initialValues={{
+              ...department,
+              faculty_id: department.faculty.id,
+              director_id: department.director?.id,
+              other_members_ids: department.other_members?.map(
+                (member) => member.id
+              ),
+            }}
             onFinish={onFinish}
           >
             {dom}
@@ -122,6 +147,28 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
             options={getCurrentFacultiesAsOptions(faculties)}
           />
         </Form.Item>
+        <Card>
+          <Typography.Title level={5}>Membres du département </Typography.Title>
+          <Form.Item name="director_id" label="Directeur" rules={[]}>
+            <Select
+              placeholder="Séléctionnez le directeur"
+              prefix={<UserOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item name="other_members_ids" label="Autres membres" rules={[]}>
+            <Select
+              mode="multiple"
+              placeholder="Séléctionnez les autres membres"
+              prefix={<TeamOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+        </Card>
       </Modal>
     </>
   );

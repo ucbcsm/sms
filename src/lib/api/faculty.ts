@@ -11,13 +11,24 @@ export async function getFaculty(id: number) {
   return res.data as Faculty;
 }
 
-export async function createFaculty(params: Omit<Faculty, "id"|"field">&{field_id:number}) {
+export async function createFaculty(
+  params: Omit<
+    Faculty,
+    "id" | "field" | "coordinator" | "secretary" | "other_members"
+  > & {
+    field_id: number;
+    coordinator_id?: number;
+    secretary_id?: number;
+    other_members_ids?: number[];
+  }
+) {
   const res = await api.post(`/main_config/faculty/`, {
     name: params?.name,
     field: params.field_id,
     acronym: params.acronym,
-    coordinator:null,
-    secretary:null
+    coordinator: params.coordinator_id || null,
+    secretary: params.secretary_id || null,
+    other_members: params.other_members_ids || [],
   });
   return res.data;
 }
@@ -27,14 +38,23 @@ export async function updateFaculty({
   params,
 }: {
   id: number;
-  params: Omit<Faculty, "id"|"field">&{field_id:number};
+  params: Omit<
+    Faculty,
+    "id" | "field" | "coordinator" | "secretary" | "other_members"
+  > & {
+    field_id: number;
+    coordinator_id?: number;
+    secretary_id?: number;
+    other_members_ids?: number[];
+  };
 }) {
   const res = await api.put(`/main_config/faculty/${id}/`, {
     name: params?.name,
     field: params.field_id,
     acronym: params.acronym,
-    coordinator:null,
-    secretary:null
+    coordinator: params.coordinator_id || null,
+    secretary: params.secretary_id || null,
+    other_members: params.other_members_ids || [],
   });
   return res.data;
 }

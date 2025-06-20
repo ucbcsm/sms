@@ -1,18 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { Department, Faculty } from "@/types";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Typography,
+} from "antd";
+import { PlusOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { Department, Faculty, Teacher } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDepartment, getCurrentFacultiesAsOptions } from "@/lib/api";
+import { createDepartment, getCurrentFacultiesAsOptions, getTeachersAsOptions } from "@/lib/api";
+import { filterOption } from "@/lib/utils";
 
 type FormDataType = Omit<Department, "id" | "faculty"> & { faculty_id: number };
 type NewDepartmentFormProps = {
   faculties?: Faculty[];
+  teachers?: Teacher[];
 };
 export const NewDepartmentForm: React.FC<NewDepartmentFormProps> = ({
   faculties,
+  teachers,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
@@ -24,7 +38,6 @@ export const NewDepartmentForm: React.FC<NewDepartmentFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(values, {
       onSuccess: () => {
@@ -69,7 +82,7 @@ export const NewDepartmentForm: React.FC<NewDepartmentFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -120,10 +133,32 @@ export const NewDepartmentForm: React.FC<NewDepartmentFormProps> = ({
           ]}
         >
           <Select
-            placeholder="Sélectionnez un faculté"
+            placeholder="Sélectionnez une faculté"
             options={getCurrentFacultiesAsOptions(faculties)}
           />
         </Form.Item>
+        <Card>
+          <Typography.Title level={5}>Membres du département </Typography.Title>
+          <Form.Item name="director" label="Directeur" rules={[]}>
+            <Select
+              placeholder="Séléctionnez le directeur"
+              prefix={<UserOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item name="other_members" label="Autres membres" rules={[]}>
+            <Select
+              mode="multiple"
+              placeholder="Séléctionnez les autres membres"
+              prefix={<TeamOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+        </Card>
       </Modal>
     </>
   );

@@ -23,6 +23,7 @@ import {
   Typography,
 } from "antd";
 import { useParams } from "next/navigation";
+import { DepartmentMembersList } from "./_components/members/list";
 
 export default function Page() {
   const { departmentId } = useParams();
@@ -179,167 +180,47 @@ export default function Page() {
         </Row>
       </Col>
       <Col span={8}>
-      <Row gutter={[16,16]}>
-        <Col span={24}>
-        <Card loading={isPending}>
-          <Descriptions
-            title="Détails sur le département"
-            // extra={
-            //   <Button type="link" icon={<EditOutlined />}>
-            //     Modifier
-            //   </Button>
-            // }
-            column={1}
-            items={[
-              {
-                label: "Code",
-                children: department?.acronym,
-              },
-              {
-                label: "Nom",
-                children: department?.name,
-              },
-              {
-                label: "Faculté",
-                children: department?.faculty.name,
-              },
-              // {
-              //   label: "Année académique",
-              //   children: "",
-              // },
-            ]}
-          />
-        </Card>
-        </Col>
-        <Col span={24}>
-        <Card>
-          <Typography.Title level={5}>
-            Responsables de la faculté
-          </Typography.Title>
-          <div style={{ width: "100%" }}>
-            <div>
-              <Typography.Text type="secondary">Directeur</Typography.Text>
-              {department?.director ? (
-                <List
-                  dataSource={[department.director]}
-                  renderItem={(item) => (
-                    <List.Item
-                      extra={
-                        <Dropdown
-                          menu={{
-                            items: [
-                              {
-                                key: "edit",
-                                label: "Modifier",
-                                icon: <EditOutlined />,
-                              },
-                              {
-                                key: "delete",
-                                label: "Retirer",
-                                icon: <CloseOutlined />,
-                                danger: true,
-                              },
-                            ],
-                            onClick: ({ key }) => {},
-                          }}
-                        >
-                          <Button type="text" icon={<MoreOutlined />} />
-                        </Dropdown>
-                      }
-                    >
-                      <List.Item.Meta
-                        avatar={
-                          <Avatar
-                            style={{
-                              backgroundColor: getHSLColor(
-                                `${department.director.user.first_name} ${department.director.user.last_name} ${department.director.user.surname}`
-                              ),
-                            }}
-                          >
-                            {department.director.user.first_name
-                              ?.charAt(0)
-                              .toUpperCase()}
-                            {department.director.user.last_name
-                              ?.charAt(0)
-                              .toUpperCase()}
-                          </Avatar>
-                        }
-                        title={`${department.director?.user.first_name} ${department.director?.user.last_name} ${department.director?.user.surname}`}
-                        description={department.director.academic_title}
-                      />
-                    </List.Item>
-                  )}
-                />
-              ) : (
-                <div className="flex ">
-                  <Button type="link">Définir un directeur</Button>
-                </div>
-              )}
-            </div>
-            <Divider size="small" />
-
-            <div>
-              <Typography.Text type="secondary">Autres membres</Typography.Text>
-              {department?.other_members &&
-              department.other_members.length > 0 ? (
-                <List
-                  dataSource={department?.other_members!}
-                  renderItem={(item, index) => (
-                    <List.Item
-                      key={item.id}
-                      extra={
-                        <Dropdown
-                          menu={{
-                            items: [
-                              {
-                                key: "edit",
-                                label: "Modifier",
-                                icon: <EditOutlined />,
-                              },
-                              {
-                                key: "delete",
-                                label: "Retirer",
-                                icon: <CloseOutlined />,
-                                danger: true,
-                              },
-                            ],
-                            onClick: ({ key }) => {},
-                          }}
-                        >
-                          <Button type="text" icon={<MoreOutlined />} />
-                        </Dropdown>
-                      }
-                    >
-                      <List.Item.Meta
-                        avatar={
-                          <Avatar
-                            style={{
-                              backgroundColor: getHSLColor(
-                                `${item.user.first_name} ${item.user.last_name} ${item.user.surname}`
-                              ),
-                            }}
-                          >
-                            {item.user.first_name?.charAt(0).toUpperCase()}
-                            {item.user.last_name?.charAt(0).toUpperCase()}
-                          </Avatar>
-                        }
-                        title={`${item?.user.first_name} ${item?.user.last_name} ${item?.user.surname}`}
-                        description={item.academic_title}
-                      />
-                    </List.Item>
-                  )}
-                />
-              ) : (
-                <div className="flex">
-                  <Button type="link">Ajouter les membres</Button>
-                </div>
-              )}
-            </div>
-          </div>
-        </Card>
-        </Col>
-      </Row>
-        
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Card loading={isPending}>
+              <Descriptions
+                title="Détails sur le département"
+                // extra={
+                //   <Button type="link" icon={<EditOutlined />}>
+                //     Modifier
+                //   </Button>
+                // }
+                column={1}
+                items={[
+                  {
+                    label: "Code",
+                    children: department?.acronym,
+                  },
+                  {
+                    label: "Nom",
+                    children: department?.name,
+                  },
+                  {
+                    label: "Faculté",
+                    children: department?.faculty.name,
+                  },
+                  // {
+                  //   label: "Année académique",
+                  //   children: "",
+                  // },
+                ]}
+              />
+            </Card>
+          </Col>
+          <Col span={24}>
+            <Card>
+              <Typography.Title level={5}>
+                Responsables de la faculté
+              </Typography.Title>
+              <DepartmentMembersList department={department} />
+            </Card>
+          </Col>
+        </Row>
       </Col>
     </Row>
   );

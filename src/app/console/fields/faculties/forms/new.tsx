@@ -1,17 +1,37 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { Faculty, Field } from "@/types";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Typography,
+} from "antd";
+import { PlusOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { Faculty, Field, Teacher } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createFaculty, getCurrentFieldsAsOptions } from "@/lib/api";
+import {
+  createFaculty,
+  getCurrentFieldsAsOptions,
+  getTeachersAsOptions,
+} from "@/lib/api";
+import { filterOption } from "@/lib/utils";
 
 type FormDataType = Omit<Faculty, "id" | "field"> & { field_id: number };
 type NewFacultyFormProps = {
   fields?: Field[];
+  teachers?: Teacher[];
 };
-export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
+export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
+  fields,
+  teachers,
+}) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -83,7 +103,6 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
           </Form>
         )}
       >
-        
         <Row gutter={[16, 16]}>
           <Col span={16}>
             <Form.Item
@@ -123,6 +142,38 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({ fields }) => {
             options={getCurrentFieldsAsOptions(fields)}
           />
         </Form.Item>
+        <Card>
+          <Typography.Title level={5}>Membres de la faculté</Typography.Title>
+          <Form.Item name="coordinator_id" label="Coordinateur" rules={[]}>
+            <Select
+              placeholder="Séléctionnez le coordinateur"
+              prefix={<UserOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item name="secretary_id" label="Secrétaire" rules={[]}>
+            <Select
+              placeholder="Séléctionnez le nom du secrétaire"
+              prefix={<UserOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+
+          <Form.Item name="other_members_ids" label="Autres membres" rules={[]}>
+            <Select
+              mode="multiple"
+              placeholder="Séléctionnez les autres membres"
+              prefix={<TeamOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+        </Card>
       </Modal>
     </>
   );

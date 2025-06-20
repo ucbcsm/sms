@@ -2,8 +2,8 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Department, Faculty } from "@/types";
-import { getDepartments, getFaculties } from "@/lib/api";
+import { Department, Faculty, Teacher } from "@/types";
+import { getAllTeachers, getDepartments, getFaculties } from "@/lib/api";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -19,19 +19,23 @@ import { FC, useState } from "react";
 import { EditDepartmentForm } from "./forms/edit";
 import { DeleteDepartmentForm } from "./forms/delete";
 import { NewDepartmentForm } from "./forms/new";
+import { ListDepartmentMembers } from "./list-members";
 
 type ActionsBarProps = {
   record: Department;
   faculties?: Faculty[];
+  teachers?: Teacher[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, faculties, teachers }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <Space size="middle">
       <Button
+        color="primary"
+        variant="dashed"
         title="Gérer le département"
         onClick={() => {}}
         style={{ boxShadow: "none" }}
@@ -41,6 +45,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
       <EditDepartmentForm
         department={record}
         faculties={faculties}
+        teachers={teachers}
         open={openEdit}
         setOpen={setOpenEdit}
       />
@@ -94,11 +99,22 @@ export function ListDepartments() {
     queryFn: getFaculties,
   });
 
-  if (isPending) {
+  const {
+    data: teachers,
+    isPending: isPendinfTeachers,
+    isError: isErrorTeachers,
+  } = useQuery({
+    queryKey: ["all_teachers"],
+    queryFn: getAllTeachers,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  if (isPending || isPendinfTeachers) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
 
-  if (isError) {
+  if (isError || isErrorTeachers) {
     return <DataFetchErrorResult />;
   }
   return (
@@ -111,7 +127,7 @@ export function ListDepartments() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewDepartmentForm faculties={faculties} />
+            <NewDepartmentForm faculties={faculties} teachers={teachers} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -157,13 +173,20 @@ export function ListDepartments() {
           dataIndex: "faculty",
           title: "Faculté",
           render: (_, record, __) => `${record.faculty.name}`,
-          ellipsis:true
+          ellipsis: true,
+        },
+        {
+          key: "members",
+          dataIndex: "members",
+          title: "Membres",
+          ellipsis: true,
+          render: (_, record) => <ListDepartmentMembers department={record} />,
         },
         {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} faculties={faculties} />;
+            return <ActionsBar record={record} faculties={faculties} teachers={teachers} />;
           },
           width: 132,
         },

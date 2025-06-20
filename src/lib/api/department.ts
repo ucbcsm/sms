@@ -19,15 +19,20 @@ export async function getDepartment(id: number) {
 }
 
 export async function createDepartment(
-  params: Omit<Department, "id" | "faculty"> & { faculty_id: number }
+  params: Omit<Department, "id" | "faculty" | "director" | "other_members"> & {
+    faculty_id: number;
+    director_id?: number;
+    other_members_ids?: number[];
+  }
 ) {
   const res = await api.post(`/main_config/departement/`, {
     start_class_year: null,
     end_class_year: null, // To remove next time
     faculty: params.faculty_id,
-    chair_person: null,
     name: params?.name,
     acronym: params.acronym,
+    director: params.director_id|| null,
+    other_members: params.other_members_ids || [],
   });
   return res.data;
 }
@@ -37,15 +42,20 @@ export async function updateDepartment({
   params,
 }: {
   id: number;
-  params: Omit<Department, "id" | "faculty"> & { faculty_id: number };
+  params: Omit<Department, "id" | "faculty" | "director" | "other_members"> & {
+    faculty_id: number;
+    director_id?: number;
+    other_members_ids?: number[];
+  };
 }) {
   const res = await api.put(`/main_config/departement/${id}/`, {
     start_class_year: null,
     end_class_year: null, // To remove next time
     faculty: params.faculty_id,
-    chair_person: null,
     name: params.name,
     acronym: params.acronym,
+    director: params.director_id|| null,
+    other_members: params.other_members_ids || [],
   });
   return res.data;
 }

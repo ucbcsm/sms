@@ -1,16 +1,33 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { Faculty, Field } from "@/types";
+import {
+  Card,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Typography,
+} from "antd";
+import { Faculty, Field, Teacher } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getCurrentFieldsAsOptions, updateFaculty } from "@/lib/api";
+import {
+  getCurrentFieldsAsOptions,
+  getTeachersAsOptions,
+  updateFaculty,
+} from "@/lib/api";
+import { TeamOutlined, UserOutlined } from "@ant-design/icons";
+import { filterOption } from "@/lib/utils";
 
 type FormDataType = Omit<Faculty, "id" | "field"> & { field_id: number };
 
 interface EditFacultyFormProps {
   faculty: Faculty;
   fields?: Field[];
+  teachers?: Teacher[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -18,6 +35,7 @@ interface EditFacultyFormProps {
 export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
   faculty,
   fields,
+  teachers,
   open,
   setOpen,
 }) => {
@@ -30,8 +48,6 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
-
     mutateAsync(
       { id: faculty.id, params: values },
       {
@@ -68,7 +84,7 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -77,7 +93,15 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
             layout="vertical"
             form={form}
             name="edit_faculty_form"
-            initialValues={{ field_id: faculty.field.id, ...faculty }}
+            initialValues={{
+              ...faculty,
+              field_id: faculty.field.id,
+              coordinator_id: faculty.coordinator?.id,
+              secretary_id: faculty.secretary?.id,
+              other_members_ids: faculty.other_members?.map(
+                (member) => member.id
+              ),
+            }}
             onFinish={onFinish}
           >
             {dom}
@@ -123,6 +147,40 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
             options={getCurrentFieldsAsOptions(fields)}
           />
         </Form.Item>
+        <Card>
+          <Typography.Title level={5}>Membres de la faculté</Typography.Title>
+          <Form.Item name="coordinator_id" label="Coordinateur" rules={[]}>
+            <Select
+              showSearch
+              placeholder="Séléctionnez le coordinateur"
+              prefix={<UserOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+          <Form.Item name="secretary_id" label="Secrétaire" rules={[]}>
+            <Select
+              showSearch
+              placeholder="Séléctionnez le nom du secrétaire"
+              prefix={<UserOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+
+          <Form.Item name="other_members_ids" label="Autres membres" rules={[]}>
+            <Select
+              mode="multiple"
+              placeholder="Séléctionnez les autres membres"
+              prefix={<TeamOutlined />}
+              options={getTeachersAsOptions(teachers)}
+              filterOption={filterOption}
+              allowClear
+            />
+          </Form.Item>
+        </Card>
       </Modal>
     </>
   );

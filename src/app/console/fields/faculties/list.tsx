@@ -2,8 +2,8 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { Faculty, Field } from "@/types";
-import { getFaculties, getFields } from "@/lib/api";
+import { Faculty, Field, Teacher } from "@/types";
+import { getAllTeachers, getFaculties, getFields } from "@/lib/api";
 import {
   DeleteOutlined,
   DownOutlined,
@@ -19,26 +19,36 @@ import { FC, useState } from "react";
 import { EditFacultyForm } from "./forms/edit";
 import { DeleteFacultyForm } from "./forms/delete";
 import { NewFacultyForm } from "./forms/new";
+import { ListFacultyMembers } from "./list-members";
 
 type ActionsBarProps = {
   record: Faculty;
-  fields?:Field[]
+  fields?: Field[];
+  teachers?: Teacher[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record, fields }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, fields, teachers }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <Space size="middle">
       <Button
+        color="primary"
+        variant="dashed"
         title="Gérer la faculté"
         onClick={() => {}}
         style={{ boxShadow: "none" }}
       >
         Gérer
       </Button>
-      <EditFacultyForm faculty={record} fields={fields} open={openEdit} setOpen={setOpenEdit} />
+      <EditFacultyForm
+        faculty={record}
+        fields={fields}
+        teachers={teachers}
+        open={openEdit}
+        setOpen={setOpenEdit}
+      />
       <DeleteFacultyForm
         faculty={record}
         open={openDelete}
@@ -89,11 +99,22 @@ export function ListFaculties() {
     queryFn: getFields,
   });
 
-  if (isPending) {
+  const {
+    data: teachers,
+    isPending: isPendinfTeachers,
+    isError: isErrorTeachers,
+  } = useQuery({
+    queryKey: ["all_teachers"],
+    queryFn: getAllTeachers,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  if (isPending || isPendinfTeachers) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
 
-  if (isError) {
+  if (isError || isErrorTeachers) {
     return <DataFetchErrorResult />;
   }
 
@@ -107,7 +128,7 @@ export function ListFaculties() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <NewFacultyForm fields={fields} />
+            <NewFacultyForm fields={fields} teachers={teachers} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -153,14 +174,22 @@ export function ListFaculties() {
           dataIndex: "parentDomain",
           title: "Domaine",
           render: (_, record, __) => `${record.field.name}`,
-          ellipsis:true
+          ellipsis: true,
         },
-
+        {
+          key: "members",
+          dataIndex: "members",
+          title: "Membres",
+          ellipsis: true,
+          render: (_, record) => <ListFacultyMembers faculty={record} />,
+        },
         {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} fields={fields} />;
+            return (
+              <ActionsBar record={record} fields={fields} teachers={teachers} />
+            );
           },
           width: 132,
         },

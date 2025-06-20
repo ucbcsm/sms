@@ -1,11 +1,15 @@
 import { Teacher } from "@/types";
 import api from "../fetcher";
 import { updateUser } from "./user";
-import { number } from "zod";
 
 export async function getTeachers() {
   const res = await api.get(`/faculty/teachers/`);
   return res.data.results as Teacher[];
+}
+
+export async function getAllTeachers() {
+  const res = await api.get(`/faculty/teachers/?get_all=true`);
+  return res.data as Teacher[];
 }
 
 export async function getTeachersByFaculty(facultyId: number) {
