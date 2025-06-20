@@ -86,9 +86,9 @@ export default function Page() {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={16}>
+      <Col xs={24} sm={24} md={16}>
         <Row gutter={[16, 16]}>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -104,7 +104,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -128,7 +128,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -153,7 +153,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -164,7 +164,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -175,7 +175,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -212,8 +212,8 @@ export default function Page() {
             </Card>
           </Col> */}
           <Col span={24}>
-            <Card title="Départements">
-              {/* <Typography.Title level={5}></Typography.Title> */}
+            <Card>
+              <Typography.Title level={5}>Départements</Typography.Title>
               <List
                 dataSource={departments}
                 renderItem={(item) => (
@@ -252,7 +252,7 @@ export default function Page() {
           </Col>
         </Row>
       </Col>
-      <Col span={8}>
+      <Col xs={24} sm={24} md={8}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Card loading={isPending}>
@@ -283,12 +283,10 @@ export default function Page() {
                   },
                 ]}
               />
-            </Card>
-          </Col>
-          <Col span={24}>
-            <Card loading={isPending}>
+              <div className="pt-5">
               <Typography.Title level={5}>Membres</Typography.Title>
               <FacultyMembersList faculty={faculty} />
+              </div>
             </Card>
           </Col>
         </Row>

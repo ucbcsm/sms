@@ -30,7 +30,7 @@ export function StudentsStatistics() {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex>
             <Statistic
@@ -57,7 +57,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -73,7 +73,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -93,7 +93,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -114,7 +114,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -135,7 +135,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -156,7 +156,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -167,7 +167,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -178,7 +178,7 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between">
             <Statistic
@@ -189,14 +189,18 @@ export function StudentsStatistics() {
           </Flex>
         </Card>
       </Col>
-      <Col span={6}>
+      <Col xs={24} sm={12} md={6}>
         <Card>
           <Flex justify="space-between" align="flex-end">
             <Statistic
               loading={isPending}
               title="Candidatures en attente"
               valueRender={() => (
-                <Badge count={data?.pending_application_count} color="red" overflowCount={9} />
+                <Badge
+                  count={data?.pending_application_count}
+                  color="red"
+                  overflowCount={9}
+                />
               )}
             />
             <Button

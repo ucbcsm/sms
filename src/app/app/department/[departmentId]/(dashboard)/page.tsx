@@ -20,7 +20,6 @@ import {
 import { useParams } from "next/navigation";
 import { DepartmentMembersList } from "./_components/members/list";
 import { useState } from "react";
-import { Salsa } from "next/font/google";
 import { EditDepartmentForm } from "@/app/console/fields/departments/forms/edit";
 
 export default function Page() {
@@ -71,9 +70,9 @@ export default function Page() {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={16}>
+      <Col xs={24} sm={24} md={16}>
         <Row gutter={[16, 16]}>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -89,7 +88,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -113,7 +112,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -138,7 +137,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -149,7 +148,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col xs={24} sm={12} md={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -194,7 +193,7 @@ export default function Page() {
           </Col> */}
         </Row>
       </Col>
-      <Col span={8}>
+      <Col xs={24} md={8}>
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Card loading={isPending}>
@@ -231,23 +230,21 @@ export default function Page() {
                   // },
                 ]}
               />
-            </Card>
-          </Col>
-          <Col span={24}>
-            <Card loading={isPending}>
-              <Typography.Title level={5}>Membres</Typography.Title>
-              <DepartmentMembersList department={department} />
+              <div className="pt-5">
+                <Typography.Title level={5}>Membres</Typography.Title>
+                <DepartmentMembersList department={department} />
+              </div>
             </Card>
           </Col>
         </Row>
       </Col>
-       <EditDepartmentForm
-              department={department!}
-              faculties={faculties}
-              teachers={teachers}
-              open={openEdit}
-              setOpen={setOpenEdit}
-            />
+      <EditDepartmentForm
+        department={department!}
+        faculties={faculties}
+        teachers={teachers}
+        open={openEdit}
+        setOpen={setOpenEdit}
+      />
     </Row>
   );
 }

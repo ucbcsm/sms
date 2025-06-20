@@ -53,6 +53,9 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["faculties"] });
+          queryClient.invalidateQueries({
+            queryKey: ["faculty", `${faculty.id}`],
+          });
           messageApi.success("Faculté modifiée avec succès !");
           setOpen(false);
         },

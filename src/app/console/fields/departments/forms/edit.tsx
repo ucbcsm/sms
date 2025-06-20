@@ -48,13 +48,13 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(
       { id: department.id, params: values },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["departments"] });
+          queryClient.invalidateQueries({queryKey:["department", `${department.id}`]})
           messageApi.success("Département modifié avec succès !");
           setOpen(false);
         },
