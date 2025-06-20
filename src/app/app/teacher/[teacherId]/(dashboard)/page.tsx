@@ -126,20 +126,20 @@ export default function Page() {
                 label: "Grade académique",
                 children: teacher?.academic_grade,
               },
-              {
-                key: "experience",
-                label: "Facultés assignées",
-                children: teacher?.assigned_faculties
-                  .map((fac) => fac.name)
-                  .join(", "),
-              },
-              {
-                key: "experience",
-                label: "Départements assignés",
-                children: teacher?.assigned_departements
-                  .map((dep) => dep.name)
-                  .join(", "),
-              },
+              // {
+              //   key: "assigned_faculties",
+              //   label: "Facultés assignées",
+              //   children: teacher?.assigned_faculties
+              //     .map((fac) => fac.name)
+              //     .join(", "),
+              // },
+              // {
+              //   key: "experience",
+              //   label: "assigned_departements",
+              //   children: teacher?.assigned_departements
+              //     .map((dep) => dep.name)
+              //     .join(", "),
+              // },
               {
                 key: "experience",
                 label: "Autres responsabilités",
