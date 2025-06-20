@@ -176,12 +176,12 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           initialValues={{
             ...teacher,
             ...teacher?.user,
-            assigned_departements: teacher?.assigned_departements?.map(
-              (dept) => dept.id
-            ),
-            assigned_faculties: teacher?.assigned_faculties?.map(
-              (fac) => fac.id
-            ),
+            // assigned_departements: teacher?.assigned_departements?.map(
+            //   (dept) => dept.id
+            // ),
+            // assigned_faculties: teacher?.assigned_faculties?.map(
+            //   (fac) => fac.id
+            // ),
             is_permanent_teacher: teacher?.user.is_permanent_teacher,
             date_of_birth: dayjs(`${teacher?.date_of_birth}`, "YYYY-MM-DD"),
           }}

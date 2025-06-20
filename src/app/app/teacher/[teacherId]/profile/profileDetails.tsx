@@ -3,7 +3,6 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getHSLColor, getMaritalStatusName } from "@/lib/utils";
 import { Department, Faculty, Teacher } from "@/types";
-import { EditOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,
