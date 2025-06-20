@@ -2,9 +2,11 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import {
+  getAllTeachers,
   getDepartmentsByFacultyId,
   getFaculty,
   getFacultyDashboard,
+  getFields,
 } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -26,8 +28,12 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import { useYid } from "@/hooks/use-yid";
 import { FacultyMembersList } from "./_components/members/list";
+import { EditOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { EditFacultyForm } from "@/app/console/fields/faculties/forms/edit";
 
 export default function Page() {
+  const [openEdit, setOpenEdit] = useState<boolean>(false);
   const { facultyId } = useParams();
   const { yid } = useYid();
   const router = useRouter();
@@ -57,6 +63,22 @@ export default function Page() {
     queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
     enabled: !!facultyId,
   });
+
+    const { data: fields } = useQuery({
+      queryKey: ["fields"],
+      queryFn: getFields,
+    });
+  
+    const {
+      data: teachers,
+      isPending: isPendinfTeachers,
+      isError: isErrorTeachers,
+    } = useQuery({
+      queryKey: ["all_teachers"],
+      queryFn: getAllTeachers,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    });
 
   if (isError || isErrorDashboard) {
     return <DataFetchErrorResult />;
@@ -235,12 +257,16 @@ export default function Page() {
           <Col span={24}>
             <Card loading={isPending}>
               <Descriptions
-                title="Détails sur la faculté"
-                // extra={
-                //   <Button type="link" icon={<EditOutlined />}>
-                //     Modifier
-                //   </Button>
-                // }
+                title="Détails"
+                extra={
+                  <Button
+                    type="link"
+                    icon={<EditOutlined />}
+                    onClick={() => setOpenEdit(true)}
+                  >
+                    Modifier
+                  </Button>
+                }
                 column={1}
                 items={[
                   {
@@ -260,15 +286,20 @@ export default function Page() {
             </Card>
           </Col>
           <Col span={24}>
-            <Card>
-              <Typography.Title level={5}>
-                Responsables de la faculté
-              </Typography.Title>
-              <FacultyMembersList faculty={faculty}/>
+            <Card loading={isPending}>
+              <Typography.Title level={5}>Membres</Typography.Title>
+              <FacultyMembersList faculty={faculty} />
             </Card>
           </Col>
         </Row>
       </Col>
+      <EditFacultyForm
+        faculty={faculty!}
+        fields={fields}
+        teachers={teachers}
+        open={openEdit}
+        setOpen={setOpenEdit}
+      />
     </Row>
   );
 }

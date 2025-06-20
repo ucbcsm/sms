@@ -12,14 +12,16 @@ import {
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Dropdown, Input, Space, Table } from "antd";
+import { Avatar, Button, Dropdown, Input, Space, Table } from "antd";
 import { FC, useState } from "react";
 import { EditFacultyForm } from "./forms/edit";
 import { DeleteFacultyForm } from "./forms/delete";
 import { NewFacultyForm } from "./forms/new";
 import { ListFacultyMembers } from "./list-members";
+import { useRouter } from "next/navigation";
 
 type ActionsBarProps = {
   record: Faculty;
@@ -30,6 +32,7 @@ type ActionsBarProps = {
 const ActionsBar: FC<ActionsBarProps> = ({ record, fields, teachers }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const router =useRouter()
 
   return (
     <Space size="middle">
@@ -37,7 +40,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, fields, teachers }) => {
         color="primary"
         variant="dashed"
         title="Gérer la faculté"
-        onClick={() => {}}
+        onClick={() => {router.push(`/app/faculty/${record.id}`)}}
         style={{ boxShadow: "none" }}
       >
         Gérer
@@ -181,7 +184,12 @@ export function ListFaculties() {
           dataIndex: "members",
           title: "Membres",
           ellipsis: true,
-          render: (_, record) => <ListFacultyMembers faculty={record} />,
+          render: (_, record) => (
+            <Space size={1}>
+              <Avatar icon={<TeamOutlined />} />{" "}
+              <ListFacultyMembers faculty={record} />
+            </Space>
+          ),
         },
         {
           key: "actions",

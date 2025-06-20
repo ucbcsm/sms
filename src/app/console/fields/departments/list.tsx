@@ -12,14 +12,16 @@ import {
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Dropdown, Input, Space, Table } from "antd";
+import { Avatar, Button, Dropdown, Input, Space, Table } from "antd";
 import { FC, useState } from "react";
 import { EditDepartmentForm } from "./forms/edit";
 import { DeleteDepartmentForm } from "./forms/delete";
 import { NewDepartmentForm } from "./forms/new";
 import { ListDepartmentMembers } from "./list-members";
+import { useRouter } from "next/navigation";
 
 type ActionsBarProps = {
   record: Department;
@@ -30,14 +32,14 @@ type ActionsBarProps = {
 const ActionsBar: FC<ActionsBarProps> = ({ record, faculties, teachers }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
-
+  const router =useRouter()
   return (
     <Space size="middle">
       <Button
         color="primary"
         variant="dashed"
         title="Gérer le département"
-        onClick={() => {}}
+        onClick={() => {router.push(`/app/department/${record.id}`)}}
         style={{ boxShadow: "none" }}
       >
         Gérer
@@ -180,13 +182,24 @@ export function ListDepartments() {
           dataIndex: "members",
           title: "Membres",
           ellipsis: true,
-          render: (_, record) => <ListDepartmentMembers department={record} />,
+          render: (_, record) => (
+            <Space size={1}>
+              <Avatar icon={<TeamOutlined />} />
+              <ListDepartmentMembers department={record} />
+            </Space>
+          ),
         },
         {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} faculties={faculties} teachers={teachers} />;
+            return (
+              <ActionsBar
+                record={record}
+                faculties={faculties}
+                teachers={teachers}
+              />
+            );
           },
           width: 132,
         },
