@@ -4,28 +4,39 @@ import { Button, Card, Layout, Result, Space, theme, Typography } from "antd";
 import BackButton from "./backButton";
 import { Palette } from "./palette";
 import { FC } from "react";
+import { useSessionStore } from "@/store";
+import { redirect } from "next/navigation";
 
 type DataFetchErrorResultProps = {
   variant?: "default" | "card" | "page";
 };
 
-const ErrorContent = () => (
-  <Result
-    title="Erreur de récupération des données"
-    subTitle="Une erreur est survenue lors de la tentative de récupération des données depuis le serveur. Veuillez réessayer."
-    status="error"
-    extra={
-      <Button
-        type="link"
-        onClick={() => {
-          window.location.reload();
-        }}
-      >
-        Réessayer
-      </Button>
-    }
-  />
-);
+const ErrorContent = () => {
+  const {user} = useSessionStore();
+
+if(!user){
+  redirect("/auth/login")
+}
+
+  return (
+    <Result
+      title="Erreur de récupération des données"
+      subTitle="Une erreur est survenue lors de la tentative de récupération des données depuis le serveur. Veuillez réessayer."
+      status={"error"}
+      extra={
+        <Button
+          type="link"
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          Réessayer
+        </Button>
+      }
+    />
+  );
+};
+
 
 export const DataFetchErrorResult: FC<DataFetchErrorResultProps> = ({
   variant = "default",
