@@ -96,7 +96,8 @@ export const getServerSession = async (): Promise<Session> => {
       faculty,
     };
   } catch (error: any) {
-    throw new Error("Failed to get server session");
+    return null
+    // throw new Error("Failed to get server session");
   }
 };
 
