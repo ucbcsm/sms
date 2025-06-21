@@ -71,39 +71,32 @@ export const getServerSession = async (): Promise<Session> => {
     let faculty: Faculty | undefined = undefined;
     try {
       const resFaculty = await api.get(`/account/faculty-from-user/`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       faculty = resFaculty.data as Faculty | undefined;
     } catch (error: any) {
       if (error?.response?.status !== 404 && error?.response?.status !== 400) {
-      throw error;
+        throw error;
       }
       // If 404 or 400, faculty remains undefined
     }
 
-    // const faculty = resFaculty.data as Faculty | undefined;
 
-    
-
-    if (!user) {
-      return null;
-    }
+    // if (!user) {
+    //   return null;
+    // }
 
     return {
       accessToken,
       refreshToken,
       user,
       error: null,
-      faculty: faculty,
+      faculty,
     };
   } catch (error: any) {
-    const cookieStore = await cookies();
-    cookieStore.delete("accessToken");
-    cookieStore.delete("refreshToken");
-    return null;
-    // throw new Error("Failed to get server session");
+    throw new Error("Failed to get server session");
   }
 };
 
