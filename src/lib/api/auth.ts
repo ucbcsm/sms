@@ -1,6 +1,7 @@
 "use server";
-import { authApi } from "@/lib/fetcher";
-import { User } from "@/types";
+
+import api, { authApi } from "@/lib/fetcher";
+import { Faculty, User } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -19,6 +20,7 @@ export type Session = {
   refreshToken: string | null;
   user: User | null;
   error: string | null;
+  faculty?: Faculty;
 } | null;
 
 /**
@@ -56,6 +58,23 @@ export const getServerSession = async (): Promise<Session> => {
       },
     });
 
+    let faculty: Faculty | undefined = undefined;
+    try {
+      const resFaculty = await api.get(`/account/faculty-from-user/`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      });
+      faculty = resFaculty.data as Faculty | undefined;
+    } catch (error: any) {
+      if (error?.response?.status !== 404 && error?.response?.status !== 400) {
+      throw error;
+      }
+      // If 404 or 400, faculty remains undefined
+    }
+
+    // const faculty = resFaculty.data as Faculty | undefined;
+
     const user = userResponse.data;
 
     if (!user) {
@@ -67,9 +86,10 @@ export const getServerSession = async (): Promise<Session> => {
       refreshToken,
       user,
       error: null,
+      faculty: faculty,
     };
   } catch (error: any) {
-     const cookieStore = await cookies();
+    const cookieStore = await cookies();
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
     return null;
@@ -103,15 +123,11 @@ export const login = async (credentials: {
   password: string;
 }) => {
   try {
-    
     const Cookies = await cookies();
 
     const res = await authApi.post("/jwt/create", credentials);
-    // console.log("Res: ",res)
-    // console.log("Status: ",res.status)
 
     if (res.status !== 200) {
-      console.error("Login failed with status:", res.status);
       throw new Error("Login failed");
     }
 
@@ -121,21 +137,17 @@ export const login = async (credentials: {
     };
 
     if (!access || !refresh) {
-      console.error("Missing tokens in response:", res.data);
       throw new Error("Invalid login response");
     } else {
       Cookies.set("accessToken", access);
       Cookies.set("refreshToken", refresh);
     }
   } catch (error: any) {
-    console.error("Error during login:", error.message || error);
     if (error?.status === 401) {
-      console.error("Invalid credentials:", error.message || error);
       throw new Error("Invalid credentials. Please try again.");
     }
 
     throw new Error("An error occurred during login. Please try again.");
-  
   }
 };
 
@@ -210,8 +222,8 @@ export const logout = async () => {
  */
 export const resetPassword = async (email: string) => {
   try {
-    const res= await authApi.post("/users/reset_password/", { email });
-    console.log("Res: ",res)
+    const res = await authApi.post("/users/reset_password/", { email });
+    console.log("Res: ", res);
   } catch (error: any) {
     console.error("Error during password reset:", error);
     // console.error("Error during password reset:", error.message || error);

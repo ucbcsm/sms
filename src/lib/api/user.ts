@@ -18,3 +18,21 @@ export async function updateUser({
   });
   return res.data;
 }
+
+// export async function getAsignedFaculty() {
+
+//   const cookieStore = await cookies();
+//   const accessToken = cookieStore.get("accessToken")?.value || null;
+
+//   const res = await api.get(`/account/faculty-from-user/`, {
+//     headers: {
+//       Authorization: `Bearer ${accessToken}`,
+//     },
+//   });
+
+//   if (!res.data) {
+//     return null;
+//   }
+
+//   return res.data as Faculty;
+// }
