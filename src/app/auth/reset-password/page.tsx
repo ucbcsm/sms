@@ -16,7 +16,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -58,6 +58,7 @@ export default function Page() {
   };
 
   return (
+    <Suspense>
     <Layout>
       {contextHolder}
       <Layout.Content
@@ -188,5 +189,6 @@ export default function Page() {
         </div>
       </Layout.Sider>
     </Layout>
+    </Suspense>
   );
 }
