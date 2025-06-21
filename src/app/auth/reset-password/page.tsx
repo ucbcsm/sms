@@ -32,17 +32,16 @@ export default function Page() {
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [pendingEmail, setPendingEmail] = useQueryState(
-    "pending-email",
-    parseAsBoolean.withDefault(false)
-  );
+  // const [pendingEmail, setPendingEmail] = useQueryState(
+  //   "pending-email",
+  //   parseAsBoolean.withDefault(false)
+  // );
 
   const onFinish = (values: FormSchema) => {
     setLoading(true);
-
     resetPassword(values.email)
       .then(() => {
-        setPendingEmail(true);
+        // setPendingEmail(true);
         messageApi.success(
           "Un e-mail de réinitialisation a été envoyé. Veuillez vérifier votre boîte de réception."
         );
@@ -100,7 +99,7 @@ export default function Page() {
             </Space>
           </Layout.Header>
           <div className="flex-1 flex flex-col justify-center p-8">
-            {!pendingEmail ? (
+            {/* {!pendingEmail ? ( */}
               <>
                 <div className="">
                   <Typography.Title level={5} style={{ marginBottom: 0 }}>
@@ -157,7 +156,7 @@ export default function Page() {
                   </Form>
                 </div>
               </>
-            ) : (
+            {/* ) : (
               <Result
                 status="success"
                 title="E-mail envoyé avec succès"
@@ -171,8 +170,8 @@ export default function Page() {
                 //     Retour à la connexion
                 //   </Button>,
                 // ]}
-              />
-            )}
+              /> 
+            )}*/}
           </div>
           <Layout.Footer
             style={{
