@@ -84,9 +84,9 @@ export const getServerSession = async (): Promise<Session> => {
     }
 
 
-    // if (!user) {
-    //   return null;
-    // }
+    if (!user) {
+      return null;
+    }
 
     return {
       accessToken,
