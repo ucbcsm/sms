@@ -52,11 +52,21 @@ export const getServerSession = async (): Promise<Session> => {
       return null;
     }
 
-    const userResponse = await authApi.get("/users/me/", {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    let user = null;
+    try {
+      const userResponse = await authApi.get("/users/me/", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      user = userResponse.data;
+    } catch (error: any) {
+      if (error?.response?.status === 401) {
+        // Unauthorized, session is invalid
+        return null;
+      }
+      throw error;
+    }
 
     let faculty: Faculty | undefined = undefined;
     try {
@@ -75,7 +85,7 @@ export const getServerSession = async (): Promise<Session> => {
 
     // const faculty = resFaculty.data as Faculty | undefined;
 
-    const user = userResponse.data;
+    
 
     if (!user) {
       return null;
