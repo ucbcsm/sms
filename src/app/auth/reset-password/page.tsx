@@ -58,7 +58,7 @@ export default function Page() {
   };
 
   return (
-    <Suspense>
+    <Suspense fallback={<div>Loading...</div>}>
     <Layout>
       {contextHolder}
       <Layout.Content
