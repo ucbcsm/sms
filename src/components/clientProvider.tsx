@@ -27,7 +27,7 @@ export default function ClientProvider({
     update({ ...session });
   }, []);
 
-  console.log("ClientProvider session:", session);
+  // console.log("ClientProvider session:", session);
 
   return (
     <>

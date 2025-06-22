@@ -21,12 +21,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession();
-  
+
   return (
     <html lang="en">
       <body className={`${inter.className}  antialiased`}>
         <Suspense>
-        <ClientProvider session={session}>{children}</ClientProvider>
+          <ClientProvider session={session}>{children}</ClientProvider>
         </Suspense>
       </body>
     </html>
