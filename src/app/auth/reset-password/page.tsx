@@ -16,7 +16,7 @@ import {
 } from "antd";
 import { useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { Suspense, useState } from "react";
+import {  useState } from "react";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -57,7 +57,7 @@ export default function Page() {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    // <Suspense fallback={<div>Loading...</div>}>
       <Layout>
         {contextHolder}
         <Layout.Content
@@ -192,6 +192,6 @@ export default function Page() {
           </div>
         </Layout.Sider>
       </Layout>
-    </Suspense>
+    // </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 
-import { NextRequest, NextResponse } from "next/server";
+// import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(request: NextRequest) {
+// export async function middleware(request: NextRequest) {
  
   // const cookieStore = await cookies();
   // const accessToken = cookieStore.get("accessToken");
@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
   //   return NextResponse.redirect(new URL(`/auth/login/?callback=${request.nextUrl.pathname}`, request.url));
   // }
 
-}
+// }
 
 // export const config = {
 //   matcher: [
