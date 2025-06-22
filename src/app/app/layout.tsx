@@ -58,7 +58,7 @@ export default function AppLayout({
     queryFn: getFaculties,
   });
 
-  const getFacltiesAsMenu = () => {
+  const getFacultiesAsMenu = () => {
     const facaltiesAsMenu = faculties?.map((fac) => ({
       key: `/app/faculty/${fac.id}`,
       label: fac.name,
@@ -124,7 +124,7 @@ export default function AppLayout({
               key: "",
               label: "Filières",
               icon: <BranchesOutlined />,
-              children: getFacltiesAsMenu(),
+              children: getFacultiesAsMenu(),
             },
             {
               key: "/app/jurys",
