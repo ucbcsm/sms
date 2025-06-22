@@ -41,7 +41,7 @@ export default function Page() {
     setLoading(true);
     resetPassword(values.email)
       .then(() => {
-        // setPendingEmail(true);
+        setPendingEmail(true);
         messageApi.success(
           "Un e-mail de réinitialisation a été envoyé. Veuillez vérifier votre boîte de réception."
         );
