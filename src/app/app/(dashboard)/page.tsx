@@ -18,7 +18,7 @@ import { DepartmentsStatistics } from "./statistics/departments";
 
 
 export default function Page() {
-  
+
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -28,12 +28,12 @@ export default function Page() {
     parseAsStringEnum(["students", "teachers"]).withDefault("students")
   );
 
-  const [dashTab, setDashTab] = useQueryState(
-    "dash_tab",
-    parseAsStringEnum(["faculty", "department", "enrollment"]).withDefault(
-      "faculty"
-    )
-  );
+  // const [dashTab, setDashTab] = useQueryState(
+  //   "dash_tab",
+  //   parseAsStringEnum(["faculty", "department", "enrollment"]).withDefault(
+  //     "faculty"
+  //   )
+  // );
 
   return (
     <Layout>
