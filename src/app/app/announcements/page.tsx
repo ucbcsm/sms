@@ -1,4 +1,6 @@
-"use client";
+
+'use client'
+
 import {
   Avatar,
   Button,
@@ -23,9 +25,11 @@ import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 
 export default function Page() {
+
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+
   return (
     <Layout>
       <Layout.Content
