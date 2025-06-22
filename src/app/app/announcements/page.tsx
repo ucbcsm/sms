@@ -1,5 +1,4 @@
-
-'use client'
+"use client";
 
 import {
   Avatar,
@@ -25,7 +24,6 @@ import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 
 export default function Page() {
-
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -170,7 +168,15 @@ export default function Page() {
                 key={item.id}
                 extra={
                   <Space>
-                    <Dropdown menu={{ items: [{key:"1", label:"Action 1"},{key:"2", label:"Action 2"}, {key:"3", label:"Action 3"}] }}>
+                    <Dropdown
+                      menu={{
+                        items: [
+                          { key: "1", label: "Action 1" },
+                          { key: "2", label: "Action 2" },
+                          { key: "3", label: "Action 3" },
+                        ],
+                      }}
+                    >
                       <Button type="text" icon={<MoreOutlined />} />
                     </Dropdown>
                   </Space>
@@ -223,43 +229,44 @@ export default function Page() {
           <List
             dataSource={[
               {
-          id: "1",
-          title: "Planification des annonces",
-          description: "Réunion pour planifier les annonces du mois.",
+                id: "1",
+                title: "Planification des annonces",
+                description: "Réunion pour planifier les annonces du mois.",
               },
               {
-          id: "2",
-          title: "Validation des contenus",
-          description:
-            "Vérification et validation des annonces à publier.",
+                id: "2",
+                title: "Validation des contenus",
+                description:
+                  "Vérification et validation des annonces à publier.",
               },
               {
-          id: "3",
-          title: "Mise à jour des canaux",
-          description: "Actualisation des canaux de communication.",
+                id: "3",
+                title: "Mise à jour des canaux",
+                description: "Actualisation des canaux de communication.",
               },
               {
-          id: "4",
-          title: "Formation en communication",
-          description: "Atelier pour améliorer les compétences.",
+                id: "4",
+                title: "Formation en communication",
+                description: "Atelier pour améliorer les compétences.",
               },
               {
-          id: "5",
-          title: "Analyse des retours",
-          description: "Évaluation des retours sur les annonces publiées.",
+                id: "5",
+                title: "Analyse des retours",
+                description:
+                  "Évaluation des retours sur les annonces publiées.",
               },
             ]}
             renderItem={(item, index) => (
               <List.Item key={item.id}>
-          <List.Item.Meta
-            avatar={
-              <Avatar
-                src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-              />
-            }
-            title={<Link href="#">{item.title}</Link>}
-            description={item.description}
-          />
+                <List.Item.Meta
+                  avatar={
+                    <Avatar
+                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+                    />
+                  }
+                  title={<Link href="#">{item.title}</Link>}
+                  description={item.description}
+                />
               </List.Item>
             )}
           />
