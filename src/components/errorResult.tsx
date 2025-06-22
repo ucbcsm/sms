@@ -4,19 +4,19 @@ import { Button, Card, Layout, Result, Space, theme, Typography } from "antd";
 import BackButton from "./backButton";
 import { Palette } from "./palette";
 import { FC } from "react";
-import { useSessionStore } from "@/store";
-import { redirect } from "next/navigation";
+// import { useSessionStore } from "@/store";
+// import { redirect } from "next/navigation";
 
 type DataFetchErrorResultProps = {
   variant?: "default" | "card" | "page";
 };
 
 const ErrorContent = () => {
-  const {user} = useSessionStore();
+//   const user = useSessionStore(state=> state.user);
 
-if(!user){
-  redirect("/auth/login")
-}
+// if(!user){
+//   redirect("/auth/login")
+// }
 
   return (
     <Result
