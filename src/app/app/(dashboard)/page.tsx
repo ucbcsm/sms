@@ -1,24 +1,13 @@
-
 "use client";
 
 import { Palette } from "@/components/palette";
-import {
-  Button,
-  Card,
-  Flex,
-  Layout,
-  Space,
-  theme,
-  Typography,
-} from "antd";
+import { Button, Card, Flex, Layout, Space, theme, Typography } from "antd";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { StudentsStatistics } from "./statistics/students";
 import { TeachersStatistics } from "./statistics/teachers";
 import { DepartmentsStatistics } from "./statistics/departments";
 
-
 export default function Page() {
-
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -119,7 +108,7 @@ export default function Page() {
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
       >
-        <DepartmentsStatistics/>
+        <DepartmentsStatistics />
       </Layout.Sider>
     </Layout>
   );
