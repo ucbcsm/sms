@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { Palette } from "@/components/palette";
 import { resetPassword } from "@/lib/api/auth";
