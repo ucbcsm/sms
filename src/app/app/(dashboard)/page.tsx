@@ -18,6 +18,7 @@ import { DepartmentsStatistics } from "./statistics/departments";
 
 
 export default function Page() {
+  
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
