@@ -1,3 +1,4 @@
+'use client'
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { useYid } from "@/hooks/use-yid";
 import { getYearDashboard, getYearProgressPercent } from "@/lib/api";

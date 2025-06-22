@@ -1,3 +1,4 @@
+'use client'
 import { getTeachersDashboard } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Flex, Progress, Row, Skeleton, Statistic } from "antd";

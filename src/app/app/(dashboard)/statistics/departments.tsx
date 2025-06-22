@@ -1,4 +1,5 @@
 "use client";
+
 import { getDepartments } from "@/lib/api";
 import { Department } from "@/types";
 import { RightOutlined, SearchOutlined } from "@ant-design/icons";

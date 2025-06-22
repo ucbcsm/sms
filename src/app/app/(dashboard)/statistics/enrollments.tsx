@@ -1,3 +1,4 @@
+'use client'
 import { CheckOutlined, CloseOutlined, DeleteOutlined, EditOutlined, EyeOutlined, MoreOutlined } from "@ant-design/icons"
 import { Avatar, Badge, Button, Dropdown, List, Typography } from "antd"
 
