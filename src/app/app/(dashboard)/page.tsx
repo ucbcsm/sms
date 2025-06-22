@@ -1,8 +1,8 @@
+
 "use client";
 
 import { Palette } from "@/components/palette";
 import {
-  Badge,
   Button,
   Card,
   Flex,
@@ -15,10 +15,7 @@ import { parseAsStringEnum, useQueryState } from "nuqs";
 import { StudentsStatistics } from "./statistics/students";
 import { TeachersStatistics } from "./statistics/teachers";
 import { DepartmentsStatistics } from "./statistics/departments";
-import { EnrollmentsStatistics } from "./statistics/enrollments";
-import { useQuery } from "@tanstack/react-query";
-import { getDepartments } from "@/lib/api";
-import { useRouter } from "next/navigation";
+
 
 export default function Page() {
   const {
