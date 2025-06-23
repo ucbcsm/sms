@@ -26,6 +26,8 @@ export default function ClientProvider({
   useEffect(() => {
     if (session) {
       update({ ...session });
+    }else{
+      window.location.reload()
     }
   }, []);
 
