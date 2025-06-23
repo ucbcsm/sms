@@ -17,7 +17,7 @@ export const useYid = () => {
     const storedYid = localStorage.getItem("yid");
 
     if (storedYid) {setYid(parseInt(storedYid));}
-  }, [localStorage]);
+  }, []);
 
   return { yid, setYid, removeYid };
 };

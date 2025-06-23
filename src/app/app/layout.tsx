@@ -121,7 +121,7 @@ export default function AppLayout({
               icon: <DollarOutlined />,
             },
             {
-              key: "",
+              key: "fields",
               label: "Filières",
               icon: <BranchesOutlined />,
               children: getFacultiesAsMenu(),
