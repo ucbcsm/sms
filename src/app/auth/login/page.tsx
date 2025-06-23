@@ -2,6 +2,7 @@ import { checkInstitutionExistence } from "@/lib/api";
 import { LoginForm } from "./form";
 import { redirect } from "next/navigation";
 import { getServerSession } from "@/lib/api/auth";
+import { Suspense } from "react";
 
 export default async function Page() {
   const exists = await checkInstitutionExistence();
@@ -11,13 +12,13 @@ export default async function Page() {
     redirect("/config");
   }
 
-  if (auth?.faculty) {
-    redirect(`/app/faculty/${auth.faculty.id}`);
-  } else {
-    if (auth?.user) {
-      redirect("/app");
-    }
-  }
+  if (auth?.user) {
+    redirect(auth.faculty ? `/app/faculty/${auth.faculty.id}` : "/app");
+  } 
 
-  return <LoginForm />;
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
 }

@@ -24,7 +24,9 @@ export default function ClientProvider({
 
 
   useEffect(() => {
-    update({ ...session });
+    if (session) {
+      update({ ...session });
+    }
   }, []);
 
   // console.log("ClientProvider session:", session);
