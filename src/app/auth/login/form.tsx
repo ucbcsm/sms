@@ -13,7 +13,7 @@ import {
   theme,
   Typography,
 } from "antd";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
 
@@ -37,7 +37,7 @@ export function LoginForm() {
     login(values)
       .then(() => {
         messageApi.success("Connexion réussie!");
-        router.refresh()
+        // router.refresh()
         // window.location.href = "/app";
       })
       .catch((error) => {

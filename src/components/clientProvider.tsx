@@ -21,19 +21,13 @@ export default function ClientProvider({
   session,
 }: Readonly<{ children: React.ReactNode; session: any }>) {
   const update = useSessionStore((state) => state.update);
-  const pathname = usePathname();
 
   useEffect(() => {
     if (session) {
       update({ ...session });
-    } else {
-      if (!pathname.startsWith("/auth/login")) {
-        window.location.reload();
-      }
     }
   }, []);
 
-  // console.log("ClientProvider session:", session);
 
   return (
     <>
