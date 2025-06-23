@@ -37,7 +37,8 @@ export function LoginForm() {
     login(values)
       .then(() => {
         messageApi.success("Connexion réussie!");
-        window.location.href = "/app"
+        router.refresh()
+        // window.location.href = "/app";
       })
       .catch((error) => {
         setLoading(false);
