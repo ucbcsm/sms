@@ -11,10 +11,12 @@ export default async function Page() {
     redirect("/config");
   }
 
-  if (auth?.user && typeof auth.faculty === "undefined") {
-    redirect("/app");
-  } else if (auth?.user && typeof auth.faculty?.id === "number") {
+  if (auth?.faculty) {
     redirect(`/app/faculty/${auth.faculty.id}`);
+  } else {
+    if (auth?.user) {
+      redirect("/app");
+    }
   }
 
   return <LoginForm />;
