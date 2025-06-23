@@ -4,9 +4,9 @@ import { useSessionStore } from "@/store";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider, ThemeConfig } from "antd";
+import { usePathname } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { useEffect } from "react";
-
 
 const queryClient = new QueryClient();
 
@@ -21,13 +21,15 @@ export default function ClientProvider({
   session,
 }: Readonly<{ children: React.ReactNode; session: any }>) {
   const update = useSessionStore((state) => state.update);
-
+  const pathname = usePathname();
 
   useEffect(() => {
     if (session) {
       update({ ...session });
-    }else{
-      window.location.reload()
+    } else {
+      if (!pathname.startsWith("/auth/login")) {
+        window.location.reload();
+      }
     }
   }, []);
 
