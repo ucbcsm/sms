@@ -185,10 +185,65 @@ export const PaymentMethod = z.object({
 
 export type PaymentMethod = z.infer<typeof PaymentMethod>;
 
+export const Permission = z.object({
+  id: z.number(),
+  name: z.string(),
+  content_type_id: z.number(),
+  codename: z.string(),
+  content_type: z.number(),
+});
+
+export type Permission = z.infer<typeof Permission>;
+
+export const Group = z.object({
+  id: z.number(),
+  name: z.string(),
+  permissions: z.array(Permission),
+});
+
+export type Group = z.infer<typeof Group>;
+
+export const Role = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export type Role = z.infer<typeof Role>;
+
+export type RolesType =
+  | "is_apparitor"
+  | "is_apparitorat_personal"
+  | "is_faculty_coordinator"
+  | "is_faculty_secretary"
+  | "is_faculty_personal"
+  | "is_finance_budget_administrator"
+  | "is_finance_accountant"
+  | "is_finance_personal"
+  | "is_jury_president"
+  | "is_jury_secretary"
+  | "is_jury_member"
+  | "is_jury_personal"
+  | "is_rector"
+  | "is_rectorship_cabin_manager"
+  | "is_rectorship_secretary"
+  | "is_rectorship_personal"
+  | "is_academic_general_secretary"
+  | "is_sgad_cabin_manager"
+  | "is_sgad_secretary"
+  | "is_sgad_personal"
+  | "is_administrative_secretary_general"
+  | "is_sga_personal_manager"
+  | "is_sga_secretary"
+  | "is_sga_personal"
+  | "is_reseach_general_secretary"
+  | "is_sgr_cabin_manager"
+  | "is_sgr_secretary"
+  | "is_sgr_personal";
+
 export const User = z.object({
   id: z.number(),
   user_permissions: z.array(),
-  groups: z.array(),
+  groups: z.array(Group),
   last_login: z.string().datetime(),
   is_superuser: z.boolean(),
   first_name: z.string().nullable(),
@@ -204,7 +259,7 @@ export const User = z.object({
   matricule: z.string(),
   avatar: z.string().nullable(),
   pending_avatar: z.string().nullable(),
-  roles: z.array(),
+  roles: z.array(Role),
 });
 
 export type User = z.infer<typeof User>;
@@ -703,8 +758,6 @@ export type RequiredDocument = z.infer<typeof RequiredDocument>;
 export const Teacher = z.object({
   id: z.number(),
   user: User,
-  // assigned_faculties: z.array(Faculty),
-  // assigned_departements: z.array(Department),
   gender: z.enum(["M", "F"]),
   institution_of_origin: z.string(),
   academic_title: z.string(),

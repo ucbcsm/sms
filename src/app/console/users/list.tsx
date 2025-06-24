@@ -9,32 +9,26 @@ import {
   MoreOutlined,
   PlusOutlined,
   PrinterOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
-import {
-  Avatar,
-  Button,
-  Dropdown,
-  Input,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "@/lib/api";
+import { getGroups, getRoleName, getRoles, getUsers } from "@/lib/api";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import dayjs from "dayjs";
 import { FC, useState } from "react";
-import { User } from "@/types";
+import { Group, Role, User } from "@/types";
 import { DeleteUserForm } from "./forms/delete";
 import { EditUserForm } from "./forms/edit";
 
-
 type ActionsBarProps = {
   record: User;
+  groups?: Group[];
+  roles?: Role[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, groups, roles }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -44,12 +38,10 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
         user={record}
         open={openEdit}
         setOpen={setOpenEdit}
+        groups={groups}
+        roles={roles}
       />
-      <DeleteUserForm
-        user={record}
-        open={openDelete}
-        setOpen={setOpenDelete}
-      />
+      <DeleteUserForm user={record} open={openDelete} setOpen={setOpenDelete} />
       <Dropdown
         menu={{
           items: [
@@ -80,21 +72,44 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
   );
 };
 
+type ListUsersProps = {
+  // groups?: Group[];
+};
 
-export const ListUsers:FC=()=> {
-
-
-  const { data: users, isPending, isError } = useQuery({
+export const ListUsers: FC<ListUsersProps> = ({}) => {
+  const {
+    data: users,
+    isPending,
+    isError,
+  } = useQuery({
     queryKey: ["users"],
     queryFn: getUsers,
   });
 
-  if(isPending){
-    return <DataFetchPendingSkeleton variant="table"/>
+  const {
+    data: groups,
+    isPending: isPendingGroups,
+    isError: isErrorGroups,
+  } = useQuery({
+    queryKey: ["groups"],
+    queryFn: getGroups,
+  });
+
+  const {
+    data: roles,
+    isPending: isPendingRoles,
+    isError: isErrorRoles,
+  } = useQuery({
+    queryKey: ["roles"],
+    queryFn: getRoles,
+  });
+
+  if (isPending || isPendingGroups || isPendingRoles) {
+    return <DataFetchPendingSkeleton variant="table" />;
   }
 
-  if(isError){
-    return <DataFetchErrorResult/>
+  if (isError || isErrorGroups || isErrorRoles) {
+    return <DataFetchErrorResult />;
   }
 
   return (
@@ -152,7 +167,7 @@ export const ListUsers:FC=()=> {
               {record.first_name?.charAt(0) || "U"}
             </Avatar>
           ),
-          width:56
+          width: 56,
         },
         {
           key: "fullName",
@@ -174,16 +189,36 @@ export const ListUsers:FC=()=> {
           title: "Email",
         },
         {
-          key: "role",
-          dataIndex: "role",
-          title: "Rôle",
+          key: "roles",
+          dataIndex: "roles",
+          title: "Rôles",
+          render: (_, record) => (
+            <Space wrap>
+              {record.roles.map((r) => (
+                <Tag>{getRoleName(r.name)}</Tag>
+              ))}
+            </Space>
+          ),
+        },
+        {
+          key: "groups",
+          dataIndex: "groups",
+          title: "Groupes",
+          render: (_, record) => (
+            <Space wrap>
+              {record.groups.map((g) => (
+                <Tag icon={<TeamOutlined />}>{g.name}</Tag>
+              ))}
+            </Space>
+          ),
         },
         {
           key: "date_joined",
           dataIndex: "date_joined",
           title: "Création",
-          render: (_, record, __) => dayjs(record.date_joined).format("DD/MM/YYYY"),
-        ellipsis:true
+          render: (_, record, __) =>
+            dayjs(record.date_joined).format("DD/MM/YYYY"),
+          ellipsis: true,
         },
         {
           key: "status",
@@ -197,15 +232,13 @@ export const ListUsers:FC=()=> {
               {record.is_active ? "Actif" : "Bloqué"}
             </Tag>
           ),
-          width:60
+          width: 60,
         },
         {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return (
-             <ActionsBar record={record}/>
-            );
+            return <ActionsBar record={record} groups={groups} roles={roles} />;
           },
           width: 50,
         },
@@ -225,4 +258,4 @@ export const ListUsers:FC=()=> {
       bordered={false}
     />
   );
-}
+};

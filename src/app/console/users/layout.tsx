@@ -3,9 +3,9 @@
 import {
   DeleteOutlined,
   EditOutlined,
-  KeyOutlined,
   MoreOutlined,
   PlusCircleOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -25,6 +25,10 @@ import Link from "next/link";
 import BackButton from "@/components/backButton";
 import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getGroups, getPermissions } from "@/lib/api";
+import { GroupList } from "./groups/list";
+import { NewGroupForm } from "./groups/new";
 
 export default function UsersLayout({
   children,
@@ -35,6 +39,16 @@ export default function UsersLayout({
 
   const pathname = usePathname();
   const router = useRouter();
+
+   const {
+    data: permissions,
+    isPending: isPendingPermissions,
+    isError: isErrorPermissions,
+  } = useQuery({
+    queryKey: ["permissions"],
+    queryFn: getPermissions,
+  });
+ 
 
   return (
     <Layout>
@@ -111,15 +125,9 @@ export default function UsersLayout({
           style={{ paddingLeft: 24, paddingRight: 24, paddingTop: 12 }}
         >
           <Typography.Title level={5} className="">
-            Rôles
+            Groupes
           </Typography.Title>
-          <Button
-            type="link"
-            icon={<PlusCircleOutlined />}
-            title="Ajouter un rôle"
-          >
-            Ajouter
-          </Button>
+          <NewGroupForm permissions={permissions}/>
         </Flex>
         <div
           style={{
@@ -129,86 +137,7 @@ export default function UsersLayout({
             overflowY: "auto",
           }}
         >
-          <List
-            dataSource={[
-              {
-                id: "1",
-                name: "Administrateur",
-                description: "Accès complet au système",
-              },
-              {
-                id: "2",
-                name: "Enseignant",
-                description: "Dispenser des cours",
-              },
-              {
-                id: "3",
-                name: "Étudiant",
-                description: "Accès aux cours et aux notes",
-              },
-              {
-                id: "4",
-                name: "Secrétaire académique",
-                description: "Gestion des inscriptions et des dossiers",
-              },
-              {
-                id: "5",
-                name: "Bibliothécaire",
-                description: "Gestion des ressources de la bibliothèque",
-              },
-              {
-                id: "6",
-                name: "Apparitaire",
-                description: "Support logistique et administratif",
-              },
-              {
-                id: "7",
-                name: "Coordonateur de faculté",
-                description: "Supervision des programmes académiques",
-              },
-              {
-                id: "8",
-                name: "Secrétaire de faculté",
-                description: "Gestion administrative de la faculté",
-              },
-            ]}
-            renderItem={(item) => (
-              <List.Item
-                key={item.id}
-                extra={
-                  <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          key: "edit",
-                          label: "Modifier",
-                          icon: <EditOutlined />,
-                        },
-                        {
-                          key: "delete",
-                          label: "Supprimer",
-                          danger: true,
-                          icon: <DeleteOutlined />,
-                        },
-                      ],
-                    }}
-                  >
-                    <Button icon={<MoreOutlined />} type="text" />
-                  </Dropdown>
-                }
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar icon={<KeyOutlined />}>
-                      {item.name.charAt(0)}
-                    </Avatar>
-                  }
-                  title={<Link href="#">{item.name}</Link>}
-                  description={item.description}
-                />
-              </List.Item>
-            )}
-          />
+          <GroupList permissions={permissions}/>
         </div>
       </Layout.Sider>
     </Layout>

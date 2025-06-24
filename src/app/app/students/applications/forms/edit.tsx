@@ -236,7 +236,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
         width="100%"
         closable={false}
         onClose={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         styles={{ header: { background: colorPrimary } }}
         extra={
           <Space>
