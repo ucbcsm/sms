@@ -13,8 +13,8 @@ export default async function Page() {
   }
 
   if (auth?.user) {
-    redirect("/app");
-  } 
+    redirect(auth.faculty ? `/faculty/${auth.faculty.id}` : "/app");
+  }
 
   return (
     <Suspense>

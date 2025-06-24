@@ -14,6 +14,7 @@ import {
   Card,
   Flex,
   Form,
+  Image,
   Progress,
   Radio,
   Select,
@@ -22,7 +23,6 @@ import {
   Tag,
   Typography,
 } from "antd";
-import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Palette } from "./palette";
 import { DataFetchErrorResult } from "./errorResult";
@@ -191,8 +191,9 @@ export function YearSelector() {
             <Image
               src="/ucbc-logo.png"
               alt="logo ucbc"
-              height={180}
+              height="auto"
               width={180}
+              preview={false}
             />
             <Progress
               strokeColor={"#E84C37"}

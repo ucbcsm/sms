@@ -3,22 +3,15 @@
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
 import { useYid } from "@/hooks/use-yid";
-import { getFaculties } from "@/lib/api";
+import { getDepartmentsByFacultyId } from "@/lib/api";
 import { logout } from "@/lib/api/auth";
+import { useSessionStore } from "@/store";
 import {
-  BranchesOutlined,
-  DashboardOutlined,
-  DollarOutlined,
   LoadingOutlined,
   LogoutOutlined,
   MenuOutlined,
-  NotificationOutlined,
   QuestionOutlined,
-  SafetyCertificateOutlined,
-  SettingOutlined,
   SubnodeOutlined,
-  TeamOutlined,
-  UsergroupAddOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -35,10 +28,10 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function AppLayout({
+export default function FacultyLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -48,23 +41,26 @@ export default function AppLayout({
   } = theme.useToken();
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
+  const { facultyId } = useParams();
+  const { faculty } = useSessionStore();
   const { removeYid } = useYid();
 
   const router = useRouter();
   const pathname = usePathname();
 
-  const { data: faculties, isPending: isPendingFacalties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
+  const { data: departments } = useQuery({
+    queryKey: ["departments", facultyId],
+    queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
+    enabled: !!facultyId,
   });
 
-  const getFacultiesAsMenu = () => {
-    const facaltiesAsMenu = faculties?.map((fac) => ({
-      key: `/faculty/${fac.id}`,
-      label: fac.name,
+  const getDepartmentsAsMenu = () => {
+    const menu = departments?.map((dep) => ({
+      key: `/app/department/${dep.id}`,
+      label: dep.name,
       icon: <SubnodeOutlined />,
     }));
-    return facaltiesAsMenu;
+    return menu;
   };
 
   return (
@@ -80,17 +76,21 @@ export default function AppLayout({
           paddingRight: 32,
         }}
       >
-        <Link href="/app" style={{ display: "flex", alignItems: "center" }}>
+        <Link
+          href={`/faculty/${facultyId}`}
+          style={{ display: "flex", alignItems: "center" }}
+        >
           <div className="flex items-center pr-3">
             <Image
               src="/ucbc-logo.png"
               alt="Logo ucbc"
               width={36}
+              height="auto"
               preview={false}
             />
           </div>
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
-            CI-UCBC
+            {faculty?.acronym || "CI-UCBC"}
           </Typography.Title>
         </Link>
         <Menu
@@ -101,51 +101,23 @@ export default function AppLayout({
           overflowedIndicator={<MenuOutlined />}
           items={[
             {
-              key: "/app",
-              label: "Tableau de bord",
-              icon: <DashboardOutlined />,
+              key: `/faculty/${facultyId}`,
+              label: "Aperçu",
+            },
+            { key: `/faculty/${facultyId}/students`, label: "Étudiants" },
+            {
+              key: `/faculty/${facultyId}/taught-courses`,
+              label: "Cours",
             },
             {
-              key: "/app/students",
-              label: "Étudiants",
-              icon: <UsergroupAddOutlined />,
+              key: `/faculty/${facultyId}/courses`,
+              label: "Catalogue",
             },
             {
-              key: "/app/teachers",
-              label: "Enseigants",
-              icon: <TeamOutlined />,
-            },
-            {
-              key: "/app/finances",
-              label: "Finances",
-              icon: <DollarOutlined />,
-            },
-            {
-              key: "fields",
-              label: "Filières",
-              icon: <BranchesOutlined />,
-              children: getFacultiesAsMenu(),
-            },
-            {
-              key: "/app/jurys",
-              label: "Jurys",
-              icon: <SafetyCertificateOutlined />,
-            },
-            {
-              key: "7",
-              label: "Autres",
-              children: [
-                {
-                  key: "/app/announcements",
-                  label: "Annonces",
-                  icon: <NotificationOutlined />,
-                },
-                {
-                  key: "/console",
-                  label: "Paramètres",
-                  icon: <SettingOutlined />,
-                },
-              ],
+              key: `departments`,
+              label: "Mentions",
+              //  icon: <BranchesOutlined />,
+              children: getDepartmentsAsMenu(),
             },
           ]}
           style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
@@ -202,9 +174,6 @@ export default function AppLayout({
               icon={<UserOutlined />}
             />
           </Dropdown>
-          <Link href="/console">
-            <Button type="text" icon={<SettingOutlined />} />
-          </Link>
           <Link href="/app/support">
             <Button type="text" icon={<QuestionOutlined />}></Button>
           </Link>
@@ -220,7 +189,7 @@ export default function AppLayout({
           }}
         >
           {children}
-           <div
+          <div
             className=""
             style={{
               display: isLoadingLogout ? "flex" : "none",

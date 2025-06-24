@@ -16,6 +16,7 @@ type SessionStoreType = {
     refreshToken?: string | null;
     user?: User | null;
     error?: string | null;
+    faculty?:Faculty
   }) => void;
 }; 
 

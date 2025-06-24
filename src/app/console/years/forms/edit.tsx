@@ -78,7 +78,7 @@ export const EditYearForm: FC<EditYearFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         closable={!isPending}
         maskClosable={!isPending}
         modalRender={(dom) => (

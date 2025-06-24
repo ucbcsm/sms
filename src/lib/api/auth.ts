@@ -1,7 +1,7 @@
 "use server";
 
-import { authApi } from "@/lib/fetcher";
-import { User } from "@/types";
+import api, { authApi } from "@/lib/fetcher";
+import { Faculty, User } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -20,6 +20,7 @@ export type Session = {
   refreshToken: string | null;
   user: User | null;
   error: string | null;
+  faculty?: Faculty;
 } | null;
 
 /**
@@ -67,21 +68,20 @@ export const getServerSession = async (): Promise<Session> => {
       throw error;
     }
 
-    // let faculty: Faculty | undefined = undefined;
-    // try {
-    //   const resFaculty = await api.get(`/account/faculty-from-user/`, {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   });
-    //   faculty = resFaculty.data as Faculty | undefined;
-    // } catch (error: any) {
-    //   if (error?.response?.status !== 404 && error?.response?.status !== 400) {
-    //     throw error;
-    //   }
-    //   // If 404 or 400, faculty remains undefined
-    // }
-
+    let faculty: Faculty | undefined = undefined;
+    try {
+      const resFaculty = await api.get(`/account/faculty-from-user/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      faculty = resFaculty.data as Faculty | undefined;
+    } catch (error: any) {
+      if (error?.response?.status !== 404 && error?.response?.status !== 400) {
+        throw error;
+      }
+      // If 404 or 400, faculty remains undefined
+    }
 
     // if (!user) {
     //   return null;
@@ -92,9 +92,10 @@ export const getServerSession = async (): Promise<Session> => {
       refreshToken,
       user,
       error: null,
+      faculty,
     };
   } catch (error: any) {
-    return null
+    return null;
     // throw new Error("Failed to get server session");
   }
 };
@@ -147,11 +148,11 @@ export const login = async (credentials: {
         },
       });
       const user = userResponse.data;
-      if(user.is_superuser && user.is_staff){
-      Cookies.set("accessToken", access);
-      Cookies.set("refreshToken", refresh);
-      }else{
-        throw new Error("")
+      if ((user.is_superuser || user.is_staff) && user.is_active) {
+        Cookies.set("accessToken", access);
+        Cookies.set("refreshToken", refresh);
+      } else {
+        throw new Error("");
       }
     }
   } catch (error: any) {

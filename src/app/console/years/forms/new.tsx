@@ -75,7 +75,7 @@ export const NewYearForm: React.FC<NewYearFormProps> = ({buttonType="primary"}) 
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         closable={{disabled:isPending}}
         maskClosable={!isPending}
         modalRender={(dom) => (

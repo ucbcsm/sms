@@ -134,7 +134,7 @@ export default function ConsoleLayout({
               onClick: ({ key }) => {},
             }}
             trigger={["hover"]}
-            destroyPopupOnHide={true}
+            destroyOnHidden={true}
           >
             <Button type="text" icon={<UserOutlined />} />
           </Dropdown>
