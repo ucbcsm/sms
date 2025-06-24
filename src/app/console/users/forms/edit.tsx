@@ -203,6 +203,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
             options={getRolesAsOptions(roles)}
             showSearch
             filterOption={filterOption}
+            allowClear
           />
         </Form.Item>
         <Form.Item name="groups" label="Groupes">
@@ -211,6 +212,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
             showSearch
             options={getGroupsAsOptions(groups)}
             filterOption={filterOption}
+            allowClear
           />
         </Form.Item>
       </Modal>

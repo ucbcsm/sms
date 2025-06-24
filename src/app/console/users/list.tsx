@@ -21,6 +21,7 @@ import { FC, useState } from "react";
 import { Group, Role, User } from "@/types";
 import { DeleteUserForm } from "./forms/delete";
 import { EditUserForm } from "./forms/edit";
+import { getHSLColor } from "@/lib/utils";
 
 type ActionsBarProps = {
   record: User;
@@ -162,8 +163,10 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
           key: "avatar",
           dataIndex: "avatar",
           title: "Photo",
-          render: (value, record) => (
-            <Avatar src={value} alt={record?.first_name || ""}>
+          render: (_, record) => (
+            <Avatar src={record.avatar} alt={record?.first_name || ""} style={{background:getHSLColor(`${record.first_name || ""} ${record.last_name || ""} ${
+              record.surname || ""
+            }`)}}>
               {record.first_name?.charAt(0) || "U"}
             </Avatar>
           ),
