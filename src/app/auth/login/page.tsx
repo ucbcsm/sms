@@ -13,7 +13,7 @@ export default async function Page() {
   }
 
   if (auth?.user) {
-    redirect(auth.faculty ? `/app/faculty/${auth.faculty.id}` : "/app");
+    redirect("/app");
   } 
 
   return (

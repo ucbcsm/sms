@@ -1,7 +1,7 @@
 "use server";
 
-import api, { authApi } from "@/lib/fetcher";
-import { Faculty, User } from "@/types";
+import { authApi } from "@/lib/fetcher";
+import { User } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -20,7 +20,6 @@ export type Session = {
   refreshToken: string | null;
   user: User | null;
   error: string | null;
-  faculty?: Faculty;
 } | null;
 
 /**
@@ -68,20 +67,20 @@ export const getServerSession = async (): Promise<Session> => {
       throw error;
     }
 
-    let faculty: Faculty | undefined = undefined;
-    try {
-      const resFaculty = await api.get(`/account/faculty-from-user/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      faculty = resFaculty.data as Faculty | undefined;
-    } catch (error: any) {
-      if (error?.response?.status !== 404 && error?.response?.status !== 400) {
-        throw error;
-      }
-      // If 404 or 400, faculty remains undefined
-    }
+    // let faculty: Faculty | undefined = undefined;
+    // try {
+    //   const resFaculty = await api.get(`/account/faculty-from-user/`, {
+    //     headers: {
+    //       Authorization: `Bearer ${accessToken}`,
+    //     },
+    //   });
+    //   faculty = resFaculty.data as Faculty | undefined;
+    // } catch (error: any) {
+    //   if (error?.response?.status !== 404 && error?.response?.status !== 400) {
+    //     throw error;
+    //   }
+    //   // If 404 or 400, faculty remains undefined
+    // }
 
 
     // if (!user) {
@@ -93,7 +92,6 @@ export const getServerSession = async (): Promise<Session> => {
       refreshToken,
       user,
       error: null,
-      faculty,
     };
   } catch (error: any) {
     return null
@@ -143,8 +141,18 @@ export const login = async (credentials: {
     if (!access || !refresh) {
       throw new Error("Invalid login response");
     } else {
+      const userResponse = await authApi.get("/users/me/", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
+      const user = userResponse.data;
+      if(user.is_superuser && user.is_staff){
       Cookies.set("accessToken", access);
       Cookies.set("refreshToken", refresh);
+      }else{
+        throw new Error("")
+      }
     }
   } catch (error: any) {
     if (error?.status === 401) {
