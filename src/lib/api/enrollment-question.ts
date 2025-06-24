@@ -3,7 +3,7 @@ import { EnrollmentQuestion } from "@/types";
 
 export async function getEnrollmentQuestions() {
   const res = await api.get(`/apparitorat/registered-enrollment-question/?get_all=true`);
-  return res.data.results as EnrollmentQuestion[];
+  return res.data as EnrollmentQuestion[];
 }
 
 export async function createEnrollmentQuestion(

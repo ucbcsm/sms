@@ -149,6 +149,7 @@ export const ListEnrollmentQuestions = () => {
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
+
   if (isError) {
     return <DataFetchErrorResult />;
   }

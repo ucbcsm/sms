@@ -3,7 +3,7 @@ import { TestCourse } from "@/types";
 
 export async function getTestCourses() {
   const res = await api.get(`/apparitorat/admission-test-course/?get_all=true`);
-  return res.data.results as TestCourse[];
+  return res.data as TestCourse[];
 }
 
 export async function getEnabledTestCourses() {

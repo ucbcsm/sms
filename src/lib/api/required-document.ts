@@ -3,7 +3,7 @@ import { RequiredDocument } from "@/types";
 
 export async function getRequiredDocuments() {
   const res = await api.get(`/apparitorat/required-document/?get_all=true`);
-  return res.data.results as RequiredDocument[];
+  return res.data as RequiredDocument[];
 }
 
 export async function getEnabledRequiredDocuments() {
