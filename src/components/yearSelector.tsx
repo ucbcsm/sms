@@ -26,6 +26,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { Palette } from "./palette";
 import { DataFetchErrorResult } from "./errorResult";
+import { useSessionStore } from "@/store";
 
 type FormDataType = {
   yid: number;
@@ -36,6 +37,7 @@ export function YearSelector() {
   const { yid, setYid } = useYid();
   const [percent, setPercent] = useState(-50);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const faculty = useSessionStore((state) => state.faculty);
 
   const {
     data: years,
@@ -116,7 +118,7 @@ export function YearSelector() {
                   Année
                 </Typography.Title>
               }
-              extra={ <NewYearForm buttonType="link" />}
+              extra={!faculty ? <NewYearForm buttonType="link" /> : undefined}
             >
               <Form
                 disabled={isPending}
