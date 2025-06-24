@@ -176,7 +176,7 @@ export default function ConsoleLayout({
                     },
                     {
                       key: `/console/fields`,
-                      label: "Domaines & Filières",
+                      label: "Filières & Mentions",
                       icon: <ApartmentOutlined />,
                       className: "normal-case",
                     },
