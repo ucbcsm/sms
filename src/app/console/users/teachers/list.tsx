@@ -36,6 +36,7 @@ import { Group, Permission, Role, User } from "@/types";
 import { DeleteUserForm } from "../forms/delete";
 import { EditUserForm } from "../forms/edit";
 import { getHSLColor } from "@/lib/utils";
+import { parseAsStringEnum, useQueryState } from "nuqs";
 
 type ActionsBarProps = {
   record: User;
@@ -105,13 +106,27 @@ export const ListStaffUsers: FC<ListStaffUsersProps> = ({
   roles,
   permissions,
 }) => {
+  const [permanent, setPermanent] = useQueryState(
+    "permanent",
+    parseAsStringEnum(["all", "true", "false"]).withDefault("all")
+  );
+
   const {
     data: users,
     isPending,
     isError,
   } = useQuery({
-    queryKey: ["users", "is_staff", true],
-    queryFn: getStaffUsers,
+    queryKey: ["users", "is_staff", permanent],
+    queryFn: ({ queryKey }) =>
+      getStaffUsers(
+        queryKey[2] === "all"
+          ? undefined
+          : queryKey[2] === "true"
+          ? true
+          : queryKey[2] === "false"
+          ? false
+          : undefined
+      ),
   });
 
   if (isPending) {
@@ -143,11 +158,15 @@ export const ListStaffUsers: FC<ListStaffUsersProps> = ({
             <Input.Search placeholder="Rechercher un utilisateur ..." />
             <Segmented
               options={[
-                // { value: "all", label: "Tous" },
-                { value: "permanent", label: "Permanents" },
-                { value: "guest", label: "Visiteurs" },
+                { value: "all", label: "Tous" },
+                { value: "true", label: "Permanents" },
+                { value: "false", label: "Visiteurs" },
               ]}
-              onChange={(value) => {}}
+              onChange={(value) => {
+                setPermanent(value as "all" | "true" | "false");
+              }}
+              defaultValue={permanent}
+              value={permanent}
             />
             {/* <Dropdown
               menu={{

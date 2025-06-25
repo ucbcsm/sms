@@ -25,9 +25,12 @@ export async function getStudentsUsers() {
   return res.data.results as User[];
 }
 
-export async function getStaffUsers() {
+export async function getStaffUsers(is_permanent_teacher?: boolean) {
   const res = await api.get(
-    `/account/users/?is_staff=true`
+    `/account/users/?is_staff=true&${
+      typeof is_permanent_teacher !== "undefined" &&
+      `is_permanent_teacher=${is_permanent_teacher}`
+    }`
   );
   return res.data.results as User[];
 }

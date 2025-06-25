@@ -266,6 +266,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
             />
           </Form.Item>
           <Alert
+            showIcon
             type={user.is_active ? "success" : "error"}
             message="Statut du compte"
             description={
