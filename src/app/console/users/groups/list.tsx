@@ -1,3 +1,5 @@
+'use client'
+
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { getGroups } from "@/lib/api";
 import { Group, Permission } from "@/types";
@@ -8,7 +10,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Button, Dropdown, List, Space, theme, Typography } from "antd";
+import {Button, Dropdown, List, Space, theme, Typography } from "antd";
 import { FC, useState } from "react";
 import { EditGroupForm } from "./edit";
 import { DeleteGroupForm } from "./delete";
@@ -68,6 +70,7 @@ export const GroupList: FC<GroupListProps> = ({ permissions }) => {
   const {
     token: { colorTextDisabled },
   } = theme.useToken();
+
   const {
     data: groups,
     isPending: isPendingGroups,

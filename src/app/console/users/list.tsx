@@ -13,12 +13,18 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import { useQuery } from "@tanstack/react-query";
-import { getGroups, getRoleName, getRoles, getUsers } from "@/lib/api";
+import {
+  getGroups,
+  getPermissions,
+  getRoleName,
+  getRoles,
+  getUsers,
+} from "@/lib/api";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import dayjs from "dayjs";
 import { FC, useState } from "react";
-import { Group, Role, User } from "@/types";
+import { Group, Permission, Role, User } from "@/types";
 import { DeleteUserForm } from "./forms/delete";
 import { EditUserForm } from "./forms/edit";
 import { getHSLColor } from "@/lib/utils";
@@ -27,9 +33,15 @@ type ActionsBarProps = {
   record: User;
   groups?: Group[];
   roles?: Role[];
+  permissions?: Permission[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record, groups, roles }) => {
+const ActionsBar: FC<ActionsBarProps> = ({
+  record,
+  groups,
+  roles,
+  permissions,
+}) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -41,6 +53,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, groups, roles }) => {
         setOpen={setOpenEdit}
         groups={groups}
         roles={roles}
+        permissions={permissions}
       />
       <DeleteUserForm user={record} open={openDelete} setOpen={setOpenDelete} />
       <Dropdown
@@ -74,7 +87,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, groups, roles }) => {
 };
 
 type ListUsersProps = {
-  // groups?: Group[];
+
 };
 
 export const ListUsers: FC<ListUsersProps> = ({}) => {
@@ -105,11 +118,20 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
     queryFn: getRoles,
   });
 
-  if (isPending || isPendingGroups || isPendingRoles) {
+  const {
+    data: permissions,
+    isPending: isPendingPermissions,
+    isError: isErrorPermissions,
+  } = useQuery({
+    queryKey: ["permissions"],
+    queryFn: getPermissions,
+  });
+
+  if (isPending || isPendingGroups || isPendingRoles || isPendingPermissions) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
 
-  if (isError || isErrorGroups || isErrorRoles) {
+  if (isError || isErrorGroups || isErrorRoles || isErrorPermissions) {
     return <DataFetchErrorResult />;
   }
 
@@ -164,9 +186,17 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
           dataIndex: "avatar",
           title: "Photo",
           render: (_, record) => (
-            <Avatar src={record.avatar} alt={record?.first_name || ""} style={{background:getHSLColor(`${record.first_name || ""} ${record.last_name || ""} ${
-              record.surname || ""
-            }`)}}>
+            <Avatar
+              src={record.avatar}
+              alt={record?.first_name || ""}
+              style={{
+                background: getHSLColor(
+                  `${record.first_name || ""} ${record.last_name || ""} ${
+                    record.surname || ""
+                  }`
+                ),
+              }}
+            >
               {record.first_name?.charAt(0) || "U"}
             </Avatar>
           ),
@@ -210,7 +240,9 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
           render: (_, record) => (
             <Space wrap>
               {record.groups.map((g) => (
-                <Tag icon={<TeamOutlined />} bordered={false}>{g.name}</Tag>
+                <Tag icon={<TeamOutlined />} bordered={false}>
+                  {g.name}
+                </Tag>
               ))}
             </Space>
           ),
@@ -241,7 +273,7 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} groups={groups} roles={roles} />;
+            return <ActionsBar record={record} groups={groups} roles={roles} permissions={permissions}/>;
           },
           width: 50,
         },

@@ -82,7 +82,7 @@ export const EditGroupForm: React.FC<EditGroupFormProps> = ({
           >
 
             <Space>
-              <Button disabled={isPending} style={{ boxShadow: "none" }}>
+              <Button disabled={isPending} style={{ boxShadow: "none" }} onClick={onClose}>
                 Annuler
               </Button>
               <Button

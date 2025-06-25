@@ -138,16 +138,18 @@ export const login = async (credentials: {
       access: string;
       refresh: string;
     };
-
+console.log("Auth,",res.data)
     if (!access || !refresh) {
       throw new Error("Invalid login response");
     } else {
+      
       const userResponse = await authApi.get("/users/me/", {
         headers: {
           Authorization: `Bearer ${access}`,
         },
       });
       const user = userResponse.data;
+      console.log("User,",user)
       if ((user.is_superuser || user.is_staff) && user.is_active) {
         Cookies.set("accessToken", access);
         Cookies.set("refreshToken", refresh);

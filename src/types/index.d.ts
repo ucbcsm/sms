@@ -242,7 +242,7 @@ export type RolesType =
 
 export const User = z.object({
   id: z.number(),
-  user_permissions: z.array(),
+  user_permissions: z.array(Permission),
   groups: z.array(Group),
   last_login: z.string().datetime(),
   is_superuser: z.boolean(),
