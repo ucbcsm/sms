@@ -15,6 +15,7 @@ export async function updateUser({
 }) {
   const res = await api.patch(`/account/users/${id}/`, {
     ...params,
+    avatar:null
   });
   return res.data;
 }
