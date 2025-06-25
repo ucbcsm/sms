@@ -210,7 +210,7 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
           render: (_, record) => (
             <Space wrap>
               {record.groups.map((g) => (
-                <Tag icon={<TeamOutlined />}>{g.name}</Tag>
+                <Tag icon={<TeamOutlined />} bordered={false}>{g.name}</Tag>
               ))}
             </Space>
           ),
