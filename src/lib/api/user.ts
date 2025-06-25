@@ -1,9 +1,42 @@
-import api, { authApi } from "@/lib/fetcher";
+import api from "@/lib/fetcher";
 import { User } from "@/types";
 
-export async function getUsers() {
-  const res = await authApi.get(`/users/`);
-  return res.data as User[];
+export async function getUsers({
+  is_student,
+  is_staff,
+  is_superuser,
+}: {
+  is_student?: boolean;
+  is_staff?: boolean;
+  is_superuser?: boolean;
+}) {
+  const res = await api.get(
+    `/account/users/?is_student=${is_student || false}&is_staff=${
+      is_staff || false
+    }&is_superuser=${is_superuser || false}`
+  );
+  return res.data.results as User[];
+}
+
+export async function getStudentsUsers() {
+  const res = await api.get(
+    `/account/users/?is_student=true`
+  );
+  return res.data.results as User[];
+}
+
+export async function getStaffUsers() {
+  const res = await api.get(
+    `/account/users/?is_staff=true`
+  );
+  return res.data.results as User[];
+}
+
+export async function getSuperUsers() {
+  const res = await api.get(
+    `/account/users/?is_superuser=true`
+  );
+  return res.data.results as User[];
 }
 
 export async function updateUser({
@@ -13,9 +46,9 @@ export async function updateUser({
   id: number;
   params: Partial<Omit<User, "id">>;
 }) {
-  const res = await api.patch(`/account/users/${id}/`, {
+  const res = await api.put(`/account/users/${id}/`, {
     ...params,
-    avatar:null
+    avatar: null,
   });
   return res.data;
 }

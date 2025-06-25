@@ -7,17 +7,25 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
-  PlusOutlined,
-  PrinterOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Input,
+  Segmented,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import { useQuery } from "@tanstack/react-query";
 import {
   getGroups,
   getPermissions,
   getRoleName,
   getRoles,
+  getStudentsUsers,
   getUsers,
 } from "@/lib/api";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
@@ -25,8 +33,8 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import dayjs from "dayjs";
 import { FC, useState } from "react";
 import { Group, Permission, Role, User } from "@/types";
-import { DeleteUserForm } from "./forms/delete";
-import { EditUserForm } from "./forms/edit";
+import { DeleteUserForm } from "../forms/delete";
+import { EditUserForm } from "../forms/edit";
 import { getHSLColor } from "@/lib/utils";
 
 type ActionsBarProps = {
@@ -86,52 +94,33 @@ const ActionsBar: FC<ActionsBarProps> = ({
   );
 };
 
-type ListUsersProps = {
-
+type ListStudentsUsersProps = {
+  groups?: Group[];
+  roles?: Role[];
+  permissions?: Permission[];
 };
 
-export const ListUsers: FC<ListUsersProps> = ({}) => {
+export const ListStudentsUsers: FC<ListStudentsUsersProps> = ({
+  groups,
+  roles,
+  permissions,
+}) => {
   const {
     data: users,
     isPending,
     isError,
   } = useQuery({
-    queryKey: ["users"],
-    queryFn: getUsers,
+    queryKey: ["users", "is_student"],
+    queryFn: getStudentsUsers,
   });
 
-  const {
-    data: groups,
-    isPending: isPendingGroups,
-    isError: isErrorGroups,
-  } = useQuery({
-    queryKey: ["groups"],
-    queryFn: getGroups,
-  });
+  console.log(users);
 
-  const {
-    data: roles,
-    isPending: isPendingRoles,
-    isError: isErrorRoles,
-  } = useQuery({
-    queryKey: ["roles"],
-    queryFn: getRoles,
-  });
-
-  const {
-    data: permissions,
-    isPending: isPendingPermissions,
-    isError: isErrorPermissions,
-  } = useQuery({
-    queryKey: ["permissions"],
-    queryFn: getPermissions,
-  });
-
-  if (isPending || isPendingGroups || isPendingRoles || isPendingPermissions) {
+  if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
 
-  if (isError || isErrorGroups || isErrorRoles || isErrorPermissions) {
+  if (isError) {
     return <DataFetchErrorResult />;
   }
 
@@ -140,11 +129,19 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Input.Search placeholder="Rechercher un utilisateur ..." />
+            {/* <Segmented
+              options={[
+                // { value: "all", label: "Tous" },
+                { value: "student", label: "Étudiants" },
+                { value: "staff", label: "Staff" },
+                { value: "admins", label: "Admins" },
+              ]}
+              onChange={(value) => {}}
+            /> */}
           </Space>
           <div className="flex-1" />
           <Space>
-            <Button
+            {/* <Button
               icon={<PlusOutlined />}
               type="primary"
               title="Ajouter un utilisateur"
@@ -154,8 +151,9 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
             </Button>
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
-            </Button>
-            <Dropdown
+            </Button> */}
+            <Input.Search placeholder="Rechercher un utilisateur ..." />
+            {/* <Dropdown
               menu={{
                 items: [
                   {
@@ -176,7 +174,7 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
               <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
                 Exporter
               </Button>
-            </Dropdown>
+            </Dropdown> */}
           </Space>
         </header>
       )}
@@ -201,6 +199,7 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
             </Avatar>
           ),
           width: 56,
+          align: "center",
         },
         {
           key: "fullName",
@@ -210,16 +209,19 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
             `${record.first_name || ""} ${record.last_name || ""} ${
               record.surname || ""
             }`,
+          ellipsis: true,
         },
         {
           key: "matricule",
           dataIndex: "matricule",
           title: "Matricule",
+          width: 78,
         },
         {
           key: "email",
           dataIndex: "email",
           title: "Email",
+          ellipsis: true,
         },
         {
           key: "roles",
@@ -228,10 +230,11 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
           render: (_, record) => (
             <Space wrap>
               {record.roles.map((r) => (
-                <Tag>{getRoleName(r.name)}</Tag>
+                <Tag bordered={false}>{getRoleName(r.name)}</Tag>
               ))}
             </Space>
           ),
+          ellipsis: true,
         },
         {
           key: "groups",
@@ -246,6 +249,7 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
               ))}
             </Space>
           ),
+          ellipsis: true,
         },
         {
           key: "date_joined",
@@ -273,7 +277,14 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
           key: "actions",
           dataIndex: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} groups={groups} roles={roles} permissions={permissions}/>;
+            return (
+              <ActionsBar
+                record={record}
+                groups={groups}
+                roles={roles}
+                permissions={permissions}
+              />
+            );
           },
           width: 50,
         },
@@ -281,9 +292,9 @@ export const ListUsers: FC<ListUsersProps> = ({}) => {
       dataSource={users}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-      rowSelection={{
-        type: "checkbox",
-      }}
+      // rowSelection={{
+      //   type: "checkbox",
+      // }}
       size="small"
       pagination={{
         defaultPageSize: 10,

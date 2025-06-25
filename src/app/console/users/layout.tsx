@@ -81,15 +81,15 @@ export default function UsersLayout({
           </Space>
         </Layout.Header>
         <Card
-          tabList={[
-            {
-              key: "/console/users",
-              label: "Tous",
-            },
-            { key: "/console/users/students", label: "Étudiants" },
-            { key: "/console/users/teachers", label: "Enseignants" },
-            { key: "/console/users/admins", label: "Admins" },
-          ]}
+          // tabList={[
+          //   {
+          //     key: "/console/users",
+          //     label: "Tous",
+          //   },
+          //   { key: "/console/users/students", label: "Étudiants" },
+          //   { key: "/console/users/teachers", label: "Enseignants" },
+          //   { key: "/console/users/admins", label: "Admins" },
+          // ]}
           activeTabKey={pathname}
           onTabChange={(key) => {
             router.push(key);

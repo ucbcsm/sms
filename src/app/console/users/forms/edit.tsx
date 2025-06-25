@@ -59,7 +59,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
 
   const onFinish = (values: FormDataType) => {
     mutateAsync(
-      { id: user.id, params: values },
+      { id: user.id, params: {...values, is_permanent_teacher:user.is_permanent_teacher} },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -230,7 +230,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
             <Col span={8}>
               <Form.Item
                 name="is_student"
-                label="Etudiant"
+                label="Étudiant"
                 valuePropName="checked"
               >
                 <Switch checkedChildren="Oui" unCheckedChildren="Non" />
