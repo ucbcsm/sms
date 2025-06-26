@@ -60,7 +60,7 @@ export default function StudentsLayout({
 
   const getPeriodsAsTabs = (periods?: Period[]) => {
     return periods?.map((period) => ({
-      key: `/app/faculty/${facultyId}/students/${period.id}`,
+      key: `/faculty/${facultyId}/students/${period.id}`,
       label: `${period.name} (${period.acronym})`,
     }));
   };
@@ -132,7 +132,7 @@ export default function StudentsLayout({
         <Tabs
           items={[
             {
-              key: `/app/faculty/${facultyId}/students`,
+              key: `/faculty/${facultyId}/students`,
               label: "Année",
             },
             ...getPeriodsAsTabs(periods)!,
