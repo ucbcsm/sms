@@ -78,6 +78,9 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               pending_avatar: teacher?.user.pending_avatar || null,
               is_permanent_teacher: values.is_permanent_teacher,
               is_active:teacher.user.is_active,
+              is_staff:teacher.user.is_staff,
+              is_student:teacher.user.is_student,
+              is_superuser:teacher.user.is_superuser
             },
           },
         },
