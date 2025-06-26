@@ -327,7 +327,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           <Form.Item
             label="Affiliation religieuse"
             name="religious_affiliation"
-            rules={[{ required: true }]}
+            rules={[]}
           >
             <Input placeholder="Affiliation religieuse" />
           </Form.Item>
