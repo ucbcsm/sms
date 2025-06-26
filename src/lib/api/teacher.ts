@@ -67,6 +67,7 @@ export async function updateTeacher({
       pending_avatar:string | null
       matricule: string;
       is_permanent_teacher: boolean;
+      is_staff:boolean
     };
   };
 }) {
