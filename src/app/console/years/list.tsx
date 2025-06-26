@@ -164,7 +164,7 @@ export const ListYears = () => {
         {
           key: "status",
           dataIndex: "status",
-          title: "Instcriptions",
+          title: "Inscriptions",
           render: (_, record, __) => {
             let color = "";
             let text = "";
