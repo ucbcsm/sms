@@ -207,7 +207,7 @@ export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
           ]}
         />
       </Form.Item>
-      <Form.Item
+      {/* <Form.Item
         label="Facultés assignées"
         name="assigned_faculties"
         rules={[{ required: true }]}
@@ -228,7 +228,7 @@ export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
           placeholder="Départements assignés"
           options={getCurrentDepartmentsAsOptions(departments)}
         />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item
         label="Autres responsabilités/Charge administrative"
         name="other_responsabilities"
