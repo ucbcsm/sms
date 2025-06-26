@@ -187,7 +187,7 @@ export const EditPeriodForm: React.FC<EditPeriodFormProps> = ({
         </Row>
         <Form.Item
           name="status"
-          label="Statut"
+          label="Statut des inscriptions"
           rules={[
             { required: true, message: "Veuillez sélectionner un statut" },
           ]}

@@ -201,7 +201,7 @@ export const NewPeriodForm: React.FC<NewPeriodFormProps> = ({ cycles }) => {
         </Row>
         <Form.Item
           name="status"
-          label="Statut"
+          label="Statut des inscriptions"
           rules={[
             { required: true, message: "Veuillez sélectionner un statut" },
           ]}
