@@ -55,7 +55,7 @@ export default function Page() {
               <Statistic
                 loading={isPendingDashboard}
                 title="Promotion actuelle"
-                value={enrolledStudent?.class_year.acronym}
+                value={enrolledStudent?.class_year?.acronym}
               />
             </Card>
           </Col>
