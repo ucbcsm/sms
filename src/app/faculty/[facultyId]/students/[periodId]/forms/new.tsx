@@ -125,7 +125,7 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
           items: [...periodsAsMenu!],
           onClick: ({ key }) => {
             router.push(
-              `/app/faculty/${facultyId}/students/${key}/?new_enrollments=true`
+              `/faculty/${facultyId}/students/${key}/?new_enrollments=true`
             );
           },
         }}
