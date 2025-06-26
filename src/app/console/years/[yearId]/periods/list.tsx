@@ -186,7 +186,7 @@ export function ListPeriods() {
             dayjs(record.end_date).format("DD/MM/YYYY"),
         },
         {
-          title: "Statut",
+          title: "Inscriptions",
           dataIndex: "status",
           key: "status",
           render: (_, record, __) => {
