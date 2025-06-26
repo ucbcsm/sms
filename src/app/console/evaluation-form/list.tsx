@@ -23,9 +23,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Button, Dropdown, Input, Select, Space, Table, Tag } from "antd";
 import { useParams, useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { DeleteCourseForm } from "./forms/delete";
-import { NewCourseForm } from "./forms/new";
-import { EditCourseForm } from "./forms/edit";
+import { DeleteCourseForm } from "../../faculty/[facultyId]/courses/forms/delete";
+import { NewCourseForm } from "../../faculty/[facultyId]/courses/forms/new";
+import { EditCourseForm } from "../../faculty/[facultyId]/courses/forms/edit";
 
 type ActionsBarProps = {
   record: Course;

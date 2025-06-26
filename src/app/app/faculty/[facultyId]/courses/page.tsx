@@ -1,7 +1,7 @@
 "use client";
 
-import { DeleteCourseForm } from "@/app/console/courses/forms/delete";
-import { EditCourseForm } from "@/app/console/courses/forms/edit";
+import { DeleteCourseForm } from "@/app/faculty/[facultyId]/courses/forms/delete";
+import { EditCourseForm } from "@/app/faculty/[facultyId]/courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
@@ -31,7 +31,7 @@ import {
 } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
-import { NewCourseForm } from "@/app/console/courses/forms/new";
+import { NewCourseForm } from "@/app/faculty/[facultyId]/courses/forms/new";
 
 type ActionsBarProps = {
   record: Course;

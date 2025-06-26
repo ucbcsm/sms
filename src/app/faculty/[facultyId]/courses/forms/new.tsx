@@ -1,69 +1,71 @@
 "use client";
 
-import React, { Dispatch, SetStateAction } from "react";
-import { Col, Form, Input, message, Modal, Row, Select } from "antd";
+import React, { useState } from "react";
+import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  updateCourse,
+  createCourse,
   getCourseTypesAsOptions,
   getCurrentFacultiesAsOptions,
 } from "@/lib/api";
 import { Course, Faculty } from "@/types";
 import { filterOption } from "@/lib/utils";
+import { useParams } from "next/navigation";
 
 type FormDataType = Omit<Course, "id" | "faculties"> & {
   faculties: number[];
 };
 
-type EditCourseFormProps = {
-  course: Course;
+type NewCourseFormProps = {
   faculties?: Faculty[];
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
 };
-
-export const EditCourseForm: React.FC<EditCourseFormProps> = ({
-  course,
-  faculties,
-  open,
-  setOpen,
-}) => {
+export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const {facultyId} = useParams()
+  const [open, setOpen] = useState(false);
+
 
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: updateCourse,
+    mutationFn: createCourse,
   });
 
   const onFinish = (values: FormDataType) => {
     console.log("Received values of form: ", values);
 
-    mutateAsync(
-      { id: course.id, params: values },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["courses"] });
-          messageApi.success("Cours modifié avec succès !");
-          setOpen(false);
-        },
-        onError: () => {
-          messageApi.error(
-            "Une erreur s'est produite lors de la modification du cours."
-          );
-        },
-      }
-    );
+    mutateAsync(values, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["courses"] });
+        messageApi.success("Cours créé avec succès !");
+        setOpen(false);
+      },
+      onError: () => {
+        messageApi.error(
+          "Une erreur s'est produite lors de la création du cours."
+        );
+      },
+    });
   };
 
   return (
     <>
       {contextHolder}
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        className="shadow-none"
+        style={{ boxShadow: "none" }}
+        onClick={() => setOpen(true)}
+      >
+        Nouveau cours
+      </Button>
       <Modal
         open={open}
-        title="Modifier le cours"
+        title="Nouveau cours"
         centered
-        okText="Enregistrer"
+        okText="Créer"
         cancelText="Annuler"
         okButtonProps={{
           autoFocus: true,
@@ -75,22 +77,17 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
             disabled={isPending}
-            key="edit_course"
+            key="create_new_course"
             layout="vertical"
             form={form}
-            name="edit_course"
-            initialValues={{
-              ...course,
-              faculties: course.faculties.map(
-                (fac) => fac.id
-              ),
-            }}
+            name="create_new_course"
             onFinish={onFinish}
+            clearOnDestroy
           >
             {dom}
           </Form>
@@ -138,13 +135,14 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
         >
           <Select options={getCourseTypesAsOptions} />
         </Form.Item>
-        <Form.Item name="faculties" label="Pour facultés" rules={[{required:true}]}>
+        <Form.Item name="faculties" label="Pour facultés" rules={[{required:true}]} initialValue={[Number(facultyId)]}>
           <Select
             placeholder="Sélectionnez une faculté"
             showSearch
             options={getCurrentFacultiesAsOptions(faculties)}
             mode="multiple"
             filterOption={filterOption}
+            disabled
           />
         </Form.Item>
       </Modal>

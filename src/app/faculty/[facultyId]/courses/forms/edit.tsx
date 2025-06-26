@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { Dispatch, SetStateAction } from "react";
+import { Col, Form, Input, message, Modal, Row, Select } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  createCourse,
+  updateCourse,
   getCourseTypesAsOptions,
   getCurrentFacultiesAsOptions,
 } from "@/lib/api";
@@ -16,53 +15,55 @@ type FormDataType = Omit<Course, "id" | "faculties"> & {
   faculties: number[];
 };
 
-type NewCourseFormProps = {
+type EditCourseFormProps = {
+  course: Course;
   faculties?: Faculty[];
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
-export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
+
+export const EditCourseForm: React.FC<EditCourseFormProps> = ({
+  course,
+  faculties,
+  open,
+  setOpen,
+}) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const [open, setOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: createCourse,
+    mutationFn: updateCourse,
   });
 
   const onFinish = (values: FormDataType) => {
     console.log("Received values of form: ", values);
 
-    mutateAsync(values, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["courses"] });
-        messageApi.success("Cours créé avec succès !");
-        setOpen(false);
-      },
-      onError: () => {
-        messageApi.error(
-          "Une erreur s'est produite lors de la création du cours."
-        );
-      },
-    });
+    mutateAsync(
+      { id: course.id, params: values },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["courses"] });
+          messageApi.success("Cours modifié avec succès !");
+          setOpen(false);
+        },
+        onError: () => {
+          messageApi.error(
+            "Une erreur s'est produite lors de la modification du cours."
+          );
+        },
+      }
+    );
   };
 
   return (
     <>
       {contextHolder}
-      <Button
-        type="primary"
-        icon={<PlusOutlined />}
-        className="shadow-none"
-        style={{ boxShadow: "none" }}
-        onClick={() => setOpen(true)}
-      >
-        Nouveau cours
-      </Button>
       <Modal
         open={open}
-        title="Nouveau cours"
+        title="Modifier le cours"
         centered
-        okText="Créer"
+        okText="Enregistrer"
         cancelText="Annuler"
         okButtonProps={{
           autoFocus: true,
@@ -74,17 +75,22 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
             disabled={isPending}
-            key="create_new_course"
+            key="edit_course"
             layout="vertical"
             form={form}
-            name="create_new_course"
+            name="edit_course"
+            initialValues={{
+              ...course,
+              faculties: course.faculties.map(
+                (fac) => fac.id
+              ),
+            }}
             onFinish={onFinish}
-            clearOnDestroy
           >
             {dom}
           </Form>

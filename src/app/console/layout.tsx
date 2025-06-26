@@ -182,29 +182,29 @@ export default function ConsoleLayout({
                       className: "normal-case",
                     },
                     {
-                      key: `/console/courses`,
-                      label: "Cours",
+                      key: "/console/enrollment-form",
+                      label: "Formulaire d'inscription",
+                      icon: <CheckCircleOutlined />,
+                      className: "normal-case",
+                    },
+                    {
+                      key: `/console/evaluation-form`,
+                      label: "Formulaire d'évaluation",
                       icon: <ReadOutlined />,
                       className: "normal-case",
                     },
+                    {
+                      key: "/console/classrooms",
+                      label: "Salles de classe",
+                      icon: <TagsOutlined />,
+                      className: "normal-case",
+                    },
+                    {
+                      key: "/console/users",
+                      label: "Comptes",
+                      icon: <TeamOutlined />,
+                    },
                   ],
-                },
-                {
-                  key: "/console/enrollment-form",
-                  label: "Formulaire d'inscription",
-                  icon: <CheckCircleOutlined />,
-                  className: "normal-case",
-                },
-                {
-                  key: "/console/classrooms",
-                  label: "Salles de classe",
-                  icon: <TagsOutlined />,
-                  className: "normal-case",
-                },
-                {
-                  key: "/console/users",
-                  label: "Comptes",
-                  icon: <TeamOutlined />,
                 },
               ]}
               onClick={({ key }) => {
