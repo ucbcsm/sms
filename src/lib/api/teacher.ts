@@ -55,8 +55,8 @@ export async function updateTeacher({
       // | "assigned_departements" | "assigned_faculties"
     >
   > & {
-    assigned_departements: number[];
-    assigned_faculties: number[];
+    // assigned_departements: number[];
+    // assigned_faculties: number[];
     user: {
       id: number;
       first_name: string;
@@ -64,6 +64,7 @@ export async function updateTeacher({
       surname: string;
       email: string;
       avatar: string | null;
+      pending_avatar:string | null
       matricule: string;
       is_permanent_teacher: boolean;
     };
