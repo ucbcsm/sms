@@ -193,10 +193,10 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                 name="teaching_unit_id"
                 label="Unité d'enseignement"
                 rules={[
-                  {
-                    required: true,
-                    message: "Veuillez sélectionner une unité d'enseignement.",
-                  },
+                  // {
+                  //   required: true,
+                  //   message: "Veuillez sélectionner une unité d'enseignement.",
+                  // },
                 ]}
               >
                 <Select
