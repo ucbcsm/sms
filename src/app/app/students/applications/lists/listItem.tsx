@@ -182,7 +182,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
               >
                 {getApplicationStatusName(`${item.status}`)}
               </Typography.Text>{" "}
-              : {item.class_year.acronym} {item.departement.name}
+              : {item.class_year?.acronym||""} {item.departement.name}
             </div>
           }
         />

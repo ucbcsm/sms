@@ -150,7 +150,7 @@ export function StudentsList() {
           title: "Promotion",
           dataIndex: "promotion",
           render: (_, record, __) =>
-            `${record.class_year.acronym} ${record.departement.name}`,
+            `${record.class_year?.acronym} ${record.departement.name}`,
           key: "class",
           ellipsis: true,
         },

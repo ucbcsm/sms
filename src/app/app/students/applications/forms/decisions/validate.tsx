@@ -151,7 +151,7 @@ export const ValidateApplicationForm: FC<
       >
         <Alert
           message="Confirmation requise"
-          description={`Êtes-vous sûr de vouloir valider l'inscription de "${application.name}" en ${application.class_year.acronym} ${application.departement.name} ?`}
+          description={`Êtes-vous sûr de vouloir valider l'inscription de "${application.name}" en ${application.class_year?.acronym} ${application.departement.name} ?`}
           type="info"
           showIcon
           style={{ border: 0 }}

@@ -330,7 +330,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             field_id: application.field.id,
             faculty_id: application.faculty.id,
             department_id: application.departement.id,
-            class_id: application.class_year.id,
+            class_id: application.class_year?.id,
             enrollment_question_response:
               application.enrollment_question_response,
             year_of_diploma_obtained: dayjs(

@@ -61,6 +61,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
     mutationFn: updateStudentInfo,
   });
 
+
   const onFinish = (values: any) => {
     if (!data) {
       messageApi.error("Aucune donnée disponible pour la mise à jour.");
@@ -79,6 +80,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               avatar: data?.user.avatar,
               matricule: values.matricule,
               pending_avatar: data?.user.pending_avatar,
+              is_active:data.user.is_active
             },
             application_documents: formatApplicationDocumentsForEdition(
               data?.common_enrollment_infos.application_documents

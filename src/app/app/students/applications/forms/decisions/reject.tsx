@@ -76,7 +76,7 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
         modalRender={(dom) => (
