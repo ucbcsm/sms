@@ -84,11 +84,12 @@ export default function ConsoleLayout({
             <Alert
               description="Assurez-vous d'avoir enregistré toutes vos modifications, car toute modification non sauvegardée sera perdue. Voulez-vous vraiment continuer ?"
               message="Vous êtes sur le point de quitter la console d'administration."
-              type="warning"
+              type="info"
+              showIcon
               style={{
                 marginTop: 16,
                 marginBottom: 32,
-                border: 0,
+                // border: 0,
               }}
             />
           </Modal>
