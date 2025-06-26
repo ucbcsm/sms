@@ -2,7 +2,7 @@
 import React, { FC, useState } from "react";
 import { Alert, Button, Modal } from "antd";
 import { Faculty } from "@/types";
-import { FacultyMembersList } from "@/app/app/faculty/[facultyId]/(dashboard)/_components/members/list";
+import { FacultyMembersList } from "@/app/faculty/[facultyId]/(dashboard)/_components/members/list";
 
 type ListFacultyMembersProps = {
     faculty: Faculty;
