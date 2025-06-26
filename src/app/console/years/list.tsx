@@ -34,6 +34,8 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
   return (
     <Space size="middle">
       <Button
+        color="primary"
+        variant="dashed"
         title="Gérer l'année académique"
         onClick={() => {
           router.push(`/console/years/${record.id}/periods`);
