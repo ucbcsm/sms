@@ -8,7 +8,9 @@ import {
 } from "@/lib/api";
 import { countries } from "@/lib/data/countries";
 
-import { Department, Faculty, Teacher } from "@/types";
+import {
+  //  Department, Faculty, 
+  Teacher } from "@/types";
 import { CloseOutlined, EditOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -54,6 +56,8 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
     mutationFn: updateTeacher,
   });
 
+  console.log("Teacher:",teacher)
+
   const onFinish = (values: any) => {
     if (!teacher) {
       messageApi.error("Aucune donnée disponible pour la mise à jour.");
@@ -77,10 +81,10 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               matricule: values.matricule,
               pending_avatar: teacher?.user.pending_avatar || null,
               is_permanent_teacher: values.is_permanent_teacher,
-              is_active:teacher.user.is_active,
-              is_staff:teacher.user.is_staff,
-              is_student:teacher.user.is_student,
-              is_superuser:teacher.user.is_superuser
+              is_active: teacher.user.is_active,
+              is_staff: teacher.user.is_staff,
+              is_student: teacher.user.is_student,
+              is_superuser: teacher.user.is_superuser,
             },
           },
         },
@@ -134,7 +138,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
         width="100%"
         closable={false}
         onClose={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         styles={{ header: { background: colorPrimary } }}
         extra={
           <Space>

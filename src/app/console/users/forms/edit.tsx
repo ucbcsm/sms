@@ -59,7 +59,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
 
   const onFinish = (values: FormDataType) => {
     mutateAsync(
-      { id: user.id, params: {...values, is_permanent_teacher:user.is_permanent_teacher} },
+      { id: user.id, params: {...values, is_permanent_teacher:user.is_permanent_teacher, avatar: user.avatar||null} },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["users"] });

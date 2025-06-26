@@ -103,7 +103,7 @@ export default function Page() {
       <Col span={6}>
         <Card loading={isPending}>
           <Descriptions
-            title="Info professionnelles"
+            title="Informations professionnelles"
             column={1}
             items={[
               {

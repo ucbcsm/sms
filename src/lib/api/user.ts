@@ -51,7 +51,7 @@ export async function updateUser({
 }) {
   const res = await api.put(`/account/users/${id}/`, {
     ...params,
-    avatar: null,
+    // avatar: null,
   });
   return res.data;
 }

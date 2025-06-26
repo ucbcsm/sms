@@ -64,10 +64,10 @@ export async function updateTeacher({
       surname: string;
       email: string;
       avatar: string | null;
-      pending_avatar:string | null
+      pending_avatar:string | null;
       matricule: string;
       is_permanent_teacher: boolean;
-      is_staff:boolean
+      is_staff:boolean;
     };
   };
 }) {

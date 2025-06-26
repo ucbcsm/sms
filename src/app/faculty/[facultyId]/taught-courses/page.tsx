@@ -4,6 +4,7 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import {
+  getAllTeachers,
   getClassrooms,
   getCoursesByFacultyId,
   getCycles,
@@ -153,13 +154,13 @@ export default function Page() {
   } = theme.useToken();
   const { yid } = useYid();
   const { facultyId } = useParams();
-  const { data, isPending, isError } = useQuery({
+  const { data:taughtCourses, isPending, isError } = useQuery({
     queryKey: ["taught_courses", `${yid}`, facultyId],
     queryFn: ({ queryKey }) =>
       getTaughtCoursesByFacultyId(Number(queryKey[1]), Number(queryKey[2])),
     enabled: !!yid && !!facultyId,
   });
-
+  
   const { data: courses } = useQuery({
     queryKey: ["courses", facultyId],
     queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
@@ -174,7 +175,7 @@ export default function Page() {
 
   const { data: teachers } = useQuery({
     queryKey: ["teachers", facultyId],
-    queryFn: ({ queryKey }) => getTeachersByFaculty(Number(queryKey[1])),
+    queryFn: getAllTeachers,
     enabled: !!facultyId,
   });
 
@@ -311,7 +312,7 @@ export default function Page() {
                   </Space>
                 </header>
               )}
-              dataSource={data}
+              dataSource={taughtCourses}
               columns={[
                 {
                   title: "Titre du cours",
