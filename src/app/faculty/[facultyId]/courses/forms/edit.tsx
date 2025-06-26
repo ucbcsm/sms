@@ -145,6 +145,7 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
             options={getCurrentFacultiesAsOptions(faculties)}
             mode="multiple"
             filterOption={filterOption}
+            disabled
           />
         </Form.Item>
       </Modal>

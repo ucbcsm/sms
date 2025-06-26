@@ -357,7 +357,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   allowClear
                 />
               </Form.Item>
-              <Form.Item name="status" label="Statut du cours">
+              <Alert message="Statut des inscriptions au cours" description={<Form.Item name="status" >
                 <Select
                   options={[
                     { value: "pending", label: "En attente" },
@@ -375,7 +375,8 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                     },
                   ]}
                 />
-              </Form.Item>
+              </Form.Item>}/>
+              
               <Flex justify="space-between" align="center">
                 <Palette />
                 <Form.Item
