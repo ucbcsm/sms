@@ -23,6 +23,8 @@ export async function updateStudentInfo({
       is_active:boolean,
       is_staff:boolean,
       is_student:boolean,
+      is_superuser:boolean,
+      is_permanent_teacher:boolean,
     };
   };
 }) {

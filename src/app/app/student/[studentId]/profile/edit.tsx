@@ -82,7 +82,9 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               pending_avatar: data?.user.pending_avatar,
               is_active:data.user.is_active,
               is_staff:data.user.is_staff,
-              is_student:data.user.is_student
+              is_student:data.user.is_student,
+              is_superuser:data.user.is_superuser,
+              is_permanent_teacher:data.user.is_permanent_teacher
             },
             application_documents: formatApplicationDocumentsForEdition(
               data?.common_enrollment_infos.application_documents
