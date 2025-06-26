@@ -21,6 +21,8 @@ export async function updateStudentInfo({
       avatar: string | null;
       pending_avatar: string | null;
       is_active:boolean,
+      is_staff:boolean,
+      is_student:boolean,
     };
   };
 }) {
