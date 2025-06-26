@@ -16,7 +16,7 @@ import { Button, Descriptions, Space, Tag } from "antd";
 import { FC, useState } from "react";
 import { getCourseTypeName, getTeachingUnitCategoryName, getYearStatusName } from "@/lib/api";
 import { EditOutlined } from "@ant-design/icons";
-import { EditTaughtCourseForm } from "@/app/app/faculty/[facultyId]/taught-courses/forms/edit";
+import { EditTaughtCourseForm } from "@/app/faculty/[facultyId]/taught-courses/forms/edit";
 
 type TaughtCourseDetailsProps = {
   data?: TaughtCourse;

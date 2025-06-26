@@ -1,6 +1,6 @@
 "use client";
 
-import { EditTaughtCourseForm } from "@/app/app/faculty/[facultyId]/taught-courses/forms/edit";
+import { EditTaughtCourseForm } from "@/app/faculty/[facultyId]/taught-courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import {
   getClassrooms,
