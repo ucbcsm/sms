@@ -28,13 +28,6 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
 
   return (
     <Space size="middle">
-      <Button
-        title="Gérer la salle de classe"
-        onClick={() => {}}
-        style={{ boxShadow: "none" }}
-      >
-        Gérer
-      </Button>
       <EditClassroomForm
         classroom={record}
         open={openEdit}
@@ -178,7 +171,7 @@ export const ListClassrooms = () => {
           render: (_, record, __) => {
             return <ActionsBar record={record} />;
           },
-          width:132
+          width:58
         },
       ]}
       dataSource={classrooms}

@@ -205,9 +205,9 @@ export function ListFaculties() {
       dataSource={faculties}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-      rowSelection={{
-        type: "checkbox",
-      }}
+      // rowSelection={{
+      //   type: "checkbox",
+      // }}
       size="small"
       pagination={{
         defaultPageSize: 10,
