@@ -57,8 +57,8 @@ export const Step3: FC<Props> = ({ setStep }) => {
       mutateAsync(
         {
           is_permanent_teacher: values.is_permanent_teacher,
-          assigned_faculties: sdata.assigned_faculties,
-          assigned_departements: sdata.assigned_departements,
+          // assigned_faculties: sdata.assigned_faculties,
+          // assigned_departements: sdata.assigned_departements,
           gender: sdata.gender,
           institution_of_origin: values.is_permanent_teacher
             ? ""

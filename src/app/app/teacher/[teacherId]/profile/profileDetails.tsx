@@ -2,10 +2,12 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getHSLColor, getMaritalStatusName } from "@/lib/utils";
-import { Department, Faculty, Teacher } from "@/types";
+import {
+  //  Department, Faculty,
+   Teacher } from "@/types";
 import {
   Avatar,
-  Button,
+  // Button,
   Descriptions,
   Flex,
   Image,
@@ -19,15 +21,15 @@ type TeacherProfileDetailsProps = {
   data?: Teacher;
   isPending: boolean;
   isError: boolean;
-  faculties?: Faculty[];
-  departments?: Department[];
+  // faculties?: Faculty[];
+  // departments?: Department[];
 };
 export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
   data,
   isError,
   isPending,
-  departments,
-  faculties,
+  // departments,
+  // faculties,
 }) => {
   if (isError) {
     return <DataFetchErrorResult />;
@@ -46,8 +48,8 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
           </Typography.Title>
           <EditTeacherProfileForm
             teacher={data}
-            departments={departments}
-            faculties={faculties}
+            // departments={departments}
+            // faculties={faculties}
           />
         </Flex>
         <Space

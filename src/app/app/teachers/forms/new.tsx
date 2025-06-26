@@ -23,13 +23,13 @@ import { useTeacherStepsData } from "@/hooks/use-teacher-steps-data";
 import { Department, Faculty } from "@/types";
 
 type NewTeacherFormProps = {
-  departments?: Department[];
-  faculties?: Faculty[];
+  // departments?: Department[];
+  // faculties?: Faculty[];
 };
 
 export const NewTeacherForm: FC<NewTeacherFormProps> = ({
-  departments,
-  faculties,
+  // departments,
+  // faculties,
 }) => {
   const {
     token: { colorPrimary },
@@ -54,8 +54,8 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
       content: (
         <Step2
           setStep={setStep}
-          departments={departments}
-          faculties={faculties}
+          // departments={departments}
+          // faculties={faculties}
         />
       ),
     },

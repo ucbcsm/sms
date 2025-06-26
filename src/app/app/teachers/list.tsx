@@ -27,7 +27,9 @@ import {
 import { useRouter } from "next/navigation";
 import { NewTeacherForm } from "./forms/new";
 import { useQuery } from "@tanstack/react-query";
-import { getDepartments, getFaculties, getTeachers } from "@/lib/api";
+import {
+  //  getDepartments, getFaculties,
+   getTeachers } from "@/lib/api";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
@@ -46,15 +48,15 @@ export function ListTeachers() {
     refetchOnReconnect: false,
   });
 
-  const { data: faculties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
+  // const { data: faculties } = useQuery({
+  //   queryKey: ["faculties"],
+  //   queryFn: getFaculties,
+  // });
 
-  const { data: departments } = useQuery({
-    queryKey: ["departments"],
-    queryFn: getDepartments,
-  });
+  // const { data: departments } = useQuery({
+  //   queryKey: ["departments"],
+  //   queryFn: getDepartments,
+  // });
 
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
@@ -92,7 +94,9 @@ export function ListTeachers() {
             </Space>
             <div className="flex-1" />
             <Space>
-              <NewTeacherForm departments={departments} faculties={faculties} />
+              <NewTeacherForm
+              //  departments={departments} faculties={faculties}
+                />
               <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
                 Imprimer
               </Button>

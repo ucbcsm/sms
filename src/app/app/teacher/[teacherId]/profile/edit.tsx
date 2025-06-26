@@ -2,8 +2,8 @@
 
 import { Palette } from "@/components/palette";
 import {
-  getCurrentDepartmentsAsOptions,
-  getCurrentFacultiesAsOptions,
+  // getCurrentDepartmentsAsOptions,
+  // getCurrentFacultiesAsOptions,
   updateTeacher,
 } from "@/lib/api";
 import { countries } from "@/lib/data/countries";
@@ -32,14 +32,14 @@ import { FC, useState } from "react";
 
 type EditTeacherProfileFormProps = {
   teacher?: Teacher;
-  departments?: Department[];
-  faculties?: Faculty[];
+  // departments?: Department[];
+  // faculties?: Faculty[];
 };
 
 export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   teacher,
-  faculties,
-  departments,
+  // faculties,
+  // departments,
 }) => {
   const {
     token: { colorPrimary },
@@ -522,7 +522,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               ]}
             />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             label="Facultés assignées"
             name="assigned_faculties"
             rules={[{ required: true }]}
@@ -543,7 +543,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               placeholder="Départements assignés"
               options={getCurrentDepartmentsAsOptions(departments)}
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item
             label="Autres responsabilités/Charge administrative"
             name="other_responsabilities"

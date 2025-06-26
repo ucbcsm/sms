@@ -26,11 +26,12 @@ export async function getTeacher(id: number) {
 export async function createTeacher(
   params: Omit<
     Teacher,
-    "id" | "user" | "assigned_departements" | "assigned_faculties"
+    "id" | "user"
+    //  | "assigned_departements" | "assigned_faculties"
   > & {
     is_permanent_teacher: boolean;
-    assigned_departements: number[];
-    assigned_faculties: number[];
+    // assigned_departements: number[];
+    // assigned_faculties: number[];
     first_name: string;
     last_name: string;
     surname: string;
@@ -50,7 +51,8 @@ export async function updateTeacher({
   params: Partial<
     Omit<
       Teacher,
-      "id" | "user" | "assigned_departements" | "assigned_faculties"
+      "id" | "user"
+      // | "assigned_departements" | "assigned_faculties"
     >
   > & {
     assigned_departements: number[];
@@ -84,7 +86,6 @@ export function getTeachersAsOptions(teachers?: Teacher[]) {
     };
   });
 }
-
 
 export async function getTeacherDashboard(yearId: number, teacherId: number) {
   const res = await api.get(

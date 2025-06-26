@@ -1,9 +1,11 @@
 "use client";
-import {
-  getCurrentDepartmentsAsOptions,
-  getCurrentFacultiesAsOptions,
-} from "@/lib/api";
-import { Department, Faculty, Step2TeacherFormDataType } from "@/types";
+// import {
+//   getCurrentDepartmentsAsOptions,
+//   getCurrentFacultiesAsOptions,
+// } from "@/lib/api";
+import { 
+  // Department, Faculty, 
+  Step2TeacherFormDataType } from "@/types";
 import { Button, Form, Input, Select, Space } from "antd";
 import {
   compressToEncodedURIComponent,
@@ -17,8 +19,8 @@ type Props = {
     value: number | ((old: number) => number | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
-  faculties?: Faculty[];
-  departments?: Department[];
+  // faculties?: Faculty[];
+  // departments?: Department[];
 };
 
 // const formSchema = z.object({
@@ -38,7 +40,9 @@ type Props = {
 // });
 // type FormSchemaType = z.infer<typeof formSchema>;
 
-export const Step2: FC<Props> = ({ setStep, faculties, departments }) => {
+export const Step2: FC<Props> = ({ setStep,
+  //  faculties, departments 
+  }) => {
   const [form] = Form.useForm<Step2TeacherFormDataType>();
 
   useEffect(() => {

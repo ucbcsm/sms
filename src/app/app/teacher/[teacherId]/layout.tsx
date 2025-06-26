@@ -2,7 +2,9 @@
 
 import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
-import { getDepartments, getFaculties, getTeacher } from "@/lib/api";
+import {
+  //  getDepartments, getFaculties, 
+  getTeacher } from "@/lib/api";
 import { MoreOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 
@@ -40,15 +42,15 @@ export default function TeacherLayout({
     enabled: !!teacherId,
   });
 
-  const { data: faculties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
+  // const { data: faculties } = useQuery({
+  //   queryKey: ["faculties"],
+  //   queryFn: getFaculties,
+  // });
 
-  const { data: departments } = useQuery({
-    queryKey: ["departments"],
-    queryFn: getDepartments,
-  });
+  // const { data: departments } = useQuery({
+  //   queryKey: ["departments"],
+  //   queryFn: getDepartments,
+  // });
 
   return (
     <Layout>
@@ -154,8 +156,8 @@ export default function TeacherLayout({
           data={teacher}
           isError={isError}
           isPending={isPending}
-          departments={departments}
-          faculties={faculties}
+          // departments={departments}
+          // faculties={faculties}
         />
       </Layout.Sider>
     </Layout>

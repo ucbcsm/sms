@@ -806,8 +806,8 @@ export const Step2TeacherFormDataType = z.object({
   academic_title: z.string(),
   academic_grade: z.string(),
   education_level: z.string(),
-  assigned_faculties: z.array(z.number()),
-  assigned_departements: z.array(z.number()),
+  // assigned_faculties: z.array(z.number()),
+  // assigned_departements: z.array(z.number()),
   other_responsabilities: z.string(),
 });
 
