@@ -1,7 +1,8 @@
-'use client'
+"use client";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { useYid } from "@/hooks/use-yid";
 import { getYearDashboard, getYearProgressPercent } from "@/lib/api";
+import { toFixedNumber } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   Badge,
@@ -85,7 +86,10 @@ export function StudentsStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.male_count! / data?.student_counter!) * 100}
+                // percent={Number(((data?.male_count! / data?.student_counter!) * 100).toFixed(0))}
+                percent={toFixedNumber(
+                  (data?.male_count! / data?.student_counter!) * 100
+                )}
                 size={58}
               />
             ) : (
@@ -105,7 +109,7 @@ export function StudentsStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.female_count! / data?.student_counter!) * 100}
+                percent={toFixedNumber((data?.female_count! / data?.student_counter!) * 100)}
                 size={58}
                 strokeColor="cyan"
               />
@@ -126,7 +130,7 @@ export function StudentsStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.actif_count! / data?.student_counter!) * 100}
+                percent={toFixedNumber((data?.actif_count! / data?.student_counter!) * 100)}
                 size={58}
                 strokeColor="cyan"
               />
@@ -147,7 +151,7 @@ export function StudentsStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.inactif_count! / data?.student_counter!) * 100}
+                percent={toFixedNumber((data?.inactif_count! / data?.student_counter!) * 100)}
                 size={58}
                 strokeColor="cyan"
               />

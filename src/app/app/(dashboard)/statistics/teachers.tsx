@@ -1,5 +1,6 @@
 'use client'
 import { getTeachersDashboard } from "@/lib/api";
+import { toFixedNumber } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Flex, Progress, Row, Skeleton, Statistic } from "antd";
 
@@ -37,7 +38,9 @@ export function TeachersStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.male_count! / data?.teachers_count!) * 100}
+                percent={toFixedNumber(
+                  (data?.male_count! / data?.teachers_count!) * 100
+                )}
                 size={58}
               />
             ) : (
@@ -57,7 +60,9 @@ export function TeachersStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.female_count! / data?.teachers_count!) * 100}
+                percent={toFixedNumber(
+                  (data?.female_count! / data?.teachers_count!) * 100
+                )}
                 size={58}
                 strokeColor="cyan"
               />
@@ -78,9 +83,9 @@ export function TeachersStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={
+                percent={toFixedNumber(
                   (data?.permanent_teacher_count! / data?.teachers_count!) * 100
-                }
+                )}
                 size={58}
                 strokeColor="cyan"
               />
@@ -101,9 +106,9 @@ export function TeachersStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={
+                percent={toFixedNumber(
                   (data?.guest_teacher_count! / data?.teachers_count!) * 100
-                }
+                )}
                 size={58}
                 strokeColor="cyan"
               />
@@ -124,7 +129,9 @@ export function TeachersStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.actif_count! / data?.teachers_count!) * 100}
+                percent={toFixedNumber(
+                  (data?.actif_count! / data?.teachers_count!) * 100
+                )}
                 size={58}
                 strokeColor="cyan"
               />
@@ -137,11 +144,17 @@ export function TeachersStatistics() {
       <Col xs={24} sm={12} md={8} xl={6}>
         <Card>
           <Flex justify="space-between">
-            <Statistic loading={isPending} title="Abandons" value={data?.inactif_count} />
+            <Statistic
+              loading={isPending}
+              title="Abandons"
+              value={data?.inactif_count}
+            />
             {!isPending ? (
               <Progress
                 type="dashboard"
-                percent={(data?.inactif_count!/data?.teachers_count!)*100}
+                percent={toFixedNumber(
+                  (data?.inactif_count! / data?.teachers_count!) * 100
+                )}
                 size={58}
                 strokeColor="cyan"
               />
