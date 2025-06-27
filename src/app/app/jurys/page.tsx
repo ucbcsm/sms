@@ -1,10 +1,8 @@
 "use client";
+
 import {
-  Avatar,
-  Button,
   Card,
   Layout,
-  List,
   Radio,
   Space,
   theme,
@@ -12,13 +10,11 @@ import {
 } from "antd";
 import {
   AppstoreOutlined,
-  PlusCircleOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import Link from "next/link";
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
-import { JurysList } from "./list";
+import { JurysList } from "../../console/years/[yearId]/jurys/list";
 
 export default function Page() {
   const {

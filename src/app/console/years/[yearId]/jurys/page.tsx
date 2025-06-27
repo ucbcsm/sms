@@ -1,6 +1,6 @@
 "use client";
 
-import { JurysList } from "@/app/app/jurys/list";
+import { JurysList } from "@/app/console/years/[yearId]/jurys/list";
 
 export default function Page() {
   return (

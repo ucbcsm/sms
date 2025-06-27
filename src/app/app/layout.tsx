@@ -127,11 +127,6 @@ export default function AppLayout({
               children: getFacultiesAsMenu(),
             },
             {
-              key: "/app/jurys",
-              label: "Jurys",
-              icon: <SafetyCertificateOutlined />,
-            },
-            {
               key: "7",
               label: "Autres",
               children: [

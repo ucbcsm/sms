@@ -806,9 +806,19 @@ export const Step2TeacherFormDataType = z.object({
   academic_title: z.string(),
   academic_grade: z.string(),
   education_level: z.string(),
-  // assigned_faculties: z.array(z.number()),
-  // assigned_departements: z.array(z.number()),
   other_responsabilities: z.string(),
 });
 
 export type Step2TeacherFormDataType = z.infer<typeof Step2TeacherFormDataType>;
+
+export const Jury = z.object({
+  id: z.number(),
+  academic_year: Year,
+  faculties: z.array(Faculty),
+  chairperson: Teacher,
+  secretary: Teacher,
+  members: z.array(Teacher),
+  name: z.string(),
+});
+
+export type Jury = z.infer<typeof Jury>;

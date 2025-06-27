@@ -166,7 +166,7 @@ export default function YearLayout({
                 },
                 {
                   id: "3",
-                  name: "Status",
+                  name: "Status des inscriptions",
                   description: getYearStatusName(`${year?.status}`),
                 },
               ]}
