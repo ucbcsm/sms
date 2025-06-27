@@ -19,7 +19,7 @@ import {
   getTeachingUnitsByfaculty,
   getYearStatusName,
 } from "@/lib/api";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, toFixedNumber } from "@/lib/utils";
 import { EditOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -107,8 +107,6 @@ export default function Page() {
     enabled: !!courseId,
   });
 
-
-
   const getCourseProgressStatus = (
     status: "pending" | "progress" | "finished" | "suspended"
   ) => {
@@ -190,11 +188,11 @@ export default function Page() {
                 {!isPending ? (
                   <Progress
                     type="dashboard"
-                    percent={
+                    percent={toFixedNumber(
                       (getCumulativeHours(hours) /
                         (course.theoretical_hours! + course.practical_hours!)) *
-                      100
-                    }
+                        100,1
+                    )}
                     size={58}
                     status={getCourseProgressStatus(course?.status!)}
                   />
