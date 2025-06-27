@@ -70,7 +70,7 @@ export default function Page() {
           </Space>
         </Layout.Footer>
       </Layout.Content>
-      <Layout.Sider
+      {/* <Layout.Sider
         width={280}
         theme="light"
         style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
@@ -132,7 +132,7 @@ export default function Page() {
             )}
           />
         </Card>
-      </Layout.Sider>
+      </Layout.Sider> */}
     </Layout>
   );
 }

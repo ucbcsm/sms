@@ -60,7 +60,7 @@ export default function Page() {
               { key: "students", label: "Etudiants" },
               { key: "teachers", label: "Enseignants" },
             ]}
-            tabBarExtraContent={<Button type="link">Voir plus</Button>}
+            // tabBarExtraContent={<Button type="link">Voir plus</Button>}
             onTabChange={(key) => {
               setStatTab(key as "teachers" | "students");
             }}
