@@ -73,7 +73,7 @@ export function ListTeachers() {
           <header className="flex  pb-3">
             <Space>
               <Input.Search placeholder="Rechercher ..." />
-              <Select placeholder="Faculté" showSearch />
+              {/* <Select placeholder="Faculté" showSearch />
               <Select
                 placeholder="Catégorie"
                 options={[
@@ -82,7 +82,7 @@ export function ListTeachers() {
                   { value: "visitor", label: "Visiteurs" },
                 ]}
                 showSearch
-              />
+              /> */}
               <Select
                 placeholder="Genre"
                 options={[
