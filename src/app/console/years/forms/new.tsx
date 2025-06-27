@@ -165,7 +165,7 @@ export const NewYearForm: React.FC<NewYearFormProps> = ({buttonType="primary"}) 
         </Form.Item>
         <Form.Item
           name="status"
-          label="Statut"
+          label="Statut des inscriptions"
           rules={[
             { required: true, message: "Veuillez sélectionner un statut" },
           ]}
