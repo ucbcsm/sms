@@ -48,15 +48,7 @@ export async function updateTeacher({
   params,
 }: {
   id: number;
-  params: Partial<
-    Omit<
-      Teacher,
-      "id" | "user"
-      // | "assigned_departements" | "assigned_faculties"
-    >
-  > & {
-    // assigned_departements: number[];
-    // assigned_faculties: number[];
+  params: Partial<Omit<Teacher, "id" | "user">> & {
     user: {
       id: number;
       first_name: string;
@@ -64,10 +56,13 @@ export async function updateTeacher({
       surname: string;
       email: string;
       avatar: string | null;
-      pending_avatar:string | null;
+      pending_avatar: string | null;
       matricule: string;
       is_permanent_teacher: boolean;
-      is_staff:boolean;
+      is_active: boolean;
+      is_staff: boolean;
+      is_student: boolean;
+      is_superuser: boolean;
     };
   };
 }) {

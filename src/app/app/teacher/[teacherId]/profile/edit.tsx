@@ -56,7 +56,6 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
     mutationFn: updateTeacher,
   });
 
-  console.log("Teacher:",teacher)
 
   const onFinish = (values: any) => {
     if (!teacher) {
