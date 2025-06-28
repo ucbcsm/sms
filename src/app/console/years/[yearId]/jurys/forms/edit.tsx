@@ -150,7 +150,7 @@ export const EditJuryForm: React.FC<EditJuryFormProps> = ({
         </Form.Item>
         <Card>
           <Typography.Title level={5}>Membres du jury</Typography.Title>
-          <Form.Item name="chairperson_id" label="Président" rules={[]}>
+          <Form.Item name="chairperson_id" label="Président" rules={[{required:true}]}>
             <Select
               placeholder="Sélectionnez le président"
               prefix={<UserOutlined />}
@@ -159,7 +159,7 @@ export const EditJuryForm: React.FC<EditJuryFormProps> = ({
               allowClear
             />
           </Form.Item>
-          <Form.Item name="secretary_id" label="Secrétaire" rules={[]}>
+          <Form.Item name="secretary_id" label="Secrétaire" rules={[{required:true}]}>
             <Select
               placeholder="Sélectionnez le secrétaire"
               prefix={<UserOutlined />}
