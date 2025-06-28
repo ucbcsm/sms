@@ -81,7 +81,7 @@ export const EditJuryForm: React.FC<EditJuryFormProps> = ({
         open={open}
         title="Modifier le jury"
         centered
-        okText="Enregistrer"
+        okText="Sauvegarder"
         cancelText="Annuler"
         okButtonProps={{
           autoFocus: true,
