@@ -25,10 +25,10 @@ export async function createJury(
 ) {
   const res = await api.post("/jury/jury/", {
     academic_year: data.academic_year_id,
-    faculties: data.faculties_ids,
+    faculties: data.faculties_ids || [],
     chairperson: data.chairperson_id,
     secretary: data.secretary_id,
-    members: data.members_ids,
+    members: data.members_ids || [],
     name: data.name,
   });
   return res.data;
@@ -57,16 +57,16 @@ export async function updateJury({
 }) {
   const res = await api.put(`/jury/jury/${id}/`, {
     academic_year: data.academic_year_id,
-    faculties: data.faculties_ids,
+    faculties: data.faculties_ids || [],
     chairperson: data.chairperson_id,
     secretary: data.secretary_id,
-    members: data.members_ids,
+    members: data.members_ids || [],
     name: data.name,
   });
   return res.data;
 }
 
-export async function deleteGroup(id: number) {
+export async function deleteJury(id: number) {
   const res = await api.delete(`/jury/jury/${id}/`);
   return res.data;
 }

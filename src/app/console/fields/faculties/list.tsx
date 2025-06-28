@@ -109,8 +109,6 @@ export function ListFaculties() {
   } = useQuery({
     queryKey: ["all_teachers"],
     queryFn: getAllTeachers,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
   });
 
   if (isPending || isPendinfTeachers) {

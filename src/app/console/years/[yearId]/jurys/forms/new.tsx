@@ -14,48 +14,59 @@ import {
   Typography,
 } from "antd";
 import { PlusOutlined, TeamOutlined, UserOutlined } from "@ant-design/icons";
-import { Faculty, Field, Teacher } from "@/types";
+import { Faculty, Teacher } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  createFaculty,
-  getCurrentFieldsAsOptions,
+  createJury,
+  getCurrentFacultiesAsOptions,
   getTeachersAsOptions,
 } from "@/lib/api";
 import { filterOption } from "@/lib/utils";
+import { useParams } from "next/navigation";
 
-type FormDataType = Omit<Faculty, "id" | "field"> & { field_id: number };
-type NewFacultyFormProps = {
-  fields?: Field[];
+type FormDataType = {
+  faculties_ids: number[];
+  chairperson_id: number;
+  secretary_id: number;
+  members_ids: number[];
+  name: string;
+};
+
+type NewJuryFormProps = {
+  faculties?: Faculty[];
   teachers?: Teacher[];
 };
-export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
-  fields,
+
+export const NewJuryForm: React.FC<NewJuryFormProps> = ({
+  faculties,
   teachers,
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
+  const { yearId } = useParams();
 
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: createFaculty,
+    mutationFn: createJury,
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
-
-    mutateAsync(values, {
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["faculties"] });
-        messageApi.success("Faculté créée avec succès !");
-        setOpen(false);
-      },
-      onError: () => {
-        messageApi.error(
-          "Une erreur s'est produite lors de la création de la faculté."
-        );
-      },
-    });
+    mutateAsync(
+      { ...values, academic_year_id: Number(yearId) },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["jurys"] });
+          messageApi.success("Jury créé avec succès !");
+          setOpen(false);
+        },
+        onError: () => {
+          messageApi.error(
+            "Une erreur s'est produite lors de la création du jury."
+          );
+        },
+      }
+    );
   };
 
   return (
@@ -65,15 +76,15 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
         type="primary"
         icon={<PlusOutlined />}
         className="shadow-none"
-        title="Ajouter une faculté"
+        title="Ajouter un jury"
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
-        Ajouter
+        Créer un jury
       </Button>
       <Modal
         open={open}
-        title="Nouvelle faculté"
+        title="Nouveau jury"
         centered
         okText="Créer"
         cancelText="Annuler"
@@ -92,10 +103,10 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
         modalRender={(dom) => (
           <Form
             disabled={isPending}
-            key="create_new_faculty"
+            key="create_new_jury"
             layout="vertical"
             form={form}
-            name="create_new_faculty"
+            name="create_new_jury"
             onFinish={onFinish}
             clearOnDestroy
           >
@@ -104,71 +115,64 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
         )}
       >
         <Row gutter={[16, 16]}>
-          <Col span={16}>
+          <Col span={24}>
             <Form.Item
               name="name"
-              label="Nom"
+              label="Nom du jury"
               rules={[
                 {
                   required: true,
-                  message: "Veuillez entrer un nom de la faculté",
+                  message: "Veuillez entrer le nom du jury",
                 },
               ]}
             >
-              <Input placeholder="Entrez le nom" />
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item
-              name="acronym"
-              label="Acronyme"
-              rules={[
-                { required: true, message: "Veuillez entrer un acronyme" },
-              ]}
-            >
-              <Input placeholder="Entrez l'acronyme" />
+              <Input placeholder="Entrez le nom du jury" />
             </Form.Item>
           </Col>
         </Row>
         <Form.Item
-          name="field_id"
-          label="Domaine"
+          name="faculties_ids"
+          label="Facultés"
           rules={[
-            { required: true, message: "Veuillez sélectionner un  domaine" },
+            {
+              required: true,
+              message: "Veuillez sélectionner au moins une faculté",
+            },
           ]}
         >
           <Select
-            placeholder="Sélectionnez un domaine"
-            options={getCurrentFieldsAsOptions(fields)}
+            mode="multiple"
+            placeholder="Sélectionnez les facultés"
+            options={getCurrentFacultiesAsOptions?.(faculties)}
+            filterOption={filterOption}
           />
         </Form.Item>
         <Card>
-          <Typography.Title level={5}>Membres de la faculté</Typography.Title>
-          <Form.Item name="coordinator_id" label="Coordinateur" rules={[]}>
+          <Typography.Title level={5}>Membres du jury</Typography.Title>
+          <Form.Item name="chairperson_id" label="Président" rules={[{required:true}]}>
             <Select
-              placeholder="Séléctionnez le coordinateur"
+              placeholder="Sélectionnez le président"
               prefix={<UserOutlined />}
-              options={getTeachersAsOptions(teachers)}
+              options={getTeachersAsOptions?.(teachers)}
               filterOption={filterOption}
               allowClear
             />
           </Form.Item>
-          <Form.Item name="secretary_id" label="Secrétaire" rules={[]}>
+          <Form.Item name="secretary_id" label="Secrétaire" rules={[{required:true}]}>
             <Select
-              placeholder="Séléctionnez le nom du secrétaire"
+              placeholder="Sélectionnez le secrétaire"
               prefix={<UserOutlined />}
-              options={getTeachersAsOptions(teachers)}
+              options={getTeachersAsOptions?.(teachers)}
               filterOption={filterOption}
               allowClear
             />
           </Form.Item>
-
-          <Form.Item name="other_members_ids" label="Autres membres" rules={[]}>
+          <Form.Item name="members_ids" label="Autres membres" rules={[]}>
             <Select
               mode="multiple"
-              placeholder="Séléctionnez les autres membres"
+              placeholder="Sélectionnez les autres membres"
               prefix={<TeamOutlined />}
-              options={getTeachersAsOptions(teachers)}
+              options={getTeachersAsOptions?.(teachers)}
               filterOption={filterOption}
               allowClear
             />

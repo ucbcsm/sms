@@ -1,6 +1,7 @@
+"use client";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getJurys } from "@/lib/api/jury";
+import { getAllTeachers, getFaculties, getJurys } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
 import { Faculty, Jury, Teacher } from "@/types";
 import {
@@ -9,22 +10,17 @@ import {
   EditOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
-  FilterOutlined,
   MoreOutlined,
   PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Button,
-  Dropdown,
-  Input,
-  Space,
-  Table,
-  Tag,
-} from "antd";
+import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
+import { NewJuryForm } from "./forms/new";
+import { DeleteJuryForm } from "./forms/delete";
+import { EditJuryForm } from "./forms/edit";
 
 type ActionsBarProps = {
   record: Jury;
@@ -38,18 +34,14 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties, teachers }) => {
 
   return (
     <Space size="middle">
-      {/* <EditJuryForm
+      <EditJuryForm
         faculties={faculties}
         jury={record}
         teachers={teachers}
         open={openEdit}
         setOpen={setOpenEdit}
       />
-      <DeleteJuryForm
-        jury={record}
-        open={openDelete}
-        setOpen={setOpenDelete}
-      /> */}
+      <DeleteJuryForm jury={record} open={openDelete} setOpen={setOpenDelete} />
       <Dropdown
         menu={{
           items: [
@@ -91,6 +83,25 @@ export function JurysList() {
     queryFn: ({ queryKey }) => getJurys(Number(queryKey[1])),
     enabled: !!yearId,
   });
+
+  const {
+    data: faculties,
+    isPending: isPendingFacalties,
+    isError: isErrorFaculties,
+  } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const {
+    data: teachers,
+    isPending: isPendinfTeachers,
+    isError: isErrorTeachers,
+  } = useQuery({
+    queryKey: ["all_teachers"],
+    queryFn: getAllTeachers,
+  });
+
   if (isPending) {
     return <DataFetchPendingSkeleton />;
   }
@@ -104,19 +115,10 @@ export function JurysList() {
         <header className="flex pb-3">
           <Space>
             <Input.Search placeholder="Rechercher ..." />
-            <Button icon={<FilterOutlined />} style={{ boxShadow: "none" }}>
-              Filtrer
-            </Button>
           </Space>
           <div className="flex-1" />
           <Space>
-            <Button
-              icon={<PlusOutlined />}
-              type="primary"
-              style={{ boxShadow: "none" }}
-            >
-              Ajouter un jury
-            </Button>
+            <NewJuryForm teachers={teachers} faculties={faculties} />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -199,7 +201,14 @@ export function JurysList() {
         {
           dataIndex: "actions",
           key: "actions",
-          render: (_, record) => <ActionsBar record={record} />,
+          render: (_, record) => (
+            <ActionsBar
+              record={record}
+              faculties={faculties}
+              teachers={teachers}
+            />
+          ),
+          width: 52,
         },
       ]}
       dataSource={jurys}
