@@ -196,7 +196,6 @@ export function JurysList() {
           title: "Autres membres",
           dataIndex: "membersCount",
           key: "membersCount",
-          width: 80,
           render: (_, record) => (
             <Space wrap>
               {record.members.map(
@@ -221,10 +220,10 @@ export function JurysList() {
       ]}
       dataSource={jurys}
       rowKey="id"
-      rowClassName={`bg-[#f5f5f5] odd:bg-white hover:cursor-pointer`}
-      rowSelection={{
-        type: "checkbox",
-      }}
+      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      // rowSelection={{
+      //   type: "checkbox",
+      // }}
       size="small"
       pagination={{
         defaultPageSize: 25,
