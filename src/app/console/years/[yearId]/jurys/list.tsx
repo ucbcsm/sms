@@ -114,7 +114,9 @@ export function JurysList() {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Typography.Title level={5} style={{marginBottom:0}}>Jurys</Typography.Title>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              Jurys
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
@@ -195,8 +197,14 @@ export function JurysList() {
           dataIndex: "membersCount",
           key: "membersCount",
           width: 80,
-          render: (_, record) => record.members.length,
-          align: "center",
+          render: (_, record) => (
+            <Space wrap>
+              {record.members.map(
+                (m) =>
+                  `${m.user.first_name} ${m.user.last_name} ${m.user.surname}`
+              )}
+            </Space>
+          ),
         },
         {
           dataIndex: "actions",
@@ -223,7 +231,6 @@ export function JurysList() {
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
       }}
-  
     />
   );
 }
