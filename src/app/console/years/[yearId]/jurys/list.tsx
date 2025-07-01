@@ -193,7 +193,7 @@ export function JurysList() {
           ellipsis: true,
         },
         {
-          title: "Autres membres",
+          title: "Autre (s) membre (s)",
           dataIndex: "membersCount",
           key: "membersCount",
           render: (_, record) => (
