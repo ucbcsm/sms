@@ -15,7 +15,7 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import { Button, Dropdown, Input, Space, Table, Tag, Typography } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 import { NewJuryForm } from "./forms/new";
@@ -114,7 +114,7 @@ export function JurysList() {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Input.Search placeholder="Rechercher ..." />
+            <Typography.Title level={5}>Jurys</Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>

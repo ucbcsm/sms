@@ -85,7 +85,7 @@ export function LetterGradingsList() {
             title={() => (
                 <header className="flex pb-3">
                     <Space>
-                        <Input.Search placeholder="Rechercher ..." />
+                        <Typography.Title level={5}>Notations</Typography.Title>
                     </Space>
                     <div className="flex-1" />
                     <Space>
