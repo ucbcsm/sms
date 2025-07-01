@@ -223,11 +223,7 @@ export function JurysList() {
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
       }}
-      // onRow={(record) => ({
-      //   onClick: () => {
-      //     router.push(`/app/jurys/${record.id}`); // Navigate to the jury details page
-      //   },
-      // })}
+  
     />
   );
 }

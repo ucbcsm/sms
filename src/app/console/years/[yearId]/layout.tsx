@@ -84,12 +84,16 @@ export default function YearLayout({
               label: "Jurys d'examen",
             },
             {
+              key: `/console/years/${yearId}/letter-gradings`,
+              label: "Notation par lettres",
+            },
+            {
               key: `/console/years/${yearId}/currencies`,
               label: "Monnaies",
             },
             {
               key: `/console/years/${yearId}/payment-methods`,
-              label: "Modes de paiement",
+              label: "Modes de paiement", 
             },
           ]}
           activeTabKey={pathname}

@@ -822,3 +822,14 @@ export const Jury = z.object({
 });
 
 export type Jury = z.infer<typeof Jury>;
+
+export const LetterGrading = z.object({
+  id: z.number(),
+  grade_letter: z.string(),
+  lower_bound: z.number(),
+  upper_bound: z.number(),
+  appreciation: z.string(),
+  description: z.string(),
+});
+
+export type LetterGrading = z.infer<typeof LetterGrading>;
