@@ -114,7 +114,7 @@ export function JurysList() {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Typography.Title level={5}>Jurys</Typography.Title>
+            <Typography.Title level={5} style={{marginBottom:0}}>Jurys</Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
