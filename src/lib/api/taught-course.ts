@@ -12,7 +12,7 @@ export async function getTaughtCoursesByFacultyId(
   return res.data.results as TaughtCourse[];
 }
 
-export async function getTaughtCoursesByDepartment(
+export async function getTaughtCoursesByDepartmentId(
   yearId: number,
   departmentId: number
 ) {

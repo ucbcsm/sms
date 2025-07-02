@@ -12,7 +12,6 @@ import {
   getFaculties,
   getPeriods,
   getTaughtCoursesByFacultyId,
-  getTeachersByFaculty,
   getTeachingUnitsByfaculty,
   getYearStatusColor,
   getYearStatusName,
