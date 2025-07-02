@@ -97,7 +97,7 @@ export const EditTeachingUnitForm: React.FC<EditTeachingUnitFormProps> = ({
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         modalRender={(dom) => (
           <Form
             form={form}

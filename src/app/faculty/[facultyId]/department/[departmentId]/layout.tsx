@@ -50,7 +50,7 @@ export default function DepartmentLayout({
           height: "calc(100vh - 64px)",
         }}
       >
-        {/* <Layout.Header
+        <Layout.Header
           style={{
             display: "flex",
             alignItems: "center",
@@ -59,7 +59,7 @@ export default function DepartmentLayout({
           }}
         >
           <Space>
-            <BackButton />
+            {/* <BackButton /> */}
             {!isPending ? (
               <Typography.Title level={3} style={{ marginBottom: 0 }}>
                 {department?.name} (Département)
@@ -74,14 +74,14 @@ export default function DepartmentLayout({
           <Space>
             <Palette />
           </Space>
-        </Layout.Header> */}
+        </Layout.Header>
         <Card
-          style={{ borderRadius: 0 }}
-          title={
-            <Typography.Title level={3}>
-              {department?.name} (Département)
-            </Typography.Title>
-          }
+          // style={{ borderRadius: 0 }}
+          // title={
+          //   <Typography.Title level={3}>
+          //     {department?.name} (Département)
+          //   </Typography.Title>
+          // }
           tabBarExtraContent={
             <Space>
               <Button
@@ -109,6 +109,10 @@ export default function DepartmentLayout({
             {
               key: `/faculty/${facultyId}/department/${departmentId}/programs`,
               label: "Programmes",
+            },
+            {
+              key: `/faculty/${facultyId}/department/${departmentId}/taught-courses`,
+              label: "Cours planifiés",
             },
             // {
             //   key: `/faculty/${facultyId}/department/${departmentId}/teachers`,

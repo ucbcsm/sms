@@ -77,7 +77,7 @@ export const NewTeachingUnitForm: React.FC<NewTeachingUnitFormProps> = ({
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         modalRender={(dom) => (
           <Form
             form={form}
