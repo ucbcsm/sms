@@ -344,7 +344,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                   allowClear
                 />
               </Form.Item>
-              <Form.Item name="status" label="Statut du cours">
+              <Form.Item name="status" label="Statut des inscriptions">
                 <Select
                   options={[
                     { value: "pending", label: "En attente" },
