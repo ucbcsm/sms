@@ -56,7 +56,7 @@ export default function FacultyLayout({
 
   const getDepartmentsAsMenu = () => {
     const menu = departments?.map((dep) => ({
-      key: `/app/department/${dep.id}`,
+      key: `/faculty/${dep.faculty.id}/department/${dep.id}`,
       label: dep.name,
       icon: <SubnodeOutlined />,
     }));

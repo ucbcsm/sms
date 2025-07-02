@@ -1,28 +1,16 @@
 "use client";
 
 import {
-  AppstoreOutlined,
-  MoreOutlined,
-  PlusCircleOutlined,
-  RightOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
-import {
-  Avatar,
   Button,
   Card,
-  Dropdown,
   Form,
   Layout,
-  List,
-  Radio,
   Skeleton,
   Space,
   theme,
   Typography,
 } from "antd";
 
-import Link from "next/link";
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -37,7 +25,7 @@ export default function DepartmentLayout({
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
-  const { departmentId } = useParams();
+  const { facultyId ,departmentId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -97,23 +85,23 @@ console.log(department)
           }
           tabList={[
             {
-              key: `/app/department/${departmentId}`,
+              key: `/faculty/${facultyId}/department/${departmentId}`,
               label: "Aperçu",
             },
             {
-              key: `/app/department/${departmentId}/students`,
+              key: `/faculty/${facultyId}/department/${departmentId}/students`,
               label: "Étudiants",
             },
             // {
-            //   key: `/app/department/${departmentId}/classes`,
+            //   key: `/faculty/${facultyId}/department/${departmentId}/classes`,
             //   label: "Promotions",
             // },
             {
-              key: `/app/department/${departmentId}/programs`,
+              key: `/faculty/${facultyId}/department/${departmentId}/programs`,
               label: "Programmes",
             },
             // {
-            //   key: `/app/department/${departmentId}/teachers`,
+            //   key: `/faculty/${facultyId}/department/${departmentId}/teachers`,
             //   label: "Enseignants",
             // },
           ]}

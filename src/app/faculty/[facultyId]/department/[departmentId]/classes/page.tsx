@@ -1,8 +1,5 @@
 "use client";
 
-import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getDepartmentsByFacultyId } from "@/lib/api";
 import {
     DeleteOutlined,
     DownOutlined,
@@ -12,35 +9,17 @@ import {
     MoreOutlined,
     PrinterOutlined,
 } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
-import { Button, Dropdown, Input, Space, Table} from "antd";
-import { useParams, useRouter } from "next/navigation";
+import { Button, Dropdown, Input, Space, Table, Tag } from "antd";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-    const router =useRouter()
-    const {facultyId}=useParams()
-
-    const { data, isPending, isError } = useQuery({
-    queryKey: ["departments", facultyId],
-    queryFn: ({ queryKey }) =>
-      getDepartmentsByFacultyId(Number(queryKey[1])),
-    enabled: !!facultyId,
-  });
-
-   if (isPending) {
-     return <DataFetchPendingSkeleton variant="table" />;
-   }
-
-   if (isError) {
-     return <DataFetchErrorResult />;
-   }
-
+    const router=useRouter()
     return (
         <Table
             title={() => (
                 <header className="flex pb-3">
                     <Space>
-                        <Input.Search placeholder="Rechercher un département ..." />
+                        <Input.Search placeholder="Rechercher une promotion ..." />
                     </Space>
                     <div className="flex-1" />
                     <Space>
@@ -72,40 +51,86 @@ export default function Page() {
                     </Space>
                 </header>
             )}
-            dataSource={data}
+            dataSource={[
+                {
+                    key: "1",
+                    name: "L1",
+                    department: "Informatique",
+                    students: 120,
+                    year: "2023-2024",
+                    type: "Licence",
+                },
+                {
+                    key: "2",
+                    name: "M1",
+                    department: "Informatique",
+                    students: 80,
+                    year: "2023-2024",
+                    type: "Master",
+                },
+                {
+                    key: "3",
+                    name: "L2",
+                    department: "Mathématiques",
+                    students: 100,
+                    year: "2023-2024",
+                    type: "Licence",
+                },
+                {
+                    key: "4",
+                    name: "D1",
+                    department: "Informatique",
+                    students: 15,
+                    year: "2023-2024",
+                    type: "Doctorat",
+                },
+            ]}
             columns={[
                 {
-                    title: "Nom du département",
+                    title: "Promotion",
                     dataIndex: "name",
                     key: "name",
                 },
-                // {
-                //     title: "Programmes",
-                //     dataIndex: "programs",
-                //     key: "programs",
-                // },
-                // {
-                //     title: "Etudiants",
-                //     dataIndex: "students",
-                //     key: "students",
-                //     align: "end",
-                // },
+                {
+                    title: "Etudiants",
+                    dataIndex: "students",
+                    key: "students",
+                   
+                },
+                {
+                    title: "Année",
+                    dataIndex: "year",
+                    key: "year",
+                },
+                {
+                    title: "Cycle",
+                    dataIndex: "type",
+                    key: "type",
+                    render: (type) => {
+                        let color = type === "Licence" ? "blue" : type === "Master" ? "green" : "purple";
+                        return (
+                            <Tag color={color} bordered={false} style={{ borderRadius: 10 }}>
+                                {type}
+                            </Tag>
+                        );
+                    },
+                },
                 {
                     title: "Actions",
                     key: "actions",
                     render: (_, record) => (
                         <Space>
-                            <Button style={{ boxShadow: "none" }} onClick={()=>{router.push(`/app/department/1`)}}>Gérer</Button>
+                            <Button style={{ boxShadow: "none" }} onClick={()=>{router.push(`/app/class/1`)}}>Voir détails</Button>
                             <Dropdown
                                 menu={{
                                     items: [
-                                        // { key: "1", label: "Modifier", icon: <EditOutlined /> },
-                                        // {
-                                        //     key: "2",
-                                        //     label: "Supprimer",
-                                        //     danger: true,
-                                        //     icon: <DeleteOutlined />,
-                                        // },
+                                        { key: "1", label: "Modifier", icon: <EditOutlined /> },
+                                        {
+                                            key: "2",
+                                            label: "Supprimer",
+                                            danger: true,
+                                            icon: <DeleteOutlined />,
+                                        },
                                     ],
                                 }}
                             >
@@ -116,7 +141,7 @@ export default function Page() {
                     width: 50,
                 },
             ]}
-            rowKey="id"
+            rowKey="key"
             rowClassName={`bg-[#f5f5f5] odd:bg-white`}
             rowSelection={{
                 type: "checkbox",
