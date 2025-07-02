@@ -25,7 +25,7 @@ export default function DepartmentLayout({
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
-  const { facultyId ,departmentId } = useParams();
+  const { facultyId, departmentId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -38,7 +38,7 @@ export default function DepartmentLayout({
     queryFn: ({ queryKey }) => getDepartment(Number(queryKey[1])),
     enabled: !!departmentId,
   });
-console.log(department)
+  console.log(department);
   return (
     <Layout>
       <Layout.Content
@@ -50,7 +50,7 @@ console.log(department)
           height: "calc(100vh - 64px)",
         }}
       >
-        <Layout.Header
+        {/* <Layout.Header
           style={{
             display: "flex",
             alignItems: "center",
@@ -74,11 +74,21 @@ console.log(department)
           <Space>
             <Palette />
           </Space>
-        </Layout.Header>
+        </Layout.Header> */}
         <Card
+          style={{ borderRadius: 0 }}
+          title={
+            <Typography.Title level={3}>
+              {department?.name} (Département)
+            </Typography.Title>
+          }
           tabBarExtraContent={
             <Space>
-              <Button type="dashed" title="Programmer un cours" style={{boxShadow:"none"}}>
+              <Button
+                type="dashed"
+                title="Programmer un cours"
+                style={{ boxShadow: "none" }}
+              >
                 Programmer un cours
               </Button>
             </Space>
