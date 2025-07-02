@@ -194,8 +194,8 @@ export function JurysList() {
         },
         {
           title: "Autre (s) membre (s)",
-          dataIndex: "membersCount",
-          key: "membersCount",
+          dataIndex: "members",
+          key: "members",
           render: (_, record) => (
             <Space wrap>
               {record.members.map(
