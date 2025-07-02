@@ -214,44 +214,7 @@ export default function Page() {
   }
 
   return (
-    <Layout>
-      <Layout.Content
-        style={{
-          minHeight: 280,
-          padding: "0 32px 0 32px",
-          background: colorBgContainer,
-          overflowY: "auto",
-          height: "calc(100vh - 64px)",
-        }}
-      >
-        <Layout.Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            padding: 0,
-          }}
-        >
-          <Space>
-            {/* <BackButton /> */}
-            {!isPending ? (
-              <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                Cours planifiés
-              </Typography.Title>
-            ) : (
-              <Form>
-                <Skeleton.Input active />
-              </Form>
-            )}
-          </Space>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Header>
-        <Row gutter={[24, 24]}>
-          <Col span={18}>
-          <Card>
+     
             <Table
               title={() => (
                 <header className="flex pb-3">
@@ -440,15 +403,15 @@ export default function Page() {
                   ),
                   ellipsis: true,
                 },
+                // {
+                //   key: "department",
+                //   dataIndex: "departement",
+                //   title: "Département",
+                //   render: (_, record) => record.departement.name,
+                //   ellipsis: true,
+                // },
                 {
-                  key: "department",
-                  dataIndex: "departement",
-                  title: "Département",
-                  render: (_, record) => record.departement.name,
-                  ellipsis: true,
-                },
-                {
-                  title: "Inscription",
+                  title: "Inscriptions",
                   dataIndex: "status",
                   key: "status",
                   render: (_, record, __) => (
@@ -495,28 +458,7 @@ export default function Page() {
                 size: "small",
               }}
             />
-            </Card>
-          </Col>
-          <Col span={6}>
-            {/* <ListTeachingUnits cycles={cycles} departments={departments} /> */}
-          </Col>
-        </Row>
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: "24px 0",
-          }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
-      </Layout.Content>
-    </Layout>
+        
+       
   );
 }

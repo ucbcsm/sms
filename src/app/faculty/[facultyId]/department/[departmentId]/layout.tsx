@@ -82,17 +82,17 @@ export default function DepartmentLayout({
           //     {department?.name} (Département)
           //   </Typography.Title>
           // }
-          tabBarExtraContent={
-            <Space>
-              <Button
-                type="dashed"
-                title="Programmer un cours"
-                style={{ boxShadow: "none" }}
-              >
-                Programmer un cours
-              </Button>
-            </Space>
-          }
+          // tabBarExtraContent={
+          //   <Space>
+          //     <Button
+          //       type="dashed"
+          //       title="Programmer un cours"
+          //       style={{ boxShadow: "none" }}
+          //     >
+          //       Programmer un cours
+          //     </Button>
+          //   </Space>
+          // }
           tabList={[
             {
               key: `/faculty/${facultyId}/department/${departmentId}`,

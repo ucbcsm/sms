@@ -242,7 +242,7 @@ export default function Page() {
                               variant="dashed"
                               style={{ boxShadow: "none" }}
                               onClick={() =>
-                                router.push(`/app/department/${item.id}`)
+                                router.push(`/faculty/${facultyId}/department/${item.id}`)
                               }
                             >
                               Gérer
