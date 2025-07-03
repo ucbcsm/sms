@@ -12,7 +12,6 @@ import {
   getFaculties,
   getPeriods,
   getTaughtCoursesByDepartmentId,
-  getTaughtCoursesByFacultyId,
   getTeachingUnitsByfaculty,
   getYearStatusColor,
   getYearStatusName,
@@ -68,7 +67,6 @@ type ActionsBarProps = {
   record: TaughtCourse;
   taughtCourse: TaughtCourse | null;
   departments?: Department[];
-  faculties?: Faculty[];
   courses?: Course[];
   teachers?: Teacher[];
   periods?: Period[];
@@ -78,7 +76,6 @@ type ActionsBarProps = {
 
 const ActionsBar: FC<ActionsBarProps> = ({
   record,
-  faculties,
   departments,
   periods,
   teachers,
@@ -94,7 +91,6 @@ const ActionsBar: FC<ActionsBarProps> = ({
     <Space size="middle">
       <EditTaughtCourseForm
         taughtCourse={record}
-        faculties={faculties}
         departments={departments}
         periods={periods}
         teachers={teachers}
@@ -226,7 +222,7 @@ export default function Page() {
                   <Space>
                     {/* <Input.Search placeholder="Rechercher un cours dans le catalogue ..." /> */}
                     <NewTaughtCourseForm
-                      faculties={faculties}
+                      facultyId={Number(facultyId)}
                       teachingUnits={teachingUnits}
                       periods={periods}
                       courses={courses}
@@ -433,7 +429,6 @@ export default function Page() {
                       <ActionsBar
                         record={record}
                         taughtCourse={record}
-                        faculties={faculties}
                         departments={departments}
                         courses={courses}
                         periods={periods}

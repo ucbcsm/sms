@@ -47,7 +47,7 @@ import { filterOption } from "@/lib/utils";
 
 type NewTaughtCourseFormProps = {
   departments?: Department[];
-  faculties?: Faculty[];
+  facultyId: number;
   courses?: Course[];
   teachers?: Teacher[];
   periods?: Period[];
@@ -57,7 +57,7 @@ type NewTaughtCourseFormProps = {
 
 export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
   departments,
-  faculties,
+  facultyId,
   courses,
   teachers,
   periods,
@@ -87,7 +87,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
 
   const onFinish = (values: any) => {
     mutateAsync(
-      { ...values, academic_year_id: yid },
+      { ...values, academic_year_id: yid, faculty_id: facultyId },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["taught_courses"] });
@@ -270,12 +270,12 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <Form.Item
-                    name="department_id"
-                    label="Département"
+                    name="departments_ids"
+                    label="Départements"
                     rules={[
                       {
                         required: true,
-                        message: "Veuillez sélectionner un département.",
+                        message: "Veuillez sélectionner les départements.",
                       },
                     ]}
                   >
@@ -283,20 +283,21 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                       options={getCurrentDepartmentsAsOptions(departments)}
                       allowClear
                       showSearch
+                      mode="multiple"
                       filterOption={filterOption}
-                      onChange={(value) => {
-                        const selectedDepartment = departments?.find(
-                          (department) => department.id === value
-                        );
-                        form.setFieldValue(
-                          "faculty_id",
-                          selectedDepartment?.faculty.id
-                        );
-                      }}
+                      // onChange={(value) => {
+                      //   const selectedDepartment = departments?.find(
+                      //     (department) => department.id === value
+                      //   );
+                      //   form.setFieldValue(
+                      //     "faculty_id",
+                      //     selectedDepartment?.faculty.id
+                      //   );
+                      // }}
                     />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                {/* <Col span={12}>
                   <Form.Item
                     name="faculty_id"
                     label="Faculté"
@@ -315,7 +316,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                       disabled
                     />
                   </Form.Item>
-                </Col>
+                </Col> */}
               </Row>
               <Row gutter={[16, 16]}>
                 <Col span={12}>
@@ -357,26 +358,31 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   allowClear
                 />
               </Form.Item>
-              <Alert message="Statut des inscriptions" description={<Form.Item name="status" >
-                <Select
-                  options={[
-                    { value: "pending", label: "En attente" },
-                    {
-                      value: "progress",
-                      label: "En cours",
-                    },
-                    {
-                      value: "finished",
-                      label: "Terminé",
-                    },
-                    {
-                      value: "suspended",
-                      label: "Suspendu",
-                    },
-                  ]}
-                />
-              </Form.Item>}/>
-              
+              <Alert
+                message="Statut des inscriptions"
+                description={
+                  <Form.Item name="status">
+                    <Select
+                      options={[
+                        { value: "pending", label: "En attente" },
+                        {
+                          value: "progress",
+                          label: "En cours",
+                        },
+                        {
+                          value: "finished",
+                          label: "Terminé",
+                        },
+                        {
+                          value: "suspended",
+                          label: "Suspendu",
+                        },
+                      ]}
+                    />
+                  </Form.Item>
+                }
+              />
+
               <Flex justify="space-between" align="center">
                 <Palette />
                 <Form.Item

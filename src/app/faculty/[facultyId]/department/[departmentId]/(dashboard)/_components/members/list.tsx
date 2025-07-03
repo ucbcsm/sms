@@ -2,8 +2,7 @@
 
 import { getHSLColor } from "@/lib/utils";
 import { Department } from "@/types";
-import { CloseOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
-import { Avatar, Button, Divider, Dropdown, List, Tag, Typography } from "antd";
+import { Avatar, Button, Divider, List, Tag, Typography } from "antd";
 import { FC } from "react";
 
 type DepartmentMembersListProps = {
@@ -16,7 +15,7 @@ export const DepartmentMembersList: FC<DepartmentMembersListProps> = ({
   return (
     <div style={{ width: "100%" }}>
       <div>
-        <Typography.Text type="secondary">Directeur</Typography.Text>
+        <Typography.Text type="secondary">Chef de département</Typography.Text>
         {department?.director ? (
           <List
             dataSource={[department.director]}

@@ -21,7 +21,6 @@ import { CloseOutlined } from "@ant-design/icons";
 import {
   Course,
   Department,
-  Faculty,
   Period,
   Teacher,
   TeachingUnit,
@@ -49,7 +48,6 @@ type EditTaughtCourseFormProps = {
   setOpen: (open: boolean) => void;
   taughtCourse: TaughtCourse | null;
   departments?: Department[];
-  faculties?: Faculty[];
   courses?: Course[];
   teachers?: Teacher[];
   periods?: Period[];
@@ -62,7 +60,6 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
   setOpen,
   taughtCourse,
   departments,
-  faculties,
   courses,
   teachers,
   periods,
@@ -93,7 +90,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
         practical_hours: taughtCourse.practical_hours,
         period_id: taughtCourse.period?.id,
         faculty_id: taughtCourse.faculty?.id,
-        department_id: taughtCourse.departement?.id,
+        departments_ids: taughtCourse.departements.map(dep=>dep.id),
         start_date: taughtCourse.start_date
           ? dayjs(taughtCourse.start_date)
           : null,
@@ -115,7 +112,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
   const onFinish = (values: any) => {
     if (!taughtCourse) return;
     mutateAsync(
-      { id: taughtCourse.id, data: { ...values, academic_year_id: yid } },
+      { id: taughtCourse.id, data: { ...values, academic_year_id: yid, faculty_id:taughtCourse.faculty.id } },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["taught_courses"] });
@@ -257,12 +254,12 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <Form.Item
-                    name="department_id"
-                    label="Département"
+                    name="departments_ids"
+                    label="Départements"
                     rules={[
                       {
                         required: true,
-                        message: "Veuillez sélectionner un département.",
+                        message: "Veuillez sélectionner les départements.",
                       },
                     ]}
                   >
@@ -270,20 +267,21 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                       options={getCurrentDepartmentsAsOptions(departments)}
                       allowClear
                       showSearch
+                      mode="multiple"
                       filterOption={filterOption}
-                      onChange={(value) => {
-                        const selectedDepartment = departments?.find(
-                          (department) => department.id === value
-                        );
-                        form.setFieldValue(
-                          "faculty_id",
-                          selectedDepartment?.faculty.id
-                        );
-                      }}
+                      // onChange={(value) => {
+                      //   const selectedDepartment = departments?.find(
+                      //     (department) => department.id === value
+                      //   );
+                      //   form.setFieldValue(
+                      //     "faculty_id",
+                      //     selectedDepartment?.faculty.id
+                      //   );
+                      // }}
                     />
                   </Form.Item>
                 </Col>
-                <Col span={12}>
+                {/* <Col span={12}>
                   <Form.Item
                     name="faculty_id"
                     label="Faculté"
@@ -302,7 +300,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                       disabled
                     />
                   </Form.Item>
-                </Col>
+                </Col> */}
               </Row>
               <Row gutter={[16, 16]}>
                 <Col span={12}>

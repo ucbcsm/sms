@@ -25,9 +25,9 @@ import { EditTeachingUnitForm } from "./forms/edit";
 type ListItemProps = {
   item: TeachingUnit;
   cycles?: Cycle[];
-  departments?: Department[];
+  // departments?: Department[];
 };
-const ListItem: FC<ListItemProps> = ({ item, cycles, departments }) => {
+const ListItem: FC<ListItemProps> = ({ item, cycles }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -40,7 +40,7 @@ const ListItem: FC<ListItemProps> = ({ item, cycles, departments }) => {
             open={openEdit}
             setOpen={setOpenEdit}
             cycles={cycles}
-            departments={departments}
+            // departments={departments}
           />
           <DeleteTeachingUnitForm
             teachingUnit={item}
@@ -80,10 +80,10 @@ const ListItem: FC<ListItemProps> = ({ item, cycles, departments }) => {
             <Tag style={{ border: 0 }}>
               {getTeachingUnitCategoryName(item.category)}
             </Tag>
-            <Badge
+            {/* <Badge
               count={item.departement?.acronym}
               color={getHSLColor(`${item.departement?.name}`)}
-            />
+            /> */}
           </Space>
         }
       />
@@ -93,11 +93,11 @@ const ListItem: FC<ListItemProps> = ({ item, cycles, departments }) => {
 
 type ListTeachingUnitsProps = {
   cycles?: Cycle[];
-  departments?: Department[];
+  // departments?: Department[];
 };
 export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
   cycles,
-  departments,
+  // departments,
 }) => {
   const { facultyId } = useParams();
   const { data: teaching_units, isPending } = useQuery({
@@ -119,7 +119,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
       style={{ boxShadow: "none" }}
       extra={
         teaching_units && (
-          <NewTeachingUnitForm cycles={cycles} departments={departments} />
+          <NewTeachingUnitForm cycles={cycles} />
         )
       }
     >
@@ -130,7 +130,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
             key={item.id}
             item={item}
             cycles={cycles}
-            departments={departments}
+            // departments={departments}
           />
         )}
       />

@@ -304,7 +304,7 @@ export const TeachingUnit = z.object({
   name: z.string(),
   code: z.string(),
   category: z.enum(["required", "optional", "free", "transversal"]),
-  departement: Department.nullable(),
+  faculty: Faculty.nullable(),
   cycle: Cycle.nullable(),
   credit_count: z.number().nullable(),
 });
@@ -321,7 +321,7 @@ export const TaughtCourse = z.object({
   period: Period.nullable(),
   available_course: Course,
   faculty: Faculty,
-  departement: Department,
+  departements: z.array(Department),
   credit_count: z.number().nullable(),
   theoretical_hours: z.number().nullable(),
   practical_hours: z.number().nullable(),
