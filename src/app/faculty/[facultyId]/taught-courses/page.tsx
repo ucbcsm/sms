@@ -201,11 +201,6 @@ export default function Page() {
     queryFn: getClassrooms,
   });
 
-  const { data: cycles } = useQuery({
-    queryKey: ["cycles"],
-    queryFn: getCycles,
-  });
-
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
@@ -250,8 +245,8 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
-        <Row gutter={[24, 24]}>
-          <Col span={18}>
+        {/* <Row gutter={[24, 24]}>
+          <Col span={18}> */}
             <Card>
               <Table
                 title={() => (
@@ -499,11 +494,11 @@ export default function Page() {
                 }}
               />
             </Card>
-          </Col>
+          {/* </Col>
           <Col span={6}>
             <ListTeachingUnits cycles={cycles} />
           </Col>
-        </Row>
+        </Row> */}
         <Layout.Footer
           style={{
             display: "flex",

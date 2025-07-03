@@ -235,7 +235,7 @@ export default function FacultyLayout({
             },
             {
               key: `/faculty/${facultyId}/courses`,
-              label: "Catalogue de cours",
+              label: "Catalogue & UE",
             },
             {
               key: `departments`,
