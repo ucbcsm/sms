@@ -3,8 +3,10 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
+  getClasses,
   getClassPresidentsByFaculty,
   getDepartmentsByFacultyId,
+  getYearEnrollmentsByFacultyId,
 } from "@/lib/api";
 import { Class, ClassPresident, Department, Enrollment } from "@/types";
 import {
@@ -34,6 +36,7 @@ import { Palette } from "@/components/palette";
 import { getHSLColor } from "@/lib/utils";
 import { NewClassPresidentForm } from "./forms/new";
 import { EditClassPresidentForm } from "./forms/edit";
+import { useYid } from "@/hooks/use-yid";
 
 type ActionsBarProps = {
   record: ClassPresident;
@@ -69,6 +72,8 @@ export default function Page() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const { yid } = useYid();
   const { facultyId } = useParams();
 
   const {
@@ -85,6 +90,26 @@ export default function Page() {
     queryKey: ["departments", facultyId],
     queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
     enabled: !!facultyId,
+  });
+
+  const {
+    data: classes,
+    isPending: isPendingClasses,
+    isError: isErrorClasses,
+  } = useQuery({
+    queryKey: ["classes"],
+    queryFn: getClasses,
+  });
+
+  const {
+    data: students,
+    isPending: isPendingStudents,
+    isError: isErrorStudents,
+  } = useQuery({
+    queryKey: ["year_enrollments", `${yid}`, facultyId],
+    queryFn: ({ queryKey }) =>
+      getYearEnrollmentsByFacultyId(Number(queryKey[1]), Number(queryKey[2])),
+    enabled: !!yid && !!facultyId,
   });
 
   if (isPending) {
@@ -142,8 +167,8 @@ export default function Page() {
                 <Space>
                   <NewClassPresidentForm
                     departments={departments}
-                    classes={}
-                    students={}
+                    classes={classes}
+                    students={students}
                   />
                   <Button
                     icon={<PrinterOutlined />}
@@ -213,7 +238,12 @@ export default function Page() {
                 key: "actions",
                 render: (_, record, __) => {
                   return (
-                    <ActionsBar record={record} departments={departments} />
+                    <ActionsBar
+                      record={record}
+                      departments={departments}
+                      classes={classes}
+                      students={students}
+                    />
                   );
                 },
                 width: 50,
