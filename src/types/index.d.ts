@@ -150,6 +150,15 @@ export const Class = z.object({
 
 export type Class = z.infer<typeof Class>;
 
+export const ClassPresident = z.object({
+  id: z.number(),
+  departement: Department,
+  class_year: Class,
+  student: Enrollment,
+});
+
+export type ClassPresident = z.infer<typeof ClassPresident>;
+
 export const Period = z.object({
   id: z.number(),
   cycle: Cycle.nullable(),

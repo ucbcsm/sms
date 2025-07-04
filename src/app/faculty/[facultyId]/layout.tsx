@@ -242,7 +242,12 @@ export default function FacultyLayout({
               label: "Mentions",
               //  icon: <BranchesOutlined />,
               children: getDepartmentsAsMenu(),
-            },]
+            },
+            {
+              key: `/faculty/${facultyId}/class-presidents`,
+              label:"Chefs de promotion"
+            }
+          ]
           }
           ]}
           // style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
