@@ -159,7 +159,7 @@ export default function Page() {
           </Space>
         </Layout.Header>
         <Row>
-          <Col>
+          <Col span={16}>
             <Card>
               <Table
                 title={() => (
@@ -261,7 +261,7 @@ export default function Page() {
               />
             </Card>
           </Col>
-          <Col>
+          <Col span={8}>
             <ListTeachingUnits cycles={cycles} />
           </Col>
         </Row>
