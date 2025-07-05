@@ -60,7 +60,7 @@ const EnrollButton: FC<EnrollButtonProps> = ({
     >
       <Button
         icon={<UserAddOutlined />}
-        type="link"
+        color="primary"
         style={{ boxShadow: "none" }}
         variant="dashed"
       >
@@ -146,18 +146,17 @@ export default function Page() {
             icon={<UserAddOutlined style={{ color: "GrayText" }} />}
             extra={
               <Space>
+                <EnrollButton
+                  setReapply={setReapply}
+                  SetNewApplication={SetNewApplication}
+                />
                 <Button
-                  color="primary"
-                  variant="dashed"
+                  type="link"
                   style={{ boxShadow: "none" }}
                   onClick={() => router.push(`/app/students`)}
                 >
                   Gérer les étudiants
                 </Button>
-                <EnrollButton
-                  setReapply={setReapply}
-                  SetNewApplication={SetNewApplication}
-                />
               </Space>
             }
           />
