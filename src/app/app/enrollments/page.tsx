@@ -6,6 +6,7 @@ import {
   Dropdown,
   Flex,
   Layout,
+  Result,
   Space,
   Tabs,
   theme,
@@ -119,41 +120,17 @@ export default function StudentsLayout({
           height: "calc(100vh - 64px)",
         }}
       >
-        <Layout.Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            padding: 0,
-          }}
+        <div
+          className="flex flex-col justify-center"
+          style={{ height: "calc(100vh - 64px)" }}
         >
-          <Space>
-            <BackButton />
-            <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Etudiants
-            </Typography.Title>
-          </Space>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Header>
-        <Card>{children}</Card>
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: " 24px 0",
-          }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
+          <Result
+            status="info"
+            title="Aucune candidature sélectionnée"
+            subTitle="Veuillez sélectionner une candidature dans la liste pour afficher les détails."
+            icon={<UserAddOutlined style={{ color: "GrayText" }} />}
+          />
+        </div>
       </Layout.Content>
     </Layout>
   );
