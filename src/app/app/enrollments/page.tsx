@@ -76,7 +76,7 @@ export default function Page() {
               style={{ boxShadow: "none" }}
               variant="dashed"
             >
-              Créer
+              Inscrire
             </Button>
           </Dropdown>
         </Flex>
