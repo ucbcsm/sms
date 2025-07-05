@@ -146,10 +146,6 @@ export default function Page() {
             icon={<UserAddOutlined style={{ color: "GrayText" }} />}
             extra={
               <Space>
-                <EnrollButton
-                  setReapply={setReapply}
-                  SetNewApplication={SetNewApplication}
-                />
                 <Button
                   type="link"
                   style={{ boxShadow: "none" }}
@@ -157,6 +153,10 @@ export default function Page() {
                 >
                   Gérer les étudiants
                 </Button>
+                <EnrollButton
+                  setReapply={setReapply}
+                  SetNewApplication={SetNewApplication}
+                />
               </Space>
             }
           />
