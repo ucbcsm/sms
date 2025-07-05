@@ -2,30 +2,21 @@
 import { UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import {
   Button,
-  Card,
   Dropdown,
   Flex,
   Layout,
   Result,
-  Space,
   Tabs,
   theme,
   Typography,
 } from "antd";
-import { usePathname, useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { ListNewApplications } from "./applications/lists/new_applications";
 import { ListReApplications } from "./applications/lists/reapplications";
 import { ReapplyForm } from "./applications/forms/reapply";
 import { NewApplicationForm } from "./applications/forms/new/new";
-import BackButton from "@/components/backButton";
-import { Palette } from "@/components/palette";
 
-export default function StudentsLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function Page() {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -39,8 +30,6 @@ export default function StudentsLayout({
     parseAsBoolean.withDefault(false)
   );
 
-  const pathname = usePathname();
-  const router = useRouter();
 
   return (
     <Layout>
