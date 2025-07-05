@@ -20,7 +20,7 @@ import {
 } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
-import { CloseOutlined, UserAddOutlined } from "@ant-design/icons";
+import { BulbOutlined, CloseOutlined, UserAddOutlined } from "@ant-design/icons";
 import {
   Classroom,
   Course,
@@ -163,9 +163,32 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
         <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
           <Alert
             type="info"
-            message="Veuillez fournir toutes les informations nécessaires pour programmer un nouveau cours."
-            description="Assurez-vous que les détails du cours (intitulé, horaires, enseignants, et étudiants concernés) sont complets et exacts avant de valider la planification."
+            message="Instructions"
+            description={
+              <ul style={{ margin: 0 }}>
+                <li>
+                  ▪ Remplissez tous les champs obligatoires du formulaire.
+                </li>
+                <li>
+                  ▪ Vérifiez que les informations du cours (intitulé, horaires,
+                  enseignants, etc.) sont exactes.
+                </li>
+                <li>
+                  ▪ Ajoutez les départements et la période concernés par ce
+                  cours.
+                </li>
+                <li>
+                  ▪ Indiquez les dates de début et de fin, ainsi que la salle
+                  de classe si nécessaire.
+                </li>
+                <li>
+                  ▪ Validez la planification en cliquant sur "Programmer le
+                  cours".
+                </li>
+              </ul>
+            }
             showIcon
+            icon={<BulbOutlined />}
             closable
           />
           <Card
@@ -267,8 +290,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 />
               </Form.Item>
 
-              <Row gutter={[16, 16]}>
-                <Col span={12}>
+              
                   <Form.Item
                     name="departments_ids"
                     label="Départements"
@@ -285,39 +307,9 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                       showSearch
                       mode="multiple"
                       filterOption={filterOption}
-                      // onChange={(value) => {
-                      //   const selectedDepartment = departments?.find(
-                      //     (department) => department.id === value
-                      //   );
-                      //   form.setFieldValue(
-                      //     "faculty_id",
-                      //     selectedDepartment?.faculty.id
-                      //   );
-                      // }}
                     />
                   </Form.Item>
-                </Col>
-                {/* <Col span={12}>
-                  <Form.Item
-                    name="faculty_id"
-                    label="Faculté"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Veuillez sélectionner une faculté.",
-                      },
-                    ]}
-                  >
-                    <Select
-                      options={getCurrentFacultiesAsOptions(faculties)}
-                      allowClear
-                      showSearch
-                      filterOption={filterOption}
-                      disabled
-                    />
-                  </Form.Item>
-                </Col> */}
-              </Row>
+              
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <Form.Item name="start_date" label="Date de début">

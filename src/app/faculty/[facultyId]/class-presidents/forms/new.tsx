@@ -98,6 +98,19 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
           </Form>
         )}
       >
+        
+        <Form.Item
+          name="department_id"
+          label="Département"
+          rules={[
+            { required: true, message: "Veuillez sélectionner un département" },
+          ]}
+        >
+          <Select
+            placeholder="Sélectionnez un département"
+            options={getCurrentDepartmentsAsOptions(departments)}
+          />
+        </Form.Item>
         <Form.Item
           name="class_year_id"
           label="Promotion"
@@ -114,20 +127,8 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
           />
         </Form.Item>
         <Form.Item
-          name="department_id"
-          label="Département"
-          rules={[
-            { required: true, message: "Veuillez sélectionner un département" },
-          ]}
-        >
-          <Select
-            placeholder="Sélectionnez un département"
-            options={getCurrentDepartmentsAsOptions(departments)}
-          />
-        </Form.Item>
-        <Form.Item
           name="student_id"
-          label="Étudiant"
+          label="Chef de promotion (CP)"
           rules={[
             { required: true, message: "Veuillez sélectionner un étudiant" },
           ]}

@@ -41,6 +41,7 @@ import { FC, useState } from "react";
 import { NewCourseForm } from "@/app/faculty/[facultyId]/courses/forms/new";
 import { Palette } from "@/components/palette";
 import { ListTeachingUnits } from "./teaching-units/list";
+import Sider from "antd/es/layout/Sider";
 
 type ActionsBarProps = {
   record: Course;
@@ -96,7 +97,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
 
 export default function Page() {
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
   const { facultyId } = useParams();
   const { data, isPending, isError } = useQuery({
@@ -158,8 +159,8 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
-        <Row>
-          <Col span={16}>
+        {/* <Row> */}
+          {/* <Col span={16}> */}
             <Card>
               <Table
                 title={() => (
@@ -260,11 +261,11 @@ export default function Page() {
                 }}
               />
             </Card>
-          </Col>
-          <Col span={8}>
+          {/* </Col> */}
+          {/* <Col span={8}>
             <ListTeachingUnits cycles={cycles} />
-          </Col>
-        </Row>
+          </Col> */}
+        {/* </Row> */}
         <Layout.Footer
           style={{
             display: "flex",
@@ -281,6 +282,18 @@ export default function Page() {
           </Space>
         </Layout.Footer>
       </Layout.Content>
+      <Layout.Sider
+        width={300}
+        style={{
+          borderLeft: `1px solid ${colorBorderSecondary}`,
+          // paddingTop: 20,
+          background: colorBgContainer,
+          height: `calc(100vh - 64px)`,
+          overflow: "auto",
+        }}
+      >
+        <ListTeachingUnits cycles={cycles} />
+      </Layout.Sider>
     </Layout>
   );
 }

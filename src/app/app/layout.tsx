@@ -92,7 +92,7 @@ export default function AppLayout({
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
             CI-UCBC
           </Typography.Title>
-        </Link>
+          </Link>
         <Menu
           mode="horizontal"
           theme="light"
@@ -104,6 +104,11 @@ export default function AppLayout({
               key: "/app",
               label: "Tableau de bord",
               icon: <DashboardOutlined />,
+            },
+            {
+              key: "/app/enrollments",
+              label: "Inscriptions",
+              icon: <SafetyCertificateOutlined />, // Icône la plus adaptée pour "Inscriptions"
             },
             {
               key: "/app/students",
@@ -130,16 +135,16 @@ export default function AppLayout({
               key: "7",
               label: "Autres",
               children: [
-                {
-                  key: "/app/announcements",
-                  label: "Annonces",
-                  icon: <NotificationOutlined />,
-                },
-                {
-                  key: "/console",
-                  label: "Paramètres",
-                  icon: <SettingOutlined />,
-                },
+          {
+            key: "/app/announcements",
+            label: "Annonces",
+            icon: <NotificationOutlined />,
+          },
+          {
+            key: "/console",
+            label: "Paramètres",
+            icon: <SettingOutlined />,
+          },
               ],
             },
           ]}

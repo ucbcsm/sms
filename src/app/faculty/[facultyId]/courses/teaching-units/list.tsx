@@ -107,7 +107,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
   });
   return (
     <Card
-        // variant="borderless"
+        variant="borderless"
       loading={isPending}
       title={
         !isPending ? (
@@ -116,7 +116,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
           <Skeleton.Input size="small" active />
         )
       }
-      style={{ boxShadow: "none" }}
+      style={{ boxShadow: "none", borderRadius:0 }}
       extra={
         teaching_units && (
           <NewTeachingUnitForm cycles={cycles} />
