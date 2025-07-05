@@ -72,7 +72,7 @@ export default function Page() {
           >
             <Button
               icon={<UserAddOutlined />}
-              type="primary"
+              type="link"
               style={{ boxShadow: "none" }}
               variant="dashed"
             >
