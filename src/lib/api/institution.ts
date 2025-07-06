@@ -26,9 +26,9 @@ export async function checkInstitutionExistence(): Promise<boolean> {
   try {
     const res = await api.get("/main_config/institution-exist");
 
-    const data = res.data as { institutionExist: boolean };
+    const data = res.data as { institutionExists: boolean };
 
-    return data.institutionExist;
+    return data.institutionExists;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
       // Axios received an error response from the server

@@ -7,7 +7,7 @@ import {
   Layout,
   Result,
   Space,
-  Tabs,
+  Tag,
   theme,
   Typography,
 } from "antd";
@@ -16,7 +16,7 @@ import { ListNewApplications } from "./applications/lists/new_applications";
 import { ListReApplications } from "./applications/lists/reapplications";
 import { ReapplyForm } from "./applications/forms/reapply";
 import { NewApplicationForm } from "./applications/forms/new/new";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 
 type EnrollButtonProps = {
@@ -85,6 +85,8 @@ export default function Page() {
     parseAsBoolean.withDefault(false)
   );
 
+  const [selectedTag, setSelectedTag] = useState<"new" | "old">("new");
+
   return (
     <Layout>
       <Layout.Sider
@@ -95,8 +97,7 @@ export default function Page() {
         <Flex
           justify="space-between"
           align="center"
-          className="px-7 pt-3"
-          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
+          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 16 }}
         >
           <Typography.Title level={3} className="">
             Candidatures
@@ -106,10 +107,30 @@ export default function Page() {
             SetNewApplication={SetNewApplication}
           />
         </Flex>
-        <Tabs
-          tabBarStyle={{ paddingLeft: 28, marginBottom: 0 }}
-          // tabPosition="bottom"
 
+        <Flex gap={4} wrap align="center"  style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}>
+          <Tag.CheckableTag
+            key="new"
+            checked={selectedTag === "new"}
+            onChange={(checked) => setSelectedTag("new")}
+            style={{ borderRadius: 12 }}
+          >
+            Nouveaux
+          </Tag.CheckableTag>
+
+          <Tag.CheckableTag
+            key="old"
+            checked={selectedTag === "old"}
+            onChange={(checked) => setSelectedTag("old")}
+            style={{ borderRadius: 12 }}
+          >
+            Anciens
+          </Tag.CheckableTag>
+        </Flex>
+        {selectedTag==="new" && <ListNewApplications /> }
+        {selectedTag==="old" && <ListReApplications />}
+        {/* <Tabs
+          tabBarStyle={{ paddingLeft: 28, marginBottom: 0 }}
           items={[
             {
               key: "waiting",
@@ -122,7 +143,7 @@ export default function Page() {
               children: <ListReApplications />,
             },
           ]}
-        />
+        /> */}
         <ReapplyForm open={reapply} setOpen={setReapply} />
         <NewApplicationForm open={newApplication} setOpen={SetNewApplication} />
       </Layout.Sider>
