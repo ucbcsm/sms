@@ -42,7 +42,7 @@ export default function StudentsLayout({
         <Flex
           justify="space-between"
           align="center"
-          style={{ paddingLeft: 12, paddingRight: 12, paddingTop: 20 }}
+          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20 }}
         >
           <Typography.Title level={3} className="">
             Étudiants
@@ -50,7 +50,7 @@ export default function StudentsLayout({
           <Space>
             <Button
               // icon={<FilterOutlined />}
-              type="primary"
+              color="primary"
               style={{ boxShadow: "none" }}
               variant="dashed"
             >
@@ -63,8 +63,8 @@ export default function StudentsLayout({
           style={{
             height: "calc(100vh - 210px)",
             overflowY: "auto",
-            paddingLeft: 12,
-            paddingRight: 12,
+            paddingLeft: 16,
+            paddingRight: 16,
             paddingBottom: 28,
             paddingTop: 16,
           }}
