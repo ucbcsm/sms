@@ -63,7 +63,13 @@ export default function StudentLayout({
         >
           <Space>
             {/* <BackButton /> */}
-            <Avatar icon={<UserOutlined />}></Avatar>
+            {!isPending ? (
+              <Avatar icon={<UserOutlined />} />
+            ) : (
+              <Form>
+                <Skeleton.Avatar active />
+              </Form>
+            )}
             {!isPending ? (
               <Typography.Title level={3} style={{ marginBottom: 0 }}>
                 {`${enrolledStudent?.user.first_name} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.surname}`}{" "}
@@ -78,14 +84,21 @@ export default function StudentLayout({
           <div className="flex-1" />
           <Space>
             {/* <Palette /> */}
-            <Button icon={<CloseOutlined/>} type="text" title="Quitter ce profile étudant" onClick={()=>router.push("/app/students")}/>
+            <Button
+              icon={<CloseOutlined />}
+              type="text"
+              title="Quitter ce profile étudant"
+              onClick={() => router.push("/app/students")}
+            />
           </Space>
         </Layout.Header>
         <Tabs
-          moreIcon={<MoreOutlined/>}
+          moreIcon={<MoreOutlined />}
           defaultActiveKey={pathname}
           accessKey={pathname}
-          onTabClick={(key)=>{router.push(key)}}
+          onTabClick={(key) => {
+            router.push(key);
+          }}
           items={[
             {
               key: `/app/students/${studentId}`,
