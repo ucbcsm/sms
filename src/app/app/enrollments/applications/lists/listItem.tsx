@@ -25,7 +25,7 @@ import {
   EyeOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, List, Typography } from "antd";
+import { Avatar, Button, Dropdown, List, theme, Typography } from "antd";
 import { FC, useState } from "react";
 import { EditApplicationForm } from "../forms/edit";
 import { DeleteApplicationForm } from "../forms/decisions/delete";
@@ -54,6 +54,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
   departments,
   classes,
 }) => {
+  const {token:{colorBgTextHover}}=theme.useToken()
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
@@ -156,6 +157,11 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
             <Button icon={<MoreOutlined />} type="text" />
           </Dropdown>
         }
+        style={{
+          background: item.id === view ? colorBgTextHover : "",
+          paddingLeft: 12,
+          paddingRight: 12,
+        }}
       >
         <List.Item.Meta
           avatar={

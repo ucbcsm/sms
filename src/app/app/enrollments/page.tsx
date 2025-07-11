@@ -145,7 +145,7 @@ export default function Page() {
         <Flex
           justify="space-between"
           align="center"
-          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 16 }}
+          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16 }}
         >
           <Typography.Title level={3} className="">
             Candidatures
@@ -160,7 +160,7 @@ export default function Page() {
           gap={4}
           wrap
           align="center"
-          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
+          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 12 }}
         >
           <Tag.CheckableTag
             key="new"

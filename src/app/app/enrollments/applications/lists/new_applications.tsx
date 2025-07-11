@@ -118,8 +118,8 @@ export const ListNewApplications: FC = () => {
               style={{
                 height: "calc(100vh - 210px)",
                 overflowY: "auto",
-                paddingLeft: 28,
-                paddingRight: 12,
+                paddingLeft: 16,
+                paddingRight: 16,
                 paddingBottom: 28,
                 paddingTop: 20,
               }}
@@ -164,8 +164,8 @@ export const ListNewApplications: FC = () => {
               style={{
                 height: "calc(100vh - 210px)",
                 overflowY: "auto",
-                paddingLeft: 28,
-                paddingRight: 12,
+                paddingLeft: 16,
+                paddingRight: 16,
                 paddingBottom: 28,
                 paddingTop: 20,
               }}
@@ -210,8 +210,8 @@ export const ListNewApplications: FC = () => {
               style={{
                 height: "calc(100vh - 210px)",
                 overflowY: "auto",
-                paddingLeft: 28,
-                paddingRight: 12,
+                paddingLeft: 16,
+                paddingRight: 16,
                 paddingBottom: 28,
                 paddingTop: 20,
               }}
