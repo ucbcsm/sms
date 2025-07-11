@@ -31,6 +31,7 @@ import { EditApplicationForm } from "../forms/edit";
 import { DeleteApplicationForm } from "../forms/decisions/delete";
 import { RejectApplicationForm } from "../forms/decisions/reject";
 import { ValidateApplicationForm } from "../forms/decisions/validate";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 type ListItemApplicationProps = {
   item: Application;
@@ -67,6 +68,8 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
       })
     | null
   >(null);
+
+  const [view, setView] = useQueryState("view", parseAsInteger.withDefault(0));
 
   const toggleEdit = () => {
     setOpenEdit(true);
@@ -171,7 +174,13 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
             </Avatar>
           }
           title={
-            <Typography.Text onClick={toggleEdit} style={{ cursor: "pointer" }}>
+            <Typography.Text
+              onClick={() => {
+                // toggleEdit();
+                setView(item.id);
+              }}
+              style={{ cursor: "pointer" }}
+            >
               {item.first_name} {item.last_name} {item.surname}
             </Typography.Text>
           }
@@ -182,7 +191,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({
               >
                 {getApplicationStatusName(`${item.status}`)}
               </Typography.Text>{" "}
-              : {item.class_year?.acronym||""} {item.departement.name}
+              : {item.class_year?.acronym || ""} {item.departement.name}
             </div>
           }
         />

@@ -11,13 +11,24 @@ import {
   theme,
   Typography,
 } from "antd";
-import { Options, parseAsBoolean, useQueryState } from "nuqs";
+import { Options, parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
 import { ListNewApplications } from "./applications/lists/new_applications";
 import { ListReApplications } from "./applications/lists/reapplications";
 import { ReapplyForm } from "./applications/forms/reapply";
 import { NewApplicationForm } from "./applications/forms/new/new";
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import {
+  getClasses,
+  getCycles,
+  getDepartments,
+  getEnabledRequiredDocuments,
+  getEnabledTestCourses,
+  getFaculties,
+  getFields,
+} from "@/lib/api";
+import { ViewEditApplicationForm } from "./view";
 
 type EnrollButtonProps = {
   setReapply: (
@@ -87,6 +98,43 @@ export default function Page() {
 
   const [selectedTag, setSelectedTag] = useState<"new" | "old">("new");
 
+  const [view, setView] = useQueryState("view", parseAsInteger.withDefault(0));
+
+  const { data: test_courses } = useQuery({
+    queryKey: ["test_courses", "enabled"],
+    queryFn: getEnabledTestCourses,
+  });
+
+  const { data: required_documents } = useQuery({
+    queryKey: ["required_documents", "enabled"],
+    queryFn: getEnabledRequiredDocuments,
+  });
+
+  const { data: cycles } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: getCycles,
+  });
+
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const { data: fields } = useQuery({
+    queryKey: ["fields"],
+    queryFn: getFields,
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getDepartments,
+  });
+
+  const { data: classes } = useQuery({
+    queryKey: ["classes"],
+    queryFn: getClasses,
+  });
+
   return (
     <Layout>
       <Layout.Sider
@@ -108,7 +156,12 @@ export default function Page() {
           />
         </Flex>
 
-        <Flex gap={4} wrap align="center"  style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}>
+        <Flex
+          gap={4}
+          wrap
+          align="center"
+          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
+        >
           <Tag.CheckableTag
             key="new"
             checked={selectedTag === "new"}
@@ -127,8 +180,8 @@ export default function Page() {
             Anciens
           </Tag.CheckableTag>
         </Flex>
-        {selectedTag==="new" && <ListNewApplications /> }
-        {selectedTag==="old" && <ListReApplications />}
+        {selectedTag === "new" && <ListNewApplications />}
+        {selectedTag === "old" && <ListReApplications />}
         {/* <Tabs
           tabBarStyle={{ paddingLeft: 28, marginBottom: 0 }}
           items={[
@@ -156,32 +209,46 @@ export default function Page() {
           height: "calc(100vh - 64px)",
         }}
       >
-        <div
-          className="flex flex-col justify-center"
-          style={{ height: "calc(100vh - 64px)" }}
-        >
-          <Result
-            status="info"
-            title="Aucune candidature sélectionnée"
-            subTitle="Veuillez sélectionner une candidature dans la liste pour afficher les détails."
-            icon={<UserAddOutlined style={{ color: "GrayText" }} />}
-            extra={
-              <Space>
-                <Button
-                  type="link"
-                  style={{ boxShadow: "none" }}
-                  onClick={() => router.push(`/app/students`)}
-                >
-                  Gérer les étudiants
-                </Button>
-                <EnrollButton
-                  setReapply={setReapply}
-                  SetNewApplication={SetNewApplication}
-                />
-              </Space>
-            }
+        {view > 0 && (
+          <ViewEditApplicationForm
+            // application={}
+            courses={test_courses}
+            documents={required_documents}
+            cycles={cycles}
+            faculties={faculties}
+            fields={fields}
+            departments={departments}
+            classes={classes}
           />
-        </div>
+        )}
+        {view === 0 && (
+          <div
+            className="flex flex-col justify-center"
+            style={{ height: "calc(100vh - 64px)" }}
+          >
+            <Result
+              status="info"
+              title="Aucune candidature sélectionnée"
+              subTitle="Veuillez sélectionner une candidature dans la liste pour afficher les détails."
+              icon={<UserAddOutlined style={{ color: "GrayText" }} />}
+              extra={
+                <Space>
+                  <Button
+                    type="link"
+                    style={{ boxShadow: "none" }}
+                    onClick={() => router.push(`/app/students`)}
+                  >
+                    Gérer les étudiants
+                  </Button>
+                  <EnrollButton
+                    setReapply={setReapply}
+                    SetNewApplication={SetNewApplication}
+                  />
+                </Space>
+              }
+            />
+          </div>
+        )}
       </Layout.Content>
     </Layout>
   );
