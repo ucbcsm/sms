@@ -158,9 +158,14 @@ export default function Page() {
         <Flex
           justify="space-between"
           align="center"
-          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16, marginBottom: 16 }}
+          style={{
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingTop: 16,
+            marginBottom: 16,
+          }}
         >
-          <Typography.Title level={5} className="" style={{marginBottom:0}}>
+          <Typography.Title level={5} className="" style={{ marginBottom: 0 }}>
             Candidatures
           </Typography.Title>
           <EnrollButton
@@ -207,7 +212,13 @@ export default function Page() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {view > 0 && (
+        {isPendingApplication && view > 0 && (
+          <div className="px-0 py-7" style={{ height: "calc(100vh - 64px)" }}>
+            <DataFetchPendingSkeleton />
+          </div>
+        )}
+
+        {!isPendingApplication && view > 0 && (
           <ViewEditApplicationForm
             application={application}
             courses={test_courses}

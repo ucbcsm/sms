@@ -21,20 +21,17 @@ import {
   Card,
   Layout,
   Result,
-  Avatar,
   Dropdown,
 } from "antd";
 import {
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
-  EyeOutlined,
   FileOutlined,
   HourglassOutlined,
   MoreOutlined,
   PlusCircleOutlined,
   UploadOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import {
   Application,
