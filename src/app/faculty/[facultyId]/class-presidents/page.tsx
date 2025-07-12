@@ -207,13 +207,6 @@ export default function Page() {
             dataSource={class_presidents}
             columns={[
               {
-                title: "Promotion",
-                dataIndex: "class_year",
-                key: "class_year",
-                render: (_, record, __) =>
-                  `${record.class_year.acronym} ${record.departement.name}`,
-              },
-              {
                 title: "Chef",
                 dataIndex: "student",
                 key: "student",
@@ -232,6 +225,13 @@ export default function Page() {
                     {`${record.student.user.first_name} ${record.student.user.last_name} ${record.student?.user.surname}`}
                   </Space>
                 ),
+              },
+               {
+                title: "Promotion",
+                dataIndex: "class_year",
+                key: "class_year",
+                render: (_, record, __) =>
+                  `${record.class_year.acronym} ${record.departement.name}`,
               },
               {
                 title: "",
