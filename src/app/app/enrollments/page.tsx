@@ -160,7 +160,7 @@ export default function Page() {
           align="center"
           style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16, marginBottom: 16 }}
         >
-          <Typography.Title level={3} className="" style={{marginBottom:0}}>
+          <Typography.Title level={5} className="" style={{marginBottom:0}}>
             Candidatures
           </Typography.Title>
           <EnrollButton
@@ -207,8 +207,6 @@ export default function Page() {
           height: "calc(100vh - 64px)",
         }}
       >
-        {isPendingApplication && <DataFetchPendingSkeleton />}
-        {isErrorApplication && <DataFetchErrorResult/>}
         {view > 0 && (
           <ViewEditApplicationForm
             application={application}
