@@ -20,6 +20,7 @@ import { FC, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import {
+  getApplication,
   getClasses,
   getCycles,
   getDepartments,
@@ -29,6 +30,8 @@ import {
   getFields,
 } from "@/lib/api";
 import { ViewEditApplicationForm } from "./view";
+import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { DataFetchErrorResult } from "@/components/errorResult";
 
 type EnrollButtonProps = {
   setReapply: (
@@ -99,6 +102,16 @@ export default function Page() {
   const [selectedTag, setSelectedTag] = useState<"new" | "old">("new");
 
   const [view, setView] = useQueryState("view", parseAsInteger.withDefault(0));
+
+  const {
+    data: application,
+    isPending: isPendingApplication,
+    isError: isErrorApplication,
+  } = useQuery({
+    queryKey: ["applications", `${view}`],
+    queryFn: ({ queryKey }) => getApplication(Number(queryKey[1])),
+    enabled: !!(view > 0),
+  });
 
   const { data: test_courses } = useQuery({
     queryKey: ["test_courses", "enabled"],
@@ -182,21 +195,6 @@ export default function Page() {
         </Flex>
         {selectedTag === "new" && <ListNewApplications />}
         {selectedTag === "old" && <ListReApplications />}
-        {/* <Tabs
-          tabBarStyle={{ paddingLeft: 28, marginBottom: 0 }}
-          items={[
-            {
-              key: "waiting",
-              label: "Nouveaux étudiants",
-              children: <ListNewApplications />,
-            },
-            {
-              key: "accepted",
-              label: "Anciens étudiants",
-              children: <ListReApplications />,
-            },
-          ]}
-        /> */}
         <ReapplyForm open={reapply} setOpen={setReapply} />
         <NewApplicationForm open={newApplication} setOpen={SetNewApplication} />
       </Layout.Sider>
@@ -209,9 +207,11 @@ export default function Page() {
           height: "calc(100vh - 64px)",
         }}
       >
+        {isPendingApplication && <DataFetchPendingSkeleton />}
+        {isErrorApplication && <DataFetchErrorResult/>}
         {view > 0 && (
           <ViewEditApplicationForm
-            // application={}
+            application={application}
             courses={test_courses}
             documents={required_documents}
             cycles={cycles}
@@ -219,6 +219,7 @@ export default function Page() {
             fields={fields}
             departments={departments}
             classes={classes}
+            setView={setView}
           />
         )}
         {view === 0 && (

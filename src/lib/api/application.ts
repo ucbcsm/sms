@@ -14,6 +14,11 @@ export async function getApplications() {
   return res.data.results as Application[];
 }
 
+export async function getApplication(id: number) {
+  const res = await api.get(`/apparitorat/application/${id}/`);
+  return res.data as Application;
+}
+
 export async function getPendingApplications(searchParams?: {
   year?: string;
   page?: string | number;
@@ -324,6 +329,21 @@ export function getApplicationStatusAlertType(
   status: "pending" | "validated" | "rejected" | "reoriented" | string
 ) {
   switch (status) {
+    case "pending":
+      return "warning";
+    case "validated":
+      return "success";
+    case "rejected":
+      return "error";
+    case "reoriented":
+      return "info";
+    default:
+      break;
+  }
+}
+
+export function getApplicationTagColor( status: "pending" | "validated" | "rejected" | "reoriented" | string){
+switch (status) {
     case "pending":
       return "warning";
     case "validated":

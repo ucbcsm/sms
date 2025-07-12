@@ -61,40 +61,40 @@ export const ListNewApplications: FC = () => {
       getValidatedApplications({ student_tab_type: queryKey[2] }),
   });
 
-  const { data: test_courses } = useQuery({
-    queryKey: ["test_courses", "enabled"],
-    queryFn: getEnabledTestCourses,
-  });
+  // const { data: test_courses } = useQuery({
+  //   queryKey: ["test_courses", "enabled"],
+  //   queryFn: getEnabledTestCourses,
+  // });
 
-  const { data: required_documents } = useQuery({
-    queryKey: ["required_documents", "enabled"],
-    queryFn: getEnabledRequiredDocuments,
-  });
+  // const { data: required_documents } = useQuery({
+  //   queryKey: ["required_documents", "enabled"],
+  //   queryFn: getEnabledRequiredDocuments,
+  // });
 
-  const { data: cycles } = useQuery({
-    queryKey: ["cycles"],
-    queryFn: getCycles,
-  });
+  // const { data: cycles } = useQuery({
+  //   queryKey: ["cycles"],
+  //   queryFn: getCycles,
+  // });
 
-  const { data: faculties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
+  // const { data: faculties } = useQuery({
+  //   queryKey: ["faculties"],
+  //   queryFn: getFaculties,
+  // });
 
-  const { data: fields } = useQuery({
-    queryKey: ["fields"],
-    queryFn: getFields,
-  });
+  // const { data: fields } = useQuery({
+  //   queryKey: ["fields"],
+  //   queryFn: getFields,
+  // });
 
-  const { data: departments } = useQuery({
-    queryKey: ["departments"],
-    queryFn: getDepartments,
-  });
+  // const { data: departments } = useQuery({
+  //   queryKey: ["departments"],
+  //   queryFn: getDepartments,
+  // });
 
-  const { data: classes } = useQuery({
-    queryKey: ["classes"],
-    queryFn: getClasses,
-  });
+  // const { data: classes } = useQuery({
+  //   queryKey: ["classes"],
+  //   queryFn: getClasses,
+  // });
 
   return (
     <Tabs
@@ -139,13 +139,13 @@ export const ListNewApplications: FC = () => {
                       <ListItemApplication
                         key={item.id}
                         item={item}
-                        courses={test_courses}
-                        documents={required_documents}
-                        cycles={cycles}
-                        faculties={faculties}
-                        fields={fields}
-                        departments={departments}
-                        classes={classes}
+                        // courses={test_courses}
+                        // documents={required_documents}
+                        // cycles={cycles}
+                        // faculties={faculties}
+                        // fields={fields}
+                        // departments={departments}
+                        // classes={classes}
                       />
                     )}
                   />
@@ -185,13 +185,13 @@ export const ListNewApplications: FC = () => {
                       <ListItemApplication
                         key={item.id}
                         item={item}
-                        courses={test_courses}
-                        documents={required_documents}
-                        cycles={cycles}
-                        faculties={faculties}
-                        fields={fields}
-                        departments={departments}
-                        classes={classes}
+                        // courses={test_courses}
+                        // documents={required_documents}
+                        // cycles={cycles}
+                        // faculties={faculties}
+                        // fields={fields}
+                        // departments={departments}
+                        // classes={classes}
                       />
                     )}
                   />
@@ -231,13 +231,13 @@ export const ListNewApplications: FC = () => {
                       <ListItemApplication
                         key={item.id}
                         item={item}
-                        courses={test_courses}
-                        documents={required_documents}
-                        cycles={cycles}
-                        faculties={faculties}
-                        fields={fields}
-                        departments={departments}
-                        classes={classes}
+                        // courses={test_courses}
+                        // documents={required_documents}
+                        // cycles={cycles}
+                        // faculties={faculties}
+                        // fields={fields}
+                        // departments={departments}
+                        // classes={classes}
                       />
                     )}
                   />

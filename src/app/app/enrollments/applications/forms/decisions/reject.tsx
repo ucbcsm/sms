@@ -6,7 +6,6 @@ import { rejectApplication } from "@/lib/api";
 import { Application } from "@/types";
 
 type FormDataType = {
-  validate: string;
   rejected: boolean;
 };
 
@@ -33,7 +32,7 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
       messageApi.error("Vous devez confirmer le rejet de l'inscription.");
       return;
     }
-    if (values.validate === application.name) {
+   
       mutateAsync(
         { ...application },
         {
@@ -49,9 +48,6 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
           },
         }
       );
-    } else {
-      messageApi.error("Le nom saisi ne correspond pas à l'inscription.");
-    }
   };
 
   return (
@@ -99,14 +95,6 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
           showIcon
           style={{ border: 0 }}
         />
-        <Form.Item
-          name="validate"
-          label="Veuillez saisir le nom de l'inscription pour confirmer."
-          rules={[{ required: true }]}
-          style={{ marginTop: 24 }}
-        >
-          <Input placeholder={application.name} />
-        </Form.Item>
         <Form.Item
           name="rejected"
           valuePropName="checked"

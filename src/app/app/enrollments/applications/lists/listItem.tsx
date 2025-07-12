@@ -1,207 +1,68 @@
 "use client";
 
 import { getHSLColor } from "@/lib/utils";
-import {
-  Application,
-  ApplicationDocument,
-  ApplicationEditFormDataType,
-  Class,
-  Cycle,
-  Department,
-  EnrollmentQA,
-  Faculty,
-  Field,
-  RequiredDocument,
-  TestCourse,
-} from "@/types";
-import {
-  getApplicationStatusName,
-  getApplicationStatusTypographyType,
-} from "@/lib/api";
-import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  MoreOutlined,
-} from "@ant-design/icons";
-import { Avatar, Button, Dropdown, List, theme, Typography } from "antd";
-import { FC, useState } from "react";
-import { EditApplicationForm } from "../forms/edit";
-import { DeleteApplicationForm } from "../forms/decisions/delete";
-import { RejectApplicationForm } from "../forms/decisions/reject";
-import { ValidateApplicationForm } from "../forms/decisions/validate";
+import { Application } from "@/types";
+import { getApplicationStatusName, getApplicationTagColor } from "@/lib/api";
+import { Avatar, Flex, List, Tag, theme, Typography } from "antd";
+import { FC } from "react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 type ListItemApplicationProps = {
   item: Application;
-  courses?: TestCourse[];
-  documents?: RequiredDocument[];
-  cycles?: Cycle[];
-  faculties?: Faculty[];
-  fields?: Field[];
-  departments?: Department[];
-  classes?: Class[];
 };
 
-export const ListItemApplication: FC<ListItemApplicationProps> = ({
-  item,
-  courses,
-  documents,
-  cycles,
-  faculties,
-  fields,
-  departments,
-  classes,
-}) => {
-  const {token:{colorBgTextHover}}=theme.useToken()
-  const [openEdit, setOpenEdit] = useState<boolean>(false);
-  const [openDelete, setOpenDelete] = useState<boolean>(false);
-  const [openReject, setOpenReject] = useState<boolean>(false);
-  const [openValidate, setOpenValidate] = useState<boolean>(false);
-  const [editedApplication, setEditedApplication] = useState<
-    | (Omit<
-        ApplicationEditFormDataType,
-        "application_documents" | "enrollment_question_response"
-      > & {
-        application_documents: Array<ApplicationDocument>;
-        enrollment_question_response: Array<EnrollmentQA>;
-      })
-    | null
-  >(null);
+export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
+  const {
+    token: { colorBgTextHover },
+  } = theme.useToken();
 
   const [view, setView] = useQueryState("view", parseAsInteger.withDefault(0));
 
-  const toggleEdit = () => {
-    setOpenEdit(true);
-  };
   return (
-    <>
-      <EditApplicationForm
-        application={item}
-        open={openEdit}
-        setOpen={setOpenEdit}
-        setOpenReject={setOpenReject}
-        setOpenValidate={setOpenValidate}
-        courses={courses}
-        documents={documents}
-        cycles={cycles}
-        faculties={faculties}
-        fields={fields}
-        departments={departments}
-        classes={classes}
-        setEditedApplication={setEditedApplication}
-      />
-      <DeleteApplicationForm
-        application={item}
-        open={openDelete}
-        setOpen={setOpenDelete}
-      />
-      <RejectApplicationForm
-        application={item}
-        open={openReject}
-        setOpen={setOpenReject}
-      />
-      <ValidateApplicationForm
-        application={item}
-        open={openValidate}
-        setOpen={setOpenValidate}
-        editedApplication={editedApplication}
-      />
-      <List.Item
-        extra={
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: "edit",
-                  label: "Voir",
-                  icon: <EyeOutlined />,
-                },
-                item.status === "pending"
-                  ? {
-                      key: "validate",
-                      label: "Accepter",
-                      icon: <CheckOutlined />,
-                    }
-                  : null,
-                item.status === "pending"
-                  ? {
-                      key: "reject",
-                      label: "Rejeter",
-                      icon: <CloseOutlined />,
-                    }
-                  : null,
-                item.status === "pending"
-                  ? {
-                      key: "delete",
-                      label: "Supprimer",
-                      icon: <DeleteOutlined />,
-                      danger: true,
-                    }
-                  : null,
-              ],
-              onClick: ({ key }) => {
-                if (key === "edit") {
-                  toggleEdit();
-                } else if (key === "delete") {
-                  setOpenDelete(true);
-                } else if (key === "reject") {
-                  setOpenReject(true);
-                } else if (key === "validate") {
-                  setOpenValidate(true);
-                }
-              },
+    <List.Item
+      style={{
+        background: item.id === view ? colorBgTextHover : "",
+        paddingLeft: 12,
+        paddingRight: 12,
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        // toggleEdit();
+        setView(item.id);
+      }}
+    >
+      <List.Item.Meta
+        avatar={
+          <Avatar
+            src={item.avatar}
+            style={{
+              backgroundColor: getHSLColor(
+                `${item.first_name} ${item.last_name} ${item.surname}`
+              ),
             }}
           >
-            <Button icon={<MoreOutlined />} type="text" />
-          </Dropdown>
+            {item.first_name?.charAt(0).toUpperCase()}
+            {item.last_name?.charAt(0).toUpperCase()}
+          </Avatar>
         }
-        style={{
-          background: item.id === view ? colorBgTextHover : "",
-          paddingLeft: 12,
-          paddingRight: 12,
-        }}
-      >
-        <List.Item.Meta
-          avatar={
-            <Avatar
-              src={item.avatar}
-              style={{
-                backgroundColor: getHSLColor(
-                  `${item.first_name} ${item.last_name} ${item.surname}`
-                ),
-                cursor: "pointer",
-              }}
-              onClick={toggleEdit}
+        title={
+          <Typography.Text>
+            {item.first_name} {item.last_name} {item.surname}
+          </Typography.Text>
+        }
+        description={
+          <Flex justify="space-between">
+            {item.class_year?.acronym || ""} {item.departement.name}
+            <Tag
+              color={getApplicationTagColor(item.status || "")}
+              style={{ marginRight: 0 }}
+              bordered={false}
             >
-              {item.first_name?.charAt(0).toUpperCase()}
-              {item.last_name?.charAt(0).toUpperCase()}
-            </Avatar>
-          }
-          title={
-            <Typography.Text
-              onClick={() => {
-                // toggleEdit();
-                setView(item.id);
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              {item.first_name} {item.last_name} {item.surname}
-            </Typography.Text>
-          }
-          description={
-            <div onClick={toggleEdit} style={{ cursor: "pointer" }}>
-              <Typography.Text
-                type={getApplicationStatusTypographyType(item.status!)}
-              >
-                {getApplicationStatusName(`${item.status}`)}
-              </Typography.Text>{" "}
-              : {item.class_year?.acronym || ""} {item.departement.name}
-            </div>
-          }
-        />
-      </List.Item>
-    </>
+              {getApplicationStatusName(`${item.status}`)}
+            </Tag>
+          </Flex>
+        }
+      />
+    </List.Item>
   );
 };
