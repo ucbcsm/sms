@@ -30,6 +30,7 @@ import {
   DeleteOutlined,
   EyeOutlined,
   FileOutlined,
+  HourglassOutlined,
   MoreOutlined,
   PlusCircleOutlined,
   UploadOutlined,
@@ -67,6 +68,7 @@ import { DeleteApplicationForm } from "./applications/forms/decisions/delete";
 import { RejectApplicationForm } from "./applications/forms/decisions/reject";
 import { ValidateApplicationForm } from "./applications/forms/decisions/validate";
 import { Options } from "nuqs";
+import { MarkAsPendingForm } from "./applications/forms/decisions/mark-as-pending";
 
 type ViewEditApplicationFormProps = {
   application?: Application;
@@ -101,7 +103,7 @@ export const ViewEditApplicationForm: React.FC<
   } = theme.useToken();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
-
+  const [openMarkAsPending, setOpenMarkAsPending] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
@@ -258,7 +260,7 @@ export const ViewEditApplicationForm: React.FC<
             <Typography.Title
               level={5}
               type="warning"
-              style={{ marginBottom:0, textTransform: "uppercase" }}
+              style={{ marginBottom: 0, textTransform: "uppercase" }}
             >
               {application.first_name} {application.last_name}{" "}
               {application.surname}
@@ -1153,7 +1155,7 @@ export const ViewEditApplicationForm: React.FC<
                 style={{ boxShadow: "none" }}
                 disabled={isPending}
               >
-                Sauvegarder
+                Sauvegarder uniquement
               </Button>
               <Button
                 // type="dashed"
@@ -1200,16 +1202,27 @@ export const ViewEditApplicationForm: React.FC<
           <Dropdown
             menu={{
               items: [
-                {
-                  key: "validate",
-                  label: "Accepter",
-                  icon: <CheckOutlined />,
-                },
-                {
-                  key: "reject",
-                  label: "Rejeter",
-                  icon: <CloseOutlined />,
-                },
+                application.status === "pending"
+                  ? {
+                      key: "validate",
+                      label: "Accepter",
+                      icon: <CheckOutlined />,
+                    }
+                  : null,
+                application.status === "rejected"
+                  ? {
+                      key: "pending",
+                      label: "Marquer comme en attente",
+                      icon: <HourglassOutlined />,
+                    }
+                  : null,
+                application.status === "pending"
+                  ? {
+                      key: "reject",
+                      label: "Rejeter",
+                      icon: <CloseOutlined />,
+                    }
+                  : null,
                 {
                   key: "delete",
                   label: "Supprimer",
@@ -1218,7 +1231,9 @@ export const ViewEditApplicationForm: React.FC<
                 },
               ],
               onClick: ({ key }) => {
-                if (key === "delete") {
+                if (key === "pending") {
+                  setOpenMarkAsPending(true);
+                } else if (key === "delete") {
                   setOpenDelete(true);
                 } else if (key === "reject") {
                   setOpenReject(true);
@@ -1233,6 +1248,11 @@ export const ViewEditApplicationForm: React.FC<
         </Layout.Footer>
       </Layout>
 
+      <MarkAsPendingForm
+        application={application}
+        open={openMarkAsPending}
+        setOpen={setOpenMarkAsPending}
+      />
       <DeleteApplicationForm
         application={application}
         open={openDelete}

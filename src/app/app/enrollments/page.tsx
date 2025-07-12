@@ -158,9 +158,9 @@ export default function Page() {
         <Flex
           justify="space-between"
           align="center"
-          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16 }}
+          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 16, marginBottom: 16 }}
         >
-          <Typography.Title level={3} className="">
+          <Typography.Title level={3} className="" style={{marginBottom:0}}>
             Candidatures
           </Typography.Title>
           <EnrollButton
