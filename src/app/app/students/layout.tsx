@@ -44,7 +44,7 @@ export default function StudentsLayout({
           align="center"
           style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20 }}
         >
-          <Typography.Title level={3} className="">
+          <Typography.Title level={3} className="" style={{marginBottom:0}}>
             Étudiants
           </Typography.Title>
           <Space>
@@ -61,7 +61,7 @@ export default function StudentsLayout({
         </Flex>
         <div
           style={{
-            height: "calc(100vh - 210px)",
+            height: "calc(100vh - 116px)",
             overflowY: "auto",
             paddingLeft: 16,
             paddingRight: 16,

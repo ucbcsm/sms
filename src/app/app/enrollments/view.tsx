@@ -225,6 +225,26 @@ export const ViewEditApplicationForm: React.FC<
     }
   }, [application, documents]);
 
+  useEffect(() => {
+    if(application){
+    form.setFieldsValue({
+      ...application,
+      date_of_birth: dayjs(application.date_of_birth),
+      spoken_languages: parseLanguages(application.spoken_language),
+      cycle_id: application.cycle.id,
+      field_id: application.field.id,
+      faculty_id: application.faculty.id,
+      department_id: application.departement.id,
+      class_id: application.class_year?.id,
+      enrollment_question_response: application.enrollment_question_response,
+      year_of_diploma_obtained: dayjs(
+        `${application.year_of_diploma_obtained}`,
+        "YYYY"
+      ),
+    });
+    }
+  }, [application, form]);
+
   if (typeof application === "undefined") {
     return (
       <div
@@ -297,20 +317,20 @@ export const ViewEditApplicationForm: React.FC<
             form={form}
             name="form_in_drawer"
             initialValues={{
-              ...application,
-              date_of_birth: dayjs(application.date_of_birth),
-              spoken_languages: parseLanguages(application.spoken_language),
-              cycle_id: application.cycle.id,
-              field_id: application.field.id,
-              faculty_id: application.faculty.id,
-              department_id: application.departement.id,
-              class_id: application.class_year?.id,
-              enrollment_question_response:
-                application.enrollment_question_response,
-              year_of_diploma_obtained: dayjs(
-                `${application.year_of_diploma_obtained}`,
-                "YYYY"
-              ),
+              // ...application,
+              // date_of_birth: dayjs(application.date_of_birth),
+              // spoken_languages: parseLanguages(application.spoken_language),
+              // cycle_id: application.cycle.id,
+              // field_id: application.field.id,
+              // faculty_id: application.faculty.id,
+              // department_id: application.departement.id,
+              // class_id: application.class_year?.id,
+              // enrollment_question_response:
+              //   application.enrollment_question_response,
+              // year_of_diploma_obtained: dayjs(
+              //   `${application.year_of_diploma_obtained}`,
+              //   "YYYY"
+              // ),
             }}
             onFinish={onFinish}
             disabled={isPending || application.status !== "pending"}
