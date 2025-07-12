@@ -165,7 +165,7 @@ export default function Page() {
             marginBottom: 16,
           }}
         >
-          <Typography.Title level={5} className="" style={{ marginBottom: 0 }}>
+          <Typography.Title level={3} className="" style={{ marginBottom: 0 }}>
             Candidatures
           </Typography.Title>
           <EnrollButton
