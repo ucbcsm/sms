@@ -44,21 +44,21 @@ export const EditClassPresidentForm: React.FC<EditClassPresidentFormProps> = ({
   });
 
   useEffect(() => {
-    if (open && classPresident) {
+    if ( classPresident) {
       form.setFieldsValue({
         class_year_id: classPresident.class_year.id,
         department_id: classPresident.departement.id,
         student_id: classPresident.student.id,
       });
     }
-  }, [open, classPresident, form]);
+  }, [ classPresident, form]);
 
   const onFinish = (values: FormDataType) => {
     mutateAsync(
       { id: classPresident.id, data: { ...values } },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["classPresidents"] });
+          queryClient.invalidateQueries({ queryKey: ["class_presidents"] });
           messageApi.success("Délégué de classe modifié avec succès !");
           setOpen(false);
         },
@@ -75,7 +75,8 @@ export const EditClassPresidentForm: React.FC<EditClassPresidentFormProps> = ({
     <>
       {contextHolder}
       <Button
-        type="default"
+        color="primary"
+        variant="dashed"
         icon={<EditOutlined />}
         className="shadow-none"
         title="Modifier le délégué"
@@ -100,7 +101,7 @@ export const EditClassPresidentForm: React.FC<EditClassPresidentFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnHidden
+        // destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -110,7 +111,7 @@ export const EditClassPresidentForm: React.FC<EditClassPresidentFormProps> = ({
             form={form}
             name="edit_class_president"
             onFinish={onFinish}
-            clearOnDestroy
+            // clearOnDestroy
           >
             {dom}
           </Form>

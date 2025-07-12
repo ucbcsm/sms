@@ -229,7 +229,7 @@ export default function Page() {
                       {record.student?.user.first_name?.charAt(0).toUpperCase()}
                       {record.student?.user.last_name?.charAt(0).toUpperCase()}
                     </Avatar>
-                    record.teacher?.user.surname
+                    {`${record.student.user.first_name} ${record.student.user.last_name} ${record.student?.user.surname}`}
                   </Space>
                 ),
               },
@@ -251,9 +251,9 @@ export default function Page() {
             ]}
             rowKey="id"
             rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-            rowSelection={{
-              type: "checkbox",
-            }}
+            // rowSelection={{
+            //   type: "checkbox",
+            // }}
             size="small"
             pagination={{
               defaultPageSize: 25,

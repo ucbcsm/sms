@@ -41,7 +41,7 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
   const onFinish = (values: FormDataType) => {
     mutateAsync(values, {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["classPresidents"] });
+        queryClient.invalidateQueries({ queryKey: ["class_presidents"] });
         messageApi.success("Délégué de classe créé avec succès !");
         setOpen(false);
       },
