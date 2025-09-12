@@ -6,12 +6,12 @@ import {
   getClassrooms,
   getCourseEnrollments,
   getCourseEnrollmentsCountByStatus,
+  getCourses,
   getCoursesByFacultyId,
   getCourseTypeName,
   getCumulativeHours,
   getDepartmentsByFacultyId,
   getFaculties,
-  getFacultyCourses,
   getHoursTrackings,
   getPeriods,
   getTaughtCours,
@@ -66,7 +66,7 @@ export default function Page() {
       const { data: courses } = useQuery({
         queryKey: ["courses", `${course?.faculty.id}`, "all"],
         queryFn: ({ queryKey }) =>
-          getFacultyCourses({ facultyId: Number(queryKey[1]), get_all: true }),
+          getCourses({ facultyId: Number(queryKey[1]), get_all: true }),
         enabled: !!course?.faculty.id,
       });
 

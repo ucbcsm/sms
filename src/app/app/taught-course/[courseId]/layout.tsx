@@ -17,10 +17,10 @@ import { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   getClassrooms,
+  getCourses,
   getCoursesByFacultyId,
   getDepartmentsByFacultyId,
   getFaculties,
-  getFacultyCourses,
   getPeriods,
   getTaughtCours,
   getTeachersByFaculty,
@@ -60,7 +60,7 @@ export default function FacultyLayout({
     const { data: courses } = useQuery({
       queryKey: ["courses", `${course?.faculty.id}`, "all"],
       queryFn: ({ queryKey }) =>
-        getFacultyCourses({ facultyId: Number(queryKey[1]), get_all: true }),
+        getCourses({ facultyId: Number(queryKey[1]), get_all: true }),
       enabled: !!course?.faculty.id,
     });
 
