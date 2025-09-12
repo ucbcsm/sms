@@ -123,6 +123,8 @@ export default function Page() {
     enabled: !!facultyId,
   });
 
+  console.log(data?.results)
+
   const { data: faculties } = useQuery({
     queryKey: ["faculties"],
     queryFn: getFaculties,
@@ -181,6 +183,7 @@ export default function Page() {
                   <Input.Search
                     placeholder="Rechercher un cours dans le catalogue ..."
                     onChange={(e) => {
+                      setPage(0)
                       setSearch(e.target.value);
                     }}
                   />
@@ -277,7 +280,7 @@ export default function Page() {
               pageSizeOptions: [25, 50, 75, 100],
               size: "small",
               showSizeChanger: true,
-              current: pageSize !== 0 ? page : 1,
+              current: page !== 0 ? page : 1,
               pageSize: pageSize !== 0 ? pageSize : 25,
               total: data?.count,
               onChange: (page, pageSize) => {
