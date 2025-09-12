@@ -3,11 +3,10 @@
 import { EditTaughtCourseForm } from "@/app/faculty/[facultyId]/taught-courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import {
+  getAllCourses,
   getClassrooms,
   getCourseEnrollments,
   getCourseEnrollmentsCountByStatus,
-  getCourses,
-  getCoursesByFacultyId,
   getCourseTypeName,
   getCumulativeHours,
   getDepartmentsByFacultyId,
@@ -63,12 +62,12 @@ export default function Page() {
   //   enabled: !!course?.faculty.id,
   // });
 
-      const { data: courses } = useQuery({
-        queryKey: ["courses", `${course?.faculty.id}`, "all"],
-        queryFn: ({ queryKey }) =>
-          getCourses({ facultyId: Number(queryKey[1]), get_all: true }),
-        enabled: !!course?.faculty.id,
-      });
+  const { data: courses } = useQuery({
+    queryKey: ["courses", `${course?.faculty.id}`, "all"],
+    queryFn: ({ queryKey }) =>
+      getAllCourses({ facultyId: Number(queryKey[1]),}),
+    enabled: !!course?.faculty.id,
+  });
 
   const { data: departments } = useQuery({
     queryKey: ["departments", `${course?.faculty.id}`],
@@ -199,7 +198,8 @@ export default function Page() {
                     percent={toFixedNumber(
                       (getCumulativeHours(hours) /
                         (course.theoretical_hours! + course.practical_hours!)) *
-                        100,1
+                        100,
+                      1
                     )}
                     size={58}
                     status={getCourseProgressStatus(course?.status!)}

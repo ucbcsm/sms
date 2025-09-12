@@ -16,6 +16,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
+  getAllCourses,
   getClassrooms,
   getCourses,
   getCoursesByFacultyId,
@@ -60,7 +61,7 @@ export default function FacultyLayout({
     const { data: courses } = useQuery({
       queryKey: ["courses", `${course?.faculty.id}`, "all"],
       queryFn: ({ queryKey }) =>
-        getCourses({ facultyId: Number(queryKey[1]), get_all: true }),
+        getAllCourses({ facultyId: Number(queryKey[1]), }),
       enabled: !!course?.faculty.id,
     });
 

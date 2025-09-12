@@ -90,7 +90,7 @@ export default function AppLayout({
             />
           </div>
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
-            CI-UCBC
+            UCBC
           </Typography.Title>
         </Link>
         <Menu

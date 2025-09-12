@@ -5,6 +5,7 @@ import { EditCourseForm } from "@/app/faculty/[facultyId]/courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
+  getCourses,
   getCoursesByFacultyId,
   getCourseTypeName,
   getCycles,
@@ -41,7 +42,7 @@ import { FC, useState } from "react";
 import { NewCourseForm } from "@/app/faculty/[facultyId]/courses/forms/new";
 import { Palette } from "@/components/palette";
 import { ListTeachingUnits } from "./teaching-units/list";
-import Sider from "antd/es/layout/Sider";
+import { parseAsInteger, useQueryState, } from "nuqs";
 
 type ActionsBarProps = {
   record: Course;
@@ -99,10 +100,26 @@ export default function Page() {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+  
   const { facultyId } = useParams();
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["courses", facultyId],
-    queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+
+  const [pageSize, setPageSize] = useQueryState(
+    "page_size",
+    parseAsInteger.withDefault(25)
+  );
+
+  const [search, setSearch] = useQueryState("search");
+
+  const { data, isPending:isPendngCourses, isError } = useQuery({
+    queryKey: ["courses", facultyId, page, pageSize, search],
+    queryFn: ({ queryKey }) =>
+      getCourses({
+        facultyId: Number(queryKey[1]),
+        page: page !== 0 ? page : undefined,
+        pageSize: pageSize !== 0 ? pageSize : undefined,
+        search: search !== null && search?.trim() !== "" ? search : undefined,
+      }),
     enabled: !!facultyId,
   });
 
@@ -116,9 +133,9 @@ export default function Page() {
     queryFn: getCycles,
   });
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
+  // if (isPending) {
+  //   return <DataFetchPendingSkeleton variant="table" />;
+  // }
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -144,15 +161,10 @@ export default function Page() {
         >
           <Space>
             {/* <BackButton /> */}
-            {!isPending ? (
-              <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                Catalogue de cours
-              </Typography.Title>
-            ) : (
-              <Form>
-                <Skeleton.Input active />
-              </Form>
-            )}
+
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Catalogue de cours
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
@@ -160,109 +172,123 @@ export default function Page() {
           </Space>
         </Layout.Header>
         {/* <Row> */}
-          {/* <Col span={16}> */}
-            <Card>
-              <Table
-                title={() => (
-                  <header className="flex pb-3">
-                    <Space>
-                      <Input.Search placeholder="Rechercher un cours dans le catalogue ..." />
-                    </Space>
-                    <div className="flex-1" />
-                    <Space>
-                      <NewCourseForm
-                        faculties={faculties?.filter(
-                          (fac) => fac.id === Number(facultyId)
-                        )}
-                      />
-                      <Button
-                        icon={<PrinterOutlined />}
-                        style={{ boxShadow: "none" }}
-                      >
-                        Imprimer
-                      </Button>
-                      <Dropdown
-                        menu={{
-                          items: [
-                            {
-                              key: "pdf",
-                              label: "PDF",
-                              icon: <FilePdfOutlined />,
-                              title: "Exporter en PDF",
-                            },
-                            {
-                              key: "excel",
-                              label: "EXCEL",
-                              icon: <FileExcelOutlined />,
-                              title: "Exporter vers Excel",
-                            },
-                          ],
-                        }}
-                      >
-                        <Button
-                          icon={<DownOutlined />}
-                          style={{ boxShadow: "none" }}
-                        >
-                          Exporter
-                        </Button>
-                      </Dropdown>
-                    </Space>
-                  </header>
-                )}
-                dataSource={data}
-                columns={[
-                  {
-                    title: "Titre du cours",
-                    dataIndex: "title",
-                    key: "title",
-                    render: (_, record, __) => record.name,
-                  },
-                  {
-                    title: "Code",
-                    dataIndex: "code",
-                    key: "code",
-                    width: 100,
-                  },
-                  {
-                    title: "Nature",
-                    dataIndex: "course_type",
-                    key: "type",
-                    render: (_, record, __) =>
-                      getCourseTypeName(record.course_type),
-                    // width:100,
-                    ellipsis: true,
-                  },
-                  {
-                    title: "",
-                    key: "actions",
-                    render: (_, record, __) => {
-                      return (
-                        <ActionsBar
-                          record={record}
-                          faculties={faculties?.filter(
-                            (fac) => fac.id === Number(facultyId)
-                          )}
-                        />
-                      );
-                    },
-                    width: 50,
-                  },
-                ]}
-                rowKey="id"
-                rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-                rowSelection={{
-                  type: "checkbox",
-                }}
-                size="small"
-                pagination={{
-                  defaultPageSize: 25,
-                  pageSizeOptions: [25, 50, 75, 100],
-                  size: "small",
-                }}
-              />
-            </Card>
-          {/* </Col> */}
-          {/* <Col span={8}>
+        {/* <Col span={16}> */}
+        <Card>
+          <Table
+            title={() => (
+              <header className="flex pb-3">
+                <Space>
+                  <Input.Search
+                    placeholder="Rechercher un cours dans le catalogue ..."
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
+                  />
+                </Space>
+                <div className="flex-1" />
+                <Space>
+                  <NewCourseForm
+                    faculties={faculties?.filter(
+                      (fac) => fac.id === Number(facultyId)
+                    )}
+                  />
+                  <Button
+                    icon={<PrinterOutlined />}
+                    style={{ boxShadow: "none" }}
+                  >
+                    Imprimer
+                  </Button>
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "pdf",
+                          label: "PDF",
+                          icon: <FilePdfOutlined />,
+                          title: "Exporter en PDF",
+                        },
+                        {
+                          key: "excel",
+                          label: "EXCEL",
+                          icon: <FileExcelOutlined />,
+                          title: "Exporter vers Excel",
+                        },
+                      ],
+                    }}
+                  >
+                    <Button
+                      icon={<DownOutlined />}
+                      style={{ boxShadow: "none" }}
+                    >
+                      Exporter
+                    </Button>
+                  </Dropdown>
+                </Space>
+              </header>
+            )}
+            dataSource={data?.results}
+            columns={[
+              {
+                title: "Titre du cours",
+                dataIndex: "title",
+                key: "title",
+                render: (_, record, __) => record.name,
+              },
+              {
+                title: "Code",
+                dataIndex: "code",
+                key: "code",
+                width: 100,
+              },
+              {
+                title: "Nature",
+                dataIndex: "course_type",
+                key: "type",
+                render: (_, record, __) =>
+                  getCourseTypeName(record.course_type),
+                // width:100,
+                ellipsis: true,
+              },
+              {
+                title: "",
+                key: "actions",
+                render: (_, record, __) => {
+                  return (
+                    <ActionsBar
+                      record={record}
+                      faculties={faculties?.filter(
+                        (fac) => fac.id === Number(facultyId)
+                      )}
+                    />
+                  );
+                },
+                width: 50,
+              },
+            ]}
+            rowKey="id"
+            rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+            rowSelection={{
+              type: "checkbox",
+            }}
+            size="small"
+            loading={isPendngCourses}
+            pagination={{
+              defaultPageSize: 25,
+              pageSizeOptions: [25, 50, 75, 100],
+              size: "small",
+              showSizeChanger: true,
+              current: pageSize !== 0 ? page : 1,
+              pageSize: pageSize !== 0 ? pageSize : 25,
+              total: data?.count,
+              onChange: (page, pageSize) => {
+                setPage(page);
+                setPageSize(pageSize);
+              },
+            }}
+          />
+        </Card>
+        {/* </Col> */}
+        {/* <Col span={8}>
             <ListTeachingUnits cycles={cycles} />
           </Col> */}
         {/* </Row> */}

@@ -4,6 +4,7 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import {
+  getAllCourses,
   getAllTeachers,
   getClassrooms,
   getCourses,
@@ -200,7 +201,7 @@ export default function Page() {
   const { data: courses } = useQuery({
     queryKey: ["courses", facultyId, "all"],
     queryFn: ({ queryKey }) =>
-      getCourses({ facultyId: Number(queryKey[1]), get_all: true }),
+      getAllCourses({ facultyId: Number(queryKey[1]) }),
     enabled: !!facultyId,
   });
 

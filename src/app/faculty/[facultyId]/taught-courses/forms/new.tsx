@@ -20,12 +20,11 @@ import {
 } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
-import { BulbOutlined, CloseOutlined, UserAddOutlined } from "@ant-design/icons";
+import { BulbOutlined, CloseOutlined, PlusOutlined, } from "@ant-design/icons";
 import {
   Classroom,
   Course,
   Department,
-  Faculty,
   Period,
   Teacher,
   TeachingUnit,
@@ -108,7 +107,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
     <>
       {contextHolder}
       <Button
-        icon={<UserAddOutlined />}
+        icon={<PlusOutlined />}
         type="primary"
         style={{ boxShadow: "none" }}
         variant="dashed"

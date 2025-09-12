@@ -1,21 +1,53 @@
 import api from "@/lib/fetcher";
-import { Course, CourseProgram } from "@/types";
+import { Course, } from "@/types";
 
 export async function getCourses(searchParams: {
   facultyId?: number;
-  get_all?: boolean;
+  page?: number;
+  pageSize?: number;
+  search?: string;
 }) {
-  const { facultyId, get_all } = searchParams;
+  const { facultyId, page, pageSize, search } = searchParams;
   const queryParams = new URLSearchParams();
   if (facultyId !== undefined) {
     queryParams.append("faculties__id", facultyId.toString());
   }
-  if (get_all) {
-    queryParams.append("get_all", "true");
+  if (page !== undefined) {
+    queryParams.append("page", page.toString());
   }
+  if (pageSize !== undefined) {
+    queryParams.append("page_size", pageSize.toString());
+  }
+  if (search !== undefined && search.trim() !== "") {
+    queryParams.append("search", search.trim());
+  }
+
   const res = await api.get(
     `/faculty/available-course?${queryParams.toString()}`
   );
+
+  return res.data as {
+    results: Course[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
+}
+
+export async function getAllCourses(searchParams: {
+  facultyId?: number;
+}) {
+  const { facultyId } = searchParams;
+  const queryParams = new URLSearchParams();
+  if (facultyId !== undefined) {
+    queryParams.append("faculties__id", facultyId.toString());
+     queryParams.append("get_all", "true");
+  }
+
+  const res = await api.get(
+    `/faculty/available-course?${queryParams.toString()}`
+  );
+
   return res.data as Course[];
 }
 
