@@ -6,11 +6,11 @@ import { useYid } from "@/hooks/use-yid";
 import {
   getAllTeachers,
   getClassrooms,
-  getCourses,
   getCoursesByFacultyId,
   getCurrentDepartmentsAsOptions,
   getCurrentPeriodsAsOptions,
   getDepartmentsByFacultyId,
+  getFacultyCourses,
   getPeriods,
   getTaughtCourses,
   getTaughtCoursesByFacultyId,
@@ -198,11 +198,13 @@ export default function Page() {
   });
 
   const { data: courses } = useQuery({
-    queryKey: ["courses", facultyId],
+    queryKey: ["courses", facultyId, "all"],
     queryFn: ({ queryKey }) =>
-      getCourses({ facultyId: Number(queryKey[1]), get_all: true }),
+      getFacultyCourses({ facultyId: Number(queryKey[1]), get_all: true }),
     enabled: !!facultyId,
   });
+
+  console.log(courses)
 
   const { data: departments } = useQuery({
     queryKey: ["departments", facultyId],

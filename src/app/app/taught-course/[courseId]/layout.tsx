@@ -20,6 +20,7 @@ import {
   getCoursesByFacultyId,
   getDepartmentsByFacultyId,
   getFaculties,
+  getFacultyCourses,
   getPeriods,
   getTaughtCours,
   getTeachersByFaculty,
@@ -50,11 +51,18 @@ export default function FacultyLayout({
     enabled: !!courseId,
   });
 
-  const { data: courses } = useQuery({
-    queryKey: ["courses", `${course?.faculty.id}`],
-    queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
-    enabled: !!course?.faculty.id,
-  });
+  // const { data: courses } = useQuery({
+  //   queryKey: ["courses", `${course?.faculty.id}`],
+  //   queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
+  //   enabled: !!course?.faculty.id,
+  // });
+
+    const { data: courses } = useQuery({
+      queryKey: ["courses", `${course?.faculty.id}`, "all"],
+      queryFn: ({ queryKey }) =>
+        getFacultyCourses({ facultyId: Number(queryKey[1]), get_all: true }),
+      enabled: !!course?.faculty.id,
+    });
 
   const { data: departments } = useQuery({
     queryKey: ["departments", `${course?.faculty.id}`],

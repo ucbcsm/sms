@@ -247,7 +247,6 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                 name="attendance_threshold"
                 label="Seuil de présence (%)"
                 rules={[{ required: true }]}
-                initialValue={75}
               >
                 <InputNumber
                   type="number"
