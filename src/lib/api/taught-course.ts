@@ -2,14 +2,66 @@ import { TaughtCourse } from "@/types";
 import api from "../fetcher";
 import dayjs from "dayjs";
 
+export async function getTaughtCourses(searchParams: {
+  yearId: number;
+  facultyId: number;
+  departmentId?: number;
+  periodId?: number;
+  page?: number;
+  pageSize?: number;
+  search?:string
+}) {
+  const { yearId, facultyId, periodId, departmentId, page, pageSize, search } = searchParams;
+
+  const queryParams = new URLSearchParams();
+
+  // Paramètres obligatoires
+  queryParams.append("academic_year__id", yearId.toString());
+  queryParams.append("faculty__id", facultyId.toString());
+  // Paramètres optionnels
+  if (periodId !== undefined) {
+    queryParams.append("period__id", periodId.toString());
+  }
+  if (departmentId !== undefined) {
+    queryParams.append("departements__id", departmentId.toString());
+  }
+  if (page !== undefined) {
+    queryParams.append("page", page.toString());
+  }
+  if (pageSize !== undefined) {
+    queryParams.append("page_size", pageSize.toString());
+  }
+  if (search!==undefined && search.trim()!=="") {
+    queryParams.append("search", search.trim());
+  }
+
+  const res = await api.get(
+    `/faculty/taught-course/?${queryParams.toString()}`
+  );
+  return res.data as {
+    results: TaughtCourse[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
+}
+
 export async function getTaughtCoursesByFacultyId(
   yearId: number,
-  facultyId: number
+  facultyId: number,
+  periodId?: number,
+  page?: number,
+  pageSize?: number
 ) {
   const res = await api.get(
     `/faculty/taught-course/?academic_year__id=${yearId}&faculty__id=${facultyId}`
   );
-  return res.data.results as TaughtCourse[];
+  return res.data as {
+    results: TaughtCourse[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
 export async function getTaughtCoursesByDepartmentId(
