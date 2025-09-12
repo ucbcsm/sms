@@ -178,8 +178,8 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   cours.
                 </li>
                 <li>
-                  ▪ Indiquez les dates de début et de fin, ainsi que la salle
-                  de classe si nécessaire.
+                  ▪ Indiquez les dates de début et de fin, ainsi que la salle de
+                  classe si nécessaire.
                 </li>
                 <li>
                   ▪ Validez la planification en cliquant sur "Programmer le
@@ -271,7 +271,21 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   </Form.Item>
                 </Col>
               </Row>
-
+              <Form.Item
+                name="attendance_threshold"
+                label="Seuil de présence (%)"
+                rules={[{required: true}]}
+                initialValue={75}
+              >
+                <InputNumber
+                  type="number"
+                  min={0}
+                  max={100}
+                  step={1}
+                  placeholder="exemple: 75"
+                  addonAfter="%"
+                />
+              </Form.Item>
               <Form.Item
                 name="period_id"
                 label="Période"
@@ -290,26 +304,25 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 />
               </Form.Item>
 
-              
-                  <Form.Item
-                    name="departments_ids"
-                    label="Départements"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Veuillez sélectionner les départements.",
-                      },
-                    ]}
-                  >
-                    <Select
-                      options={getCurrentDepartmentsAsOptions(departments)}
-                      allowClear
-                      showSearch
-                      mode="multiple"
-                      filterOption={filterOption}
-                    />
-                  </Form.Item>
-              
+              <Form.Item
+                name="departments_ids"
+                label="Départements"
+                rules={[
+                  {
+                    required: true,
+                    message: "Veuillez sélectionner les départements.",
+                  },
+                ]}
+              >
+                <Select
+                  options={getCurrentDepartmentsAsOptions(departments)}
+                  allowClear
+                  showSearch
+                  mode="multiple"
+                  filterOption={filterOption}
+                />
+              </Form.Item>
+
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <Form.Item name="start_date" label="Date de début">

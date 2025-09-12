@@ -338,6 +338,7 @@ export const TaughtCourse = z.object({
   start_date: z.date().nullable(),
   end_date: z.date().nullable(),
   status: z.enum(["pending", "progress", "finished", "suspended"]).nullable(),
+  attendance_threshold: z.number(),
 });
 
 export type TaughtCourse = z.infer<typeof TaughtCourse>;

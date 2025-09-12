@@ -123,6 +123,7 @@ export async function createTaughtCourse(
     status: data.status || "pending",
     class_room: data.class_room_id || null,
     assistants: data.assistants || [],
+    attendance_threshold: data.attendance_threshold,
   });
 
   return res.data as TaughtCourse;
@@ -178,6 +179,7 @@ export async function updateTaughtCourse(
     status: data.status || "pending",
     class_room: data.class_room_id || null,
     assistants: data.assistants || [],
+    attendance_threshold: data.attendance_threshold
   });
   return res.data;
 }

@@ -32,7 +32,6 @@ import {
   updateTaughtCourse,
   getCoursesAsOptions,
   getCurrentDepartmentsAsOptions,
-  getCurrentFacultiesAsOptions,
   getCurrentPeriodsAsOptions,
   getTeachersAsOptions,
   getTeachingUnitsAsOptions,
@@ -99,6 +98,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
         status: taughtCourse.status,
         assistants: taughtCourse.assistants?.map((a) => a.id),
         class_room_id: taughtCourse.class_room?.id,
+        attendance_threshold: taughtCourse.attendance_threshold
       });
     } else {
       form.resetFields();
@@ -155,10 +155,11 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
             message="Instructions"
             description={
               <ul>
+                <li>▪ Mettez à jour les champs si nécessaires .</li>
                 <li>
-                  ▪ Mettez à jour les champs si nécessaires .
+                  ▪ Puis cliquez sur «Sauvegarder» pour valider les
+                  modifications
                 </li>
-                <li>▪ Puis cliquez sur «Sauvegarder» pour valider les modifications</li>
               </ul>
             }
             showIcon
@@ -242,7 +243,21 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                   </Form.Item>
                 </Col>
               </Row>
-
+              <Form.Item
+                name="attendance_threshold"
+                label="Seuil de présence (%)"
+                rules={[{ required: true }]}
+                initialValue={75}
+              >
+                <InputNumber
+                  type="number"
+                  min={0}
+                  max={100}
+                  step={1}
+                  placeholder="exemple: 75"
+                  addonAfter="%"
+                />
+              </Form.Item>
               <Form.Item
                 name="period_id"
                 label="Période"

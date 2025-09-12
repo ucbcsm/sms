@@ -6,7 +6,9 @@ import { useYid } from "@/hooks/use-yid";
 import {
   getAllTeachers,
   getClassrooms,
+  getCourses,
   getCoursesByFacultyId,
+  getCurrentDepartmentsAsOptions,
   getCurrentPeriodsAsOptions,
   getDepartmentsByFacultyId,
   getPeriods,
@@ -35,7 +37,7 @@ import {
   MoreOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
@@ -152,10 +154,20 @@ export default function Page() {
   } = theme.useToken();
   const { yid } = useYid();
   const { facultyId } = useParams();
-  const [selectedPeriodId, setSelectedPeriodId]=useQueryState("p", parseAsInteger.withDefault(0))
-  const [page, setPage]= useQueryState("page", parseAsInteger.withDefault(0))
-  const [pageSize, setPageSize]= useQueryState("size", parseAsInteger.withDefault(0))
-  const [search, setSearch]=useQueryState("search")
+  const [departmentId, setDepartmentId] = useQueryState(
+    "dep",
+    parseAsInteger.withDefault(0)
+  );
+  const [periodId, setPeriodId] = useQueryState(
+    "p",
+    parseAsInteger.withDefault(0)
+  );
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+  const [pageSize, setPageSize] = useQueryState(
+    "size",
+    parseAsInteger.withDefault(0)
+  );
+  const [search, setSearch] = useQueryState("search");
 
   const {
     data: taughtCourses,
@@ -166,7 +178,8 @@ export default function Page() {
       "taught_courses",
       `${yid}`,
       facultyId,
-      selectedPeriodId,
+      departmentId,
+      periodId,
       page,
       pageSize,
       search,
@@ -175,7 +188,8 @@ export default function Page() {
       getTaughtCourses({
         yearId: Number(queryKey[1]),
         facultyId: Number(queryKey[2]),
-        periodId: selectedPeriodId !== 0 ? selectedPeriodId : undefined,
+        departmentId: departmentId !== 0 ? departmentId : undefined,
+        periodId: periodId !== 0 ? periodId : undefined,
         page: page !== 0 ? page : undefined,
         pageSize: pageSize !== 0 ? pageSize : undefined,
         search: search !== null && search?.trim() !== "" ? search : undefined,
@@ -185,7 +199,8 @@ export default function Page() {
 
   const { data: courses } = useQuery({
     queryKey: ["courses", facultyId],
-    queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
+    queryFn: ({ queryKey }) =>
+      getCourses({ facultyId: Number(queryKey[1]), get_all: true }),
     enabled: !!facultyId,
   });
 
@@ -273,13 +288,35 @@ export default function Page() {
             title={() => (
               <header className="flex pb-3">
                 <Space>
-                  <Input.Search placeholder="Rechercher un cours dans le catalogue ..." onChange={(e)=>{
-                    setSearch(e.target.value);
-                  }} />
+                  <Input.Search
+                    placeholder="Rechercher un cours dans le catalogue ..."
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
+                  />
                 </Space>
                 <div className="flex-1" />
                 <Space>
-                  <Select value={selectedPeriodId} onChange={(value)=>{setSelectedPeriodId(value)}} options={[{value:0, label:"Toutes les périodes"}, ...(getCurrentPeriodsAsOptions(periods) || [])]}/>
+                  <Select
+                    value={departmentId}
+                    onChange={(value) => {
+                      setDepartmentId(value);
+                    }}
+                    options={[
+                      { value: 0, label: "Tous les départements" },
+                      ...(getCurrentDepartmentsAsOptions(departments) || []),
+                    ]}
+                  />
+                  <Select
+                    value={periodId}
+                    onChange={(value) => {
+                      setPeriodId(value);
+                    }}
+                    options={[
+                      { value: 0, label: "Toutes les périodes" },
+                      ...(getCurrentPeriodsAsOptions(periods) || []),
+                    ]}
+                  />
                   <NewTaughtCourseForm
                     facultyId={Number(facultyId)}
                     teachingUnits={teachingUnits}
@@ -297,7 +334,7 @@ export default function Page() {
               Ajouter
             </Button> */}
                   <Button
-                    icon={<PrinterOutlined />} 
+                    icon={<PrinterOutlined />}
                     style={{ boxShadow: "none" }}
                   >
                     Imprimer
@@ -513,8 +550,16 @@ export default function Page() {
             size="small"
             pagination={{
               defaultPageSize: 25,
+              showSizeChanger: true,
               pageSizeOptions: [25, 50, 75, 100],
               size: "small",
+              current: pageSize !== 0 ? page : 1,
+              pageSize: pageSize !== 0 ? pageSize : 25,
+              total: taughtCourses?.count,
+              onChange: (page, pageSize) => {
+                setPage(page);
+                setPageSize(pageSize);
+              },
             }}
           />
         </Card>

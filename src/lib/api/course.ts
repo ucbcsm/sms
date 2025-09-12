@@ -1,8 +1,21 @@
 import api from "@/lib/fetcher";
 import { Course, CourseProgram } from "@/types";
 
-export async function getCouses() {
-  const res = await api.get(`/faculty/available-course/`);
+export async function getCourses(searchParams: {
+  facultyId?: number;
+  get_all?: boolean;
+}) {
+  const { facultyId, get_all } = searchParams;
+  const queryParams = new URLSearchParams();
+  if (facultyId !== undefined) {
+    queryParams.append("faculties__id", facultyId.toString());
+  }
+  if (get_all) {
+    queryParams.append("get_all", "true");
+  }
+  const res = await api.get(
+    `/faculty/available-course?${queryParams.toString()}`
+  );
   return res.data.results as Course[];
 }
 
