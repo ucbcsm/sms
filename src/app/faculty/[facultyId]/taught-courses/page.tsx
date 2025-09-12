@@ -305,7 +305,7 @@ export default function Page() {
                       setDepartmentId(value);
                     }}
                     options={[
-                      { value: 0, label: "Tous les départements" },
+                      { value: 0, label: "Toutes les mentions" },
                       ...(getCurrentDepartmentsAsOptions(departments) || []),
                     ]}
                   />
