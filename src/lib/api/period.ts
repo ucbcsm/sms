@@ -7,8 +7,8 @@ export async function getPeriods() {
   return res.data.results as Period[];
 }
 
-export async function getPeriodsByYear(yeardId:number) {
-  const res= await api.get(`/main_config/period/?academic_year__id=${yeardId}`)
+export async function getPeriodsByYear(yearId:number) {
+  const res= await api.get(`/main_config/period/?academic_year__id=${yearId}`)
   return res.data.results as Period[]
 }
 

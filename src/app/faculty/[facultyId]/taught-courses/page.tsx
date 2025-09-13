@@ -205,7 +205,6 @@ export default function Page() {
     enabled: !!facultyId,
   });
 
-  console.log(courses)
 
   const { data: departments } = useQuery({
     queryKey: ["departments", facultyId],
@@ -296,6 +295,8 @@ export default function Page() {
                     onChange={(e) => {
                       setSearch(e.target.value);
                     }}
+                    allowClear
+                    variant="filled"
                   />
                 </Space>
                 <div className="flex-1" />
@@ -309,6 +310,7 @@ export default function Page() {
                       { value: 0, label: "Toutes les mentions" },
                       ...(getCurrentDepartmentsAsOptions(departments) || []),
                     ]}
+                    variant="filled"
                   />
                   <Select
                     value={periodId}
@@ -319,6 +321,7 @@ export default function Page() {
                       { value: 0, label: "Toutes les périodes" },
                       ...(getCurrentPeriodsAsOptions(periods) || []),
                     ]}
+                    variant="filled"
                   />
                   <NewTaughtCourseForm
                     facultyId={Number(facultyId)}

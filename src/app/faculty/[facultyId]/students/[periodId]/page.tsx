@@ -35,130 +35,12 @@ import { ListPeriodValidatedStudents } from "./list-validated-enrollments";
 import { ValidateSignlePeriodEnllmentForm } from "./forms/decisions/validate";
 import { RejectSinglePeriodEnrollmentForm } from "./forms/decisions/reject";
 import { PendingSinglePeriodEnrollmentForm } from "./forms/decisions/pending";
+import { ListPeriodPendingStudents } from "./list-pending-enrollments";
+import { ListPeriodRejectedStudents } from "./list-rejected-enrollments";
 
-type ListPeriodEnrollmentItemProps = {
-  item: PeriodEnrollment;
-};
-
-const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
-  item,
-}) => {
-  const {token:{colorSuccessActive, colorWarningActive}}=theme.useToken()
-  const [openPending, setOpenPending] = useState<boolean>(false);
-  const [openReject, setOpenReject] = useState<boolean>(false);
-  const [openValidate, setOpenValidate] = useState<boolean>(false);
-
-  return (
-    <>
-      <PendingSinglePeriodEnrollmentForm
-        open={openPending}
-        setOpen={setOpenPending}
-        enrollment={item}
-      />
-      <ValidateSignlePeriodEnllmentForm
-        open={openValidate}
-        setOpen={setOpenValidate}
-        enrollment={item}
-      />
-      <RejectSinglePeriodEnrollmentForm
-        open={openReject}
-        setOpen={setOpenReject}
-        enrollment={item}
-      />
-
-      <List.Item
-        extra={
-          <Dropdown
-            menu={{
-              items: [
-                item.status === "pending" || item.status === "rejected"
-                  ? {
-                      key: "validate",
-                      label: "Accepter",
-                      icon: (
-                        <CheckOutlined style={{ color: colorSuccessActive }} />
-                      ),
-                    }
-                  : null,
-                item.status === "validated" || item.status === "rejected"
-                  ? {
-                      key: "pending",
-                      label: "Marquer en attente",
-                      icon: (
-                        <HourglassOutlined
-                          style={{ color: colorWarningActive }}
-                        />
-                      ),
-                    }
-                  : null,
-                item.status === "pending"
-                  ? {
-                      key: "reject",
-                      label: "Rejeter",
-                      icon: <CloseOutlined />,
-                      danger: true,
-                    }
-                  : null,
-              ],
-              onClick: ({ key }) => {
-                if (key === "pending") {
-                  setOpenPending(true);
-                } else if (key === "reject") {
-                  setOpenReject(true);
-                } else if (key === "validate") {
-                  setOpenValidate(true);
-                }
-              },
-            }}
-          >
-            <Button icon={<MoreOutlined />} type="text" />
-          </Dropdown>
-        }
-      >
-        <List.Item.Meta
-          avatar={
-            <Avatar
-              src={item.year_enrollment.user.avatar || null}
-              style={{
-                backgroundColor: getHSLColor(
-                  `${item.year_enrollment.user.first_name} ${item.year_enrollment.user.last_name} ${item.year_enrollment.user.surname}`
-                ),
-                cursor: "pointer",
-              }}
-            >
-              {item.year_enrollment.user.first_name?.charAt(0).toUpperCase()}
-              {item.year_enrollment.user.last_name?.charAt(0).toUpperCase()}
-            </Avatar>
-          }
-          title={
-            <Typography.Text style={{ cursor: "pointer" }}>
-              {item.year_enrollment.user.first_name}{" "}
-              {item.year_enrollment.user.last_name}{" "}
-              {item.year_enrollment.user.surname}
-            </Typography.Text>
-          }
-          description={
-            <Space>
-              <Checkbox/>
-            <div style={{ cursor: "pointer" }}>
-              <Typography.Text
-                type={getApplicationStatusTypographyType(item.status!)}
-              >
-                {getApplicationStatusName(`${item.status}`)}
-              </Typography.Text>{" "}
-              : {item.year_enrollment.class_year.acronym}{" "}
-              {item.year_enrollment.departement.name}
-            </div>
-            </Space>
-          }
-        />
-      </List.Item>
-    </>
-  );
-};
 
 export default function Page() {
-  const router = useRouter();
+
   const { facultyId, periodId } = useParams();
   const { yid } = useYid();
   const { data, isPending, isError } = useQuery({
@@ -183,9 +65,7 @@ export default function Page() {
   return (
     <Row gutter={[24, 24]}>
       <Col span={16}>
-        <ListPeriodValidatedStudents
-          periodEnrollments={getPeriodEnrollmentsByStatus(data, "validated")}
-        />
+        <ListPeriodValidatedStudents />
       </Col>
       <Col span={8}>
         <div>
@@ -206,12 +86,13 @@ export default function Page() {
                 ),
                 children: (
                   <div>
-                    <List
+                    <ListPeriodPendingStudents />
+                    {/* <List
                       dataSource={getPeriodEnrollmentsByStatus(data, "pending")}
                       renderItem={(item) => (
                         <ListPeriodEnrollmentItem key={item.id} item={item} />
                       )}
-                    />
+                    /> */}
                   </div>
                 ),
               },
@@ -220,7 +101,8 @@ export default function Page() {
                 label: "Rejetées",
                 children: (
                   <div>
-                    <List
+                    <ListPeriodRejectedStudents />
+                    {/* <List
                       dataSource={getPeriodEnrollmentsByStatus(
                         data,
                         "rejected"
@@ -228,7 +110,7 @@ export default function Page() {
                       renderItem={(item) => (
                         <ListPeriodEnrollmentItem key={item.id} item={item} />
                       )}
-                    />
+                    /> */}
                   </div>
                 ),
               },

@@ -135,7 +135,7 @@ export default function StudentsLayout({
               key: `/faculty/${facultyId}/students`,
               label: "Année",
             },
-            ...getPeriodsAsTabs(periods)!,
+            ...(getPeriodsAsTabs(periods) || []),
           ]}
           defaultActiveKey={pathname}
           activeKey={pathname}

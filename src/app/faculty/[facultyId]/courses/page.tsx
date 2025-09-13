@@ -186,6 +186,8 @@ export default function Page() {
                       setPage(0)
                       setSearch(e.target.value);
                     }}
+                    allowClear
+                    variant="filled"
                   />
                 </Space>
                 <div className="flex-1" />

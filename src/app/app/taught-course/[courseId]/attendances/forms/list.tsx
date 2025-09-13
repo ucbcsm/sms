@@ -47,16 +47,12 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
             <Avatar
               style={{
                 backgroundColor: getHSLColor(
-                  `${record.student.year_enrollment.user.first_name} ${record.student.year_enrollment.user.last_name} ${record.student.year_enrollment.user.surname}`
+                  `${record.student.user.first_name} ${record.student.user.last_name} ${record.student.user.surname}`
                 ),
               }}
             >
-              {record.student.year_enrollment.user.first_name
-                ?.charAt(0)
-                .toUpperCase()}
-              {record.student.year_enrollment.user.last_name
-                ?.charAt(0)
-                .toUpperCase()}
+              {record.student.user.first_name?.charAt(0).toUpperCase()}
+              {record.student.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 58,
@@ -68,7 +64,7 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
           key: "matricule",
           width: 92,
           render: (_, record, __) =>
-            record.student.year_enrollment.user.matricule.padStart(6, "0"),
+            record.student.user.matricule.padStart(6, "0"),
           align: "center",
         },
         {
@@ -77,9 +73,8 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
           key: "available_course",
           render: (_, record) => (
             <>
-              {record.student.year_enrollment.user.first_name}{" "}
-              {record.student.year_enrollment.user.last_name}{" "}
-              {record.student.year_enrollment.user.surname}
+              {record.student.user.first_name} {record.student.user.last_name}{" "}
+              {record.student.user.surname}
             </>
           ),
         },

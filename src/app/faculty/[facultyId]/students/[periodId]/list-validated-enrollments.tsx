@@ -16,6 +16,7 @@ import {
   Button,
   Dropdown,
   Input,
+  Select,
   Space,
   Table,
   Tag,
@@ -23,11 +24,21 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { PendingSinglePeriodEnrollmentForm } from "./forms/decisions/pending";
 import { ValidateSignlePeriodEnllmentForm } from "./forms/decisions/validate";
 import { RejectSinglePeriodEnrollmentForm } from "./forms/decisions/reject";
+import { parseAsInteger, useQueryState } from "nuqs";
+import { useQuery } from "@tanstack/react-query";
+import {
+  getClasses,
+  getClassesYearsAsOptions,
+  getCurrentDepartmentsAsOptions,
+  getDepartmentsByFacultyId,
+  getPeriodEnrollments,
+} from "@/lib/api";
+import { useYid } from "@/hooks/use-yid";
 
 type ActionsBarProps = {
   item: PeriodEnrollment;
@@ -119,13 +130,72 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
 };
 
 type ListPeriodStudentsValidatedProps = {
-  periodEnrollments?: PeriodEnrollment[];
+  // periodEnrollments?: PeriodEnrollment[];
 };
 
 export const ListPeriodValidatedStudents: FC<
   ListPeriodStudentsValidatedProps
-> = ({ periodEnrollments }) => {
-  const router = useRouter();
+> = ({}) => {
+  const { facultyId, periodId } = useParams();
+  const { yid } = useYid();
+  const [departmentId, setDepartmentId] = useQueryState(
+    "dep",
+    parseAsInteger.withDefault(0)
+  );
+  const [classId, setClassId] = useQueryState(
+    "class",
+    parseAsInteger.withDefault(0)
+  );
+
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+  const [pageSize, setPageSize] = useQueryState(
+    "size",
+    parseAsInteger.withDefault(25)
+  );
+  const [search, setSearch] = useQueryState("search");
+
+  const {
+    data,
+    isPending: isPendingPeriodEnrollments,
+    isError: isErrorPeriodEnrollments,
+  } = useQuery({
+    queryKey: [
+      "period_enrollments",
+      `${yid}`,
+      facultyId,
+      periodId,
+      departmentId,
+      classId,
+      page,
+      pageSize,
+      search,
+    ],
+    queryFn: ({ queryKey }) =>
+      getPeriodEnrollments({
+        yearId: Number(queryKey[1]),
+        facultyId: Number(queryKey[2]),
+        periodId: Number(queryKey[3]),
+        departmentId: departmentId !== 0 ? departmentId : undefined,
+        classId: classId !== 0 ? classId : undefined,
+        page: page !== 0 ? page : undefined,
+        pageSize: pageSize !== 0 ? pageSize : undefined,
+        search: search !== null && search.trim() !== "" ? search : undefined,
+        status: "validated",
+      }),
+    enabled: !!yid && !!facultyId && !!periodId,
+  });
+
+  const { data: departments, isPending: isPendingDepartments } = useQuery({
+    queryKey: ["departments", facultyId],
+    queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
+
+  const { data: classes, isPending: isPendingClasses } = useQuery({
+    queryKey: ["classes"],
+    queryFn: getClasses,
+  });
+
   return (
     <Table
       title={() => (
@@ -137,7 +207,44 @@ export const ListPeriodValidatedStudents: FC<
           </Space>
           <div className="flex-1" />
           <Space>
-            <Input.Search placeholder="Rechercher un étudiant ..." />
+            <Input.Search
+              placeholder="Rechercher ..."
+              onChange={(e) => {
+                setPage(0);
+                setSearch(e.target.value);
+              }}
+              allowClear
+              variant="filled"
+              style={{ maxWidth: 180 }}
+            />
+            <Select
+              value={classId}
+              variant="filled"
+              onChange={(value) => {
+                setPage(0);
+                setClassId(value);
+              }}
+              options={[
+                { value: 0, label: "Toutes les promotions" },
+                ...(getClassesYearsAsOptions({ classes }) || []),
+              ]}
+              loading={isPendingClasses}
+              style={{ minWidth: 92, maxWidth: 160 }}
+            />
+            <Select
+              value={departmentId}
+              variant="filled"
+              onChange={(value) => {
+                setPage(0);
+                setDepartmentId(value);
+              }}
+              options={[
+                { value: 0, label: "Toutes les mentions" },
+                ...(getCurrentDepartmentsAsOptions(departments) || []),
+              ]}
+              style={{ minWidth: 150 }}
+              loading={isPendingDepartments}
+            />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
@@ -146,27 +253,29 @@ export const ListPeriodValidatedStudents: FC<
                 items: [
                   {
                     key: "pdf",
-                    label: "PDF",
+                    label: "Exporter PDF",
                     icon: <FilePdfOutlined />,
                     title: "Exporter en pdf",
                   },
                   {
                     key: "excel",
-                    label: "EXCEL",
+                    label: "Exporter EXCEL",
                     icon: <FileExcelOutlined />,
                     title: "Exporter vers Excel",
                   },
                 ],
               }}
             >
-              <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                Exporter
-              </Button>
+              <Button
+                type="text"
+                icon={<MoreOutlined />}
+                style={{ boxShadow: "none" }}
+              />
             </Dropdown>
           </Space>
         </header>
       )}
-      dataSource={periodEnrollments}
+      dataSource={data?.results}
       columns={[
         {
           title: "Photo",
@@ -210,6 +319,7 @@ export const ListPeriodValidatedStudents: FC<
               {record.year_enrollment.user.surname}
             </Link>
           ),
+          ellipsis: true,
         },
         {
           title: "Promotion",
@@ -261,10 +371,18 @@ export const ListPeriodValidatedStudents: FC<
         type: "checkbox",
       }}
       size="small"
+      loading={isPendingPeriodEnrollments}
       pagination={{
         defaultPageSize: 25,
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
+        showSizeChanger: true,
+        current: page !== 0 ? page : 1,
+        total: data?.count,
+        onChange: (page, pageSize) => {
+          setPage(page);
+          setPageSize(pageSize);
+        },
       }}
     />
   );
