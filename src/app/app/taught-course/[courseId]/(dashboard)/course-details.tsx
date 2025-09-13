@@ -78,7 +78,8 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
               {
                 key: "departments",
                 label: "Mentions",
-                children: data?.departements.map(dep=><Space size={1} wrap>{dep.name}</Space>) || "",
+                children:
+                  data?.departements.map((dep) => dep.acronym).join(", ") || "",
               },
               // {
               //   key: "code",
@@ -105,8 +106,9 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
               {
                 key: "classroom",
                 label: "Salle de classe",
-                children: `${data?.class_room?.name||""} ${
-                  data?.class_room?.code? `(${data?.class_room?.code})`:""}`,
+                children: `${data?.class_room?.name || ""} ${
+                  data?.class_room?.code ? `(${data?.class_room?.code})` : ""
+                }`,
               },
             ]}
           />
@@ -120,14 +122,14 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
                 children: `${data.teacher?.user.first_name} ${data.teacher?.user.last_name} ${data.teacher?.user.surname}`,
               },
               {
-                key:"academic_title",
-                label:"Titre académique",
-                children:data.teacher?.academic_title
+                key: "academic_title",
+                label: "Titre académique",
+                children: data.teacher?.academic_title,
               },
               {
-                key:"academic_grade",
-                label:"Grade académique",
-                children:data.teacher?.academic_grade
+                key: "academic_grade",
+                label: "Grade académique",
+                children: data.teacher?.academic_grade,
               },
               {
                 key: "email",
@@ -135,19 +137,21 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
                 children: data.teacher?.user.email || "",
               },
               {
-                key:"phone_number_1",
+                key: "phone_number_1",
                 label: "Téléphone 1",
                 children: data.teacher?.phone_number_1 || "",
               },
-               {
-                key:"phone_number_2",
+              {
+                key: "phone_number_2",
                 label: "Téléphone 2",
                 children: data.teacher?.phone_number_2 || "",
               },
               {
                 key: "assistants",
                 label: "Assistants",
-                children: data.assistants?.map((ass) => `${ass.user.surname}, `),
+                children: data.assistants?.map(
+                  (ass) => `${ass.user.surname}, `
+                ),
               },
             ]}
           />
@@ -211,10 +215,12 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
                   data.teaching_unit?.code && `(${data.teaching_unit?.code})`
                 }`,
               },
-               {
+              {
                 key: "teaching_unit_category",
                 label: "Catgorie UE",
-                children: getTeachingUnitCategoryName(data.teaching_unit?.category!),
+                children: getTeachingUnitCategoryName(
+                  data.teaching_unit?.category!
+                ),
               },
               {
                 key: "start_date",
