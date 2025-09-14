@@ -13,11 +13,21 @@ import {
 import { Period } from "@/types";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Form, Layout, Skeleton, Space, Tabs, theme, Typography } from "antd";
+import {
+  Form,
+  Layout,
+  Menu,
+  Skeleton,
+  Space,
+  Tabs,
+  theme,
+  Typography,
+} from "antd";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import { NewPeriodEnrollmentForm } from "./[periodId]/forms/new";
 import { Palette } from "@/components/palette";
+import Link from "next/link";
 
 export default function StudentsLayout({
   children,
@@ -61,7 +71,11 @@ export default function StudentsLayout({
   const getPeriodsAsTabs = (periods?: Period[]) => {
     return periods?.map((period) => ({
       key: `/faculty/${facultyId}/students/${period.id}`,
-      label: `${period.name} (${period.acronym})`,
+      label: (
+        <Link
+          href={`/faculty/${facultyId}/students/${period.id}`}
+        >{`${period.name} (${period.acronym})`}</Link>
+      ),
     }));
   };
 
@@ -125,11 +139,31 @@ export default function StudentsLayout({
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette />
+            {/* <Palette /> */}
+            <NewPeriodEnrollmentForm
+              periodsAsMenu={[...getPeriodsAsDropdownMenu(periods)!]}
+              periods={periods}
+              yearEnrollments={yearEnrollments}
+              periodEnrollments={periodEnrollments}
+              departments={departments}
+              classes={classes} // Promotions
+            />
           </Space>
         </Layout.Header>
         {/* <Typography.Title level={3}>Inscriptions</Typography.Title> */}
-        <Tabs
+        <Menu
+          mode="horizontal"
+          defaultSelectedKeys={[pathname]}
+          selectedKeys={[pathname]}
+          items={[
+            {
+              key: `/faculty/${facultyId}/students`,
+              label: <Link href={`/faculty/${facultyId}/students`}>Année</Link>,
+            },
+            ...(getPeriodsAsTabs(periods) || []),
+          ]}
+        />
+        {/* <Tabs
           items={[
             {
               key: `/faculty/${facultyId}/students`,
@@ -150,9 +184,14 @@ export default function StudentsLayout({
               classes={classes} // Promotions
             />
           }
-        />
-        <>{children}</>
-        <Layout.Footer
+        /> */}
+
+        <div
+          className="pt-4"
+          style={{ overflowY: "auto", height: "calc(100vh - 174px)" }}
+        >
+          {children}
+           <Layout.Footer
           style={{
             display: "flex",
             background: colorBgContainer,
@@ -167,6 +206,8 @@ export default function StudentsLayout({
             <Palette />
           </Space>
         </Layout.Footer>
+        </div>
+       
       </Layout.Content>
     </Layout>
   );

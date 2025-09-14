@@ -4,7 +4,6 @@ import "../styles/globals.css";
 import ClientProvider from "@/components/clientProvider";
 import { getServerSession } from "@/lib/api/auth";
 import { Suspense } from "react";
-import { LoaderProgress } from "@/components/loader";
 
 const inter = Inter({
   // variable: "--font-inter",
@@ -26,7 +25,6 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className}  antialiased`}>
-         <LoaderProgress />
         <Suspense>
           <ClientProvider session={session}>{children}</ClientProvider>
         </Suspense>

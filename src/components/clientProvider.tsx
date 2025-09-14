@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider, ThemeConfig } from "antd";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { useEffect } from "react";
+import NextTopLoader from 'nextjs-toploader';
 
 const queryClient = new QueryClient();
 
@@ -30,7 +31,10 @@ export default function ClientProvider({
 
   return (
     <>
-    
+      <NextTopLoader
+        color={themeConfig.token?.colorPrimary}
+        showSpinner={false}
+      />
       <NuqsAdapter>
         <ConfigProvider theme={themeConfig}>
           <AntdRegistry>
