@@ -186,7 +186,7 @@ export default function Page() {
           dataIndex: "matricule",
           key: "matricule",
           render: (_, record) => (
-            <Link href={`/app/student/${record.id}`}>
+            <Link href={`/student/${record.id}`}>
               {record.user.matricule.padStart(6, "0")}
             </Link>
           ),
@@ -198,7 +198,7 @@ export default function Page() {
           dataIndex: "name",
           key: "name",
           render: (value, record) => (
-            <Link href={`/app/student/${record.id}`}>
+            <Link href={`/student/${record.id}`}>
               {record.user.first_name} {record.user.last_name}{" "}
               {record.user.surname}
             </Link>
@@ -244,7 +244,7 @@ export default function Page() {
               <Button
                 color="primary"
                 variant="dashed"
-                onClick={() => router.push(`/app/student/${record.id}`)}
+                onClick={() => router.push(`/student/${record.id}`)}
                 style={{ boxShadow: "none" }}
               >
                 Gérer

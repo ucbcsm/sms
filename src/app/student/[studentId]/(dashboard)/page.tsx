@@ -47,7 +47,7 @@ export default function Page() {
     }
 
   return (
-    <Row gutter={24}>
+    <Row gutter={24} style={{marginRight:0}}>
       <Col span={18}>
         <Row gutter={[24, 24]}>
           <Col span={8}>
