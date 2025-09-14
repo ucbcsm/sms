@@ -91,12 +91,16 @@ export const getAttendanceJustifiedPercentage = (
 
 export const getAttendanceItemsFromCourseEnrollments = (
   enrollments?: CourseEnrollment[]
-): Omit<AttendanceListItem, "id" & { id?: number }>[] => {
+): Omit<
+  AttendanceListItem,
+  "id" & { id?: number; exempted_on_attendance?: boolean }
+>[] => {
   return (
     enrollments?.map((enrollment) => ({
       student: enrollment.student.year_enrollment,
       status: "present",
       note: null,
+      exempted_on_attendance: enrollment.exempted_on_attendance || false,
     })) || []
   );
 };

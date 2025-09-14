@@ -14,6 +14,8 @@ import {
 import { getHSLColor } from "@/lib/utils";
 import { AttendanceList, TaughtCourse } from "@/types";
 import {
+  CheckCircleFilled,
+  CheckCircleOutlined,
   DeleteOutlined,
   DownOutlined,
   EditOutlined,
@@ -129,7 +131,7 @@ export default function Page() {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <DatePicker placeholder="DD/MM/YYYY" format="DD/MM/YYYY" />
+            <DatePicker variant="filled" placeholder="DD/MM/YYYY" format="DD/MM/YYYY" />
           </Space>
           <div className="flex-1" />
           <Space>
@@ -140,31 +142,33 @@ export default function Page() {
                 "validated"
               )}
             />
-            <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
-              Imprimer
+            <Button icon={<CheckCircleOutlined />} style={{ boxShadow: "none" }}>
+              Rapport de présence
             </Button>
-            <Dropdown
+            {/* <Dropdown
               menu={{
                 items: [
                   {
                     key: "pdf",
-                    label: "PDF",
+                    label: "Exporter .pdf",
                     icon: <FilePdfOutlined />,
                     title: "Exporter en PDF",
                   },
                   {
                     key: "excel",
-                    label: "EXCEL",
+                    label: "Exporter .xlsx",
                     icon: <FileExcelOutlined />,
                     title: "Exporter vers Excel",
                   },
                 ],
               }}
             >
-              <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                Exporter
-              </Button>
-            </Dropdown>
+              <Button
+                type="text"
+                icon={<MoreOutlined />}
+                style={{ boxShadow: "none" }}
+              />
+            </Dropdown> */}
           </Space>
         </header>
       )}
@@ -201,13 +205,13 @@ export default function Page() {
           render: (_, record, __) =>
             getAttendanceAbsentCount(record.student_attendance_status),
         },
-        {
-          title: "Justifiées",
-          dataIndex: "justified_count",
-          key: "justified_count",
-          render: (_, record, __) =>
-            getAttendanceJustifiedCount(record.student_attendance_status),
-        },
+        // {
+        //   title: "Justifiées",
+        //   dataIndex: "justified_count",
+        //   key: "justified_count",
+        //   render: (_, record, __) =>
+        //     getAttendanceJustifiedCount(record.student_attendance_status),
+        // },
         {
           title: "Étudiants",
           dataIndex: "students",

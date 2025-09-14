@@ -66,6 +66,7 @@ import { useRouter } from "next/navigation";
 import { ListTeachingUnits } from "../courses/teaching-units/list";
 import { Palette } from "@/components/palette";
 import { parseAsInteger, useQueryState } from "nuqs";
+import Link from "next/link";
 
 type ActionsBarProps = {
   record: TaughtCourse;
@@ -110,15 +111,17 @@ const ActionsBar: FC<ActionsBarProps> = ({
         open={openDelete}
         setOpen={setOpenDelete}
       />
-      <Button
-        // type="dashed"
-        color="primary"
-        variant="dashed"
-        style={{ boxShadow: "none" }}
-        onClick={() => router.push(`/app/taught-course/${record.id}`)}
-      >
-        Gérer
-      </Button>
+      <Link href={`/taught-course/${record.id}`}>
+        <Button
+          // type="dashed"
+          color="primary"
+          variant="dashed"
+          style={{ boxShadow: "none" }}
+          // onClick={() => router.push(`/taught-course/${record.id}`)}
+        >
+          Gérer
+        </Button>
+      </Link>
       <Dropdown
         menu={{
           items: [
@@ -267,16 +270,9 @@ export default function Page() {
           }}
         >
           <Space>
-            {/* <BackButton /> */}
-            {!isPending ? (
-              <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                Cours planifiés
-              </Typography.Title>
-            ) : (
-              <Form>
-                <Skeleton.Input active />
-              </Form>
-            )}
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Cours planifiés
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
@@ -350,13 +346,13 @@ export default function Page() {
                       items: [
                         {
                           key: "pdf",
-                          label: "PDF",
+                          label: "Exporter .pdf",
                           icon: <FilePdfOutlined />,
                           title: "Exporter en PDF",
                         },
                         {
                           key: "excel",
-                          label: "EXCEL",
+                          label: "Exporter .xlsx",
                           icon: <FileExcelOutlined />,
                           title: "Exporter vers Excel",
                         },
@@ -364,11 +360,10 @@ export default function Page() {
                     }}
                   >
                     <Button
-                      icon={<DownOutlined />}
+                      type="text"
+                      icon={<MoreOutlined />}
                       style={{ boxShadow: "none" }}
-                    >
-                      Exporter
-                    </Button>
+                    />
                   </Dropdown>
                 </Space>
               </header>

@@ -96,6 +96,11 @@ export async function updateSinglePeriodEnrollment(data: {
   return res.data;
 }
 
+export async function deleteSinglePeriodEnrollment(id: number) {
+  const res = await api.delete(`/apparitorat/period-enrollment/${id}/`);
+  return res.data;
+}
+
 
 export const getPeriodEnrollmentsByStatus = (
   enrollments?: PeriodEnrollment[],

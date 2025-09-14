@@ -389,6 +389,7 @@ export const CourseEnrollment = z.object({
   date: z.date(),
   course: TaughtCourse,
   status: z.enum(["pending", "validated", "rejected"]).nullable(),
+  exempted_on_attendance: z.boolean(),
 });
 
 export type CourseEnrollment = z.infer<typeof CourseEnrollment>;

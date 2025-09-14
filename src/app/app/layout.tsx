@@ -1,6 +1,7 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/languageSwitcher";
+import { SupportDrawer } from "@/components/support-drawer";
 import { YearSelector } from "@/components/yearSelector";
 import { useYid } from "@/hooks/use-yid";
 import { getFaculties } from "@/lib/api";
@@ -102,27 +103,27 @@ export default function AppLayout({
           items={[
             {
               key: "/app",
-              label: "Tableau de bord",
+              label: <Link href={`/app`}>Tableau de bord</Link>,
               icon: <DashboardOutlined />,
             },
             {
               key: "/app/enrollments",
-              label: "Inscriptions",
+              label: <Link href={`/app/enrollments`}>Inscriptions</Link>,
               icon: <SafetyCertificateOutlined />,
             },
             {
               key: "/app/students",
-              label: "Étudiants",
+              label: <Link href={`/app/students`}>Étudiants</Link>,
               icon: <UsergroupAddOutlined />,
             },
             {
               key: "/app/teachers",
-              label: "Enseigants",
+              label: <Link href={`/app/teachers`}>Enseigants</Link>,
               icon: <TeamOutlined />,
             },
             {
               key: "/app/finances",
-              label: "Finances",
+              label: <Link href={`/app/finances`}>Finances</Link>,
               icon: <DollarOutlined />,
             },
             {
@@ -137,21 +138,21 @@ export default function AppLayout({
               children: [
                 {
                   key: "/app/announcements",
-                  label: "Annonces",
+                  label: <Link href={`/app/announcements`}>Annonces</Link>,
                   icon: <NotificationOutlined />,
                 },
                 {
                   key: "/console",
-                  label: "Paramètres",
+                  label: <Link href={`/console`}>Paramètres</Link>,
                   icon: <SettingOutlined />,
                 },
               ],
             },
           ]}
           style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-          onClick={({ key }) => {
-            router.push(key);
-          }}
+          // onClick={({ key }) => {
+          //   router.push(key);
+          // }}
         />
         <Space>
           <YearSelector />
@@ -205,9 +206,7 @@ export default function AppLayout({
           <Link href="/console">
             <Button type="text" icon={<SettingOutlined />} />
           </Link>
-          <Link href="/app/support">
-            <Button type="text" icon={<QuestionOutlined />}></Button>
-          </Link>
+          <SupportDrawer />
           <LanguageSwitcher />
         </Space>
       </Layout.Header>

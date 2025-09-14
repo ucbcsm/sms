@@ -206,7 +206,7 @@ export function YearSelector() {
               Academic Workspace
             </Typography.Title>
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} UCBC. Tous droits réservés.
             </Typography.Text>
           </Flex>
         )}

@@ -1,11 +1,11 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/languageSwitcher";
+import { SupportDrawer } from "@/components/support-drawer";
 import { YearSelector } from "@/components/yearSelector";
 import { useYid } from "@/hooks/use-yid";
 import { getDepartmentsByFacultyId, getFaculty } from "@/lib/api";
 import { logout } from "@/lib/api/auth";
-import { useSessionStore } from "@/store";
 import {
   LoadingOutlined,
   LogoutOutlined,
@@ -47,14 +47,14 @@ export default function FacultyLayout({
   const { removeYid } = useYid();
 
   const {
-      data: faculty,
-      isPending,
-      isError,
-    } = useQuery({
-      queryKey: ["faculty", facultyId],
-      queryFn: ({ queryKey }) => getFaculty(Number(queryKey[1])),
-      enabled: !!facultyId,
-    });
+    data: faculty,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["faculty", facultyId],
+    queryFn: ({ queryKey }) => getFaculty(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
 
   const router = useRouter();
   const pathname = usePathname();
@@ -68,7 +68,11 @@ export default function FacultyLayout({
   const getDepartmentsAsMenu = () => {
     const menu = departments?.map((dep) => ({
       key: `/faculty/${dep.faculty.id}/department/${dep.id}`,
-      label: dep.name,
+      label: (
+        <Link href={`/faculty/${dep.faculty.id}/department/${dep.id}`}>
+          {dep.name}
+        </Link>
+      ),
       icon: <SubnodeOutlined />,
     }));
     return menu;
@@ -106,9 +110,7 @@ export default function FacultyLayout({
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
-          <Typography.Text type="secondary">
-           {faculty?.acronym}
-          </Typography.Text>
+          <Typography.Text type="secondary">{faculty?.acronym}</Typography.Text>
         </Space>
 
         {/* <Menu
@@ -143,7 +145,7 @@ export default function FacultyLayout({
             router.push(key);
           }}
         /> */}
-        <div className="flex-1"/>
+        <div className="flex-1" />
         <Space>
           <YearSelector />
           <Dropdown
@@ -193,14 +195,13 @@ export default function FacultyLayout({
               icon={<UserOutlined />}
             />
           </Dropdown>
-          <Link href="/app/support">
-            <Button type="text" icon={<QuestionOutlined />}></Button>
-          </Link>
+
+          <SupportDrawer />
           <LanguageSwitcher />
         </Space>
       </Layout.Header>
       <Layout>
-      <Layout.Sider
+        <Layout.Sider
           width={260}
           style={{
             borderRight: `1px solid ${colorBorderSecondary}`,
@@ -216,44 +217,63 @@ export default function FacultyLayout({
               theme="light"
               style={{ height: "100%", borderRight: 0 }}
               defaultSelectedKeys={[pathname]}
-          selectedKeys={[pathname]}
-          overflowedIndicator={<MenuOutlined />}
-          items={[
-              {
+              selectedKeys={[pathname]}
+              overflowedIndicator={<MenuOutlined />}
+              items={[
+                {
                   key: `/`,
                   label: "Menu",
                   type: "group",
-                  children:[
-            {
-              key: `/faculty/${facultyId}`,
-              label: "Aperçu",
-            },
-            { key: `/faculty/${facultyId}/students`, label: "Étudiants" },
-            {
-              key: `/faculty/${facultyId}/taught-courses`,
-              label: "Cours planifiés",
-            },
-            {
-              key: `/faculty/${facultyId}/courses`,
-              label: "Catalogue & UE",
-            },
-            {
-              key: `departments`,
-              label: "Mentions",
-              //  icon: <BranchesOutlined />,
-              children: getDepartmentsAsMenu(),
-            },
-            {
-              key: `/faculty/${facultyId}/class-presidents`,
-              label:"Chefs de promotion"
-            }
-          ]
-          }
-          ]}
-          // style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-          onClick={({ key }) => {
-            router.push(key);
-          }}
+                  children: [
+                    {
+                      key: `/faculty/${facultyId}`,
+                      label: <Link href={`/faculty/${facultyId}`}>Aperçu</Link>,
+                    },
+                    {
+                      key: `/faculty/${facultyId}/students`,
+                      label: (
+                        <Link href={`/faculty/${facultyId}/students`}>
+                          Étudiants
+                        </Link>
+                      ),
+                    },
+                    {
+                      key: `/faculty/${facultyId}/taught-courses`,
+                      label: (
+                        <Link href={`/faculty/${facultyId}/taught-courses`}>
+                          Cours planifiés
+                        </Link>
+                      ),
+                    },
+                    {
+                      key: `/faculty/${facultyId}/courses`,
+                      label: (
+                        <Link href={`/faculty/${facultyId}/courses`}>
+                          Catalogue & UE
+                        </Link>
+                      ),
+                    },
+                    {
+                      key: `departments`,
+                      label: "Mentions",
+                      //  icon: <BranchesOutlined />,
+                      children: getDepartmentsAsMenu(),
+                    },
+                    {
+                      key: `/faculty/${facultyId}/class-presidents`,
+                      label: (
+                        <Link href={`/faculty/${facultyId}/class-presidents`}>
+                          Chefs de promotion
+                        </Link>
+                      ),
+                    },
+                  ],
+                },
+              ]}
+              // style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
+              // onClick={({ key }) => {
+              //   router.push(key);
+              // }}
             />
 
             {/* {
@@ -285,15 +305,15 @@ export default function FacultyLayout({
             </Layout.Footer> */}
           </Layout>
         </Layout.Sider>
-      <Layout.Content>
-        <div
-          style={{
-            background: colorBgContainer,
-            minHeight: 280,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          {/* <Menu
+        <Layout.Content>
+          <div
+            style={{
+              background: colorBgContainer,
+              minHeight: 280,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            {/* <Menu
           mode="horizontal"
           theme="light"
           defaultSelectedKeys={[pathname]}
@@ -331,47 +351,47 @@ export default function FacultyLayout({
             router.push(key);
           }}
         /> */}
-          {children}
-          <div
-            className=""
-            style={{
-              display: isLoadingLogout ? "flex" : "none",
-              flexDirection: "column",
-              background: "#fff",
-              position: "fixed",
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              zIndex: 99,
-              height: "100vh",
-              width: "100%",
-            }}
-          >
+            {children}
             <div
+              className=""
               style={{
-                width: 440,
-                margin: "auto",
-                display: "flex",
+                display: isLoadingLogout ? "flex" : "none",
                 flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
+                background: "#fff",
+                position: "fixed",
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 99,
+                height: "100vh",
+                width: "100%",
               }}
             >
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-              />
-              <Typography.Title
-                type="secondary"
-                level={3}
-                style={{ marginTop: 10 }}
+              <div
+                style={{
+                  width: 440,
+                  margin: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                Déconnexion en cours ...
-              </Typography.Title>
+                <Spin
+                  indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
+                />
+                <Typography.Title
+                  type="secondary"
+                  level={3}
+                  style={{ marginTop: 10 }}
+                >
+                  Déconnexion en cours ...
+                </Typography.Title>
+              </div>
             </div>
           </div>
-        </div>
-      </Layout.Content>
+        </Layout.Content>
       </Layout>
     </Layout>
   );

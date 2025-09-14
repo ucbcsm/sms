@@ -18,6 +18,7 @@ import { RejectSinglePeriodEnrollmentForm } from "./forms/decisions/reject";
 import {
   CheckOutlined,
   CloseOutlined,
+  DeleteOutlined,
   HourglassOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
@@ -26,6 +27,7 @@ import {
   getApplicationStatusName,
   getApplicationStatusTypographyType,
 } from "@/lib/api";
+import { DeleteSinglePeriodEnrollmentForm } from "./forms/decisions/delete";
 
 type ListPeriodEnrollmentItemProps = {
   item: PeriodEnrollment;
@@ -40,6 +42,7 @@ export const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
   const [openPending, setOpenPending] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <>
@@ -56,6 +59,11 @@ export const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
       <RejectSinglePeriodEnrollmentForm
         open={openReject}
         setOpen={setOpenReject}
+        enrollment={item}
+      />
+      <DeleteSinglePeriodEnrollmentForm
+        open={openDelete}
+        setOpen={setOpenDelete}
         enrollment={item}
       />
 
@@ -92,7 +100,15 @@ export const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
                       danger: true,
                     }
                   : null,
-              ],
+                item.status === "rejected"
+                  ? {
+                      key: "delete",
+                      label: "Supprimer",
+                      icon: <DeleteOutlined />,
+                      danger: true,
+                    }
+                  : null,
+              ].filter(Boolean) as any[],
               onClick: ({ key }) => {
                 if (key === "pending") {
                   setOpenPending(true);
@@ -100,6 +116,8 @@ export const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
                   setOpenReject(true);
                 } else if (key === "validate") {
                   setOpenValidate(true);
+                } else if (key === "delete") {
+                  setOpenDelete(true);
                 }
               },
             }}

@@ -411,7 +411,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                     />
                   </Flex>
                 </Card>
-                <Card>
+                {/* <Card>
                   <Flex justify="space-between">
                     <Statistic
                       loading={isPending}
@@ -428,7 +428,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                       strokeColor="#faad14"
                     />
                   </Flex>
-                </Card>
+                </Card> */}
               </Flex>
             </Col>
           </Row>

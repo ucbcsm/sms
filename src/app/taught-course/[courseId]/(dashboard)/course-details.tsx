@@ -22,7 +22,6 @@ type TaughtCourseDetailsProps = {
   data?: TaughtCourse;
   isError: boolean;
   departments?: Department[];
-  faculties?: Faculty[];
   courses?: Course[];
   teachers?: Teacher[];
   periods?: Period[];
@@ -33,7 +32,6 @@ type TaughtCourseDetailsProps = {
 export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
   data,
   isError,
-  faculties,
   departments,
   teachers,
   periods,

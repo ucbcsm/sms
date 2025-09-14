@@ -19,7 +19,6 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
   editRecordStatus,
 }) => {
 
-
   return (
     <Table
       title={() => (

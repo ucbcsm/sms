@@ -27,6 +27,7 @@ import {
   theme,
   Typography,
 } from "antd";
+import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -166,50 +167,66 @@ export default function ConsoleLayout({
                   children: [
                     {
                       key: `/console`,
-                      label: "Profile",
+                      label: <Link href={`/console`}>Profile</Link>,
                       icon: <HomeOutlined />,
                     },
                     {
                       key: `/console/years`,
-                      label: "Années",
+                      label: <Link href={`/console/years`}>Années</Link>,
                       icon: <ClockCircleOutlined />,
                       className: "normal-case",
                     },
                     {
                       key: `/console/fields`,
-                      label: "Filières & Mentions",
+                      label: (
+                        <Link href={`/console/fields`}>
+                          Filières & Mentions
+                        </Link>
+                      ),
                       icon: <ApartmentOutlined />,
                       className: "normal-case",
                     },
                     {
                       key: "/console/enrollment-form",
-                      label: "Formulaire d'inscription",
+                      label: (
+                        <Link href={`/console/enrollment-form`}>
+                          Formulaire d&apos;inscription
+                        </Link>
+                      ),
                       icon: <CheckCircleOutlined />,
                       className: "normal-case",
                     },
                     {
                       key: `/console/evaluation-form`,
-                      label: "Formulaire d'évaluation",
+                      label: (
+                        <Link href={`/console/evaluation-form`}>
+                          Formulaire d&apos;évaluation
+                        </Link>
+                      ),
                       icon: <ReadOutlined />,
                       className: "normal-case",
                     },
                     {
                       key: "/console/classrooms",
-                      label: "Salles de classe",
+                      label: (
+                        <Link href={`/console/classrooms`}>
+                          Salles de classe
+                        </Link>
+                      ),
                       icon: <TagsOutlined />,
                       className: "normal-case",
                     },
                     {
                       key: "/console/users",
-                      label: "Comptes",
+                      label: <Link href={`/console/users`}>Comptes</Link>,
                       icon: <TeamOutlined />,
                     },
                   ],
                 },
               ]}
-              onClick={({ key }) => {
-                router.push(key);
-              }}
+              // onClick={({ key }) => {
+              //   router.push(key);
+              // }}
             />
 
             {/* {

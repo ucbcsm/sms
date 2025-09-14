@@ -5,7 +5,7 @@ import { Radio, Space } from "antd";
 import { FC } from "react";
 
 type AttendanceControllerProps = {
-  record: Omit<AttendanceListItem, "id" & { id?: number }>;
+  record: Omit<AttendanceListItem, "id" & { id?: number,  }>;
   index: number;
   editRecordStatus: (
     status: "present" | "absent" | "justified",
@@ -21,10 +21,11 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
   return (
     <Space size="middle">
       <Radio.Group
+        // disabled={record.exempted_on_attendance}
         options={[
           { value: "present", label: "Présent" },
           { value: "absent", label: "Absent" },
-          { value: "justified", label: "Justifié" },
+          // { value: "justified", label: "Justifié" },
         ]}
         onChange={(e) => {
           editRecordStatus(e.target.value, index);

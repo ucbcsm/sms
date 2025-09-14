@@ -29,6 +29,7 @@ import {
   Col,
   Descriptions,
   Flex,
+  Layout,
   List,
   Progress,
   Row,
@@ -136,7 +137,7 @@ export default function Page() {
   }
 
   return (
-    <Row gutter={24}>
+    <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
       <Col span={16}>
         <Row gutter={[16, 16]}>
           <Col span={8}>

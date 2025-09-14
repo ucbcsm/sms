@@ -401,7 +401,7 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                     />
                   </Flex>
                 </Card>
-                <Card>
+                {/* <Card>
                   <Flex justify="space-between">
                     <Statistic
                       loading={isPending}
@@ -419,7 +419,7 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                       
                     />
                   </Flex>
-                </Card>
+                </Card> */}
               </Flex>
             </Col>
           </Row>
