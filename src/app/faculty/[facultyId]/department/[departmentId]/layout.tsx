@@ -5,6 +5,7 @@ import {
   Card,
   Form,
   Layout,
+  Menu,
   Skeleton,
   Space,
   theme,
@@ -16,6 +17,7 @@ import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getDepartment } from "@/lib/api";
+import Link from "next/link";
 
 export default function DepartmentLayout({
   children,
@@ -75,32 +77,27 @@ export default function DepartmentLayout({
             <Palette />
           </Space>
         </Layout.Header>
-        <Card
-          // style={{ borderRadius: 0 }}
-          // title={
-          //   <Typography.Title level={3}>
-          //     {department?.name} (Département)
-          //   </Typography.Title>
-          // }
-          // tabBarExtraContent={
-          //   <Space>
-          //     <Button
-          //       type="dashed"
-          //       title="Programmer un cours"
-          //       style={{ boxShadow: "none" }}
-          //     >
-          //       Programmer un cours
-          //     </Button>
-          //   </Space>
-          // }
-          tabList={[
+        <Menu
+          mode="horizontal"
+          selectedKeys={[pathname]}
+          items={[
             {
               key: `/faculty/${facultyId}/department/${departmentId}`,
-              label: "Aperçu",
+              label: (
+                <Link href={`/faculty/${facultyId}/department/${departmentId}`}>
+                  Aperçu
+                </Link>
+              ),
             },
             {
               key: `/faculty/${facultyId}/department/${departmentId}/students`,
-              label: "Étudiants",
+              label: (
+                <Link
+                  href={`/faculty/${facultyId}/department/${departmentId}/students`}
+                >
+                  Étudiants
+                </Link>
+              ),
             },
             // {
             //   key: `/faculty/${facultyId}/department/${departmentId}/classes`,
@@ -108,107 +105,55 @@ export default function DepartmentLayout({
             // },
             {
               key: `/faculty/${facultyId}/department/${departmentId}/programs`,
-              label: "Programmes",
+              label: (
+                <Link
+                  href={`/faculty/${facultyId}/department/${departmentId}/programs`}
+                >
+                  Programmes
+                </Link>
+              ),
             },
             {
               key: `/faculty/${facultyId}/department/${departmentId}/taught-courses`,
-              label: "Cours planifiés",
+              label: (
+                <Link
+                  href={`/faculty/${facultyId}/department/${departmentId}/taught-courses`}
+                >
+                  Cours planifiés
+                </Link>
+              ),
             },
             // {
             //   key: `/faculty/${facultyId}/department/${departmentId}/teachers`,
             //   label: "Enseignants",
             // },
           ]}
-          defaultActiveTabKey={pathname}
-          activeTabKey={pathname}
-          onTabChange={(key) => {
-            router.push(key);
+        />
+        <div
+          style={{
+            overflowY: "auto",
+            height: "calc(100vh - 174px)",
+            paddingTop: 16,
           }}
         >
           {children}
-        </Card>
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: "24px 0",
-          }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
+          <Layout.Footer
+            style={{
+              display: "flex",
+              background: colorBgContainer,
+              padding: "24px 0",
+            }}
+          >
+            <Typography.Text type="secondary">
+              © {new Date().getFullYear()} UCBC. Tous droits réservés.
+            </Typography.Text>
+            <div className="flex-1" />
+            <Space>
+              <Palette />
+            </Space>
+          </Layout.Footer>
+        </div>
       </Layout.Content>
-      {/* <Layout.Sider
-        width={280}
-        theme="light"
-        style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
-      >
-        <Card
-          variant="borderless"
-          title="Personnel"
-          style={{ boxShadow: "none" }}
-          extra={
-            <Button
-              type="link"
-              icon={<PlusCircleOutlined />}
-              title="Ajouter un membre du personnel"
-            >
-              Ajouter
-            </Button>
-          }
-        >
-          <List
-            dataSource={[
-              {
-                id: "1",
-                name: "Dr. Alfred L.",
-                role: "Responsable",
-              },
-              {
-                id: "2",
-                name: "Mme. Sophie K.",
-                role: "Secrétaire académique",
-              },
-              {
-                id: "3",
-                name: "M. Jean P.",
-                role: "Chargé des finances",
-              },
-              {
-                id: "4",
-                name: "Mme. Claire T.",
-                role: "Coordonnatrice des cours",
-              },
-              {
-                id: "5",
-                name: "M. David M.",
-                role: "Technicien informatique",
-              },
-            ]}
-            renderItem={(item, index) => (
-              <List.Item
-                key={item.id}
-                extra={<Button type="text" icon={<RightOutlined />} />}
-              >
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-                    />
-                  }
-                  title={<Link href="#">{item.name}</Link>}
-                  description={item.role}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
-      </Layout.Sider> */}
     </Layout>
   );
 }

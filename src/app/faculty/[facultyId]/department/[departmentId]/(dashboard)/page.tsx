@@ -69,7 +69,7 @@ export default function Page() {
   }
 
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[16, 16]} style={{marginRight:0}}>
       <Col xs={24} sm={24} md={16}>
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>

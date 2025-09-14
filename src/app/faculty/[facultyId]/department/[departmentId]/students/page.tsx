@@ -83,14 +83,7 @@ export default function Page() {
                 Exporter
               </Button>
             </Dropdown>
-            <Radio.Group>
-              <Radio.Button value="grid">
-                <AppstoreOutlined />
-              </Radio.Button>
-              <Radio.Button value="list">
-                <UnorderedListOutlined />
-              </Radio.Button>
-            </Radio.Group>
+           
           </Space>
         </header>
       )}
