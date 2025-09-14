@@ -20,6 +20,7 @@ import {
 } from "antd";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { StudentProfileDetails } from "./profile/profileDetails";
+import Link from "next/link";
 
 export default function StudentLayout({
   children,
@@ -92,41 +93,59 @@ export default function StudentLayout({
             />
           </Space>
         </Layout.Header>
-        <Tabs
-          moreIcon={<MoreOutlined />}
-          defaultActiveKey={pathname}
-          accessKey={pathname}
-          onTabClick={(key) => {
-            router.push(key);
-          }}
+        <Menu
+          mode="horizontal"
+          selectedKeys={[pathname]}
           items={[
             {
               key: `/app/students/${studentId}`,
-              label: "Aperçu",
+              label: <Link href={`/app/students/${studentId}`}>Aperçu</Link>,
             },
             {
               key: `/app/students/${studentId}/fees`,
-              label: "Frais & Paiements",
+              label: (
+                <Link href={`/app/students/${studentId}/fees`}>
+                  Frais & Paiements
+                </Link>
+              ),
             },
             {
               key: `/app/students/${studentId}/documents`,
-              label: "Documents",
+              label: (
+                <Link href={`/app/students/${studentId}/documents`}>
+                  Documents
+                </Link>
+              ),
             },
             {
               key: `/app/students/${studentId}/health`,
-              label: "Santé",
+              label: (
+                <Link href={`/app/students/${studentId}/health`}>Santé</Link>
+              ),
             },
             {
               key: `/app/students/${studentId}/discipline`,
-              label: "Discipline",
+              label: (
+                <Link href={`/app/students/${studentId}/discipline`}>
+                  Discipline
+                </Link>
+              ),
             },
             {
               key: `/app/students/${studentId}/path`,
-              label: "Parcours académique",
+              label: (
+                <Link href={`/app/students/${studentId}/path`}>
+                  Parcours académique
+                </Link>
+              ),
             },
             {
               key: `/app/students/${studentId}/student-card`,
-              label: "Carte d'étudiant",
+              label: (
+                <Link href={`/app/students/${studentId}/student-card`}>
+                  Carte d&apos;étudiant
+                </Link>
+              ),
             },
             { key: "form", label: "Attestation d'admission", disabled: true },
             { key: "transcript", label: "Relevé de notes", disabled: true },
@@ -146,23 +165,30 @@ export default function StudentLayout({
           ]}
         />
 
-        {children}
-
-        <Layout.Footer
+        <div
           style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: " 24px 0",
+            paddingTop: 24,
+            overflow: "auto",
+            height: "calc(100vh - 174px)",
           }}
         >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
+          {children}
+          <Layout.Footer
+            style={{
+              display: "flex",
+              background: colorBgContainer,
+              padding: " 24px 0",
+            }}
+          >
+            <Typography.Text type="secondary">
+              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            </Typography.Text>
+            <div className="flex-1" />
+            <Space>
+              <Palette />
+            </Space>
+          </Layout.Footer>
+        </div>
       </Layout.Content>
       <Layout.Sider
         width={280}
