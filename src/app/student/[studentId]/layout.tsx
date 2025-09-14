@@ -2,7 +2,7 @@
 import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
 import { getYearEnrollment } from "@/lib/api";
-import { MoreOutlined } from "@ant-design/icons";
+import { CloseOutlined, MoreOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -101,21 +101,12 @@ export default function StudentLayout({
           </Space>
           <div className="flex-1" />
           <Space>
-            <Dropdown
-              menu={{
-                items: [
-                  { key: "form", label: "Attestation d'admission" },
-                  { key: "transcript", label: "Relevé de notes" },
-                  { key: "certificate", label: "Certificat de scolarité" },
-                  { key: "schedule", label: "Attestation de fréquentation" },
-                  { key: "diploma", label: "Diplôme" },
-                  { key: "report", label: "Rapport de stage" },
-                  { key: "rules", label: "Règlement intérieur" },
-                ],
-              }}
-            >
-              <Button type="text" icon={<MoreOutlined />} />
-            </Dropdown>
+            <Typography.Text type="secondary">
+              {enrolledStudent?.academic_year.name}
+            </Typography.Text>
+            <Link href={`/faculty/${enrolledStudent?.faculty.id}/students`}>
+              <Button type="text" icon={<CloseOutlined />} title="Quitter le compte" />
+            </Link>
           </Space>
         </Layout.Header>
         <Menu
@@ -188,6 +179,21 @@ export default function StudentLayout({
                 </Link>
               ),
             },
+            { key: "form", label: "Attestation d'admission", disabled: true },
+            { key: "transcript", label: "Relevé de notes", disabled: true },
+            {
+              key: "certificate",
+              label: "Certificat de scolarité",
+              disabled: true,
+            },
+            {
+              key: "schedule",
+              label: "Attestation de fréquentation",
+              disabled: true,
+            },
+            { key: "diploma", label: "Diplôme", disabled: true },
+            { key: "report", label: "Rapport de stage", disabled: true },
+            { key: "rules", label: "Règlement intérieur", disabled: true },
           ]}
         />
         <div
