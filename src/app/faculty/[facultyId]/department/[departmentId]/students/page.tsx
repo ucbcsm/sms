@@ -83,7 +83,6 @@ export default function Page() {
                 Exporter
               </Button>
             </Dropdown>
-           
           </Space>
         </header>
       )}
@@ -160,15 +159,17 @@ export default function Page() {
           key: "actions",
           render: (_, record, __) => (
             <Space>
-              <Button
-                color="primary"
-                variant="dashed"
-                onClick={() => router.push(`/student/${record.id}`)}
-                style={{ boxShadow: "none" }}
-              >
-                Gérer
-              </Button>
-              <Dropdown
+              <Link href={`/student/${record.id}`}>
+                <Button
+                  color="primary"
+                  variant="dashed"
+                  // onClick={() => router.push(`/student/${record.id}`)}
+                  style={{ boxShadow: "none" }}
+                >
+                  Gérer
+                </Button>
+              </Link>
+              {/* <Dropdown
                 menu={{
                   items: [
                     { key: "1", label: "Action 1" },
@@ -178,17 +179,18 @@ export default function Page() {
                 }}
               >
                 <Button type="text" icon={<MoreOutlined />} />
-              </Dropdown>
+              </Dropdown> */}
             </Space>
           ),
           width: 120,
         },
       ]}
       rowKey="id"
-      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      rowClassName={`bg-white odd:bg-[#f5f5f5]`}
       rowSelection={{
         type: "checkbox",
       }}
+      scroll={{ y: "calc(100vh - 348px)" }}
       size="small"
       pagination={{
         defaultPageSize: 25,

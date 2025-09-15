@@ -173,145 +173,119 @@ export default function Page() {
             <Palette />
           </Space>
         </Layout.Header>
-        {/* <Row> */}
-        {/* <Col span={16}> */}
-        <Card>
-          <Table
-            title={() => (
-              <header className="flex pb-3">
-                <Space>
-                  <Input.Search
-                    placeholder="Rechercher un cours dans le catalogue ..."
-                    onChange={(e) => {
-                      setPage(0)
-                      setSearch(e.target.value);
-                    }}
-                    allowClear
-                    variant="filled"
-                  />
-                </Space>
-                <div className="flex-1" />
-                <Space>
-                  <NewCourseForm
+
+        <Table
+          title={() => (
+            <header className="flex pb-3">
+              <Space>
+                <Input.Search
+                  placeholder="Rechercher un cours dans le catalogue ..."
+                  onChange={(e) => {
+                    setPage(0);
+                    setSearch(e.target.value);
+                  }}
+                  allowClear
+                  variant="filled"
+                />
+              </Space>
+              <div className="flex-1" />
+              <Space>
+                <NewCourseForm
+                  faculties={faculties?.filter(
+                    (fac) => fac.id === Number(facultyId)
+                  )}
+                />
+                <Button
+                  icon={<PrinterOutlined />}
+                  style={{ boxShadow: "none" }}
+                >
+                  Imprimer
+                </Button>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: "pdf",
+                        label: "PDF",
+                        icon: <FilePdfOutlined />,
+                        title: "Exporter en PDF",
+                      },
+                      {
+                        key: "excel",
+                        label: "EXCEL",
+                        icon: <FileExcelOutlined />,
+                        title: "Exporter vers Excel",
+                      },
+                    ],
+                  }}
+                >
+                  <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
+                    Exporter
+                  </Button>
+                </Dropdown>
+              </Space>
+            </header>
+          )}
+          dataSource={data?.results}
+          columns={[
+            {
+              title: "Titre du cours",
+              dataIndex: "title",
+              key: "title",
+              render: (_, record, __) => record.name,
+            },
+            {
+              title: "Code",
+              dataIndex: "code",
+              key: "code",
+              width: 100,
+            },
+            {
+              title: "Nature",
+              dataIndex: "course_type",
+              key: "type",
+              render: (_, record, __) => getCourseTypeName(record.course_type),
+              // width:100,
+              ellipsis: true,
+            },
+            {
+              title: "",
+              key: "actions",
+              render: (_, record, __) => {
+                return (
+                  <ActionsBar
+                    record={record}
                     faculties={faculties?.filter(
                       (fac) => fac.id === Number(facultyId)
                     )}
                   />
-                  <Button
-                    icon={<PrinterOutlined />}
-                    style={{ boxShadow: "none" }}
-                  >
-                    Imprimer
-                  </Button>
-                  <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          key: "pdf",
-                          label: "PDF",
-                          icon: <FilePdfOutlined />,
-                          title: "Exporter en PDF",
-                        },
-                        {
-                          key: "excel",
-                          label: "EXCEL",
-                          icon: <FileExcelOutlined />,
-                          title: "Exporter vers Excel",
-                        },
-                      ],
-                    }}
-                  >
-                    <Button
-                      icon={<DownOutlined />}
-                      style={{ boxShadow: "none" }}
-                    >
-                      Exporter
-                    </Button>
-                  </Dropdown>
-                </Space>
-              </header>
-            )}
-            dataSource={data?.results}
-            columns={[
-              {
-                title: "Titre du cours",
-                dataIndex: "title",
-                key: "title",
-                render: (_, record, __) => record.name,
+                );
               },
-              {
-                title: "Code",
-                dataIndex: "code",
-                key: "code",
-                width: 100,
-              },
-              {
-                title: "Nature",
-                dataIndex: "course_type",
-                key: "type",
-                render: (_, record, __) =>
-                  getCourseTypeName(record.course_type),
-                // width:100,
-                ellipsis: true,
-              },
-              {
-                title: "",
-                key: "actions",
-                render: (_, record, __) => {
-                  return (
-                    <ActionsBar
-                      record={record}
-                      faculties={faculties?.filter(
-                        (fac) => fac.id === Number(facultyId)
-                      )}
-                    />
-                  );
-                },
-                width: 50,
-              },
-            ]}
-            rowKey="id"
-            rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-            rowSelection={{
-              type: "checkbox",
-            }}
-            size="small"
-            loading={isPendngCourses}
-            pagination={{
-              defaultPageSize: 25,
-              pageSizeOptions: [25, 50, 75, 100],
-              size: "small",
-              showSizeChanger: true,
-              current: page !== 0 ? page : 1,
-              pageSize: pageSize !== 0 ? pageSize : 25,
-              total: data?.count,
-              onChange: (page, pageSize) => {
-                setPage(page);
-                setPageSize(pageSize);
-              },
-            }}
-          />
-        </Card>
-        {/* </Col> */}
-        {/* <Col span={8}>
-            <ListTeachingUnits cycles={cycles} />
-          </Col> */}
-        {/* </Row> */}
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: "24px 0",
+              width: 50,
+            },
+          ]}
+          rowKey="id"
+          rowClassName={`bg-white odd:bg-[#f5f5f5]`}
+          rowSelection={{
+            type: "checkbox",
           }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
+          scroll={{ y: "calc(100vh - 283px)" }}
+          size="small"
+          loading={isPendngCourses}
+          pagination={{
+            defaultPageSize: 25,
+            pageSizeOptions: [25, 50, 75, 100],
+            size: "small",
+            showSizeChanger: true,
+            current: page !== 0 ? page : 1,
+            pageSize: pageSize !== 0 ? pageSize : 25,
+            total: data?.count,
+            onChange: (page, pageSize) => {
+              setPage(page);
+              setPageSize(pageSize);
+            },
+          }}
+        />
       </Layout.Content>
       <Layout.Sider
         width={300}
@@ -319,8 +293,6 @@ export default function Page() {
           borderLeft: `1px solid ${colorBorderSecondary}`,
           // paddingTop: 20,
           background: colorBgContainer,
-          height: `calc(100vh - 64px)`,
-          overflow: "auto",
         }}
       >
         <ListTeachingUnits cycles={cycles} />

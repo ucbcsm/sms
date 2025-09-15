@@ -70,6 +70,13 @@ export function getCurrentFacultiesAsOptions(faculties?: Faculty[]) {
   });
 }
 
+export function getFacultiesAsDropdownMenu(faculties?: Faculty[]) {
+  return faculties?.map((faculty) => ({
+    key: `${faculty.id}`,
+    label: faculty.name,
+  }));
+}
+
 export async function getFacultyDashboard(yearId: number, facultyId: number) {
   const res = await api.get(
     `/faculty/faculty-dashboard/?academic_year__id=${yearId}&faculty__id=${facultyId}`

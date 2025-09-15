@@ -220,6 +220,7 @@ export const ListNewPeriodEnrollments: FC<ListNewPeriodEnrollmentsProps> = ({
       }}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      scroll={{ y: 'calc(100vh - 270px)' }}
       size="small"
       pagination={false}
       onRow={(record) => ({

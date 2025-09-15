@@ -195,7 +195,7 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
         }
       >
         <div style={{ maxWidth: 1400, margin: "auto" }}>
-          <Alert
+          {/* <Alert
             type="info"
             icon={<BulbOutlined />}
             message="Instructions d'inscription"
@@ -215,7 +215,7 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
             showIcon
             closable
             style={{ marginBottom: 24 }}
-          />
+          /> */}
           <Row gutter={[24, 24]}>
             <Col span={16}>
               <Card>
@@ -232,20 +232,20 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
                   setClassFilterValueId={setClassFilterValueId}
                 />
               </Card>
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   padding: "24px 0",
                 }}
               >
                 <Typography.Text type="secondary">
-                  © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+                  © {new Date().getFullYear()} UCBC. Tous droits réservés.
                 </Typography.Text>
                 <div className="flex-1" />
                 <Space>
                   <Palette />
                 </Space>
-              </div>
+              </div> */}
             </Col>
             <Col span={8}>
               <Flex vertical gap={16}>

@@ -4,9 +4,11 @@ import { Button, Dropdown, Form, Layout, Skeleton, Space, theme, Typography } fr
 import { ListStudents } from "./_components/list-students";
 import { UserAddOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { getFaculties } from "@/lib/api";
+import { getFaculties, getFacultiesAsDropdownMenu } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
+  const router = useRouter();
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -34,11 +36,15 @@ export default function Page() {
           {!isPendingFaculties ? (
             <Dropdown
               menu={{
-                items: [],
+                items: [...(getFacultiesAsDropdownMenu(faculties) || [])],
+                onClick:({key})=>{
+                  router.push(`/faculty/${key}/students`);
+                }
               }}
             >
               <Button
-                type="primary"
+                color="primary"
+                variant="dashed"
                 icon={<UserAddOutlined />}
                 style={{ boxShadow: "none" }}
               >

@@ -171,7 +171,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
         }
       >
         <div style={{ maxWidth: 1400, margin: "auto" }}>
-          <Alert
+          {/* <Alert
             type="info"
             icon={<BulbOutlined />}
             message="Instructions d'inscription"
@@ -195,7 +195,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
             showIcon
             closable
             style={{ marginBottom: 24 }}
-          />
+          /> */}
           <Row gutter={[24, 24]}>
             <Col span={16}>
               <Card>
@@ -213,7 +213,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
                 />
               </Card>
 
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   // background: colorBgContainer,
@@ -227,7 +227,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
                 <Space>
                   <Palette />
                 </Space>
-              </div>
+              </div> */}
             </Col>
             <Col span={8}>
               <Flex vertical gap={16}>

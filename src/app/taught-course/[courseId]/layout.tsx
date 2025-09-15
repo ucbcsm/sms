@@ -249,7 +249,7 @@ export default function FacultyLayout({
           }}
         >
           {children}
-          <Layout.Footer
+          {/* <Layout.Footer
             style={{
               display: "flex",
               background: colorBgContainer,
@@ -263,7 +263,7 @@ export default function FacultyLayout({
             <Space>
               <Palette />
             </Space>
-          </Layout.Footer>
+          </Layout.Footer> */}
         </div>
       </Layout.Content>
     </Layout>

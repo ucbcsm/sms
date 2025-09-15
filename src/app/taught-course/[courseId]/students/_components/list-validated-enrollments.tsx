@@ -255,6 +255,7 @@ export const ListCourseValidatedStudents: FC<
       rowSelection={{
         type: "checkbox",
       }}
+      scroll={{ y: "calc(100vh - 283px)" }}
       size="small"
       pagination={{
         defaultPageSize: 25,

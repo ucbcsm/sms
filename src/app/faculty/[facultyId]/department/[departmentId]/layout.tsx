@@ -137,7 +137,7 @@ export default function DepartmentLayout({
           }}
         >
           {children}
-          <Layout.Footer
+          {/* <Layout.Footer
             style={{
               display: "flex",
               background: colorBgContainer,
@@ -151,7 +151,7 @@ export default function DepartmentLayout({
             <Space>
               <Palette />
             </Space>
-          </Layout.Footer>
+          </Layout.Footer> */}
         </div>
       </Layout.Content>
     </Layout>

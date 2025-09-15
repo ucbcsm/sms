@@ -86,7 +86,6 @@ export function StudentsStatistics() {
             {!isPending ? (
               <Progress
                 type="dashboard"
-                // percent={Number(((data?.male_count! / data?.student_counter!) * 100).toFixed(0))}
                 percent={toFixedNumber(
                   (data?.male_count! / data?.student_counter!) * 100
                 )}

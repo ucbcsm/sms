@@ -107,7 +107,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
   });
   return (
     <Card
-        variant="borderless"
+      variant="borderless"
       loading={isPending}
       title={
         !isPending ? (
@@ -116,24 +116,23 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
           <Skeleton.Input size="small" active />
         )
       }
-      style={{ boxShadow: "none", borderRadius:0 }}
-      extra={
-        teaching_units && (
-          <NewTeachingUnitForm cycles={cycles} />
-        )
-      }
+      style={{ boxShadow: "none", borderRadius: 0 }}
+      extra={teaching_units && <NewTeachingUnitForm cycles={cycles} />}
+      styles={{ body: { height: `calc(100vh - 119px)`, overflow: "auto" } }}
     >
-      <List
-        dataSource={teaching_units}
-        renderItem={(item) => (
-          <ListItem
-            key={item.id}
-            item={item}
-            cycles={cycles}
-            // departments={departments}
-          />
-        )}
-      />
+      <div>
+        <List
+          dataSource={teaching_units}
+          renderItem={(item) => (
+            <ListItem
+              key={item.id}
+              item={item}
+              cycles={cycles}
+              // departments={departments}
+            />
+          )}
+        />
+      </div>
     </Card>
   );
 };

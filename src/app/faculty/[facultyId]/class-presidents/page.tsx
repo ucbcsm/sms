@@ -156,128 +156,108 @@ export default function Page() {
           </Space>
         </Layout.Header>
 
-        <Card>
-          <Table
-            title={() => (
-              <header className="flex pb-3">
+        <Table
+          title={() => (
+            <header className="flex pb-3">
+              <Space>
+                <Input.Search placeholder="Rechercher un chef" />
+              </Space>
+              <div className="flex-1" />
+              <Space>
+                <NewClassPresidentForm
+                  departments={departments}
+                  classes={classes}
+                  students={students}
+                />
+                <Button
+                  icon={<PrinterOutlined />}
+                  style={{ boxShadow: "none" }}
+                >
+                  Imprimer
+                </Button>
+                <Dropdown
+                  menu={{
+                    items: [
+                      {
+                        key: "pdf",
+                        label: "PDF",
+                        icon: <FilePdfOutlined />,
+                        title: "Exporter en PDF",
+                      },
+                      {
+                        key: "excel",
+                        label: "EXCEL",
+                        icon: <FileExcelOutlined />,
+                        title: "Exporter vers Excel",
+                      },
+                    ],
+                  }}
+                >
+                  <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
+                    Exporter
+                  </Button>
+                </Dropdown>
+              </Space>
+            </header>
+          )}
+          dataSource={class_presidents}
+          columns={[
+            {
+              title: "Chef",
+              dataIndex: "student",
+              key: "student",
+              render: (_, record, __) => (
                 <Space>
-                  <Input.Search placeholder="Rechercher un chef" />
+                  <Avatar
+                    style={{
+                      backgroundColor: getHSLColor(
+                        `${record.student?.user.first_name} ${record.student?.user.last_name} ${record.student?.user.surname}`
+                      ),
+                    }}
+                  >
+                    {record.student?.user.first_name?.charAt(0).toUpperCase()}
+                    {record.student?.user.last_name?.charAt(0).toUpperCase()}
+                  </Avatar>
+                  {`${record.student.user.first_name} ${record.student.user.last_name} ${record.student?.user.surname}`}
                 </Space>
-                <div className="flex-1" />
-                <Space>
-                  <NewClassPresidentForm
+              ),
+            },
+            {
+              title: "Promotion",
+              dataIndex: "class_year",
+              key: "class_year",
+              render: (_, record, __) =>
+                `${record.class_year.acronym} ${record.departement.name}`,
+            },
+            {
+              title: "",
+              key: "actions",
+              render: (_, record, __) => {
+                return (
+                  <ActionsBar
+                    record={record}
                     departments={departments}
                     classes={classes}
                     students={students}
                   />
-                  <Button
-                    icon={<PrinterOutlined />}
-                    style={{ boxShadow: "none" }}
-                  >
-                    Imprimer
-                  </Button>
-                  <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          key: "pdf",
-                          label: "PDF",
-                          icon: <FilePdfOutlined />,
-                          title: "Exporter en PDF",
-                        },
-                        {
-                          key: "excel",
-                          label: "EXCEL",
-                          icon: <FileExcelOutlined />,
-                          title: "Exporter vers Excel",
-                        },
-                      ],
-                    }}
-                  >
-                    <Button
-                      icon={<DownOutlined />}
-                      style={{ boxShadow: "none" }}
-                    >
-                      Exporter
-                    </Button>
-                  </Dropdown>
-                </Space>
-              </header>
-            )}
-            dataSource={class_presidents}
-            columns={[
-              {
-                title: "Chef",
-                dataIndex: "student",
-                key: "student",
-                render: (_, record, __) => (
-                  <Space>
-                    <Avatar
-                      style={{
-                        backgroundColor: getHSLColor(
-                          `${record.student?.user.first_name} ${record.student?.user.last_name} ${record.student?.user.surname}`
-                        ),
-                      }}
-                    >
-                      {record.student?.user.first_name?.charAt(0).toUpperCase()}
-                      {record.student?.user.last_name?.charAt(0).toUpperCase()}
-                    </Avatar>
-                    {`${record.student.user.first_name} ${record.student.user.last_name} ${record.student?.user.surname}`}
-                  </Space>
-                ),
+                );
               },
-               {
-                title: "Promotion",
-                dataIndex: "class_year",
-                key: "class_year",
-                render: (_, record, __) =>
-                  `${record.class_year.acronym} ${record.departement.name}`,
-              },
-              {
-                title: "",
-                key: "actions",
-                render: (_, record, __) => {
-                  return (
-                    <ActionsBar
-                      record={record}
-                      departments={departments}
-                      classes={classes}
-                      students={students}
-                    />
-                  );
-                },
-                width: 50,
-              },
-            ]}
-            rowKey="id"
-            rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-            // rowSelection={{
-            //   type: "checkbox",
-            // }}
-            size="small"
-            pagination={{
-              defaultPageSize: 25,
-              pageSizeOptions: [25, 50, 75, 100],
-              size: "small",
-            }}
-          />
-        </Card>
-
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: "24px 0",
+              width: 128,
+            },
+          ]}
+          rowKey="id"
+          rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+          // rowSelection={{
+          //   type: "checkbox",
+          // }}
+          scroll={{ y: "calc(100vh - 270px)" }}
+          size="small"
+          pagination={{
+            defaultPageSize: 25,
+            pageSizeOptions: [25, 50, 75, 100],
+            size: "small",
           }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
+        />
       </Layout.Content>
     </Layout>
   );
