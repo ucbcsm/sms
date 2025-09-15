@@ -71,14 +71,15 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
       />
 
       <Space>
-        <Button
-          color="primary"
-          variant="dashed"
-          style={{ boxShadow: "none" }}
-          onClick={() => router.push(`/app/student/${item.year_enrollment.id}`)}
-        >
-          Gérer
-        </Button>
+        <Link href={`/student/${item.year_enrollment.id}`}>
+          <Button
+            color="primary"
+            variant="dashed"
+            style={{ boxShadow: "none" }}
+          >
+            Gérer
+          </Button>
+        </Link>
         <Dropdown
           menu={{
             items: [
@@ -370,6 +371,7 @@ export const ListPeriodValidatedStudents: FC<
       rowSelection={{
         type: "checkbox",
       }}
+       scroll={{ y: 'calc(100vh - 346px)' }}
       size="small"
       loading={isPendingPeriodEnrollments}
       pagination={{

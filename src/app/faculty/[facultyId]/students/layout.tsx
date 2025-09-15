@@ -1,7 +1,6 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import {
   getAllYearEnrollmentsByFaculty,
@@ -19,14 +18,12 @@ import {
   Menu,
   Skeleton,
   Space,
-  Tabs,
   theme,
   Typography,
 } from "antd";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import { NewPeriodEnrollmentForm } from "./[periodId]/forms/new";
-import { Palette } from "@/components/palette";
 import Link from "next/link";
 
 export default function StudentsLayout({
@@ -98,10 +95,6 @@ export default function StudentsLayout({
     }));
   };
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
-
   if (isError) {
     return <DataFetchErrorResult />;
   }
@@ -126,31 +119,28 @@ export default function StudentsLayout({
           }}
         >
           <Space>
-            {/* <BackButton /> */}
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Étudiants
+            </Typography.Title>
+          </Space>
+          <div className="flex-1" />
+          <Space>
             {!isPending ? (
-              <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                Inscriptions
-              </Typography.Title>
+              <NewPeriodEnrollmentForm
+                periodsAsMenu={[...(getPeriodsAsDropdownMenu(periods) || [])]}
+                periods={periods}
+                yearEnrollments={yearEnrollments}
+                periodEnrollments={periodEnrollments}
+                departments={departments}
+                classes={classes} // Promotions
+              />
             ) : (
               <Form>
                 <Skeleton.Input active />
               </Form>
             )}
           </Space>
-          <div className="flex-1" />
-          <Space>
-            {/* <Palette /> */}
-            <NewPeriodEnrollmentForm
-              periodsAsMenu={[...getPeriodsAsDropdownMenu(periods)!]}
-              periods={periods}
-              yearEnrollments={yearEnrollments}
-              periodEnrollments={periodEnrollments}
-              departments={departments}
-              classes={classes} // Promotions
-            />
-          </Space>
         </Layout.Header>
-        {/* <Typography.Title level={3}>Inscriptions</Typography.Title> */}
         <Menu
           mode="horizontal"
           defaultSelectedKeys={[pathname]}
@@ -163,51 +153,12 @@ export default function StudentsLayout({
             ...(getPeriodsAsTabs(periods) || []),
           ]}
         />
-        {/* <Tabs
-          items={[
-            {
-              key: `/faculty/${facultyId}/students`,
-              label: "Année",
-            },
-            ...(getPeriodsAsTabs(periods) || []),
-          ]}
-          defaultActiveKey={pathname}
-          activeKey={pathname}
-          onChange={(key) => router.push(key)}
-          tabBarExtraContent={
-            <NewPeriodEnrollmentForm
-              periodsAsMenu={[...getPeriodsAsDropdownMenu(periods)!]}
-              periods={periods}
-              yearEnrollments={yearEnrollments}
-              periodEnrollments={periodEnrollments}
-              departments={departments}
-              classes={classes} // Promotions
-            />
-          }
-        /> */}
 
         <div
           className="pt-4"
-          style={{ overflowY: "auto", height: "calc(100vh - 174px)" }}
         >
           {children}
-           <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: "24px 0",
-          }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
         </div>
-       
       </Layout.Content>
     </Layout>
   );

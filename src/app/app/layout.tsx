@@ -62,7 +62,7 @@ export default function AppLayout({
   const getFacultiesAsMenu = () => {
     const facaltiesAsMenu = faculties?.map((fac) => ({
       key: `/faculty/${fac.id}`,
-      label: fac.name,
+      label: <Link href={`/faculty/${fac.id}`}>{fac.name}</Link>,
       icon: <SubnodeOutlined />,
     }));
     return facaltiesAsMenu;

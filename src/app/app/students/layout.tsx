@@ -1,21 +1,6 @@
 "use client";
-import {
-  FileExcelOutlined,
-  FilePdfOutlined,
-  MoreOutlined,
-  PrinterOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import {
-  Button,
-  Flex,
-  Input,
-  Layout,
-  Space,
-  theme,
-  Typography,
-} from "antd";
-import { ListStudents } from "./list";
+
+import { Card, Flex, Layout, Statistic, theme, Typography } from "antd";
 
 export default function StudentsLayout({
   children,
@@ -28,32 +13,6 @@ export default function StudentsLayout({
 
   return (
     <Layout>
-      <Layout.Sider
-        width={360}
-        theme="light"
-        style={{ borderRight: `1px solid ${colorBorderSecondary}` }}
-      >
-        <Flex
-          justify="space-between"
-          align="center"
-          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 20 }}
-        >
-          <Typography.Title level={3} className="" style={{ marginBottom: 0 }}>
-            Gestion des étudiants
-          </Typography.Title>
-        </Flex>
-
-        <div
-          style={{
-            height: "calc(100vh - 116px)",
-            overflowY: "auto",
-            paddingLeft: 16,
-            paddingRight: 16,
-            paddingBottom: 28,
-            paddingTop: 16,
-          }}
-        ></div>
-      </Layout.Sider>
       <Layout.Content
         style={{
           background: colorBgContainer,
@@ -62,6 +21,61 @@ export default function StudentsLayout({
       >
         {children}
       </Layout.Content>
+      <Layout.Sider
+        width={260}
+        theme="light"
+        style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
+      >
+        <div
+          style={{
+            height: 64,
+            display: "flex",
+            alignItems: "center",
+            background: colorBgContainer,
+            borderBottom: `1px solid ${colorBorderSecondary}`,
+            paddingLeft: 32,
+            paddingRight: 32,
+          }}
+        >
+          <Typography.Title
+            type="secondary"
+            style={{ marginBottom: 0 }}
+            level={5}
+            ellipsis={{}}
+          >
+            Statistiques
+          </Typography.Title>
+        </div>
+
+        <div
+          style={{
+            height: "calc(100vh - 128px)",
+            overflowY: "auto",
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingBottom: 28,
+            paddingTop: 16,
+          }}
+        >
+          <Flex vertical gap={16}>
+            <Card>
+              <Statistic title="Total" />
+            </Card>
+            <Card>
+              <Statistic title="Hommes" />
+            </Card>
+            <Card>
+              <Statistic title="Femmes" />
+            </Card>
+            <Card>
+              <Statistic title="Actifs" />
+            </Card>
+            <Card>
+              <Statistic title="Abandons" />
+            </Card>
+          </Flex>
+        </div>
+      </Layout.Sider>
     </Layout>
   );
 }

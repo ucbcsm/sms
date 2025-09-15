@@ -8,21 +8,13 @@ import {
   getPeriodEnrollmentsCountByStatus,
 } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Badge,
-  Col,
-  Row,
-  Tabs,
-  Typography,
-} from "antd";
+import { Badge, Col, Row, Tabs, Typography } from "antd";
 import { useParams } from "next/navigation";
 import { ListPeriodValidatedStudents } from "./list-validated-enrollments";
 import { ListPeriodPendingStudents } from "./list-pending-enrollments";
 import { ListPeriodRejectedStudents } from "./list-rejected-enrollments";
 
-
 export default function Page() {
-
   const { facultyId, periodId } = useParams();
   const { yid } = useYid();
   const { data, isPending, isError } = useQuery({
@@ -35,10 +27,6 @@ export default function Page() {
       ),
     enabled: !!yid && !!facultyId && !!periodId,
   });
-
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -69,12 +57,6 @@ export default function Page() {
                 children: (
                   <div>
                     <ListPeriodPendingStudents />
-                    {/* <List
-                      dataSource={getPeriodEnrollmentsByStatus(data, "pending")}
-                      renderItem={(item) => (
-                        <ListPeriodEnrollmentItem key={item.id} item={item} />
-                      )}
-                    /> */}
                   </div>
                 ),
               },
@@ -84,15 +66,6 @@ export default function Page() {
                 children: (
                   <div>
                     <ListPeriodRejectedStudents />
-                    {/* <List
-                      dataSource={getPeriodEnrollmentsByStatus(
-                        data,
-                        "rejected"
-                      )}
-                      renderItem={(item) => (
-                        <ListPeriodEnrollmentItem key={item.id} item={item} />
-                      )}
-                    /> */}
                   </div>
                 ),
               },

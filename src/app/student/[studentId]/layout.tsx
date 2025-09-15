@@ -2,11 +2,10 @@
 import BackButton from "@/components/backButton";
 import { Palette } from "@/components/palette";
 import { getYearEnrollment } from "@/lib/api";
-import { CloseOutlined, MoreOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
-  Dropdown,
   Form,
   Layout,
   Menu,
@@ -15,7 +14,7 @@ import {
   theme,
   Typography,
 } from "antd";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { StudentProfileDetails } from "./profile/profileDetails";
 import Link from "next/link";
 
@@ -28,7 +27,6 @@ export default function StudentLayout({
 
   const { studentId } = useParams();
   const pathname = usePathname();
-  const router = useRouter();
 
   const {
     data: enrolledStudent,
@@ -58,7 +56,6 @@ export default function StudentLayout({
             paddingRight: 32,
           }}
         >
-          <Space>
             <Typography.Title
               type="secondary"
               style={{ marginBottom: 0 }}
@@ -67,7 +64,6 @@ export default function StudentLayout({
             >
               Compte étudiant
             </Typography.Title>
-          </Space>
         </div>
         <StudentProfileDetails data={enrolledStudent} isError={isError} />
       </Layout.Sider>

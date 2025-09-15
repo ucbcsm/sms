@@ -1,120 +1,60 @@
 "use client";
 
-import { getClasses, getClassesYearsAsOptions, getCurrentDepartmentsAsOptions, getCurrentFacultiesAsOptions, getDepartmentsByFacultyId, getFaculties, getYearEnrollments } from "@/lib/api";
+import {
+  getClasses,
+  getClassesYearsAsOptions,
+  getCurrentDepartmentsAsOptions,
+  getCurrentFacultiesAsOptions,
+  getDepartmentsByFacultyId,
+  getFaculties,
+  getYearEnrollments,
+} from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
   Dropdown,
-  Flex,
   Input,
-  List,
   Select,
   Space,
   Table,
   Tag,
-  theme,
   Typography,
 } from "antd";
 import { FC } from "react";
 import { useYid } from "@/hooks/use-yid";
-import { useParams, useRouter } from "next/navigation";
-import { Enrollment } from "@/types";
 import { getHSLColor } from "@/lib/utils";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
 import { parseAsInteger, useQueryState } from "nuqs";
-import { DownOutlined, FileExcelOutlined, FilePdfOutlined, MoreOutlined, PrinterOutlined } from "@ant-design/icons";
-
-type ListItemProps = {
-  item: Enrollment;
-};
-
-export const ListItem: FC<ListItemProps> = ({ item }) => {
-  const {
-    token: { colorBgTextHover },
-  } = theme.useToken();
-  const router = useRouter();
-  const { studentId } = useParams();
-
-  const goToStudentDetails = () => {
-    router.push(`/app/students/${item.id}`);
-  };
-  return (
-    <Link href={`/app/students/${item.id}`}>
-      <List.Item
-        style={{
-          background: Number(studentId) === item.id ? colorBgTextHover : "",
-          cursor: "pointer",
-          // paddingLeft: 12,
-          // paddingRight: 12,
-          // borderRadius:Number(studentId) === item.id ? 8 : ""
-        }}
-        // onClick={goToStudentDetails}
-      >
-        <List.Item.Meta
-          avatar={
-            <Avatar
-              src={item.user?.avatar}
-              style={{
-                backgroundColor: getHSLColor(
-                  `${item.user.first_name} ${item.user.last_name} ${item.user.surname}`
-                ),
-              }}
-            >
-              {item.user.first_name?.charAt(0).toUpperCase()}
-              {item.user.last_name?.charAt(0).toUpperCase()}
-            </Avatar>
-          }
-          title={
-            <Typography.Text>
-              {item.user.first_name} {item.user.last_name} {item.user.surname} [
-              {item.user.matricule}]
-            </Typography.Text>
-          }
-          description={
-            <Flex justify="space-between">
-              <span>
-                {item.class_year?.acronym || ""} {item.departement.name}
-              </span>
-              <Tag
-                bordered={false}
-                color={item.status === "enabled" ? "success" : "red"}
-                className=" rounded-full"
-                style={{ marginRight: 0 }}
-              >
-                {item.status === "enabled" ? "Actif" : "Abandon"}
-              </Tag>
-            </Flex>
-          }
-        />
-      </List.Item>
-    </Link>
-  );
-};
+import {
+  FileExcelOutlined,
+  FilePdfOutlined,
+  MoreOutlined,
+  PrinterOutlined,
+} from "@ant-design/icons";
 
 export const ListStudents: FC = () => {
   const { yid } = useYid();
-  const router = useRouter();
-    const [facultyId, setFacultyId] = useQueryState(
-      "fac",
-      parseAsInteger.withDefault(0)
-    );
-   const [departmentId, setDepartmentId] = useQueryState(
-      "dep",
-      parseAsInteger.withDefault(0)
-    );
-    const [classId, setClassId] = useQueryState(
-      "class",
-      parseAsInteger.withDefault(0)
-    );
-    const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
-    const [pageSize, setPageSize] = useQueryState(
-      "size",
-      parseAsInteger.withDefault(0)
-    );
-    const [search, setSearch] = useQueryState("search");
+
+  const [facultyId, setFacultyId] = useQueryState(
+    "fac",
+    parseAsInteger.withDefault(0)
+  );
+  const [departmentId, setDepartmentId] = useQueryState(
+    "dep",
+    parseAsInteger.withDefault(0)
+  );
+  const [classId, setClassId] = useQueryState(
+    "class",
+    parseAsInteger.withDefault(0)
+  );
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+  const [pageSize, setPageSize] = useQueryState(
+    "size",
+    parseAsInteger.withDefault(0)
+  );
+  const [search, setSearch] = useQueryState("search");
   const {
     data: data,
     isPending: isPendingStudents,
@@ -133,7 +73,7 @@ export const ListStudents: FC = () => {
     queryFn: ({ queryKey }) =>
       getYearEnrollments({
         yearId: Number(queryKey[1]),
-        facultyId: Number(queryKey[2]),
+        facultyId: facultyId !== 0 ? facultyId : undefined,
         departmentId: departmentId !== 0 ? departmentId : undefined,
         classId: classId !== 0 ? classId : undefined,
         page: page !== 0 ? page : undefined,
@@ -143,23 +83,21 @@ export const ListStudents: FC = () => {
     enabled: !!yid,
   });
 
-    const { data: faculties, isPending: isPendingFacalties } = useQuery({
-      queryKey: ["faculties"],
-      queryFn: getFaculties,
-    });
+  const { data: faculties, isPending: isPendingFaculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
 
-      const { data: departments, isPending: isPendingDepartments } = useQuery({
-        queryKey: ["departments", facultyId],
-        queryFn: ({ queryKey }) =>
-          getDepartmentsByFacultyId(Number(queryKey[1])),
-        enabled: !!facultyId,
-      });
+  const { data: departments, isPending: isPendingDepartments } = useQuery({
+    queryKey: ["departments", facultyId],
+    queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
+    enabled: facultyId !== 0,
+  });
 
-      const { data: classes, isPending: isPendingClasses } = useQuery({
-        queryKey: ["classes"],
-        queryFn: getClasses,
-      });
-
+  const { data: classes, isPending: isPendingClasses } = useQuery({
+    queryKey: ["classes"],
+    queryFn: getClasses,
+  });
 
   if (isErrorStudents) {
     return <DataFetchErrorResult />;
@@ -184,7 +122,7 @@ export const ListStudents: FC = () => {
                   ...(getCurrentFacultiesAsOptions(faculties) || []),
                 ]}
                 style={{ minWidth: 150 }}
-                loading={isPendingFacalties}
+                loading={isPendingFaculties}
               />
             </div>
             <div className="flex flex-row md:flex-col gap-2">
@@ -218,20 +156,23 @@ export const ListStudents: FC = () => {
                   ...(getCurrentDepartmentsAsOptions(departments) || []),
                 ]}
                 style={{ minWidth: 150 }}
-                loading={isPendingDepartments}
+                loading={facultyId !== 0 && isPendingDepartments}
               />
             </div>
           </Space>
           <div className="flex-1" />
-          <Space>
+          <Space wrap>
             <Input.Search
               placeholder="Rechercher un étudiant ..."
               onChange={(e) => {
+                // if(search && e.target.value.trim()!==""){
                 setPage(0);
                 setSearch(e.target.value);
+                // }
               }}
               allowClear
               variant="filled"
+              value={search?.trim() || undefined}
             />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
@@ -295,6 +236,14 @@ export const ListStudents: FC = () => {
           ),
           width: 80,
           align: "center",
+        },
+        {
+            title:"Genre",
+            dataIndex:"gender",
+            key:"gender",
+            render:(_,record,__)=>record.common_enrollment_infos.gender,
+            width: 56,
+            align:"center"
         },
         {
           title: "Noms",
@@ -378,10 +327,11 @@ export const ListStudents: FC = () => {
         },
       ]}
       rowKey="id"
-      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      rowClassName={`bg-white odd:bg-[#f5f5f5]`}
       rowSelection={{
         type: "checkbox",
       }}
+      scroll={{ y: 'calc(100vh - 314px)' }}
       size="small"
       loading={isPendingStudents}
       pagination={{

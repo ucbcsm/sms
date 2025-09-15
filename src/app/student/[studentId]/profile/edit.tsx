@@ -131,9 +131,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
         onClick={() => {
           setOpen(true);
         }}
-      >
-        Modifier
-      </Button>
+      />
       <Drawer
         open={open}
         title={

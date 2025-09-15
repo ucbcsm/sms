@@ -47,10 +47,10 @@ export default function Page() {
     }
 
   return (
-    <Row gutter={24} style={{marginRight:0}}>
-      <Col span={18}>
+    <Row gutter={24}>
+      <Col span={16}>
         <Row gutter={[24, 24]}>
-          <Col span={8}>
+          <Col span={12}>
             <Card>
               <Statistic
                 loading={isPendingDashboard}
@@ -60,12 +60,12 @@ export default function Page() {
             </Card>
           </Col>
 
-          <Col span={8}>
+          <Col span={12}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
                   loading={isPendingDashboard}
-                  title="Statut académique"
+                  title="Statut"
                   value={
                     enrolledStudent?.status === "enabled" ? "Actif" : "Abandon"
                   }
@@ -87,7 +87,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col span={12}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -168,7 +168,7 @@ export default function Page() {
             </Card>
           </Col> */}
 
-          <Col span={8}>
+          <Col span={12}>
             <Card>
               <Statistic
                 loading={isPending}
@@ -187,10 +187,10 @@ export default function Page() {
           </Col>
         </Row>
       </Col>
-      <Col span={6}>
-        <Card loading={isPending}>
+      <Col span={8}>
+        {/* <Card loading={isPending}> */}
           <Descriptions
-            title="Filières"
+            title="Filière"
             column={1}
             items={[
               {
@@ -200,7 +200,7 @@ export default function Page() {
               },
               {
                 key: "faculte",
-                label: "Faculté",
+                label: "Filière",
                 children: enrolledStudent?.faculty.name || "",
               },
               {
@@ -220,7 +220,7 @@ export default function Page() {
               },
             ]}
           />
-        </Card>
+        {/* </Card> */}
       </Col>
     </Row>
   );

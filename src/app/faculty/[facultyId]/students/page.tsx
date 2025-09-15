@@ -140,22 +140,24 @@ export default function Page() {
                 items: [
                   {
                     key: "pdf",
-                    label: "PDF",
+                    label: "Exporter .pdf",
                     icon: <FilePdfOutlined />,
                     title: "Exporter en pdf",
                   },
                   {
                     key: "excel",
-                    label: "EXCEL",
+                    label: "Exporter .xlsx",
                     icon: <FileExcelOutlined />,
                     title: "Exporter vers Excel",
                   },
                 ],
               }}
             >
-              <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                Exporter
-              </Button>
+              <Button
+                type="text"
+                icon={<MoreOutlined />}
+                style={{ boxShadow: "none" }}
+              />
             </Dropdown>
           </Space>
         </header>
@@ -191,6 +193,14 @@ export default function Page() {
             </Link>
           ),
           width: 80,
+          align: "center",
+        },
+        {
+          title: "Genre",
+          dataIndex: "gender",
+          key: "gender",
+          render: (_, record, __) => record.common_enrollment_infos.gender,
+          width: 56,
           align: "center",
         },
         {
@@ -241,14 +251,16 @@ export default function Page() {
           key: "actions",
           render: (_, record, __) => (
             <Space>
+              <Link href={`/student/${record.id}`}>
               <Button
                 color="primary"
                 variant="dashed"
-                onClick={() => router.push(`/student/${record.id}`)}
+                // onClick={() => router.push(`/student/${record.id}`)}
                 style={{ boxShadow: "none" }}
               >
                 Gérer
               </Button>
+              </Link>
               {/* <Dropdown
                 menu={{
                   items: [
@@ -266,10 +278,11 @@ export default function Page() {
         },
       ]}
       rowKey="id"
-      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      rowClassName={`bg-white odd:bg-[#f5f5f5]`}
       rowSelection={{
         type: "checkbox",
       }}
+      scroll={{ y: 'calc(100vh - 346px)' }}
       size="small"
       loading={isPendingEnrollememts}
       pagination={{

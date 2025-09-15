@@ -122,7 +122,7 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
       {contextHolder}
       <Dropdown
         menu={{
-          items: [...periodsAsMenu!],
+          items: [...(periodsAsMenu || [])],
           onClick: ({ key }) => {
             router.push(
               `/faculty/${facultyId}/students/${key}/?new_enrollments=true`

@@ -32,7 +32,7 @@ export default function Page() {
         <Typography.Title level={5} style={{ marginBottom: 16 }}>
           Frais à payer
         </Typography.Title>
-        <Card>
+    
           <List
             dataSource={[
               {
@@ -75,13 +75,12 @@ export default function Page() {
               </List.Item>
             )}
           />
-        </Card>
+        
       </Col>
       <Col span={24}>
         <Typography.Title level={5} style={{ marginBottom: 16 }}>
           Transactions des paiements
         </Typography.Title>
-        <Card>
           <Table
             title={() => (
               <header className="flex pb-3">
@@ -240,7 +239,6 @@ export default function Page() {
               size: "small",
             }}
           />
-        </Card>
       </Col>
     </Row>
   );
