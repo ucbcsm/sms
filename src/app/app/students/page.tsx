@@ -1,20 +1,33 @@
 "use client";
 
-import { UserOutlined } from "@ant-design/icons";
-import { Result } from "antd";
+import { Layout, Space, theme, Typography } from "antd";
+import { ListStudents } from "./_components/list-students";
 
 export default function Page() {
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
   return (
-    <div
-      className="flex flex-col justify-center"
-      style={{ height: "calc(100vh - 64px)" }}
-    >
-      <Result
-        status="info"
-        title="Aucun étudiant sélectionné"
-        subTitle="Veuillez sélectionner un étudiant dans la liste pour afficher les détails."
-        icon={<UserOutlined style={{ color: "GrayText" }} />}
-      />
-    </div>
+    <Layout>
+      <Layout.Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          background: colorBgContainer,
+          padding: 0,
+        }}
+      >
+        <Space>
+          <Typography.Title level={3} className="" style={{ marginBottom: 0 }}>
+            Étudiants
+          </Typography.Title>
+        </Space>
+        <div className="flex-1" />
+        <Space></Space>
+      </Layout.Header>
+      <Layout.Content style={{ background: colorBgContainer }}>
+        <ListStudents />
+      </Layout.Content>
+    </Layout>
   );
 }

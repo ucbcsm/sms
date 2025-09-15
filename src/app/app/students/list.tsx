@@ -1,9 +1,7 @@
 "use client";
 
 import {
-  getPendingApplications,
-  getRejectedApplications,
-  getValidatedApplications,
+
   getYearEnrollments,
 } from "@/lib/api";
 import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
@@ -27,6 +25,7 @@ import { Enrollment } from "@/types";
 import { getHSLColor } from "@/lib/utils";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
+import Link from "next/link";
 
 type ListItemProps = {
   item: Enrollment;
@@ -43,15 +42,16 @@ export const ListItem: FC<ListItemProps> = ({ item }) => {
     router.push(`/app/students/${item.id}`);
   };
   return (
+    <Link href={`/app/students/${item.id}`}>
     <List.Item
       style={{
         background: Number(studentId) === item.id ? colorBgTextHover : "",
         cursor: "pointer",
-        paddingLeft: 12,
-        paddingRight: 12,
+        // paddingLeft: 12,
+        // paddingRight: 12,
         // borderRadius:Number(studentId) === item.id ? 8 : ""
       }}
-      onClick={goToStudentDetails}
+      // onClick={goToStudentDetails}
     >
       <List.Item.Meta
         avatar={
@@ -90,18 +90,19 @@ export const ListItem: FC<ListItemProps> = ({ item }) => {
         }
       />
     </List.Item>
+    </Link>
   );
 };
 
 export const ListStudents: FC = () => {
   const { yid } = useYid();
   const {
-    data: students,
+    data: data,
     isPending: isPendingStudents,
     isError: isErrorStudents,
   } = useQuery({
     queryKey: ["year_enrollments", `${yid}`],
-    queryFn: ({ queryKey }) => getYearEnrollments(Number(queryKey[1])),
+    queryFn: ({ queryKey }) => getYearEnrollments({yearId:Number(queryKey[1])}),
     enabled: !!yid,
   });
 
@@ -116,7 +117,8 @@ export const ListStudents: FC = () => {
   return (
     <div>
       <List
-        dataSource={students}
+        size="small"
+        dataSource={data.results}
         renderItem={(item) => <ListItem key={item.id} item={item} />}
       />
     </div>
