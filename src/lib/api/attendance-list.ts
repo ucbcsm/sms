@@ -89,7 +89,10 @@ export const getAttendanceJustifiedPercentage = (
   return totalCount > 0 ? (justifiedCount! / totalCount) * 100 : 0;
 };
 
-export type AttendanceItemFromCourseEnrollment = Omit<AttendanceListItem, "id"> & {
+export type AttendanceItemFromCourseEnrollment = Omit<
+  AttendanceListItem,
+  "id"
+> & {
   id?: number;
   exempted: boolean;
 };
@@ -104,4 +107,21 @@ export const getAttendanceItemsFromCourseEnrollments = (
       exempted: enrollment.exempted_on_attendance,
     })) || []
   );
+};
+
+export const getItemsFromCurrentAttendanceListAndCourseEnrollments = (
+  currentList: AttendanceListItem[],
+  enrollments?: CourseEnrollment[]
+) => {
+  const exemptedEnrollments = enrollments?.filter(
+    (enroll) => enroll.exempted_on_attendance === true
+  );
+
+  return currentList.map((item) => ({
+    ...item,
+    exempted:
+      exemptedEnrollments?.some((enrollment) => {
+        return enrollment.student.year_enrollment.id === item.student.id;
+      }) || false,
+  }));
 };

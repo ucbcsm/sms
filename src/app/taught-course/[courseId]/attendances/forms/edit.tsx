@@ -23,7 +23,7 @@ import {
   TimePicker,
 } from "antd";
 import { BulbOutlined, CloseOutlined } from "@ant-design/icons";
-import { AttendanceList, AttendanceListItem, TaughtCourse } from "@/types";
+import { AttendanceList, AttendanceListItem, CourseEnrollment, TaughtCourse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AttendanceItemFromCourseEnrollment,
@@ -34,6 +34,7 @@ import {
   getAttendancePresentCount,
   getAttendancePresentPercentage,
   getCourseTypeName,
+  getItemsFromCurrentAttendanceListAndCourseEnrollments,
   getTeachingUnitCategoryName,
   getYearStatusName,
   updateAttendanceList,
@@ -41,20 +42,21 @@ import {
 import { useParams } from "next/navigation";
 import dayjs from "dayjs";
 import { ListAttendanceListItem } from "./list";
-import { Palette } from "@/components/palette";
 
-type NewAttendanceListFormProps = {
+type EditAttendanceListFormProps = {
   course?: TaughtCourse;
   attendanceList: AttendanceList;
+  courseEnrollements?: CourseEnrollment[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
+export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
   course,
   open,
   setOpen,
   attendanceList,
+  courseEnrollements
 }) => {
   const {
     token: { colorPrimary },
@@ -133,7 +135,12 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         date: dayjs(attendanceList.date),
         time: dayjs(attendanceList.time, "HH:mm"),
       });
-      setAttendanceItems(attendanceList.student_attendance_status);
+      const items = getItemsFromCurrentAttendanceListAndCourseEnrollments(
+        attendanceList.student_attendance_status,
+        courseEnrollements
+      );
+      setAttendanceItems(items)
+      // setAttendanceItems(attendanceList.student_attendance_status);
     }
   }, [attendanceList, open, form]);
 

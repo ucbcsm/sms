@@ -44,7 +44,7 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
 
   const existsInCourseEnrollments = (periodEnrollmentId: number) => {
     const exists = courseEnrollements?.some((enrollment) => {
-      console.log("Les i i",enrollment.student.period.id, periodEnrollmentId);
+
       return enrollment.student.period.id === periodEnrollmentId;
     });
 

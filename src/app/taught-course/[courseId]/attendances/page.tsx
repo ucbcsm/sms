@@ -12,7 +12,7 @@ import {
   getTaughtCours,
 } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
-import { AttendanceList, TaughtCourse } from "@/types";
+import { AttendanceList, CourseEnrollment, TaughtCourse } from "@/types";
 import {
   CheckCircleFilled,
   CheckCircleOutlined,
@@ -43,9 +43,10 @@ import { useYid } from "@/hooks/use-yid";
 type ActionsBarProps = {
   record: AttendanceList;
   course?: TaughtCourse;
+  enrollments?:CourseEnrollment[]
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record, course }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, course, enrollments }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -56,6 +57,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, course }) => {
         course={course}
         open={openEdit}
         setOpen={setOpenEdit}
+        courseEnrollements={enrollments}
       />
       <DeleteAttendanceListForm
         attendanceList={record}
@@ -63,7 +65,8 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, course }) => {
         setOpen={setOpenDelete}
       />
       <Button
-        type="dashed"
+        color="primary"
+        variant="dashed"
         style={{ boxShadow: "none" }}
         onClick={() => setOpenEdit(true)}
       >
@@ -125,9 +128,9 @@ export default function Page() {
     enabled: !!yid && !!course?.faculty.id && !!courseId,
   });
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
+  // if (isPending) {
+  //   return <DataFetchPendingSkeleton variant="table" />;
+  // }
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -138,7 +141,11 @@ export default function Page() {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <DatePicker variant="filled" placeholder="DD/MM/YYYY" format="DD/MM/YYYY" />
+            <DatePicker
+              variant="filled"
+              placeholder="DD/MM/YYYY"
+              format="DD/MM/YYYY"
+            />
           </Space>
           <div className="flex-1" />
           <Space>
@@ -149,7 +156,10 @@ export default function Page() {
                 "validated"
               )}
             />
-            <Button icon={<CheckCircleOutlined />} style={{ boxShadow: "none" }}>
+            <Button
+              icon={<CheckCircleOutlined />}
+              style={{ boxShadow: "none" }}
+            >
               Rapport de présence
             </Button>
             {/* <Dropdown
@@ -187,10 +197,11 @@ export default function Page() {
           key: "date",
           render: (_, record, __) =>
             record.date
-              ? new Intl.DateTimeFormat("fr", { dateStyle: "long" }).format(
+              ? new Intl.DateTimeFormat("fr", { dateStyle: "short" }).format(
                   new Date(`${record.date}`)
                 )
               : "",
+          width: 100,
         },
         {
           title: "Heure",
@@ -229,31 +240,38 @@ export default function Page() {
           title: "Opérateur",
           dataIndex: "operator",
           key: "operator",
-          render: (_, record, __) => (
-            <Space>
-              {record.verified_by && (
-                <Avatar
-                  style={{
-                    backgroundColor: getHSLColor(
-                      `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`
-                    ),
-                  }}
-                >
-                  {record.verified_by.first_name?.charAt(0).toUpperCase()}
-                  {record.verified_by.last_name?.charAt(0).toUpperCase()}
-                </Avatar>
-              )}{" "}
-              {record.verified_by.surname}
-            </Space>
-          ),
+          render: (_, record, __) =>
+            `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`,
+            // <Space>
+            //   {record.verified_by && (
+            //     <Avatar
+            //       style={{
+            //         backgroundColor: getHSLColor(
+            //           `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`
+            //         ),
+            //       }}
+            //     >
+            //       {record.verified_by.first_name?.charAt(0).toUpperCase()}
+            //       {record.verified_by.last_name?.charAt(0).toUpperCase()}
+            //     </Avatar>
+            //   )}{" "}
+            //   {record.verified_by.surname}
+            // </Space>
+          ellipsis: true,
         },
         {
           title: "",
           key: "actions",
           render: (_, record, __) => {
-            return <ActionsBar record={record} course={course} />;
+            return (
+              <ActionsBar
+                record={record}
+                course={course}
+                enrollments={enrollments}
+              />
+            );
           },
-          width: 50,
+          width: 174,
         },
       ]}
       rowKey="id"
@@ -261,6 +279,7 @@ export default function Page() {
       rowSelection={{
         type: "checkbox",
       }}
+      loading={isPending}
       size="small"
       pagination={{
         defaultPageSize: 25,
