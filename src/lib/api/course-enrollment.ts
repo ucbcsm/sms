@@ -1,7 +1,6 @@
 import { CourseEnrollment } from "@/types";
 import api from "../fetcher";
 import dayjs from "dayjs";
-import { boolean } from "zod";
 
 export async function getCourseEnrollments(courseId: number) {
   const res = await api.get(
@@ -37,6 +36,7 @@ export async function updateSingleCourseEnrollment(data: {
       course: data.course_id,
       status: data.status,
       mode: "SINGLE-UPDATE",
+      exempted_on_attendance: data.exempted_on_attendance,
     }
   );
   return res.data;
@@ -56,7 +56,7 @@ export async function updateCourseEnrollment(
       student: data.student_id,
       date: dayjs(data.date).format("YYYY-MM-DD"),
       status: data.status,
-      exempted_on_attendance: boolean,
+      exempted_on_attendance: data.exempted_on_attendance,
     }
   );
   return res.data as CourseEnrollment;
