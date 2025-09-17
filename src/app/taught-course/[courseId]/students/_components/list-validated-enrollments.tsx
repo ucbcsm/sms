@@ -17,6 +17,7 @@ import {
   MoreOutlined,
   PrinterOutlined,
   SafetyCertificateOutlined,
+  UndoOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -42,7 +43,7 @@ type ActionsBarProps = {
 };
 const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
   const {
-    token: { colorSuccessActive, colorWarningActive },
+    token: { colorSuccessActive, colorWarningActive, colorErrorActive },
   } = theme.useToken();
   const [openPending, setOpenPending] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
@@ -92,7 +93,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                       ? "Retirer l'exonération"
                       : "Exempter d'assiduité",
                     icon: item.exempted_on_attendance ? (
-                      <CloseOutlined />
+                      <UndoOutlined style={{color:colorErrorActive}} />
                     ) : (
                       <SafetyCertificateOutlined
                         style={{ color: colorSuccessActive }}
@@ -157,6 +158,7 @@ export const ListCourseValidatedStudents: FC<
   classes,
   departments,
 }) => {
+  
   return (
     <Table
       title={() => (
@@ -276,7 +278,7 @@ export const ListCourseValidatedStudents: FC<
           dataIndex: "exempted_on_attendance",
           render: (_, record, __) =>
             record.exempted_on_attendance ? (
-              <Tag bordered={false} style={{ marginRight: 0, width: "100%" }}>
+              <Tag  color="success" bordered={false} style={{ marginRight: 0, width: "100%" }}>
                 Oui
               </Tag>
             ) : (
@@ -304,6 +306,8 @@ export const ListCourseValidatedStudents: FC<
         defaultPageSize: 25,
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
+        showSizeChanger: true,
+
       }}
     />
   );

@@ -3,6 +3,7 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
+  getAllCourseEnrollments,
   getAttendanceAbsentCount,
   getAttendanceJustifiedCount,
   getAttendancePresentCount,
@@ -114,7 +115,7 @@ export default function Page() {
 
   const { data: enrollments, isPending: isPendingEnrollments } = useQuery({
     queryKey: ["course_enrollments", courseId],
-    queryFn: ({ queryKey }) => getCourseEnrollments(Number(queryKey[1])),
+    queryFn: ({ queryKey }) => getAllCourseEnrollments(Number(queryKey[1])),
     enabled: !!courseId,
   });
 

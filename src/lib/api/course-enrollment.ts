@@ -2,7 +2,40 @@ import { CourseEnrollment } from "@/types";
 import api from "../fetcher";
 import dayjs from "dayjs";
 
-export async function getCourseEnrollments(courseId: number) {
+export async function getCourseEnrollments(searchParams: {
+  courseId: number;
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  status?: "pending" | "validated" | "rejected";
+}) {
+  const { courseId, page, pageSize, search, status } = searchParams;
+  const query = new URLSearchParams();
+  query.append("course__id", courseId.toString());
+  if (page !== undefined) {
+    query.append("page", page.toString());
+  }
+  if (pageSize !== undefined) {
+    query.append("page_size", pageSize.toString());
+  }
+  if (search !== undefined && search.trim() !== "") {
+    query.append("search", search.trim());
+  }
+  if (status !== undefined) {
+    query.append("status", status);
+  }
+  const res = await api.get(
+    `/faculty/course-enrollment-from-faculty/?${query.toString()}`
+  );
+  return res.data as {
+    results: CourseEnrollment[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
+}
+
+export async function getAllCourseEnrollments(courseId: number) {
   const res = await api.get(
     `/faculty/course-enrollment-from-faculty/?course__id=${courseId}`
   );
@@ -14,11 +47,11 @@ export async function createCourseEnrollment(data: {
     student: number;
     courses: number[];
     status: "pending" | "validated" | "rejected";
-    exempted_on_attendance:boolean
+    exempted_on_attendance: boolean;
   }[];
 }) {
   const res = await api.post(`/faculty/course-enrollment-from-faculty/`, data);
-  return res.data 
+  return res.data;
 }
 
 export async function updateSingleCourseEnrollment(data: {
@@ -26,7 +59,7 @@ export async function updateSingleCourseEnrollment(data: {
   student_id: number;
   course_id: number;
   status: "pending" | "validated" | "rejected";
-  exempted_on_attendance:boolean
+  exempted_on_attendance: boolean;
 }) {
   const res = await api.put(
     `/faculty/course-enrollment-from-student/${data.id}/`,

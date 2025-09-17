@@ -3,6 +3,7 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
+  getAllCourseEnrollments,
   getApplicationStatusName,
   getApplicationStatusTypographyType,
   getClasses,
@@ -180,7 +181,7 @@ export default function Page() {
     isError,
   } = useQuery({
     queryKey: ["course_enrollments", courseId],
-    queryFn: ({ queryKey }) => getCourseEnrollments(Number(queryKey[1])),
+    queryFn: ({ queryKey }) => getAllCourseEnrollments(Number(queryKey[1])),
     enabled: !!courseId,
   });
 
