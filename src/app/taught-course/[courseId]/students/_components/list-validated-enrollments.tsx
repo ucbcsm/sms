@@ -16,6 +16,7 @@ import {
   HourglassOutlined,
   MoreOutlined,
   PrinterOutlined,
+  SafetyCertificateOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -24,6 +25,7 @@ import {
   Input,
   Space,
   Table,
+  Tag,
   theme,
   Typography,
 } from "antd";
@@ -33,6 +35,7 @@ import { PendingSingleCourseEnrollmentForm } from "./forms/decisions/pending";
 import { RejectSingleCourseEnrollmentForm } from "./forms/decisions/reject";
 import { ValidateSingleCourseEnrollmentForm } from "./forms/decisions/validate";
 import { getCourseEnrollmentsByStatus } from "@/lib/api";
+import { ExemptSingleCourseEnrollmentForm } from "./forms/decisions/exempt";
 
 type ActionsBarProps = {
   item: CourseEnrollment;
@@ -44,6 +47,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
   const [openPending, setOpenPending] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
+  const [openExempt, setOpenExempt] = useState<boolean>(false);
 
   return (
     <>
@@ -62,6 +66,11 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
         setOpen={setOpenReject}
         enrollment={item}
       />
+      <ExemptSingleCourseEnrollmentForm
+        open={openExempt}
+        setOpen={setOpenExempt}
+        enrollment={item}
+      />
 
       <Space>
         <Dropdown
@@ -73,6 +82,21 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                     label: "Accepter",
                     icon: (
                       <CheckOutlined style={{ color: colorSuccessActive }} />
+                    ),
+                  }
+                : null,
+              item.status === "validated"
+                ? {
+                    key: "exempt",
+                    label: item.exempted_on_attendance
+                      ? "Retirer l'exonération"
+                      : "Exempter d'assiduité",
+                    icon: item.exempted_on_attendance ? (
+                      <CloseOutlined />
+                    ) : (
+                      <SafetyCertificateOutlined
+                        style={{ color: colorSuccessActive }}
+                      />
                     ),
                   }
                 : null,
@@ -103,6 +127,8 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                 setOpenReject(true);
               } else if (key === "validate") {
                 setOpenValidate(true);
+              } else if (key === "exempt") {
+                setOpenExempt(true);
               }
             },
           }}
@@ -158,22 +184,20 @@ export const ListCourseValidatedStudents: FC<
                 items: [
                   {
                     key: "pdf",
-                    label: "PDF",
+                    label: "Exporter .pdf",
                     icon: <FilePdfOutlined />,
                     title: "Exporter en PDF",
                   },
                   {
                     key: "excel",
-                    label: "EXCEL",
+                    label: "Exporter .xlsx",
                     icon: <FileExcelOutlined />,
                     title: "Exporter vers Excel",
                   },
                 ],
               }}
             >
-              <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                Exporter
-              </Button>
+              <Button icon={<MoreOutlined />} style={{ boxShadow: "none" }} />
             </Dropdown>
           </Space>
         </header>
@@ -224,6 +248,7 @@ export const ListCourseValidatedStudents: FC<
               {record.student.year_enrollment.user.surname}
             </>
           ),
+          ellipsis: true,
         },
         {
           key: "class",
@@ -238,10 +263,28 @@ export const ListCourseValidatedStudents: FC<
           key: "date",
           render: (_, record, __) =>
             record.date
-              ? new Intl.DateTimeFormat("fr", { dateStyle: "long" }).format(
+              ? new Intl.DateTimeFormat("fr", { dateStyle: "short" }).format(
                   new Date(`${record.date}`)
                 )
               : "",
+              width:120,
+              ellipsis:true,
+        },
+        {
+          key: "exempted_on_attendance",
+          title: "Exempté(e)",
+          dataIndex: "exempted_on_attendance",
+          render: (_, record, __) =>
+            record.exempted_on_attendance ? (
+              <Tag bordered={false} style={{ marginRight: 0, width: "100%" }}>
+                Oui
+              </Tag>
+            ) : (
+              <Tag bordered={false} style={{ marginRight: 0, width: "100%" }}>
+                Non
+              </Tag>
+            ),
+          width: 88,
         },
         {
           title: "",
@@ -251,7 +294,7 @@ export const ListCourseValidatedStudents: FC<
         },
       ]}
       rowKey="id"
-      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      rowClassName={`bg-white odd:bg-[#f5f5f5]`}
       rowSelection={{
         type: "checkbox",
       }}

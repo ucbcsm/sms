@@ -17,6 +17,7 @@ import {
   Flex,
   Card,
   Statistic,
+  Switch,
 } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import {
@@ -75,11 +76,13 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
   const onFinish = (values: {
     course_id: number;
     status: "pending" | "validated" | "rejected";
+    exempted_on_attendance: boolean;
   }) => {
     const data = selectedRowKeys.map((key) => ({
       student: key as number,
       courses: [values.course_id],
       status: values.status,
+      exempted_on_attendance: values.exempted_on_attendance,
     }));
     mutateAsync(
       {
@@ -252,7 +255,9 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
                         showSearch
                         placeholder=""
                         disabled
-                        options={course&&getTaughtCoursAsOptions([{...course}])}
+                        options={
+                          course && getTaughtCoursAsOptions([{ ...course }])
+                        }
                         filterOption={filterOption}
                       />
                     </Form.Item>
@@ -274,6 +279,17 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
                           { value: "validated", label: "Validé" },
                           { value: "rejected", label: "Réjeté" },
                         ]}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Exempter d'assiduité?"
+                      name="exempted_on_attendance"
+                      initialValue={false}
+                    >
+                      <Switch
+                        checkedChildren="Oui"
+                        unCheckedChildren="Non"
+                        disabled={isPending || selectedRowKeys.length === 0}
                       />
                     </Form.Item>
                     <Form.Item>

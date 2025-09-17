@@ -28,6 +28,7 @@ export const RejectSingleCourseEnrollmentForm: FC<
           student_id: enrollment.student.id,
           course_id: enrollment.course.id,
           status: "rejected",
+          exempted_on_attendance:enrollment.exempted_on_attendance
         },
         {
           onSuccess: () => {

@@ -29,6 +29,7 @@ export const PendingSingleCourseEnrollmentForm: FC<
           student_id: enrollment.student.id,
           course_id: enrollment.course.id,
           status: "pending",
+          exempted_on_attendance:enrollment.exempted_on_attendance
         },
         {
           onSuccess: () => {

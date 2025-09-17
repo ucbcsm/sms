@@ -5,14 +5,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CourseEnrollment } from "@/types";
 import { updateSingleCourseEnrollment } from "@/lib/api";
 
-type ValidateSingleCourseEnrollmentFormProps = {
+type ExemptSingleCourseEnrollmentFormProps = {
   enrollment: CourseEnrollment;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export const ValidateSingleCourseEnrollmentForm: FC<
-  ValidateSingleCourseEnrollmentFormProps
+export const ExemptSingleCourseEnrollmentForm: FC<
+  ExemptSingleCourseEnrollmentFormProps
 > = ({ enrollment, open, setOpen }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
@@ -22,25 +22,32 @@ export const ValidateSingleCourseEnrollmentForm: FC<
 
   const onFinish = () => {
     if (enrollment) {
+      const isCurrentlyExempted = enrollment.exempted_on_attendance;
       mutateAsync(
         {
           id: enrollment.id,
           student_id: enrollment.student.id,
           course_id: enrollment.course.id,
-          status: "validated",
-          exempted_on_attendance: enrollment.exempted_on_attendance,
+          status: enrollment.status || "validated",
+          exempted_on_attendance: !isCurrentlyExempted, // Toggle exemption
         },
         {
           onSuccess: () => {
             queryClient.invalidateQueries({
               queryKey: ["course_enrollments"],
             });
-            messageApi.success("Inscription au cours validée avec succès !");
+            messageApi.success(
+              isCurrentlyExempted
+                ? "L'exemption d'assiduité a été retirée avec succès !"
+                : "L'étudiant a été exempté d'assiduité avec succès !"
+            );
             setOpen(false);
           },
           onError: () => {
             messageApi.error(
-              "Une erreur s'est produite lors de la validation de l'inscription au cours."
+              isCurrentlyExempted
+                ? "Une erreur s'est produite lors du retrait de l'exemption d'assiduité."
+                : "Une erreur s'est produite lors de l'exemption d'assiduité."
             );
           },
         }
@@ -53,7 +60,11 @@ export const ValidateSingleCourseEnrollmentForm: FC<
       {contextHolder}
       <Modal
         open={open}
-        title="Valider l'inscription au cours"
+        title={
+          enrollment.exempted_on_attendance
+            ? "Retirer l'exemption d'assiduité"
+            : "Exempter l'étudiant d'assiduité"
+        }
         centered
         okButtonProps={{
           autoFocus: true,
@@ -76,7 +87,12 @@ export const ValidateSingleCourseEnrollmentForm: FC<
           message="Confirmation requise"
           description={
             <p>
-              Êtes-vous sûr de vouloir <b>valider</b> l&apos;inscription de{" "}
+              Êtes-vous sûr de vouloir{" "}
+              <b>
+                {enrollment.exempted_on_attendance
+                  ? "retirer l'exemption d'assiduité de"
+                  : "exempter l'assiduité de"}
+              </b>{" "}
               <b>
                 {enrollment.student.year_enrollment.user.first_name}{" "}
                 {enrollment.student.year_enrollment.user.last_name}{" "}
@@ -90,7 +106,7 @@ export const ValidateSingleCourseEnrollmentForm: FC<
               ?
             </p>
           }
-          type="success"
+          type={enrollment.exempted_on_attendance ? "warning" : "success"}
           showIcon
         />
       </Modal>

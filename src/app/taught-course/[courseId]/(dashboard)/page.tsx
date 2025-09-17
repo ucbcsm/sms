@@ -39,6 +39,7 @@ import {
   Tag,
   Typography,
 } from "antd";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -66,7 +67,7 @@ export default function Page() {
   const { data: courses } = useQuery({
     queryKey: ["courses", `${course?.faculty.id}`, "all"],
     queryFn: ({ queryKey }) =>
-      getAllCourses({ facultyId: Number(queryKey[1]),}),
+      getAllCourses({ facultyId: Number(queryKey[1]) }),
     enabled: !!course?.faculty.id,
   });
 
@@ -151,15 +152,11 @@ export default function Page() {
                     "validated"
                   )}
                 />
-                <Button
-                  style={{ marginTop: 32 }}
-                  type="link"
-                  onClick={() =>
-                    router.push(`/app/taught-course/${courseId}/students`)
-                  }
-                >
-                  Inscrire
-                </Button>
+                <Link href={`/taught-course/${courseId}/students`}>
+                  <Button style={{ marginTop: 32 }} type="link">
+                    Inscrire
+                  </Button>
+                </Link>
               </Flex>
             </Card>
           </Col>
@@ -173,15 +170,11 @@ export default function Page() {
                     course?.theoretical_hours! + course?.practical_hours!
                   }`}
                 />
-                <Button
-                  style={{ marginTop: 32 }}
-                  type="link"
-                  onClick={() =>
-                    router.push(`/app/taught-course/${courseId}/hours-tracking`)
-                  }
-                >
-                  Suivre
-                </Button>
+                <Link href={`/taught-course/${courseId}/hours-tracking`}>
+                  <Button style={{ marginTop: 32 }} type="link">
+                    Suivre
+                  </Button>
+                </Link>
               </Flex>
             </Card>
           </Col>
