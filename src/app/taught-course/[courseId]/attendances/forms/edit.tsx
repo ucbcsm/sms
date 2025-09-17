@@ -26,6 +26,7 @@ import { BulbOutlined, CloseOutlined } from "@ant-design/icons";
 import { AttendanceList, AttendanceListItem, TaughtCourse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  AttendanceItemFromCourseEnrollment,
   getAttendanceAbsentCount,
   getAttendanceAbsentPercentage,
   getAttendanceJustifiedCount,
@@ -64,7 +65,7 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
 
   const [cancel, setCancel] = useState<boolean>(false);
   const [attendanceItems, setAttendanceItems] = useState<
-    Omit<AttendanceListItem, "id" & { id?: number }>[]
+    AttendanceItemFromCourseEnrollment[]//Omit<AttendanceListItem, "id" & { id?: number; exempted: boolean }>[]
   >([]);
 
   const queryClient = useQueryClient();
@@ -179,7 +180,10 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         }
       >
         <div style={{ maxWidth: 1400, margin: "auto" }}>
-          <Alert
+          
+          <Row gutter={[24, 24]}>
+            <Col span={6}>
+            <Alert
             type="warning"
             icon={<BulbOutlined/>}
             message="Instructions"
@@ -188,8 +192,6 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
             closable
             style={{ marginBottom: 24 }}
           />
-          <Row gutter={[24, 24]}>
-            <Col span={6}>
               <Descriptions
                 title="Détails du cours"
                 column={1}
@@ -289,21 +291,7 @@ export const EditAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                   editRecordStatus={editAttendanceItemStatus}
                 />
               </Card>
-              <div
-                style={{
-                  display: "flex",
-                  // background: colorBgContainer,
-                  padding: "24px 0",
-                }}
-              >
-                <Typography.Text type="secondary">
-                  © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-                </Typography.Text>
-                <div className="flex-1" />
-                <Space>
-                  <Palette />
-                </Space>
-              </div>
+             
             </Col>
             <Col span={6}>
               <Flex vertical gap={16}>

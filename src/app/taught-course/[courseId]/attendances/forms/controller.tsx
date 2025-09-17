@@ -1,11 +1,12 @@
 "use client";
 
-import { AttendanceListItem } from "@/types";
-import { Radio, Space } from "antd";
+import { AttendanceItemFromCourseEnrollment } from "@/lib/api";
+import { InfoCircleTwoTone } from "@ant-design/icons";
+import { Alert, Button, Popover, Radio, Space } from "antd";
 import { FC } from "react";
 
 type AttendanceControllerProps = {
-  record: Omit<AttendanceListItem, "id" & { id?: number,  }>;
+  record: AttendanceItemFromCourseEnrollment; //Omit<AttendanceListItem, "id"> & { id?: number; exempted:boolean }
   index: number;
   editRecordStatus: (
     status: "present" | "absent" | "justified",
@@ -21,7 +22,7 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
   return (
     <Space size="middle">
       <Radio.Group
-        // disabled={record.exempted_on_attendance}
+        disabled={record.exempted}
         options={[
           { value: "present", label: "Présent" },
           { value: "absent", label: "Absent" },
@@ -35,6 +36,23 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
         optionType="button"
         buttonStyle="solid"
       />
+      {record.exempted && (
+        <Popover
+          content={
+            <Alert
+              type="info"
+              showIcon
+              description="L'étudiant est exempté de toute assiduité pour ce cours. Son statut ne peut pas être modifié."
+              style={{ border: 0, maxWidth: 400 }}
+            />
+          }
+          title="Exempté d'assiduité"
+        >
+          <Button type="text">
+            <InfoCircleTwoTone />
+          </Button>
+        </Popover>
+      )}
     </Space>
   );
 };

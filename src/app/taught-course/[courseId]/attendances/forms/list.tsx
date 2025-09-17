@@ -1,15 +1,16 @@
 "use client";
 
-import { Avatar, Space, Table, Typography } from "antd";
+import { Avatar, Space, Table, theme, Typography } from "antd";
 import { FC } from "react";
 import { AttendanceListItem } from "@/types";
 import { getHSLColor } from "@/lib/utils";
 import { AttendanceController } from "./controller";
+import { AttendanceItemFromCourseEnrollment } from "@/lib/api";
 
 type ListAttendanceListItemProps = {
-  items?: Omit<AttendanceListItem, "id" & { id?: number }>[];
+  items?: AttendanceItemFromCourseEnrollment[]; //Omit<AttendanceListItem, "id" & { id?: number; exempted:boolean }>[]
   editRecordStatus?: (
-   status: "present" | "absent" | "justified",
+    status: "present" | "absent" | "justified",
     index: number
   ) => void;
 };
@@ -18,6 +19,9 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
   items,
   editRecordStatus,
 }) => {
+  const {
+    token: { colorTextDisabled },
+  } = theme.useToken();
 
   return (
     <Table
@@ -45,9 +49,11 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
           render: (_, record, __) => (
             <Avatar
               style={{
-                backgroundColor: getHSLColor(
-                  `${record.student.user.first_name} ${record.student.user.last_name} ${record.student.user.surname}`
-                ),
+                backgroundColor: record.exempted
+                  ? colorTextDisabled
+                  : getHSLColor(
+                      `${record.student.user.first_name} ${record.student.user.last_name} ${record.student.user.surname}`
+                    ),
               }}
             >
               {record.student.user.first_name?.charAt(0).toUpperCase()}
@@ -62,19 +68,30 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
           dataIndex: "matricule",
           key: "matricule",
           width: 92,
-          render: (_, record, __) =>
-            record.student.user.matricule.padStart(6, "0"),
+          render: (_, record, __) => (
+            <Typography.Text
+              style={{
+                color: record.exempted ? colorTextDisabled : "",
+              }}
+            >
+              {record.student.user.matricule.padStart(6, "0")}
+            </Typography.Text>
+          ),
           align: "center",
         },
         {
           title: "Noms",
-          dataIndex: "available_course",
-          key: "available_course",
+          dataIndex: "names",
+          key: "names",
           render: (_, record) => (
-            <>
+            <Typography.Text
+              style={{
+                color: record.exempted ? colorTextDisabled : "",
+              }}
+            >
               {record.student.user.first_name} {record.student.user.last_name}{" "}
               {record.student.user.surname}
-            </>
+            </Typography.Text>
           ),
         },
         {
@@ -91,6 +108,7 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
       ]}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+      scroll={{ y: "calc(100vh - 254px)" }}
       size="small"
       pagination={false}
     />
