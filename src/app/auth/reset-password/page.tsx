@@ -90,7 +90,7 @@ export default function Page() {
           >
             <Space>
               <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                CI-UCBC
+                UCBC
               </Typography.Title>
             </Space>
             <div className="flex-1" />
@@ -182,7 +182,7 @@ export default function Page() {
             }}
           >
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} UCBC. Tous droits réservés.
             </Typography.Text>
           </Layout.Footer>
         </div>
