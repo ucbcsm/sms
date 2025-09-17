@@ -3,7 +3,6 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
-  getAllCourseEnrollments,
   getApplicationStatusName,
   getApplicationStatusTypographyType,
   getClasses,
@@ -175,21 +174,29 @@ const ListCourseEnrollmentItem: FC<ListCourseEnrollmentItemProps> = ({
 export default function Page() {
   const { courseId } = useParams();
   const { yid } = useYid();
-  const {
-    data: courseEnrollments,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["course_enrollments", courseId],
-    queryFn: ({ queryKey }) => getAllCourseEnrollments(Number(queryKey[1])),
-    enabled: !!courseId,
-  });
 
   const { data: course } = useQuery({
     queryKey: ["taught_courses", courseId],
     queryFn: ({ queryKey }) => getTaughtCours(Number(queryKey[1])),
     enabled: !!courseId,
   });
+
+  const {
+    data: courseEnrollments,
+    isPending,
+    isError,
+  } = useQuery({
+    queryKey: ["course_enrollments", yid, course?.faculty.id, courseId],
+    queryFn: ({ queryKey }) =>
+      getCourseEnrollments({
+        academicYearId: Number(queryKey[1]),
+        facultyId: Number(queryKey[2]),
+        courseId: Number(queryKey[3]),
+      }),
+    enabled: !!yid && !!courseId && !!course?.faculty.id,
+  });
+
+  
 
   const { data: periodEnrollements } = useQuery({
     queryKey: [

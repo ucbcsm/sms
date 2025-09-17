@@ -3,44 +3,33 @@ import api from "../fetcher";
 import dayjs from "dayjs";
 
 export async function getCourseEnrollments(searchParams: {
+  academicYearId: number;
+  facultyId: number;
   courseId: number;
-  page?: number;
-  pageSize?: number;
-  search?: string;
   status?: "pending" | "validated" | "rejected";
 }) {
-  const { courseId, page, pageSize, search, status } = searchParams;
+  const { academicYearId, facultyId, courseId, status } = searchParams;
   const query = new URLSearchParams();
+  query.append("academic_year__id", academicYearId.toString());
+  query.append("faculty__id", facultyId.toString());
   query.append("course__id", courseId.toString());
-  if (page !== undefined) {
-    query.append("page", page.toString());
-  }
-  if (pageSize !== undefined) {
-    query.append("page_size", pageSize.toString());
-  }
-  if (search !== undefined && search.trim() !== "") {
-    query.append("search", search.trim());
-  }
+
   if (status !== undefined) {
     query.append("status", status);
   }
   const res = await api.get(
     `/faculty/course-enrollment-from-faculty/?${query.toString()}`
   );
-  return res.data as {
-    results: CourseEnrollment[];
-    count: number;
-    next: string | null;
-    previous: string | null;
-  };
+  return res.data as CourseEnrollment[];
+   
 }
 
-export async function getAllCourseEnrollments(courseId: number) {
-  const res = await api.get(
-    `/faculty/course-enrollment-from-faculty/?course__id=${courseId}`
-  );
-  return res.data as CourseEnrollment[];
-}
+// export async function getAllCourseEnrollments(courseId: number) {
+//   const res = await api.get(
+//     `/faculty/course-enrollment-from-faculty/?course__id=${courseId}`
+//   );
+//   return res.data as CourseEnrollment[];
+// }
 
 export async function createCourseEnrollment(data: {
   payload: {

@@ -3,7 +3,6 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
-  getAllCourseEnrollments,
   getAttendanceAbsentCount,
   getAttendanceJustifiedCount,
   getAttendancePresentCount,
@@ -39,6 +38,7 @@ import { FC, useState } from "react";
 import { DeleteAttendanceListForm } from "./forms/delete";
 import { NewAttendanceListForm } from "./forms/new";
 import { EditAttendanceListForm } from "./forms/edit";
+import { useYid } from "@/hooks/use-yid";
 
 type ActionsBarProps = {
   record: AttendanceList;
@@ -101,6 +101,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, course }) => {
 
 export default function Page() {
   const { courseId } = useParams();
+  const {yid}=useYid()
   const { data, isPending, isError } = useQuery({
     queryKey: ["attendances-lists", courseId],
     queryFn: ({ queryKey }) => getAttendancesListByCourse(Number(queryKey[1])),
@@ -114,9 +115,14 @@ export default function Page() {
   });
 
   const { data: enrollments, isPending: isPendingEnrollments } = useQuery({
-    queryKey: ["course_enrollments", courseId],
-    queryFn: ({ queryKey }) => getAllCourseEnrollments(Number(queryKey[1])),
-    enabled: !!courseId,
+    queryKey: ["course_enrollments", yid, course?.faculty.id, courseId],
+    queryFn: ({ queryKey }) =>
+      getCourseEnrollments({
+        academicYearId: Number(queryKey[1]),
+        facultyId: Number(queryKey[2]),
+        courseId: Number(queryKey[3]),
+      }),
+    enabled: !!yid && !!course?.faculty.id && !!courseId,
   });
 
   if (isPending) {

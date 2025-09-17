@@ -10,7 +10,6 @@ import {
 import {
   CheckOutlined,
   CloseOutlined,
-  DownOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   HourglassOutlined,
@@ -158,7 +157,7 @@ export const ListCourseValidatedStudents: FC<
   classes,
   departments,
 }) => {
-  
+
   return (
     <Table
       title={() => (
@@ -286,7 +285,7 @@ export const ListCourseValidatedStudents: FC<
                 Non
               </Tag>
             ),
-          width: 88,
+          width: 92,
         },
         {
           title: "",
@@ -307,7 +306,6 @@ export const ListCourseValidatedStudents: FC<
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
         showSizeChanger: true,
-
       }}
     />
   );

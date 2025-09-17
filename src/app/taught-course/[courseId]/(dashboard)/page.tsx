@@ -2,8 +2,8 @@
 
 import { EditTaughtCourseForm } from "@/app/faculty/[facultyId]/taught-courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
+import { useYid } from "@/hooks/use-yid";
 import {
-  getAllCourseEnrollments,
   getAllCourses,
   getClassrooms,
   getCourseEnrollments,
@@ -47,7 +47,7 @@ import { useState } from "react";
 export default function Page() {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const { courseId } = useParams();
-  const router = useRouter();
+const {yid}=useYid()
 
   const {
     data: course,
@@ -112,9 +112,14 @@ export default function Page() {
   });
 
   const { data: enrollments, isPending: isPendingEnrollments } = useQuery({
-    queryKey: ["course_enrollments", courseId],
-    queryFn: ({ queryKey }) => getAllCourseEnrollments(Number(queryKey[1])),
-    enabled: !!courseId,
+    queryKey: ["course_enrollments", yid, course?.faculty.id, courseId],
+    queryFn: ({ queryKey }) =>
+      getCourseEnrollments({
+        academicYearId: Number(queryKey[1]),
+        facultyId: Number(queryKey[2]),
+        courseId: Number(queryKey[3]),
+      }),
+    enabled: !!yid && !!course?.faculty.id && !!courseId,
   });
 
   const getCourseProgressStatus = (
