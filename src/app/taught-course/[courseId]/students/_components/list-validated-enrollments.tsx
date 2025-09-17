@@ -36,6 +36,7 @@ import { RejectSingleCourseEnrollmentForm } from "./forms/decisions/reject";
 import { ValidateSingleCourseEnrollmentForm } from "./forms/decisions/validate";
 import { getCourseEnrollmentsByStatus } from "@/lib/api";
 import { ExemptSingleCourseEnrollmentForm } from "./forms/decisions/exempt";
+import { useQueryState } from "nuqs";
 
 type ActionsBarProps = {
   item: CourseEnrollment;
@@ -92,7 +93,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                       ? "Retirer l'exonération"
                       : "Exempter d'assiduité",
                     icon: item.exempted_on_attendance ? (
-                      <UndoOutlined style={{color:colorErrorActive}} />
+                      <UndoOutlined style={{ color: colorErrorActive }} />
                     ) : (
                       <SafetyCertificateOutlined
                         style={{ color: colorSuccessActive }}
@@ -146,6 +147,7 @@ type ListCourseStudentsValidatedProps = {
   periodEnrollments?: PeriodEnrollment[];
   departments?: Department[];
   classes?: Class[]; // Promotions
+  isPending: boolean;
 };
 
 export const ListCourseValidatedStudents: FC<
@@ -156,7 +158,10 @@ export const ListCourseValidatedStudents: FC<
   periodEnrollments,
   classes,
   departments,
+  isPending,
 }) => {
+  const [search, setSearch] = useQueryState("search");
+  const [searchResults, setSearchResults] = useState<CourseEnrollment[]>();
 
   return (
     <Table
@@ -169,7 +174,35 @@ export const ListCourseValidatedStudents: FC<
           </Space>
           <div className="flex-1" />
           <Space>
-            <Input.Search placeholder="Rechercher ..." />
+            <Input.Search
+              variant="filled"
+              placeholder="Rechercher ..."
+              onChange={(e) => {
+                e.preventDefault();
+                
+                const results = getCourseEnrollmentsByStatus(
+                  courseEnrollments,
+                  "validated"
+                )?.filter(
+                  (course) =>
+                    course.student.year_enrollment.user.matricule
+                      ?.toLowerCase()
+                      .includes(e.target.value) ||
+                    course.student.year_enrollment.user.first_name
+                      ?.toLowerCase()
+                      .includes(e.target.value) ||
+                    course.student.year_enrollment.user.last_name
+                      ?.toLowerCase()
+                      .includes(e.target.value) ||
+                    course.student.year_enrollment.user.surname
+                      ?.toLowerCase()
+                      .includes(e.target.value)
+                );
+                setSearch(e.target.value);
+                setSearchResults(results);
+              }}
+              value={search!}
+            />
             <NewCourseEnrollmentForm
               course={course}
               periodEnrollments={periodEnrollments}
@@ -198,12 +231,20 @@ export const ListCourseValidatedStudents: FC<
                 ],
               }}
             >
-              <Button icon={<MoreOutlined />} style={{ boxShadow: "none" }} />
+              <Button
+                type="text"
+                icon={<MoreOutlined />}
+                style={{ boxShadow: "none" }}
+              />
             </Dropdown>
           </Space>
         </header>
       )}
-      dataSource={getCourseEnrollmentsByStatus(courseEnrollments, "validated")}
+      dataSource={
+        searchResults
+          ? searchResults
+          : getCourseEnrollmentsByStatus(courseEnrollments, "validated")
+      }
       columns={[
         {
           title: "Photo",
@@ -268,8 +309,8 @@ export const ListCourseValidatedStudents: FC<
                   new Date(`${record.date}`)
                 )
               : "",
-              width:120,
-              ellipsis:true,
+          width: 120,
+          ellipsis: true,
         },
         {
           key: "exempted_on_attendance",
@@ -277,7 +318,11 @@ export const ListCourseValidatedStudents: FC<
           dataIndex: "exempted_on_attendance",
           render: (_, record, __) =>
             record.exempted_on_attendance ? (
-              <Tag  color="success" bordered={false} style={{ marginRight: 0, width: "100%" }}>
+              <Tag
+                color="success"
+                bordered={false}
+                style={{ marginRight: 0, width: "100%" }}
+              >
                 Oui
               </Tag>
             ) : (
@@ -294,6 +339,7 @@ export const ListCourseValidatedStudents: FC<
           width: 50,
         },
       ]}
+      loading={isPending}
       rowKey="id"
       rowClassName={`bg-white odd:bg-[#f5f5f5]`}
       rowSelection={{

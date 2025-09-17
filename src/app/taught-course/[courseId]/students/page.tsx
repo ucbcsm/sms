@@ -225,9 +225,9 @@ export default function Page() {
     queryFn: getClasses,
   });
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
+  // if (isPending) {
+  //   return <DataFetchPendingSkeleton variant="table" />;
+  // }
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -242,6 +242,7 @@ export default function Page() {
           periodEnrollments={periodEnrollements}
           departments={departments}
           classes={classes}
+          isPending={isPending}
         />
       </Col>
       <Col span={8}>
