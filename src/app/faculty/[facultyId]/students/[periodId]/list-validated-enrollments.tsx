@@ -44,7 +44,6 @@ type ActionsBarProps = {
   item: PeriodEnrollment;
 };
 const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
-  const router = useRouter();
   const {
     token: { colorSuccessActive, colorWarningActive },
   } = theme.useToken();
