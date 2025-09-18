@@ -92,7 +92,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
         onSuccess: () => {
           messageApi.success("Étudiants inscrits au cours avec succès !");
           queryClient.invalidateQueries({
-            queryKey: ["course_enrollments", courseId],
+            queryKey: ["course_enrollments"],
           });
           setSelectedRowKeys([]);
           setClassFilterValueId(0);
