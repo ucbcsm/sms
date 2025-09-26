@@ -30,8 +30,9 @@ import {
 } from "antd";
 import { useParams } from "next/navigation";
 import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
-import { FC } from "react";
-import { record } from "zod";
+import { FC, useRef } from "react";
+import { PrintableAttendanceReport } from "./printable-attendance-report";
+import { useReactToPrint } from "react-to-print";
 
 type AttendanceCourseReportProps = {
   course?: TaughtCourse;
@@ -53,6 +54,16 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
     "attendance_reached",
     parseAsString.withDefault("all")
   );
+
+  const refToPrint = useRef<HTMLDivElement | null>(null);
+
+   const printList = useReactToPrint({
+     contentRef: refToPrint,
+     documentTitle: `Rapport-presence-${course?.available_course.name.replaceAll(
+       " ",
+       "-"
+     )}-${course?.academic_year?.name}`,
+   });
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["attendance-course-report", courseId, reached],
@@ -77,7 +88,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
-        Rapport de présence
+        Rapport d&apos;assiduité
       </Button>
       <Drawer
         open={open}
@@ -103,7 +114,10 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
           </Space>
         }
       >
-        <div className=" max-w-7xl mx-auto">
+        <div
+          className=" max-w-7xl mx-auto"
+          style={{ display: !isError ? "block" : "none" }}
+        >
           <Row gutter={[24, 24]}>
             <Col xs={24} sm={24} md={24} lg={6}>
               <Card
@@ -218,7 +232,6 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                       </Space>
                       <div className="flex-1" />
                       <Space>
-                        {" "}
                         <Select
                           variant="filled"
                           value={reached}
@@ -236,8 +249,9 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                           icon={<PrinterOutlined />}
                           color="primary"
                           variant="dashed"
-                          disabled={isPending}
+                          disabled={isPending || !data || data.length === 0}
                           style={{ boxShadow: "none" }}
+                          onClick={printList}
                         >
                           Imprimer
                         </Button>
@@ -327,6 +341,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
           />
         )}
       </Drawer>
+      <PrintableAttendanceReport ref={refToPrint} data={data} course={course} />
     </>
   );
 };

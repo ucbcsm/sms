@@ -112,15 +112,11 @@ export default function Page() {
         >
           <Space>
             {/* <BackButton /> */}
-            {!isPending ? (
+           
               <Typography.Title level={3} style={{ marginBottom: 0 }}>
-               Tableau de bord {/* {faculty?.name} (Filière) */}
+               Tableau de bord
               </Typography.Title>
-            ) : (
-              <Form>
-                <Skeleton.Input active />
-              </Form>
-            )}
+            
           </Space>
           <div className="flex-1" />
           <Space>

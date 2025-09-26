@@ -35,11 +35,11 @@ import {
 } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
-import { DeleteAttendanceListForm } from "./forms/delete";
-import { NewAttendanceListForm } from "./forms/new";
-import { EditAttendanceListForm } from "./forms/edit";
+import { DeleteAttendanceListForm } from "./_components/forms/delete";
+import { NewAttendanceListForm } from "./_components/forms/new";
+import { EditAttendanceListForm } from "./_components/forms/edit";
 import { useYid } from "@/hooks/use-yid";
-import { AttendanceCourseReport } from "./attendance-course-report";
+import { AttendanceCourseReport } from "./_components/attendance-course-report";
 
 type ActionsBarProps = {
   record: AttendanceList;

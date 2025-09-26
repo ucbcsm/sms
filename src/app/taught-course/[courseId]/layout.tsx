@@ -78,10 +78,6 @@ export default function FacultyLayout({
     queryFn: getPeriods,
   });
 
-  const { data: faculties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
 
   const { data: teachingUnits } = useQuery({
     queryKey: ["teaching-units", `${course?.faculty.id}`],
