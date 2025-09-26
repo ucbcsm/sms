@@ -49,6 +49,29 @@ export async function updateAttendanceList({
   return res.data as AttendanceList;
 }
 
+export async function getAttendanceCourseReport(params:{
+  courseId:number;
+  attendance_reached?: boolean;
+}) {
+  const {courseId, attendance_reached}=params
+  const queryParams = new URLSearchParams();
+  queryParams.append('course__id', courseId.toString());
+  if (attendance_reached !== undefined) {
+    queryParams.append('attendance_reached', attendance_reached.toString());
+  }
+  const res = await api.get(
+    `/faculty/attendance-list/?${queryParams.toString()}`
+  );
+  return res.data as {
+    class_year: string;
+    departement: string;
+    matricule: string;
+    percentage: number | null;
+    required_attendance_reached: boolean | null;
+    student: string;
+  }[];
+}
+
 export const getAttendancePresentCount = (
   items?: Omit<AttendanceListItem, "id" & { id?: number }>[]
 ) => {

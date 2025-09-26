@@ -178,7 +178,7 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
               {
                 key: "category",
                 label: "Catégorie",
-                children: getCourseTypeName(data?.available_course.code) || "",
+                children: getCourseTypeName(data?.available_course.course_type) || "",
               },
               {
                 key: "credits",

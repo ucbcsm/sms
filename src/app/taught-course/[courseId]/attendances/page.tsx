@@ -39,6 +39,7 @@ import { DeleteAttendanceListForm } from "./forms/delete";
 import { NewAttendanceListForm } from "./forms/new";
 import { EditAttendanceListForm } from "./forms/edit";
 import { useYid } from "@/hooks/use-yid";
+import { AttendanceCourseReport } from "./attendance-course-report";
 
 type ActionsBarProps = {
   record: AttendanceList;
@@ -156,12 +157,7 @@ export default function Page() {
                 "validated"
               )}
             />
-            <Button
-              icon={<CheckCircleOutlined />}
-              style={{ boxShadow: "none" }}
-            >
-              Rapport de présence
-            </Button>
+            <AttendanceCourseReport course={course} />
             {/* <Dropdown
               menu={{
                 items: [
@@ -242,21 +238,21 @@ export default function Page() {
           key: "operator",
           render: (_, record, __) =>
             `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`,
-            // <Space>
-            //   {record.verified_by && (
-            //     <Avatar
-            //       style={{
-            //         backgroundColor: getHSLColor(
-            //           `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`
-            //         ),
-            //       }}
-            //     >
-            //       {record.verified_by.first_name?.charAt(0).toUpperCase()}
-            //       {record.verified_by.last_name?.charAt(0).toUpperCase()}
-            //     </Avatar>
-            //   )}{" "}
-            //   {record.verified_by.surname}
-            // </Space>
+          // <Space>
+          //   {record.verified_by && (
+          //     <Avatar
+          //       style={{
+          //         backgroundColor: getHSLColor(
+          //           `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`
+          //         ),
+          //       }}
+          //     >
+          //       {record.verified_by.first_name?.charAt(0).toUpperCase()}
+          //       {record.verified_by.last_name?.charAt(0).toUpperCase()}
+          //     </Avatar>
+          //   )}{" "}
+          //   {record.verified_by.surname}
+          // </Space>
           ellipsis: true,
         },
         {

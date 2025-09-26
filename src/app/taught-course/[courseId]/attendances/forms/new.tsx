@@ -200,16 +200,22 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           /> */}
           <Row gutter={[24, 24]}>
             <Col span={6}>
-            <Alert
-            type="info"
-            icon={<BulbOutlined/>}
-            message="Instructions"
-            description={<><div>Indiquez la date, l&apos;heure et marquez avec précision les étudiants présents et absents</div>
-            </>}
-            showIcon
-            closable
-            style={{ marginBottom: 24 }}
-          />
+              <Alert
+                type="info"
+                icon={<BulbOutlined />}
+                message="Instructions"
+                description={
+                  <>
+                    <div>
+                      Indiquez la date, l&apos;heure et marquez avec précision
+                      les étudiants présents et absents
+                    </div>
+                  </>
+                }
+                showIcon
+                closable
+                style={{ marginBottom: 24 }}
+              />
               <Descriptions
                 title="Détails du cours"
                 column={1}

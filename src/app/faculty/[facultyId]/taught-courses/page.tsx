@@ -376,6 +376,7 @@ export default function Page() {
               dataIndex: "title",
               key: "title",
               render: (_, record, __) => record?.available_course?.name,
+              ellipsis:true
             },
             {
               title: "Code",
