@@ -300,7 +300,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                               : "error"
                           }
                           bordered={false}
-                          style={{ marginRight: 0, width: "100%" }}
+                          style={{ marginRight: 0, width: "100%", textAlign: "center" }}
                         >
                           {record.required_attendance_reached ? "OUI" : "NON"}
                         </Tag>
