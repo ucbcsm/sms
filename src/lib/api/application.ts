@@ -19,67 +19,100 @@ export async function getApplication(id: number) {
   return res.data as Application;
 }
 
-export async function getPendingApplications(searchParams?: {
-  year?: string;
+export async function getPendingApplications(searchParams: {
+  year: string | number;
+  student_tab_type: "is_new_student" | "is_old_student";
   page?: string | number;
-  student_tab_type?: "is_new_student" | "is_old_student" | string;
   page_size?: string | number;
   search?: string;
   get_all?: boolean;
 }) {
+  const { year, student_tab_type, page, page_size, search, get_all } =
+    searchParams;
+  const query = new URLSearchParams();
+   query.append("year", year.toString());
+   query.append("student_tab_type", student_tab_type.toString());
+
+  if (page !== undefined) {query.append("page", page.toString());}
+  if (page_size !== undefined) {query.append("page_size", page_size.toString());}
+  if (search !== undefined) {query.append("search", search.toString());}
+  if (get_all !== undefined) {
+    query.append("get_all", String(get_all));
+  }
+
   const res = await api.get(
-    `/apparitorat/application-pending/?year=${searchParams?.year || ""}&page=${
-      searchParams?.page || 1
-    }&page_size=${searchParams?.page_size || 25}&student_tab_type=${
-      searchParams?.student_tab_type || "is_new_student"
-    }&search=${searchParams?.search || ""}&get_all=${
-      searchParams?.get_all || false
-    }`
+    `/apparitorat/application-pending/?${query.toString()}`
   );
 
-  return res.data.results as Application[];
+  return res.data as {
+    results: Application[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
-export async function getValidatedApplications(searchParams?: {
-  year?: string;
+export async function getValidatedApplications(searchParams: {
+  year: string | number;
+  student_tab_type: "is_new_student" | "is_old_student";
   page?: string | number;
-  student_tab_type?: "is_new_student" | "is_old_student" | string;
   page_size?: string | number;
   search?: string;
   get_all?: boolean;
 }) {
+   const { year, student_tab_type, page, page_size, search, get_all } =
+    searchParams;
+  const query = new URLSearchParams();
+   query.append("year", year.toString());
+  query.append("student_tab_type", student_tab_type.toString());
+ if (page !== undefined) {query.append("page", page.toString());}
+  if (page_size !== undefined) {query.append("page_size", page_size.toString());}
+  if (search !== undefined) {query.append("search", search.toString());}
+  if (get_all !== undefined) {
+    query.append("get_all", String(get_all));
+  }
+
   const res = await api.get(
-    `/apparitorat/application-validated/?year=${
-      searchParams?.year || ""
-    }&page=${searchParams?.page || 1}&page_size=${
-      searchParams?.page_size || 25
-    }&student_tab_type=${
-      searchParams?.student_tab_type || "is_new_student"
-    }&search=${searchParams?.search || ""}&get_all=${
-      searchParams?.get_all || false
-    }`
+    `/apparitorat/application-validated/?${query.toString()}`
   );
-  return res.data.results as Application[];
+  return res.data as {
+    results: Application[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
-export async function getRejectedApplications(searchParams?: {
-  year?: string;
+export async function getRejectedApplications(searchParams: {
+  year: string | number;
+  student_tab_type: "is_new_student" | "is_old_student";
   page?: string | number;
-  student_tab_type?: "is_new_student" | "is_old_student" | string;
   page_size?: string | number;
   search?: string;
   get_all?: boolean;
 }) {
+  const { year, student_tab_type, page, page_size, search, get_all } =
+    searchParams;
+  const query = new URLSearchParams();
+  query.append("year", String(year));
+   query.append("student_tab_type", student_tab_type);
+
+  if (page !== undefined) {query.append("page", page.toString());}
+  if (page_size !== undefined) {query.append("page_size", page_size.toString());}
+  if (search !== undefined) {query.append("search", search.toString());}
+  if (get_all !== undefined) {
+    query.append("get_all", String(get_all));
+  }
+
   const res = await api.get(
-    `/apparitorat/application-rejected/?year=${searchParams?.year || ""}&page=${
-      searchParams?.page || 1
-    }&page_size=${searchParams?.page_size || 25}&student_tab_type=${
-      searchParams?.student_tab_type || "is_new_student"
-    }&search=${searchParams?.search || ""}&get_all=${
-      searchParams?.get_all || false
-    }`
+    `/apparitorat/application-rejected/?${query.toString()}`
   );
-  return res.data.results as Application[];
+  return res.data as {
+    results: Application[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
 export async function createApplication(params: ApplicationFormDataType) {

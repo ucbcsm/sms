@@ -15,6 +15,7 @@ import {
   Skeleton,
   Statistic,
 } from "antd";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export function StudentsStatistics() {
@@ -207,13 +208,14 @@ export function StudentsStatistics() {
                 />
               )}
             />
+            <Link href={"/app/enrollments"}>
             <Button
               type="primary"
               style={{ boxShadow: "none" }}
-              onClick={() => router.push("/app/students")}
             >
               Gérer
             </Button>
+            </Link>
           </Flex>
         </Card>
       </Col>

@@ -1,5 +1,9 @@
 "use client";
-import { UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  PlusCircleOutlined,
+  UserAddOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Dropdown,
@@ -11,7 +15,13 @@ import {
   theme,
   Typography,
 } from "antd";
-import { Options, parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
+import {
+  Options,
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsStringEnum,
+  useQueryState,
+} from "nuqs";
 import { ListNewApplications } from "./applications/lists/new_applications";
 import { ListReApplications } from "./applications/lists/reapplications";
 import { ReapplyForm } from "./applications/forms/reapply";
@@ -32,6 +42,7 @@ import {
 import { ViewEditApplicationForm } from "./view";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { DataFetchErrorResult } from "@/components/errorResult";
+import Link from "next/link";
 
 type EnrollButtonProps = {
   setReapply: (
@@ -53,13 +64,22 @@ const EnrollButton: FC<EnrollButtonProps> = ({
       menu={{
         items: [
           {
+            key: "newApplication",
+            label: "Nouvelle candidature",
+            icon: <PlusCircleOutlined />,
+          },
+          {
             key: "reapply",
-            label: "Réinscrire (Pour les anciens)",
+            label: "Réinscrire (Anciens étudiants)",
             icon: <UserOutlined />,
           },
           {
-            key: "newApplication",
-            label: "Nouvelle candidature",
+            key: "divider-1",
+            type: "divider",
+          },
+          {
+            key: "former-students",
+            label: "Enregistrement (Anciens étudiants)",
             icon: <UserAddOutlined />,
           },
         ],
@@ -99,7 +119,10 @@ export default function Page() {
     parseAsBoolean.withDefault(false)
   );
 
-  const [selectedTag, setSelectedTag] = useState<"new" | "old">("new");
+  const [selectedTab, setSelectedTab] = useQueryState(
+    "tab",
+    parseAsStringEnum(["new", "old"]).withDefault("new")
+  );
 
   const [view, setView] = useQueryState("view", parseAsInteger.withDefault(0));
 
@@ -182,8 +205,8 @@ export default function Page() {
         >
           <Tag.CheckableTag
             key="new"
-            checked={selectedTag === "new"}
-            onChange={(checked) => setSelectedTag("new")}
+            checked={selectedTab === "new"}
+            onChange={(checked) => setSelectedTab("new")}
             style={{ borderRadius: 12 }}
           >
             Nouveaux
@@ -191,15 +214,15 @@ export default function Page() {
 
           <Tag.CheckableTag
             key="old"
-            checked={selectedTag === "old"}
-            onChange={(checked) => setSelectedTag("old")}
+            checked={selectedTab === "old"}
+            onChange={(checked) => setSelectedTab("old")}
             style={{ borderRadius: 12 }}
           >
             Anciens
           </Tag.CheckableTag>
         </Flex>
-        {selectedTag === "new" && <ListNewApplications />}
-        {selectedTag === "old" && <ListReApplications />}
+        {selectedTab === "new" && <ListNewApplications />}
+        {selectedTab === "old" && <ListReApplications />}
         <ReapplyForm open={reapply} setOpen={setReapply} />
         <NewApplicationForm open={newApplication} setOpen={SetNewApplication} />
       </Layout.Sider>
@@ -243,13 +266,11 @@ export default function Page() {
               icon={<UserAddOutlined style={{ color: "GrayText" }} />}
               extra={
                 <Space>
-                  <Button
-                    type="link"
-                    style={{ boxShadow: "none" }}
-                    onClick={() => router.push(`/app/students`)}
-                  >
-                    Gérer les étudiants
-                  </Button>
+                  <Link href={`/app/students`}>
+                    <Button type="link" style={{ boxShadow: "none" }}>
+                      Gérer les étudiants
+                    </Button>
+                  </Link>
                   <EnrollButton
                     setReapply={setReapply}
                     SetNewApplication={SetNewApplication}

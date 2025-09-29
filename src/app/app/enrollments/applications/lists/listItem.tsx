@@ -22,8 +22,6 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
     <List.Item
       style={{
         background: item.id === view ? colorBgTextHover : "",
-        paddingLeft: 12,
-        paddingRight: 12,
         cursor: "pointer",
       }}
       onClick={() => {

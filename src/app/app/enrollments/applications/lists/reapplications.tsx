@@ -12,37 +12,17 @@ import { FC } from "react";
 import { ListItemApplication } from "./listItem";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchingSkeleton } from "./new_applications";
+import { useYid } from "@/hooks/use-yid";
+import { usePendingApplications } from "@/hooks/use-pending-application";
+import { ListPendingApplications } from "./listPending";
+import { ListRejectedApplications } from "./listRejected";
+import { ListValidatedApplications } from "./listValidated";
 
 export const ListReApplications: FC = () => {
-  const {
-    data: pendingApplications,
-    isPending: isPendingPendingApplications,
-    isError: isErrorPendingApplications,
-  } = useQuery({
-    queryKey: ["applications", "pending", "is_old_student"],
-    queryFn: async ({ queryKey }) =>
-      getPendingApplications({ student_tab_type: queryKey[2] }),
-  });
+  const {yid}=useYid()
+ const {data}=usePendingApplications("is_old_student", yid)
 
-  const {
-    data: rejectedApplications,
-    isPending: isPendingRejectdApplications,
-    isError: isErrorRejectedApplications,
-  } = useQuery({
-    queryKey: ["applications", "rejected", "is_old_student"],
-    queryFn: async ({ queryKey }) =>
-      getRejectedApplications({ student_tab_type: queryKey[2] }),
-  });
-
-  const {
-    data: validatedApplications,
-    isPending: isPendingValidatedApplications,
-    isError: isErrorValidatedApplications,
-  } = useQuery({
-    queryKey: ["applications", "validated", "is_old_student"],
-    queryFn: async ({ queryKey }) =>
-      getValidatedApplications({ student_tab_type: queryKey[2] }),
-  });
+ 
 
   return (
     <Tabs
@@ -53,11 +33,7 @@ export const ListReApplications: FC = () => {
         {
           key: "pending",
           label: (
-            <Badge
-              count={pendingApplications?.length}
-              color="red"
-              overflowCount={9}
-            >
+            <Badge count={data?.results.length} color="red" overflowCount={9}>
               En attentes
             </Badge>
           ),
@@ -72,25 +48,7 @@ export const ListReApplications: FC = () => {
                 paddingTop: 20,
               }}
             >
-              {pendingApplications && (
-                <>
-                  <Input
-                    placeholder="Rechercher ..."
-                    allowClear
-                    className="mb-4 mt-2"
-                    prefix={<SearchOutlined />}
-                    variant="borderless"
-                  />
-                  <List
-                    dataSource={pendingApplications}
-                    renderItem={(item) => (
-                      <ListItemApplication key={item.id} item={item} />
-                    )}
-                  />
-                </>
-              )}
-              {isPendingPendingApplications && <DataFetchingSkeleton />}
-              {isErrorPendingApplications && <DataFetchErrorResult />}
+              <ListPendingApplications typeOfApplication="is_old_student" year={yid} />
             </div>
           ),
         },
@@ -108,25 +66,7 @@ export const ListReApplications: FC = () => {
                 paddingTop: 20,
               }}
             >
-              {rejectedApplications && (
-                <>
-                  <Input
-                    placeholder="Rechercher ..."
-                    allowClear
-                    className="mb-4 mt-2"
-                    prefix={<SearchOutlined />}
-                    variant="borderless"
-                  />
-                  <List
-                    dataSource={rejectedApplications}
-                    renderItem={(item) => (
-                      <ListItemApplication key={item.id} item={item} />
-                    )}
-                  />
-                </>
-              )}
-              {isPendingRejectdApplications && <DataFetchingSkeleton />}
-              {isErrorRejectedApplications && <DataFetchErrorResult />}
+              <ListRejectedApplications typeOfApplication="is_old_student" year={yid} />
             </div>
           ),
         },
@@ -144,25 +84,7 @@ export const ListReApplications: FC = () => {
                 paddingTop: 20,
               }}
             >
-              {validatedApplications && (
-                <>
-                  <Input
-                    placeholder="Rechercher ..."
-                    allowClear
-                    className="mb-4 mt-2"
-                    prefix={<SearchOutlined />}
-                    variant="borderless"
-                  />
-                  <List
-                    dataSource={validatedApplications}
-                    renderItem={(item) => (
-                      <ListItemApplication key={item.id} item={item} />
-                    )}
-                  />
-                </>
-              )}
-              {isPendingValidatedApplications && <DataFetchingSkeleton />}
-              {isErrorValidatedApplications && <DataFetchErrorResult />}
+              <ListValidatedApplications typeOfApplication="is_old_student" year={yid} />
             </div>
           ),
         },
