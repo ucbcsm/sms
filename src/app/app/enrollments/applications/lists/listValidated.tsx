@@ -13,12 +13,11 @@ type ListValidatedApplicationsProps = {
 };
 export const ListValidatedApplications: FC<ListValidatedApplicationsProps> = ({
   typeOfApplication,
-  year
+  year,
 }) => {
-
   const [page, setPage] = useState<number>(0);
   const [pageSize, setPageSize] = useState<number>(0);
-  const [search, setSearch] = useState<string|null>(null);
+  const [search, setSearch] = useState<string | null>(null);
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: [
@@ -63,7 +62,8 @@ export const ListValidatedApplications: FC<ListValidatedApplicationsProps> = ({
           defaultPageSize: 25,
           pageSizeOptions: [25, 50, 75, 100],
           size: "small",
-          showSizeChanger: true,
+          //   showSizeChanger: true,
+          simple: true,
           total: data?.count,
           current: page !== 0 ? page : 1,
           pageSize: pageSize !== 0 ? pageSize : 25,
@@ -73,7 +73,11 @@ export const ListValidatedApplications: FC<ListValidatedApplicationsProps> = ({
           },
         }}
       />
-      {isError && <DataFetchErrorResult  message={(error as any)?.response?.data?.message} />}
+      {isError && (
+        <DataFetchErrorResult
+          message={(error as any)?.response?.data?.message}
+        />
+      )}
     </>
   );
 };
