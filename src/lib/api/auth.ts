@@ -77,16 +77,16 @@ export const getServerSession = async (): Promise<Session> => {
       });
       faculty = resFaculty.data as Faculty | undefined;
     } catch (error: any) {
-      if (error?.response?.status !== 404 && error?.response?.status !== 400) {
+
+      if (error?.response?.status !== 404 && error?.response?.status !== 503 && error?.response?.status !== 400) {
         throw error;
       }
-      // If 404 or 400, faculty remains undefined
+      // If 404 or 400 or 503, faculty remains undefined
     }
 
     // if (!user) {
     //   return null;
     // }
-
     return {
       accessToken,
       refreshToken,
@@ -95,8 +95,8 @@ export const getServerSession = async (): Promise<Session> => {
       faculty,
     };
   } catch (error: any) {
-    return null;
-    // throw new Error("Failed to get server session");
+    
+    throw new Error(`${error.message} Failed to get server session`);
   }
 };
 

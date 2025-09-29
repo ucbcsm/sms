@@ -36,7 +36,7 @@ export function LoginForm() {
     setLoading(true);
     login(values)
       .then(() => {
-        messageApi.success("Connexion réussie!");
+        messageApi.success("Redirection en cours...");
         // router.refresh()
         window.location.reload();
       })
