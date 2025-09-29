@@ -48,7 +48,7 @@ export const ListRejectedApplications: FC<ListRejectedApplicationsProps> = ({
         allowClear
         className="mb-4 mt-2"
         prefix={<SearchOutlined />}
-        variant="borderless"
+        variant="filled"
         onChange={(e) => {
           setSearch(e.target.value);
         }}
@@ -63,8 +63,8 @@ export const ListRejectedApplications: FC<ListRejectedApplicationsProps> = ({
           defaultPageSize: 25,
           pageSizeOptions: [25, 50, 75, 100],
           size: "small",
-        //   showSizeChanger: true,
-          simple:true,
+          //   showSizeChanger: true,
+          simple: true,
           total: data?.count,
           current: page !== 0 ? page : 1,
           pageSize: pageSize !== 0 ? pageSize : 25,
@@ -75,7 +75,11 @@ export const ListRejectedApplications: FC<ListRejectedApplicationsProps> = ({
         }}
       />
 
-      {isError && <DataFetchErrorResult  message={(error as any)?.response?.data?.message}/>}
+      {isError && (
+        <DataFetchErrorResult
+          message={(error as any)?.response?.data?.message}
+        />
+      )}
     </>
   );
 };

@@ -26,9 +26,7 @@ export const ListReApplications: FC = () => {
 
   return (
     <Tabs
-      tabBarStyle={{ paddingLeft: 28, marginTop: 0 }}
-      type="card"
-      tabPosition="bottom"
+      tabBarStyle={{ paddingLeft: 20, marginBottom: 0 }}
       items={[
         {
           key: "pending",
@@ -48,7 +46,10 @@ export const ListReApplications: FC = () => {
                 paddingTop: 20,
               }}
             >
-              <ListPendingApplications typeOfApplication="is_old_student" year={yid} />
+              <ListPendingApplications
+                typeOfApplication="is_old_student"
+                year={yid}
+              />
             </div>
           ),
         },
@@ -66,7 +67,10 @@ export const ListReApplications: FC = () => {
                 paddingTop: 20,
               }}
             >
-              <ListRejectedApplications typeOfApplication="is_old_student" year={yid} />
+              <ListRejectedApplications
+                typeOfApplication="is_old_student"
+                year={yid}
+              />
             </div>
           ),
         },
@@ -84,7 +88,10 @@ export const ListReApplications: FC = () => {
                 paddingTop: 20,
               }}
             >
-              <ListValidatedApplications typeOfApplication="is_old_student" year={yid} />
+              <ListValidatedApplications
+                typeOfApplication="is_old_student"
+                year={yid}
+              />
             </div>
           ),
         },

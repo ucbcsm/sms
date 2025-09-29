@@ -49,7 +49,7 @@ export const ListPendingApplications: FC<ListPendingApplicationsProps> = ({
         allowClear
         className="mb-4 mt-2"
         prefix={<SearchOutlined />}
-        variant="borderless"
+        variant="filled"
         onChange={(e) => {
           setSearch(e.target.value);
         }}

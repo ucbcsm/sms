@@ -25,9 +25,7 @@ export const ListNewApplications: FC = () => {
 
   return (
     <Tabs
-      tabPosition="bottom"
-      type="card"
-      tabBarStyle={{ paddingLeft: 28, marginTop: 0 }}
+      tabBarStyle={{ paddingLeft: 20, marginBottom: 0 }}
       items={[
         {
           key: "pending",
