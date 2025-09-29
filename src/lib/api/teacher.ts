@@ -2,9 +2,38 @@ import { Teacher } from "@/types";
 import api from "../fetcher";
 import { updateUser } from "./user";
 
-export async function getTeachers() {
-  const res = await api.get(`/faculty/teachers/`);
-  return res.data.results as Teacher[];
+export async function getTeachers(searchParams: {
+  search?: string;
+  gender?: "M" | "F";
+  is_permanent_teacher?:boolean
+  page?:number,
+  page_size?:number
+}) {
+  const { gender, search, is_permanent_teacher, page, page_size } =
+    searchParams;
+  const query = new URLSearchParams();
+  if (gender !== undefined) {
+    query.append("gender", gender.toString());
+  }
+  if (search !== undefined) {
+    query.append("search", search.toString());
+  }
+  if (is_permanent_teacher !== undefined) {
+    query.append("is_permanent_teacher", String(is_permanent_teacher));
+  }
+  if(page!==undefined){
+    query.append("page", page.toString())
+  }
+  if(page_size!==undefined){
+    query.append("page_size", page_size.toString());
+  }
+  const res = await api.get(`/faculty/teachers/?${query.toString()}`);
+  return res.data as {
+    results: Teacher[];
+    count: number;
+    next: string | null;
+    previous: string | null;
+  };
 }
 
 export async function getAllTeachers() {

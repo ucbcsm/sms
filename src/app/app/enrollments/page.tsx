@@ -41,8 +41,8 @@ import {
 } from "@/lib/api";
 import { ViewEditApplicationForm } from "./view";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
+import { FormerApplicationForm } from "./applications/forms/former-student-application";
 
 type EnrollButtonProps = {
   setReapply: (
@@ -53,11 +53,16 @@ type EnrollButtonProps = {
     value: boolean | ((old: boolean) => boolean | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
+  SetNewFormer: (
+    value: boolean | ((old: boolean) => boolean | null) | null,
+    options?: Options
+  ) => Promise<URLSearchParams>;
 };
 
 const EnrollButton: FC<EnrollButtonProps> = ({
   setReapply,
   SetNewApplication,
+  SetNewFormer
 }) => {
   return (
     <Dropdown
@@ -78,7 +83,7 @@ const EnrollButton: FC<EnrollButtonProps> = ({
             type: "divider",
           },
           {
-            key: "former-students",
+            key: "formerStudent",
             label: "Enregistrement (Anciens étudiants)",
             icon: <UserAddOutlined />,
           },
@@ -88,6 +93,8 @@ const EnrollButton: FC<EnrollButtonProps> = ({
             setReapply(true);
           } else if (key === "newApplication") {
             SetNewApplication(true);
+          } else if (key === "formerStudent") {
+            SetNewFormer(true);
           }
         },
       }}
@@ -118,6 +125,12 @@ export default function Page() {
     "new",
     parseAsBoolean.withDefault(false)
   );
+
+  const [newFormer, SetNewFormer] = useQueryState(
+    "new-former",
+    parseAsBoolean.withDefault(false)
+  );
+
 
   const [selectedTab, setSelectedTab] = useQueryState(
     "tab",
@@ -194,6 +207,7 @@ export default function Page() {
           <EnrollButton
             setReapply={setReapply}
             SetNewApplication={SetNewApplication}
+            SetNewFormer={SetNewFormer}
           />
         </Flex>
 
@@ -225,6 +239,7 @@ export default function Page() {
         {selectedTab === "old" && <ListReApplications />}
         <ReapplyForm open={reapply} setOpen={setReapply} />
         <NewApplicationForm open={newApplication} setOpen={SetNewApplication} />
+        <FormerApplicationForm open={newFormer} setOpen={SetNewFormer} />
       </Layout.Sider>
       <Layout.Content
         style={{
@@ -274,6 +289,7 @@ export default function Page() {
                   <EnrollButton
                     setReapply={setReapply}
                     SetNewApplication={SetNewApplication}
+                    SetNewFormer={SetNewFormer}
                   />
                 </Space>
               }

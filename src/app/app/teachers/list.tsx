@@ -1,66 +1,65 @@
 import { getHSLColor } from "@/lib/utils";
 import {
-  AppstoreOutlined,
   DeleteOutlined,
-  DownOutlined,
   EditOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
-  FilterOutlined,
   MoreOutlined,
   PrinterOutlined,
-  UnorderedListOutlined,
-  UploadOutlined,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
   Button,
   Dropdown,
   Input,
-  Radio,
   Select,
   Space,
   Table,
   Tag,
 } from "antd";
-import { useRouter } from "next/navigation";
 import { NewTeacherForm } from "./forms/new";
 import { useQuery } from "@tanstack/react-query";
-import {
-  //  getDepartments, getFaculties,
-   getTeachers } from "@/lib/api";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
+import { getTeachers } from "@/lib/api";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
+import {  parseAsInteger, parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
 
 export function ListTeachers() {
-  const router = useRouter();
 
-  const {
-    data: teachers,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["teachers"],
-    queryFn: getTeachers,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
+  const [gender, setGender] = useQueryState(
+    "gender",
+    parseAsStringEnum(["all", "M", "F"]).withDefault("all")
+  );
+  const [search, setSearch]=useQueryState("search")
+  const [category, setCategory] = useQueryState(
+    "permanent",
+    parseAsStringEnum(["all", "permanent", "visitor"]).withDefault("all")
+  );
+
+  const [page, setPage]=useQueryState("page", parseAsInteger.withDefault(0))
+  const [pageSize, setPageSize] = useQueryState(
+    "page_size",
+    parseAsInteger.withDefault(0)
+  );
+
+
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["teachers", gender, category, page, pageSize, search],
+    queryFn: ({ queryKey }) =>
+      getTeachers({
+        search: search !== null && search.length !== 0 ? search : undefined,
+        gender: gender !== "all" ? gender : undefined,
+        is_permanent_teacher:
+          category !== "all"
+            ? category === "permanent"
+              ? true
+              : false
+            : undefined,
+        page: page !== 0 ? page : undefined,
+        page_size: pageSize !== 0 ? pageSize : undefined,
+      }),
   });
 
-  // const { data: faculties } = useQuery({
-  //   queryKey: ["faculties"],
-  //   queryFn: getFaculties,
-  // });
-
-  // const { data: departments } = useQuery({
-  //   queryKey: ["departments"],
-  //   queryFn: getDepartments,
-  // });
-
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -72,31 +71,45 @@ export function ListTeachers() {
         title={() => (
           <header className="flex  pb-3">
             <Space>
-              <Input.Search placeholder="Rechercher ..." />
-              {/* <Select placeholder="Faculté" showSearch />
+              <Input.Search
+                variant="filled"
+                placeholder="Rechercher ..."
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+              />
               <Select
+                value={category}
                 placeholder="Catégorie"
                 options={[
                   { value: "all", label: "Tous" },
                   { value: "permanent", label: "Permanents" },
                   { value: "visitor", label: "Visiteurs" },
                 ]}
-                showSearch
-              /> */}
+                variant="filled"
+                onSelect={(value) => {
+                  setCategory(value);
+                }}
+              />
               <Select
+                value={gender}
                 placeholder="Genre"
                 options={[
                   { value: "all", label: "Tous" },
                   { value: "M", label: "Masculin" },
                   { value: "F", label: "Féminin" },
                 ]}
+                variant="filled"
+                onSelect={(value) => {
+                  setGender(value);
+                }}
               />
             </Space>
             <div className="flex-1" />
             <Space>
               <NewTeacherForm
               //  departments={departments} faculties={faculties}
-                />
+              />
               <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
                 Imprimer
               </Button>
@@ -105,34 +118,29 @@ export function ListTeachers() {
                   items: [
                     {
                       key: "pdf",
-                      label: "PDF",
+                      label: "Exporter .pdf",
                       icon: <FilePdfOutlined />,
                       title: "Exporter en pdf",
                     },
                     {
                       key: "excel",
-                      label: "EXCEL",
+                      label: "Exporter .xlsx",
                       icon: <FileExcelOutlined />,
-                      title: "Exporter ver excel",
+                      title: "Exporter vers excel",
                     },
                   ],
                 }}
               >
-                <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                  Exporter
-                </Button>
+                <Button
+                  type="text"
+                  icon={<MoreOutlined />}
+                  style={{ boxShadow: "none" }}
+                />
               </Dropdown>
-              <Radio.Group>
-                <Radio.Button value="grid">
-                  <AppstoreOutlined />
-                </Radio.Button>
-                <Radio.Button value="list">
-                  <UnorderedListOutlined />
-                </Radio.Button>
-              </Radio.Group>
             </Space>
           </header>
         )}
+        loading={isPending}
         columns={[
           {
             title: "Photo",
@@ -160,7 +168,7 @@ export function ListTeachers() {
             width: 92,
             render: (_, record, __) => (
               <Link href={`/app/teacher/${record.id}`}>
-                {record.user.matricule.padStart(6,"0")}
+                {record.user.matricule.padStart(6, "0")}
               </Link>
             ),
             align: "center",
@@ -229,13 +237,15 @@ export function ListTeachers() {
             width: 120,
             render: (_, record, __) => (
               <Space>
-                <Button
-                  type="dashed"
-                  onClick={() => router.push(`/app/teacher/${record.id}`)}
-                  style={{ boxShadow: "none" }}
-                >
-                  Gérer
-                </Button>
+                <Link href={`/app/teacher/${record.id}`}>
+                  <Button
+                    variant="dashed"
+                    color="primary"
+                    style={{ boxShadow: "none" }}
+                  >
+                    Gérer
+                  </Button>
+                </Link>
                 <Dropdown
                   menu={{
                     items: [
@@ -259,23 +269,27 @@ export function ListTeachers() {
             ),
           },
         ]}
-        dataSource={teachers}
+        dataSource={data?.results}
         rowClassName={`bg-[#f5f5f5] odd:bg-white `}
         rowSelection={{
           type: "checkbox",
         }}
         rowKey="id"
         size="small"
+        scroll={{ y: `calc(100vh - 240px)` }}
         pagination={{
           defaultPageSize: 25,
           pageSizeOptions: [25, 50, 75, 100],
           size: "small",
+          showSizeChanger: true,
+          total: data?.count,
+          current: page !== 0 ? page : 1,
+          pageSize: pageSize !== 0 ? pageSize : 25,
+          onChange: (page, pageSize) => {
+            setPage(page);
+            setPageSize(pageSize);
+          },
         }}
-        // onRow={(record) => ({
-        //   onClick: () => {
-        //     router.push(`/app/teacher/${record.id}`); // Navigate to the teacher details page
-        //   },
-        // })}
       />
     </>
   );
