@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Layout, Result, Space, theme, Typography } from "antd";
+import { Button, Card, Layout, message, Result, Space, theme, Typography } from "antd";
 import BackButton from "./backButton";
 import { Palette } from "./palette";
 import { FC } from "react";
@@ -9,9 +9,10 @@ import { redirect } from "next/navigation";
 
 type DataFetchErrorResultProps = {
   variant?: "default" | "card" | "page";
+  message?:string
 };
 
-const ErrorContent = () => {
+const ErrorContent = ({message}:{message?:string}) => {
   const user = useSessionStore(state=> state.user);
 
 if (!user) {
@@ -21,7 +22,10 @@ if (!user) {
   return (
     <Result
       title="Erreur de récupération des données"
-      subTitle="Une erreur est survenue lors de la tentative de récupération des données depuis le serveur. Veuillez réessayer."
+      subTitle={
+        message ||
+        "Une erreur est survenue lors de la tentative de récupération des données depuis le serveur. Veuillez réessayer."
+      }
       status={"error"}
       extra={
         <Button
@@ -40,6 +44,7 @@ if (!user) {
 
 export const DataFetchErrorResult: FC<DataFetchErrorResultProps> = ({
   variant = "default",
+  message
 }) => {
   const {
     token: { colorBgContainer },

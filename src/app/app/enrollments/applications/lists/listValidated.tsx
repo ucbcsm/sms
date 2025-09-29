@@ -6,7 +6,6 @@ import { FC, useState } from "react";
 import { ListItemApplication } from "./listItem";
 import { useQuery } from "@tanstack/react-query";
 import { getValidatedApplications } from "@/lib/api";
-import { DataFetchingSkeleton } from "./new_applications";
 import { DataFetchErrorResult } from "@/components/errorResult";
 type ListValidatedApplicationsProps = {
   typeOfApplication: "is_new_student" | "is_old_student";
@@ -21,7 +20,7 @@ export const ListValidatedApplications: FC<ListValidatedApplicationsProps> = ({
   const [pageSize, setPageSize] = useState<number>(0);
   const [search, setSearch] = useState<string|null>(null);
 
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, isError, error } = useQuery({
     queryKey: [
       "applications",
       year,
@@ -54,32 +53,27 @@ export const ListValidatedApplications: FC<ListValidatedApplicationsProps> = ({
           setSearch(e.target.value);
         }}
       />
-      {data && (
-        <>
-          <List
-            size="small"
-            dataSource={data.results}
-            renderItem={(item) => (
-              <ListItemApplication key={item.id} item={item} />
-            )}
-            pagination={{
-              defaultPageSize: 25,
-              pageSizeOptions: [25, 50, 75, 100],
-              size: "small",
-              showSizeChanger: true,
-              total: data?.count,
-              current: page !== 0 ? page : 1,
-              pageSize: pageSize !== 0 ? pageSize : 25,
-              onChange: (page, pageSize) => {
-                setPage(page);
-                setPageSize(pageSize);
-              },
-            }}
-          />
-        </>
-      )}
-      {isPending && <DataFetchingSkeleton />}
-      {isError && <DataFetchErrorResult />}
+
+      <List
+        size="small"
+        loading={isPending}
+        dataSource={data?.results}
+        renderItem={(item) => <ListItemApplication key={item.id} item={item} />}
+        pagination={{
+          defaultPageSize: 25,
+          pageSizeOptions: [25, 50, 75, 100],
+          size: "small",
+          showSizeChanger: true,
+          total: data?.count,
+          current: page !== 0 ? page : 1,
+          pageSize: pageSize !== 0 ? pageSize : 25,
+          onChange: (page, pageSize) => {
+            setPage(page);
+            setPageSize(pageSize);
+          },
+        }}
+      />
+      {isError && <DataFetchErrorResult  message={(error as any)?.response?.data?.message} />}
     </>
   );
 };

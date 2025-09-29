@@ -23,8 +23,6 @@ export const ListNewApplications: FC = () => {
   const {yid}=useYid()
   const {data}=usePendingApplications("is_new_student",yid)
 
-  console.log("YYIIDD:", yid)
-
   return (
     <Tabs
       tabPosition="bottom"
