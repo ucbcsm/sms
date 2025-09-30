@@ -6,12 +6,25 @@ export async function getDepartments() {
   return res.data.results as Department[];
 }
 
+export async function getDepartmentsBeta(searchParams?:{facultyId?:number}) {
+  const { facultyId } = searchParams!;
+  const query = new URLSearchParams();
+  if(facultyId!==undefined) {
+    query.append("faculty__id", facultyId.toString());
+  }
+
+  const res = await api.get(`/main_config/departement/?${query.toString()}`);
+  return res.data.results as Department[];
+}
+
 export async function getDepartmentsByFacultyId(facultyId: number) {
   const res = await api.get(
     `/main_config/departement/?faculty__id=${facultyId}`
   );
   return res.data.results as Department[];
 }
+
+
 
 export async function getDepartment(id: number) {
   const res = await api.get(`/main_config/departement/${id}/`);

@@ -16,13 +16,14 @@ import {
   Space,
   Table,
   Tag,
+  Typography,
 } from "antd";
 import { NewTeacherForm } from "./forms/new";
 import { useQuery } from "@tanstack/react-query";
 import { getTeachers } from "@/lib/api";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
-import {  parseAsInteger, parseAsString, parseAsStringEnum, useQueryState } from "nuqs";
+import {  parseAsInteger, parseAsStringEnum, useQueryState } from "nuqs";
 
 export function ListTeachers() {
 
@@ -78,6 +79,7 @@ export function ListTeachers() {
                   setSearch(e.target.value);
                 }}
               />
+              <Typography.Text type="secondary">Catégorie</Typography.Text>
               <Select
                 value={category}
                 placeholder="Catégorie"
@@ -91,6 +93,7 @@ export function ListTeachers() {
                   setCategory(value);
                 }}
               />
+              <Typography.Text type="secondary">Genre</Typography.Text>
               <Select
                 value={gender}
                 placeholder="Genre"

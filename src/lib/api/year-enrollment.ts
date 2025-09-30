@@ -2,7 +2,7 @@ import api from "@/lib/fetcher";
 import { Enrollment } from "@/types";
 
 export async function getYearEnrollments(searchParams: {
-  yearId: number;
+  yearId?: number;
   facultyId?: number;
   departmentId?: number;
   classId?: number;
@@ -13,7 +13,9 @@ export async function getYearEnrollments(searchParams: {
   const { yearId, facultyId, departmentId, classId, page, pageSize, search } =
     searchParams;
   const query = new URLSearchParams();
-  query.append("academic_year__id", yearId.toString());
+  if (yearId !== undefined) {
+    query.append("academic_year__id", yearId.toString());
+  }
   if(facultyId!==undefined) {
     query.append("faculty__id", facultyId.toString());
   }

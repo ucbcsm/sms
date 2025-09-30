@@ -24,7 +24,7 @@ import {
 } from "nuqs";
 import { ListNewApplications } from "./applications/lists/new_applications";
 import { ListReApplications } from "./applications/lists/reapplications";
-import { ReapplyForm } from "./applications/forms/reapply";
+import { ReapplyForm } from "./applications/forms/reapply/reapply";
 import { NewApplicationForm } from "./applications/forms/new/new";
 import { FC, useState } from "react";
 import { useRouter } from "next/navigation";

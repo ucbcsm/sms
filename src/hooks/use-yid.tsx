@@ -1,7 +1,22 @@
+import { getYearById } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
 export const useYid = () => {
   const [yid, setYidValue] = useState<number | undefined>();
+
+     const {
+       data: year,
+       isPending,
+       isError,
+       error,
+       isLoading,
+       refetch
+     } = useQuery({
+       queryKey: ["year", yid],
+       queryFn: ({ queryKey }) => getYearById(Number(yid)),
+       enabled: !!yid,
+     });
 
   const setYid = (value: number) => {
     setYidValue(value);
@@ -19,5 +34,15 @@ export const useYid = () => {
     if (storedYid) {setYid(parseInt(storedYid));}
   }, []);
 
-  return { yid, setYid, removeYid };
+  return {
+    yid,
+    setYid,
+    removeYid,
+    year,
+    isPending,
+    isError,
+    error,
+    isLoading,
+    refetch,
+  };
 };
