@@ -71,6 +71,7 @@ export const SelectAStudent: FC<SelectAStudentProps> = ({
 
   return (
     <Select
+      searchValue={search ? (selectedStudent ? undefined : search) : undefined}
       variant={variant}
       prefix={
         variant !== "borderless" && variant !== "underlined" ? (

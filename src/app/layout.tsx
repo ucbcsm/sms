@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Academic Workspace | CI-UCBC",
+  title: "Academic Workspace - UCBC",
   description: "Student Management System",
 };
 

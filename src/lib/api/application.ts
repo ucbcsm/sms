@@ -465,3 +465,29 @@ export function formatAdmissionTestResultsForEdition(results: TestResult[]) {
     course_test: res.course_test?.id || null,
   }));
 }
+
+export async function createReapplication(params: {
+  yearId: number;
+  facultyId: number;
+  fieldId: number;
+  departmentId: number;
+  classId: number;
+  yearEnrollmentId: number;
+  cycleId: number;
+  enrollmentFees: "paid" | "unpaid" | "partially_paid";
+  status:"pending" | "validated" | "rejected";
+}) {
+  const res = await api.post(`/apparitorat/year-enrollment/year-registration/`, {
+    academic_year: params.yearId,
+    cycle: params.cycleId,
+    faculty: params.facultyId,
+    field: params.fieldId,
+    departement: params.departmentId,
+    class_year: params.classId,
+    year_enrollment: params.yearEnrollmentId,
+    type_of_enrollment: "reapplication",
+    enrollment_fees: params.enrollmentFees,
+    status: params.status,
+  });
+  return res.data;
+}
