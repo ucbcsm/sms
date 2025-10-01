@@ -71,10 +71,12 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
   >();
 
   const facultyId = Form.useWatch("faculty", form);
+  const fieldId = Form.useWatch("fieldId", form);
+  const cycleId = Form.useWatch("cycleId", form);
 
   const { data: cycles, isPending: isPendingCycles } = useCycles();
-  const {data:fields, isPending:isPendingFields}=useFields()
-  const { data: faculties, isPending: isPendingFaculties } = useFaculties();
+  const { data: fields, isPending: isPendingFields } = useFields(cycleId);
+  const { data: faculties, isPending: isPendingFaculties } = useFaculties(fieldId);
   const { data: departments, isPending: isPendingDepartments } =
     useDepartments(facultyId);
   const { data: classes, isPending: isPendingClasses } = useClasses();
@@ -308,6 +310,7 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
                             placeholder="Sélectioner un cycle"
                             options={getCurrentCyclesAsOptions(cycles)}
                             loading={isPendingCycles}
+                            disabled
                           />
                         </Form.Item>
                         <Form.Item

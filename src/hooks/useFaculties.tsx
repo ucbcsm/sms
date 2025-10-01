@@ -1,9 +1,9 @@
-import { getFaculties } from "@/lib/api";
+import { getFacultiesBeta } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useFaculties = () => {
+export const useFaculties = (fieldId?: number) => {
   return useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
+    queryKey: ["faculties", fieldId],
+    queryFn: () => getFacultiesBeta({ fieldId }),
   });
 };

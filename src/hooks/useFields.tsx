@@ -1,9 +1,9 @@
-import { getFields } from "@/lib/api"
+import { getFieldsBeta } from "@/lib/api"
 import { useQuery } from "@tanstack/react-query"
 
-export const useFields=()=>{
+export const useFields=(cycleId?:number)=>{
     return useQuery({
-      queryKey: ["fields"],
-      queryFn: getFields,
+      queryKey: ["fields", cycleId],
+      queryFn:()=> getFieldsBeta({cycleId}),
     });
 }

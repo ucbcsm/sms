@@ -6,6 +6,18 @@ export async function getFaculties() {
   return res.data.results as Faculty[];
 }
 
+export async function getFacultiesBeta(searchParams?:{
+  fieldId?: number;
+}) {
+  const {fieldId}=searchParams!
+  const query = new URLSearchParams();
+  if (fieldId!==undefined) {
+    query.append("field__id", fieldId.toString());
+  }
+  const res = await api.get(`/main_config/faculty/?${query.toString()}`);
+  return res.data.results as Faculty[];
+}
+
 export async function getFaculty(id: number) {
   const res = await api.get(`/main_config/faculty/${id}/`);
   return res.data as Faculty;

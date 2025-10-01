@@ -6,6 +6,18 @@ export async function getFields() {
   return res.data.results as Field[];
 }
 
+export async function getFieldsBeta(searchParams?:{
+  cycleId?: number;
+}) {
+  const { cycleId } = searchParams!;
+  const query = new URLSearchParams();
+  if (cycleId !== undefined) {
+    query.append("cycle__id", cycleId.toString());
+  }
+  const res = await api.get(`/main_config/field/?${query.toString()}`);
+  return res.data.results as Field[];
+}
+
 export async function createField(
   params: Omit<Field, "id" | "cycle"> & { cycle_id: number }
 ) {
