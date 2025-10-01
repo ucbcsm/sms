@@ -158,7 +158,7 @@ export async function createApplication(params: ApplicationFormDataType) {
     diploma_number: params.diploma_number || null,
     diploma_percentage: params.diploma_percentage || null,
     is_foreign_registration: params.is_foreign_registration,
-    former_matricule: params.former_matricule || "",
+    former_year_enrollment_id: params.former_year_enrollment_id || null,
     type_of_enrollment: params.type_of_enrollment || null,
     enrollment_fees: "unpaid",
     surname: params.surname,

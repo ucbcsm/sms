@@ -535,7 +535,7 @@ export const StudentInfo = z.object({
   diploma_number: z.string(),
   diploma_percentage: z.number(),
   is_foreign_registration: z.boolean().nullable(),
-  former_matricule: z.string().nullable(),
+  former_year_enrollment_id: z.number().nullable(),
   house: House.nullable(),
   application_documents: z.array(ApplicationDocument),
 });
