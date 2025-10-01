@@ -34,7 +34,7 @@ import { useFaculties } from "@/hooks/useFaculties";
 import { useDepartments } from "@/hooks/useDepartments";
 import { useClasses } from "@/hooks/useClasses";
 import { useYid } from "@/hooks/use-yid";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFields } from "@/hooks/useFields";
 import { useCycles } from "@/hooks/useCycles";
 
@@ -85,6 +85,8 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
     Enrollment[] | undefined
   >();
 
+  const queryClient= useQueryClient()
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createReapplication,
   });
@@ -131,6 +133,7 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
       },
       {
         onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["applications"] });
           messageApi.success("La réinscription a été créée avec succès");
           onClose();
         },
