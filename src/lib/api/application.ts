@@ -321,7 +321,7 @@ export async function validateEditedApplication({
     application_documents: newParams.application_documents,
     enrollment_question_response: newParams.enrollment_question_response,
     admission_test_result: newParams.admission_test_result,
-    type_of_enrollment: "new_application",
+    type_of_enrollment: newParams.type_of_enrollment,
     status: "enabled",
   });
 

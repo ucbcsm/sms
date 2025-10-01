@@ -83,7 +83,7 @@ export const Step10: FC<Props> = ({ setStep }) => {
           diploma_number: sdata.diploma_number,
           diploma_percentage: sdata.diploma_percentage,
           is_foreign_registration: sdata.is_foreign_registration || null,
-          former_matricule: null,
+          former_year_enrollment_id: null,
           type_of_enrollment: "new_application",
           surname: sdata.surname,
           last_name: sdata.last_name,
