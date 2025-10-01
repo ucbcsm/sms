@@ -313,22 +313,24 @@ export const ViewEditApplicationForm: React.FC<
           <Form
             form={form}
             name="form_in_drawer"
-            initialValues={{
-              // ...application,
-              // date_of_birth: dayjs(application.date_of_birth),
-              // spoken_languages: parseLanguages(application.spoken_language),
-              // cycle_id: application.cycle.id,
-              // field_id: application.field.id,
-              // faculty_id: application.faculty.id,
-              // department_id: application.departement.id,
-              // class_id: application.class_year?.id,
-              // enrollment_question_response:
-              //   application.enrollment_question_response,
-              // year_of_diploma_obtained: dayjs(
-              //   `${application.year_of_diploma_obtained}`,
-              //   "YYYY"
-              // ),
-            }}
+            initialValues={
+              {
+                // ...application,
+                // date_of_birth: dayjs(application.date_of_birth),
+                // spoken_languages: parseLanguages(application.spoken_language),
+                // cycle_id: application.cycle.id,
+                // field_id: application.field.id,
+                // faculty_id: application.faculty.id,
+                // department_id: application.departement.id,
+                // class_id: application.class_year?.id,
+                // enrollment_question_response:
+                //   application.enrollment_question_response,
+                // year_of_diploma_obtained: dayjs(
+                //   `${application.year_of_diploma_obtained}`,
+                //   "YYYY"
+                // ),
+              }
+            }
             onFinish={onFinish}
             disabled={isPending || application.status !== "pending"}
             style={{ maxWidth: 520, margin: "auto" }}
@@ -1102,7 +1104,11 @@ export const ViewEditApplicationForm: React.FC<
               showIcon
               message="Frais d'inscription"
               type={
-                application.enrollment_fees === "paid" ? "success" : "error"
+                application.enrollment_fees === "paid"
+                  ? "success"
+                  : application.enrollment_fees === "partially_paid"
+                  ? "warning"
+                  : "error"
               }
               description={
                 <Form.Item
@@ -1115,6 +1121,7 @@ export const ViewEditApplicationForm: React.FC<
                   <Select
                     options={[
                       { value: "paid", label: "Payé" },
+                      { value: "partially_paid", label: "Partiellement payé" },
                       { value: "unpaid", label: "Non payé" },
                     ]}
                     variant="filled"

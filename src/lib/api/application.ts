@@ -270,7 +270,7 @@ export async function validateApplication(params: Application) {
     admission_test_result: formatAdmissionTestResultsForEdition(
       params.admission_test_result
     ),
-    type_of_enrollment: "new_application",
+    type_of_enrollment: params.type_of_enrollment,
     status: "enabled",
   });
 
