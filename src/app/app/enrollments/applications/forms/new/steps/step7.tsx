@@ -114,7 +114,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Filière ou Domaine"
+        label="Domaine"
         name="field_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
@@ -126,7 +126,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
         />
       </Form.Item>
       <Form.Item
-        label="Faculté"
+        label="Filière"
         name="faculty_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
@@ -137,7 +137,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
           variant="borderless"
         />
       </Form.Item>
-      
+
       <Form.Item
         label="Promotion"
         name="class_id"

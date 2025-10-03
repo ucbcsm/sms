@@ -176,7 +176,7 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
         extra={
           <Space>
             <Button
-              style={{ boxShadow: "none" }}
+              style={{ boxShadow: "none", color: "#fff" }}
               onClick={() => {
                 setCancel(true);
               }}

@@ -3,8 +3,8 @@ import { Palette } from "@/components/palette";
 import { useApplicationStepsData } from "@/hooks/use-application-steps-data";
 import { createApplication } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Space, Checkbox, Alert, message, Flex } from "antd";
-import { Options, parseAsBoolean, useQueryState } from "nuqs";
+import { Button, Form, Space, Checkbox, Alert, message, Flex, Select } from "antd";
+import { Options } from "nuqs";
 import { FC } from "react";
 import { z } from "zod";
 
@@ -13,9 +13,15 @@ type Props = {
     value: number | ((old: number) => number | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
+  setOpen: (
+    value: boolean | ((old: boolean) => boolean | null) | null,
+    options?: Options
+  ) => Promise<URLSearchParams>;
+  isFormer: boolean;
 };
 
 const formSchema = z.object({
+  enrollment_fees: z.enum(["paid", "partially_paid", "unpaid"]),
   certified: z.boolean().refine((val) => val === true, {
     message: "Vous devez certifier que les renseignements sont exacts.",
   }),
@@ -23,18 +29,15 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
-export const Step10: FC<Props> = ({ setStep }) => {
+export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
   const [form] = Form.useForm<FormSchemaType>();
   const [messageApi, contextHolder] = message.useMessage();
-  const [newApplication, setNewApplication] = useQueryState(
-    "new",
-    parseAsBoolean
-  );
+ 
   const { data: sdata, removeData } = useApplicationStepsData();
   const queryClient = useQueryClient();
 
   const { mutateAsync, isPending, } = useMutation({
-    mutationFn: createApplication,
+    mutationFn:  createApplication,
   });
 
   const onFinish = (values: FormSchemaType) => {
@@ -42,6 +45,7 @@ export const Step10: FC<Props> = ({ setStep }) => {
     if (sdata) {
       mutateAsync(
         {
+          isFormer: isFormer,
           year_id: sdata.year_id,
           cycle_id: sdata.cycle_id,
           faculty_id: sdata.faculty_id,
@@ -83,6 +87,7 @@ export const Step10: FC<Props> = ({ setStep }) => {
           diploma_number: sdata.diploma_number,
           diploma_percentage: sdata.diploma_percentage,
           is_foreign_registration: sdata.is_foreign_registration || null,
+          former_matricule: sdata.former_matricule || null,
           former_year_enrollment_id: null,
           type_of_enrollment: "new_application",
           surname: sdata.surname,
@@ -92,22 +97,23 @@ export const Step10: FC<Props> = ({ setStep }) => {
           avatar: "",
           is_former_student: false,
           status: "pending",
-          enrollment_fees: "unpaid",
-          application_documents:sdata.application_documents
+          enrollment_fees: values.enrollment_fees,
+          application_documents: sdata.application_documents,
         },
         {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["applications"] });
             removeData();
             setStep(null);
-            setNewApplication(null);
+            setOpen(null);
             messageApi.success(
-              "Votre candidature a été soumise avec succès. Vous serez contacté après examen de votre dossier."
+              "Votre candidature a été soumise avec succès."
             );
           },
-          onError: () => {
+          onError: (error) => {
             messageApi.error(
-              "Une erreur s'est produite lors de la soumission de votre candidature. Veuillez réessayer."
+              (error as any).response.data.message ||
+                "Une erreur s'est produite lors de la soumission. Veuillez réessayer."
             );
           },
         }
@@ -118,17 +124,30 @@ export const Step10: FC<Props> = ({ setStep }) => {
   return (
     <>
       {contextHolder}
-      <Form
-        disabled={isPending}
-        form={form}
-        onFinish={onFinish}
-      >
+      <Form disabled={isPending} form={form} onFinish={onFinish}>
         <Alert
           type="info"
           showIcon
           description="L'Univertisté Chrétienne Bilingue du Congo est engagée et déterminée à poursuivre l'excellence dans la formation de la jeunesse congolaise pour la formtion intégrale. Ainsi des pratiques telles que la tricherie, le plagiat, la corruption, le vol, la débauche, l'ivrognerie, la promiscuité, le dérèglement social, l'accoutrement indécent, etc. sont strictement interdites et sévèrement sanctionnées. Ainsi, JE M'ENGAGE FERMEMENT à me soumettre à toutes les exigences de l'université et au code de conduite de l'étudiant tel que repris dans le manuel de l'étudiant en cas de mon admission à l'UCBC"
           style={{ border: 0 }}
         />
+        <Form.Item
+          name="enrollment_fees"
+          label="Observation"
+          rules={[{ required: true }]}
+          status="error"
+          style={{ marginBottom: 0 }}
+        >
+          <Select
+            options={[
+              { value: "paid", label: "Payés" },
+              { value: "partially_paid", label: "Partiellement payés" },
+              { value: "unpaid", label: "Non payés" },
+            ]}
+            variant="filled"
+            style={{ width: 120 }}
+          />
+        </Form.Item>
         <Form.Item
           name="certified"
           valuePropName="checked"
@@ -143,28 +162,28 @@ export const Step10: FC<Props> = ({ setStep }) => {
           </Checkbox>
         </Form.Item>
         <Flex justify="space-between" align="center">
-        <Palette />
-        <Form.Item
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            paddingTop: 20,
-          }}
-        >
-          <Space>
-            <Button onClick={() => setStep(8)} style={{ boxShadow: "none" }}>
-              Précédent
-            </Button>
-            <Button
-              loading={isPending}
-              type="primary"
-              htmlType="submit"
-              style={{ boxShadow: "none" }}
-            >
-              Soumettre maintenant
-            </Button>
-          </Space>
-        </Form.Item>
+          <Palette />
+          <Form.Item
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              paddingTop: 20,
+            }}
+          >
+            <Space>
+              <Button onClick={() => setStep(8)} style={{ boxShadow: "none" }}>
+                Précédent
+              </Button>
+              <Button
+                loading={isPending}
+                type="primary"
+                htmlType="submit"
+                style={{ boxShadow: "none" }}
+              >
+                Soumettre maintenant
+              </Button>
+            </Space>
+          </Form.Item>
         </Flex>
       </Form>
     </>

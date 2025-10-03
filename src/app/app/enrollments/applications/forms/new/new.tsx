@@ -2,6 +2,7 @@
 import { FC, ReactNode, useState } from "react";
 import {
   Alert,
+  Badge,
   Button,
   Card,
   Drawer,
@@ -11,6 +12,7 @@ import {
   StepProps,
   Steps,
   theme,
+  Typography,
 } from "antd";
 import { Options, parseAsInteger, useQueryState } from "nuqs";
 import { Step1 } from "./steps/step1";
@@ -25,6 +27,7 @@ import { Step9 } from "./steps/step9";
 import { Step10 } from "./steps/step10";
 import { CloseOutlined } from "@ant-design/icons";
 import { useApplicationStepsData } from "@/hooks/use-application-steps-data";
+import { useInstitution } from "@/hooks/use-institution";
 
 type Props = {
   open: boolean;
@@ -32,9 +35,11 @@ type Props = {
     value: boolean | ((old: boolean) => boolean | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
+  isFormer: boolean;
 };
 
-export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
+export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
+  const { data: institution } = useInstitution();
   const {
     token: { colorPrimary },
   } = theme.useToken();
@@ -47,7 +52,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
   >([
     {
       title: "Info personnelles",
-      content: <Step1 setStep={setStep} />,
+      content: <Step1 setStep={setStep} isFormer={isFormer} />,
     },
     {
       title: "Informations sur les parents",
@@ -83,7 +88,9 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
     },
     {
       title: "Confirmation",
-      content: <Step10 setStep={setStep} />,
+      content: (
+        <Step10 setStep={setStep} setOpen={setOpen} isFormer={isFormer} />
+      ),
     },
   ]);
 
@@ -98,7 +105,20 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
   return (
     <Drawer
       width={`100%`}
-      title="Nouvelle candidature"
+      title={
+        isFormer ? (
+          <Badge color="yellow" count="Ancien étudiant">
+            <Typography.Title
+              style={{ marginBottom: 0, color: "#fff" }}
+              level={5}
+            >
+              Formulaire d&apos;enregistrement 
+            </Typography.Title>
+          </Badge>
+        ) : (
+          "Nouvelle candidature"
+        )
+      }
       styles={{ header: { background: colorPrimary, color: "#fff" } }}
       onClose={onClose}
       open={open}
@@ -145,14 +165,15 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen }) => {
       }
     >
       <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
-        <Alert
-          type="info"
-          message=" Veuillez compléter toutes les étapes avant de soumettre la candidature."
-          description="Tout formulaire qui contiendrait de faux renseignements ne sera pas pris en considération"
-          showIcon
-          style={{ border: 0 }}
-          closable
-        />
+        {isFormer && (
+          <Alert
+            type="warning"
+            message="Attention"
+            description={`Veuillez noter que ce formulaire est strictement réservé aux anciens étudiants de l'${institution?.acronym} qui ne sont pas encore enregistrés dans le système. Si l'étudiant n'a jamais été inscrit à l'${institution?.acronym}, veuillez utiliser le formulaire de nouvelle candidature ou de réinscription s'il existe déjà dans le système.`}
+            showIcon
+            style={{ border: 0 }}
+          />
+        )}
         <Card
           title={steps[step].title}
           variant="borderless"

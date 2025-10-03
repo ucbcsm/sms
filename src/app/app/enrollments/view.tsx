@@ -128,7 +128,7 @@ export const ViewEditApplicationForm: React.FC<
       field_id: number;
       department_id: number;
       class_id: number;
-      spoken_languages: { language: string }[];
+      spoken_languages:  string[];
     }
   ) => {
     if (typeof application === "undefined") {

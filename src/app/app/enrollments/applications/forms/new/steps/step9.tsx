@@ -15,6 +15,7 @@ import {
   InputNumber,
   Select,
   Space,
+  Switch,
   Typography,
   Upload,
 } from "antd";
@@ -101,7 +102,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
                   valuePropName="checked"
                   style={{ marginTop: 8 }}
                 >
-                  <Checkbox />
+                  <Switch />
                 </Form.Item>
                 <Form.Item
                   {...restField}

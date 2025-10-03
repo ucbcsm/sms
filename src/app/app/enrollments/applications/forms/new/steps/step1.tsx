@@ -2,6 +2,7 @@
 
 import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
+import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 import { Step1ApplicationFormDataType } from "@/types";
 import { CloseOutlined } from "@ant-design/icons";
 import {
@@ -27,9 +28,10 @@ type Props = {
     value: number | ((old: number) => number | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
+  isFormer: boolean;
 };
 
-export const Step1: FC<Props> = ({ setStep }) => {
+export const Step1: FC<Props> = ({ setStep, isFormer }) => {
   const [form] = Form.useForm<Step1ApplicationFormDataType>();
 
   useEffect(() => {
@@ -56,6 +58,16 @@ export const Step1: FC<Props> = ({ setStep }) => {
         setStep(1);
       }}
     >
+      {isFormer && (
+        <Form.Item
+          label="Matricule"
+          name="former_matricule"
+          rules={[{ required: true }]}
+          tooltip="Matricule déjà assigné à l'étudiant"
+        >
+          <Input placeholder="Matricule" />
+        </Form.Item>
+      )}
       <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
         <Input placeholder="Nom" />
       </Form.Item>
@@ -131,8 +143,9 @@ export const Step1: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-      <Typography.Text>Langues parlées</Typography.Text>
+      {/* <Typography.Text>Langues parlées</Typography.Text>
       <Form.List
+
         name={["spoken_languages"]}
         rules={[
           {
@@ -149,22 +162,28 @@ export const Step1: FC<Props> = ({ setStep }) => {
           <div className="pt-2">
             {fields.map(({ key, name, ...restField }, index) => (
               <div className="" key={key}>
-                <Flex gap={16}>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "language"]}
-                    label={`Langue ${index + 1}`}
-                    rules={[
-                      {
-                        required: true,
-                      },
-                    ]}
-                    style={{ flex: 1 }}
-                  >
-                    <Input placeholder={`Langue parlée ${index + 1}`} />
-                  </Form.Item>
+                <Flex gap={16}> */}
+      <Form.Item
+        // {...restField}
+        // name={[name, "language"]}
+        // label={`Langue ${index + 1}`}
+        name="spoken_languages"
+        label="Langues parlées"
+        rules={[
+          {
+            required: true,
+          },
+        ]}
+        style={{ flex: 1 }}
+      >
+        <Select
+          placeholder={`Langues parlées`}
+          options={spokenLanguagesAsOptions}
+          mode="multiple"
+        />
+      </Form.Item>
 
-                  <Button
+      {/* <Button
                     danger
                     type="text"
                     onClick={() => remove(name)}
@@ -194,7 +213,7 @@ export const Step1: FC<Props> = ({ setStep }) => {
             </Form.Item>
           </div>
         )}
-      </Form.List>
+      </Form.List> */}
       <Form.Item
         label="Email"
         name="email"

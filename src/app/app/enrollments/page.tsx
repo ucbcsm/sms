@@ -42,7 +42,6 @@ import {
 import { ViewEditApplicationForm } from "./view";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import Link from "next/link";
-import { FormerApplicationForm } from "./applications/forms/former-student-application";
 
 type EnrollButtonProps = {
   setReapply: (
@@ -238,8 +237,16 @@ export default function Page() {
         {selectedTab === "new" && <ListNewApplications />}
         {selectedTab === "old" && <ListReApplications />}
         <ReapplyForm open={reapply} setOpen={setReapply} />
-        <NewApplicationForm open={newApplication} setOpen={SetNewApplication} />
-        <FormerApplicationForm open={newFormer} setOpen={SetNewFormer} />
+        <NewApplicationForm
+          open={newApplication}
+          setOpen={SetNewApplication}
+          isFormer={false}
+        />
+        <NewApplicationForm
+          open={newFormer}
+          setOpen={SetNewFormer}
+          isFormer={true}
+        />
       </Layout.Sider>
       <Layout.Content
         style={{

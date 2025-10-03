@@ -535,7 +535,6 @@ export const StudentInfo = z.object({
   diploma_number: z.string(),
   diploma_percentage: z.number(),
   is_foreign_registration: z.boolean().nullable(),
-  former_year_enrollment_id: z.number().nullable(),
   house: House.nullable(),
   application_documents: z.array(ApplicationDocument),
 });
@@ -558,6 +557,8 @@ export const Application = Enrollment.merge(StudentInfo).extend({
   status: z.enum(["pending", "validated", "reoriented", "rejected"]).nullable(),
   avatar: z.string().nullable(),
   is_former_student: z.boolean(),
+  former_year_enrollment_id: z.number().nullable(),
+  former_matricule: z.string().nullable(),
   date_of_submission: z.string().date(),
 });
 
@@ -590,7 +591,7 @@ export type ApplicationFormDataType = Omit<
   field_id: number;
   department_id: number;
   class_id: number;
-  spoken_languages: { language: string }[];
+  spoken_languages: string[];
   student_previous_studies: Omit<StudentPreviousStudy, "id">[];
   enrollment_q_a: Omit<EnrollmentQA, "id" | "registered_enrollment_question">[];
   test_result: Omit<TestResult, "id">[];
@@ -601,6 +602,7 @@ export type ApplicationFormDataType = Omit<
 };
 
 const Step1ApplicationFormDataType = z.object({
+  former_matricule: z.string().nullable(),
   first_name: z.string(),
   last_name: z.string(),
   surname: z.string(),
@@ -611,7 +613,7 @@ const Step1ApplicationFormDataType = z.object({
   marital_status: z.enum(["single", "married", "divorced", "widowed"]),
   religious_affiliation: z.string(),
   physical_ability: z.enum(["normal", "disabled"]),
-  spoken_languages: z.array(z.object({ language: z.string() })),
+  spoken_languages: z.array(z.string()),
   email: z.string().email(),
   phone_number_1: z.string(),
   phone_number_2: z.string().nullable(),
@@ -734,7 +736,7 @@ export type ApplicationEditFormDataType = Omit<
   field_id: number;
   department_id: number;
   class_id: number;
-  spoken_languages: { language: string }[];
+  spoken_languages:  string [];
   application_documents: Array<
     Omit<ApplicationDocument, "required_document"> & {
       required_document: number | null;
