@@ -1,7 +1,17 @@
 "use client";
 
 import { useYid } from "@/hooks/use-yid";
-import { getYearDashboard } from "@/lib/api";
+import {
+  getApplication,
+  getClasses,
+  getCycles,
+  getDepartments,
+  getEnabledRequiredDocuments,
+  getEnabledTestCourses,
+  getFaculties,
+  getFields,
+  getYearDashboard,
+} from "@/lib/api";
 import { toFixedNumber } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -11,9 +21,22 @@ import {
   Progress,
   Skeleton,
   Statistic,
+  Tag,
   theme,
   Typography,
 } from "antd";
+import { EnrollButton } from "./applications/enrollButton";
+import { NewApplicationForm } from "./applications/forms/new/new";
+import { ListNewApplications } from "./applications/lists/new_applications";
+import { ListReApplications } from "./applications/lists/reapplications";
+import { ReapplyForm } from "./applications/forms/reapply/reapply";
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsStringEnum,
+  useQueryState,
+} from "nuqs";
+import { ViewEditApplicationForm } from "./applications/view";
 
 export default function StudentsLayout({
   children,
@@ -24,146 +47,158 @@ export default function StudentsLayout({
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
   const { yid } = useYid();
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["dashboard", `${yid}`],
-    queryFn: ({ queryKey }) => getYearDashboard(Number(queryKey[1])),
-    enabled: !!yid,
+  const [reapply, setReapply] = useQueryState(
+    "reapply",
+    parseAsBoolean.withDefault(false)
+  );
+  const [newApplication, SetNewApplication] = useQueryState(
+    "new",
+    parseAsBoolean.withDefault(false)
+  );
+
+  const [newFormer, SetNewFormer] = useQueryState(
+    "new-former",
+    parseAsBoolean.withDefault(false)
+  );
+
+  const [selectedTab, setSelectedTab] = useQueryState(
+    "tab",
+    parseAsStringEnum(["new", "old"]).withDefault("new")
+  );
+
+  const [view, setView] = useQueryState("view", parseAsInteger.withDefault(0));
+
+  const {
+    data: application,
+    isPending: isPendingApplication,
+    isError: isErrorApplication,
+  } = useQuery({
+    queryKey: ["applications", `${view}`],
+    queryFn: ({ queryKey }) => getApplication(Number(queryKey[1])),
+    enabled: !!(view > 0),
+  });
+
+  const { data: test_courses } = useQuery({
+    queryKey: ["test_courses", "enabled"],
+    queryFn: getEnabledTestCourses,
+  });
+
+  const { data: required_documents } = useQuery({
+    queryKey: ["required_documents", "enabled"],
+    queryFn: getEnabledRequiredDocuments,
+  });
+
+  const { data: cycles } = useQuery({
+    queryKey: ["cycles"],
+    queryFn: getCycles,
+  });
+
+  const { data: faculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
+  const { data: fields } = useQuery({
+    queryKey: ["fields"],
+    queryFn: getFields,
+  });
+
+  const { data: departments } = useQuery({
+    queryKey: ["departments"],
+    queryFn: getDepartments,
+  });
+
+  const { data: classes } = useQuery({
+    queryKey: ["classes"],
+    queryFn: getClasses,
   });
 
   return (
     <Layout>
+      <Layout.Sider
+        width={360}
+        theme="light"
+        style={{ borderRight: `1px solid ${colorBorderSecondary}` }}
+      >
+        <Flex
+          justify="space-between"
+          align="center"
+          style={{
+            paddingLeft: 16,
+            paddingRight: 16,
+            paddingTop: 16,
+            marginBottom: 16,
+          }}
+        >
+          <Typography.Title type="secondary" level={3} className="" style={{ marginBottom: 0 }}>
+            Candidatures
+          </Typography.Title>
+          <EnrollButton
+            setReapply={setReapply}
+            SetNewApplication={SetNewApplication}
+            SetNewFormer={SetNewFormer}
+          />
+        </Flex>
+
+        <Flex
+          gap={4}
+          wrap
+          align="center"
+          style={{ paddingLeft: 16, paddingRight: 16, paddingTop: 12 }}
+        >
+          <Tag.CheckableTag
+            key="new"
+            checked={selectedTab === "new"}
+            onChange={(checked) => setSelectedTab("new")}
+            style={{ borderRadius: 12 }}
+          >
+            Nouveaux
+          </Tag.CheckableTag>
+
+          <Tag.CheckableTag
+            key="old"
+            checked={selectedTab === "old"}
+            onChange={(checked) => setSelectedTab("old")}
+            style={{ borderRadius: 12 }}
+          >
+            Anciens
+          </Tag.CheckableTag>
+        </Flex>
+        {selectedTab === "new" && <ListNewApplications />}
+        {selectedTab === "old" && <ListReApplications />}
+        <ReapplyForm open={reapply} setOpen={setReapply} />
+        <NewApplicationForm
+          open={newApplication}
+          setOpen={SetNewApplication}
+          isFormer={false}
+        />
+        <NewApplicationForm
+          open={newFormer}
+          setOpen={SetNewFormer}
+          isFormer={true}
+        />
+      </Layout.Sider>
       <Layout.Content
         style={{
           background: colorBgContainer,
           padding: "0 28px",
         }}
       >
-        {children}
+        {!isPendingApplication && view > 0 && (
+          <ViewEditApplicationForm
+            application={application}
+            courses={test_courses}
+            documents={required_documents}
+            cycles={cycles}
+            faculties={faculties}
+            fields={fields}
+            departments={departments}
+            classes={classes}
+            setView={setView}
+          />
+        )}
+        {view === 0 && children}
       </Layout.Content>
-      <Layout.Sider
-        width={360}
-        theme="light"
-        style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
-      >
-        <div
-          style={{
-            height: 64,
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            // borderBottom: `1px solid ${colorBorderSecondary}`,
-            paddingLeft: 20,
-            paddingRight: 20,
-          }}
-        >
-          <Typography.Title
-            type="secondary"
-            style={{ marginBottom: 0, textTransform:"uppercase" }}
-            level={5}
-            ellipsis={{}}
-          >
-            Statistiques {data?.year.name}
-          </Typography.Title>
-        </div>
-
-        <div
-          style={{
-            height: "calc(100vh - 128px)",
-            overflowY: "auto",
-            paddingLeft: 20,
-            paddingRight: 20,
-            paddingBottom: 28,
-            // paddingTop: 16,
-          }}
-        >
-          <Flex vertical gap={16}>
-            <Card variant="borderless">
-              <Flex justify="space-between" align="center">
-                <Statistic
-                  loading={isPending}
-                  title="Total"
-                  value={data?.student_counter}
-                  valueStyle={{ color: "#1677ff", fontWeight: 600 }}
-                />
-                {!isPending ? (
-                  <Progress
-                    type="dashboard"
-                    percent={100}
-                    size={58}
-                    strokeColor="#1677ff"
-                  />
-                ) : (
-                  <Skeleton.Avatar size={58} active />
-                )}
-              </Flex>
-            </Card>
-            <Card variant="borderless">
-              <Flex justify="space-between" align="center">
-                <Statistic
-                  loading={isPending}
-                  title="Hommes"
-                  value={data?.male_count}
-                  valueStyle={{ color: "#52c41a", fontWeight: 600 }}
-                />
-                {!isPending ? (
-                  <Progress
-                    type="dashboard"
-                    percent={toFixedNumber(
-                      (data?.male_count! / data?.student_counter!) * 100
-                    )}
-                    size={58}
-                    strokeColor={"#52c41a"}
-                  />
-                ) : (
-                  <Skeleton.Avatar size={58} active />
-                )}
-              </Flex>
-            </Card>
-            <Card variant="borderless">
-              <Flex justify="space-between" align="center">
-                <Statistic
-                  loading={isPending}
-                  title="Femmes"
-                  value={data?.female_count}
-                  valueStyle={{ color: "#eb2f96", fontWeight: 600 }}
-                />
-                {!isPending ? (
-                  <Progress
-                    type="dashboard"
-                    percent={toFixedNumber(
-                      (data?.female_count! / data?.student_counter!) * 100
-                    )}
-                    size={58}
-                    strokeColor="#eb2f96"
-                  />
-                ) : (
-                  <Skeleton.Avatar size={58} active />
-                )}
-              </Flex>
-            </Card>
-            <Card variant="borderless">
-              <Flex justify="space-between" align="center">
-                <Statistic
-                  loading={isPending}
-                  title="Actifs"
-                  value={data?.actif_count}
-                  valueStyle={{ color: "#faad14", fontWeight: 600 }}
-                />
-              </Flex>
-            </Card>
-            <Card variant="borderless">
-              <Flex justify="space-between" align="center">
-                <Statistic
-                  loading={isPending}
-                  title="Abandons"
-                  value={data?.inactif_count}
-                  valueStyle={{ color: "#ff4d4f", fontWeight: 600 }}
-                />
-              </Flex>
-            </Card>
-          </Flex>
-        </div>
-      </Layout.Sider>
     </Layout>
   );
 }

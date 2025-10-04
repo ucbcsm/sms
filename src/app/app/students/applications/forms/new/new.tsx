@@ -104,19 +104,25 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
 
   return (
     <Drawer
-      width={`100%`}
+      width={`calc(100% - 362px)`}
       title={
         isFormer ? (
-          <Badge color="yellow" count="Ancien étudiant">
+          <Badge count="Ancien étudiant">
             <Typography.Title
               style={{ marginBottom: 0, color: "#fff" }}
               level={5}
             >
-              Formulaire d&apos;enregistrement 
+              Formulaire d&apos;enregistrement
             </Typography.Title>
           </Badge>
         ) : (
-          "Nouvelle candidature"
+          <Typography.Title
+            style={{ marginBottom: 0, color: "#fff" }}
+            level={5}
+            ellipsis={{}}
+          >
+            Nouvelle candidature
+          </Typography.Title>
         )
       }
       styles={{ header: { background: colorPrimary, color: "#fff" } }}

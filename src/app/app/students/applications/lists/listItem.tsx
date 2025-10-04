@@ -28,6 +28,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
         // toggleEdit();
         setView(item.id);
       }}
+      className=" hover:bg-gray-50 rounded-md"
     >
       <List.Item.Meta
         avatar={

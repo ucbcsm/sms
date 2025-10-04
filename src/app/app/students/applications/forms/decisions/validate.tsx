@@ -84,9 +84,10 @@ export const ValidateApplicationForm: FC<
               messageApi.success("Inscription validée avec succès !");
               setOpen(false);
             },
-            onError: () => {
+            onError: (error) => {
               messageApi.error(
-                "Une erreur s'est produite lors de la validation de l'inscription."
+                (error as any).response.data.message ||
+                  "Une erreur s'est produite lors de la validation de l'inscription."
               );
             },
           }

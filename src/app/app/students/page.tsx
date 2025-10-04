@@ -6,6 +6,7 @@ import { UserAddOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { getFaculties, getFacultiesAsDropdownMenu } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { StudentsStatsDashboard } from "./_components/statsDashboard";
 
 export default function Page() {
   const router = useRouter();
@@ -33,13 +34,14 @@ export default function Page() {
         </Space>
         <div className="flex-1" />
         <Space>
+          {<StudentsStatsDashboard />}
           {!isPendingFaculties ? (
             <Dropdown
               menu={{
                 items: [...(getFacultiesAsDropdownMenu(faculties) || [])],
-                onClick:({key})=>{
+                onClick: ({ key }) => {
                   router.push(`/faculty/${key}/students`);
-                }
+                },
               }}
             >
               <Button

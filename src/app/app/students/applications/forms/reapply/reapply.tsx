@@ -151,12 +151,13 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
     <>
       {contextHolder}
       <Drawer
-        width={`100%`}
+        width={`calc(100% - 362px)`}
         title={
           <Space>
             <Typography.Title
               level={5}
               style={{ marginBottom: 0, color: "#fff" }}
+              ellipsis={{}}
             >
               Réinscription :
             </Typography.Title>

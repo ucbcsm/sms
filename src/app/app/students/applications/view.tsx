@@ -22,6 +22,7 @@ import {
   Layout,
   Result,
   Dropdown,
+  Switch,
 } from "antd";
 import {
   CheckOutlined,
@@ -61,11 +62,12 @@ import {
 } from "@/lib/api";
 import { countries } from "@/lib/data/countries";
 import dayjs from "dayjs";
-import { DeleteApplicationForm } from "./applications/forms/decisions/delete";
-import { RejectApplicationForm } from "./applications/forms/decisions/reject";
-import { ValidateApplicationForm } from "./applications/forms/decisions/validate";
+import { DeleteApplicationForm } from "./forms/decisions/delete";
+import { RejectApplicationForm } from "./forms/decisions/reject";
+import { ValidateApplicationForm } from "./forms/decisions/validate";
 import { Options } from "nuqs";
-import { MarkAsPendingForm } from "./applications/forms/decisions/mark-as-pending";
+import { MarkAsPendingForm } from "./forms/decisions/mark-as-pending";
+import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 
 type ViewEditApplicationFormProps = {
   application?: Application;
@@ -276,7 +278,7 @@ export const ViewEditApplicationForm: React.FC<
             </Typography.Title>
             <Typography.Title
               level={5}
-              type="warning"
+              type="success"
               style={{ marginBottom: 0, textTransform: "uppercase" }}
             >
               {application.first_name} {application.last_name}{" "}
@@ -338,7 +340,7 @@ export const ViewEditApplicationForm: React.FC<
             {application.status === "pending" && (
               <Alert
                 showIcon
-                closable
+                // closable
                 message="Veuillez examiner les informations avec soin."
                 description="Tout formulaire qui contiendrait de faux renseignements ne doit pas étre validé!"
               />
@@ -461,8 +463,23 @@ export const ViewEditApplicationForm: React.FC<
             >
               <Input placeholder="Numéro de téléphone 2" />
             </Form.Item>
-            <Typography.Text>Langues parlées</Typography.Text>
-            <Form.List
+            <Form.Item
+              name="spoken_languages"
+              label="Langues parlées"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+              style={{ flex: 1 }}
+            >
+              <Select
+                placeholder={`Langues parlées`}
+                options={spokenLanguagesAsOptions}
+                mode="multiple"
+              />
+            </Form.Item>
+            {/* <Form.List
               name={["spoken_languages"]}
               rules={[
                 {
@@ -526,7 +543,7 @@ export const ViewEditApplicationForm: React.FC<
                   </Form.Item>
                 </div>
               )}
-            </Form.List>
+            </Form.List> */}
 
             <Divider orientation="left" orientationMargin={0}>
               <Typography.Title level={3}>
@@ -970,7 +987,7 @@ export const ViewEditApplicationForm: React.FC<
                         valuePropName="checked"
                         style={{ marginTop: 8 }}
                       >
-                        <Checkbox />
+                        <Switch />
                       </Form.Item>
                       <Form.Item
                         {...restField}
@@ -1113,7 +1130,7 @@ export const ViewEditApplicationForm: React.FC<
               description={
                 <Form.Item
                   name="enrollment_fees"
-                  label="Observation"
+                  label="Frais d'inscription"
                   rules={[{ required: true }]}
                   status="error"
                   style={{ marginBottom: 0 }}

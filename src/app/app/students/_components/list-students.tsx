@@ -230,20 +230,18 @@ export const ListStudents: FC = () => {
           dataIndex: "matricule",
           key: "matricule",
           render: (_, record) => (
-            <Link href={`/student/${record.id}`}>
-              {record.user.matricule.padStart(6, "0")}
-            </Link>
+            <Link href={`/student/${record.id}`}>{record.user.matricule}</Link>
           ),
           width: 80,
           align: "center",
         },
         {
-            title:"Genre",
-            dataIndex:"gender",
-            key:"gender",
-            render:(_,record,__)=>record.common_enrollment_infos.gender,
-            width: 56,
-            align:"center"
+          title: "Genre",
+          dataIndex: "gender",
+          key: "gender",
+          render: (_, record, __) => record.common_enrollment_infos.gender,
+          width: 56,
+          align: "center",
         },
         {
           title: "Noms",
@@ -331,7 +329,7 @@ export const ListStudents: FC = () => {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: 'calc(100vh - 314px)' }}
+      scroll={{ y: "calc(100vh - 314px)" }}
       size="small"
       loading={isPendingStudents}
       pagination={{

@@ -39,7 +39,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
   const getEnrollementQAFromQuestions = () => {
     return enrollment_questions?.map((item) => ({
       registered_enrollment_question: item.id,
-      response: null,
+      response: "",
     }));
   };
 
@@ -56,16 +56,18 @@ export const Step8: FC<Props> = ({ setStep }) => {
     }
   }, [enrollment_questions]);
 
-  console.log(enrollment_questions);
-
   return (
     <Form
       form={form}
       layout="vertical"
       onFinish={(values) => {
-        // console.log("Form:", values);
+        
+        const formattedValues = values.enrollment_q_a?.map((item: any) => ({
+          ...item,
+          response: item.response || "",
+        }));
         const compressedData = compressToEncodedURIComponent(
-          JSON.stringify(values)
+          JSON.stringify(formattedValues)
         );
         localStorage.setItem("d8", compressedData);
         setStep(8);
@@ -76,7 +78,6 @@ export const Step8: FC<Props> = ({ setStep }) => {
           <>
             {fields.map(({ key, name, ...restField }, index) => (
               <div className="" key={key}>
-                
                 <Form.Item
                   {...restField}
                   name={[name, "registered_enrollment_question"]}
@@ -98,6 +99,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
                     </Space>
                   }
                   rules={[]}
+                  initialValue={""}
                 >
                   <Input.TextArea placeholder="" />
                 </Form.Item>

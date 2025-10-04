@@ -124,16 +124,21 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
   return (
     <>
       {contextHolder}
-      <Form disabled={isPending} form={form} onFinish={onFinish}>
-        <Alert
+      <Form
+        layout="vertical"
+        disabled={isPending}
+        form={form}
+        onFinish={onFinish}
+      >
+        {/* <Alert
           type="info"
           showIcon
           description="L'Univertisté Chrétienne Bilingue du Congo est engagée et déterminée à poursuivre l'excellence dans la formation de la jeunesse congolaise pour la formtion intégrale. Ainsi des pratiques telles que la tricherie, le plagiat, la corruption, le vol, la débauche, l'ivrognerie, la promiscuité, le dérèglement social, l'accoutrement indécent, etc. sont strictement interdites et sévèrement sanctionnées. Ainsi, JE M'ENGAGE FERMEMENT à me soumettre à toutes les exigences de l'université et au code de conduite de l'étudiant tel que repris dans le manuel de l'étudiant en cas de mon admission à l'UCBC"
           style={{ border: 0 }}
-        />
+        /> */}
         <Form.Item
           name="enrollment_fees"
-          label="Observation"
+          label="Frais d'inscription"
           rules={[{ required: true }]}
           status="error"
           style={{ marginBottom: 0 }}
@@ -144,8 +149,8 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
               { value: "partially_paid", label: "Partiellement payés" },
               { value: "unpaid", label: "Non payés" },
             ]}
-            variant="filled"
-            style={{ width: 120 }}
+            // variant="filled"
+            style={{ width: "100%" }}
           />
         </Form.Item>
         <Form.Item
@@ -157,8 +162,8 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           style={{ marginTop: 16 }}
         >
           <Checkbox>
-            Je certifie sur honneur que les renseignements ci-haut fournis sont
-            exacts
+            Je certifie sur honneur que les renseignements fournis dans ce
+            formulaire sont exacts.
           </Checkbox>
         </Form.Item>
         <Flex justify="space-between" align="center">
@@ -180,7 +185,7 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
                 htmlType="submit"
                 style={{ boxShadow: "none" }}
               >
-                Soumettre maintenant
+                Soumettre
               </Button>
             </Space>
           </Form.Item>

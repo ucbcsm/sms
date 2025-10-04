@@ -106,11 +106,11 @@ export default function AppLayout({
               label: <Link href={`/app`}>Tableau de bord</Link>,
               icon: <DashboardOutlined />,
             },
-            {
-              key: "/app/enrollments",
-              label: <Link href={`/app/enrollments`}>Inscriptions</Link>,
-              icon: <SafetyCertificateOutlined />,
-            },
+            // {
+            //   key: "/app/enrollments",
+            //   label: <Link href={`/app/enrollments`}>Inscriptions</Link>,
+            //   icon: <SafetyCertificateOutlined />,
+            // },
             {
               key: "/app/students",
               label: <Link href={`/app/students`}>Étudiants</Link>,

@@ -344,6 +344,7 @@ export async function rejectApplication(params: Application) {
 }
 
 export async function validateApplication(params: Application) {
+
   const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
     ...params,
     academic_year: params.academic_year.id,
@@ -396,6 +397,8 @@ export async function validateEditedApplication({
   oldParams: Application;
   newParams: ApplicationEditFormDataType;
 }) {
+  console.log("Cycle:",newParams.cycle_id)
+  
   const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
     ...newParams,
     academic_year: newParams.year_id,
@@ -522,14 +525,12 @@ export function formatLanguages(languages: string[]): string {
   return languages.map((lang) => lang).join(", ");
 }
 
-export function parseLanguages(
-  languagesString: string
-): { language: string }[] {
+export function parseLanguages(languagesString: string): string[] {
   return languagesString
     .split(",")
     .map((lang) => lang.trim())
     .filter((lang) => lang !== "")
-    .map((lang) => ({ language: lang }));
+    .map((lang) => lang);
 }
 
 export function formatApplicationDocumentsForEdition(
