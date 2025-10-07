@@ -204,19 +204,14 @@ export default function Page() {
                 children: enrolledStudent?.faculty.name || "",
               },
               {
-                key: "departement",
-                label: "Département",
+                key: "department",
+                label: "Mention",
                 children: enrolledStudent?.departement.name || "",
               },
               {
                 key: "cycle",
                 label: "Cycle",
                 children: enrolledStudent?.cycle.name,
-              },
-              {
-                key: "specialisation",
-                label: "Spécialisation",
-                children: "",
               },
             ]}
           />

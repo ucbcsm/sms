@@ -56,14 +56,14 @@ export default function StudentLayout({
             paddingRight: 32,
           }}
         >
-            <Typography.Title
-              type="secondary"
-              style={{ marginBottom: 0 }}
-              level={5}
-              ellipsis={{}}
-            >
-              Compte étudiant
-            </Typography.Title>
+          <Typography.Title
+            type="secondary"
+            style={{ marginBottom: 0 }}
+            level={5}
+            ellipsis={{}}
+          >
+            Compte étudiant
+          </Typography.Title>
         </div>
         <StudentProfileDetails data={enrolledStudent} isError={isError} />
       </Layout.Sider>
@@ -83,11 +83,9 @@ export default function StudentLayout({
           }}
         >
           <Space>
-            <BackButton />
             {!isPending ? (
-              <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                {`${enrolledStudent?.user.first_name} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.surname}`}{" "}
-                (étudiant)
+              <Typography.Title level={3} style={{ marginBottom: 0, textTransform: "uppercase" }}>
+                {`${enrolledStudent?.user.first_name} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.surname}`}
               </Typography.Title>
             ) : (
               <Form>
@@ -101,7 +99,11 @@ export default function StudentLayout({
               {enrolledStudent?.academic_year.name}
             </Typography.Text>
             <Link href={`/faculty/${enrolledStudent?.faculty.id}/students`}>
-              <Button type="text" icon={<CloseOutlined />} title="Quitter le compte" />
+              <Button
+                type="text"
+                icon={<CloseOutlined />}
+                title="Quitter le compte"
+              />
             </Link>
           </Space>
         </Layout.Header>
@@ -114,18 +116,16 @@ export default function StudentLayout({
               label: <Link href={`/student/${studentId}`}>Aperçu</Link>,
             },
             {
-              key: `/student/${studentId}/courses/`,
+              key: `/student/${studentId}/documents`,
               label: (
-                <Link href={`/student/${studentId}/courses/`}>
-                  Cours prévus
-                </Link>
+                <Link href={`/student/${studentId}/documents`}>Documents</Link>
               ),
             },
             {
-              key: `/student/${studentId}/taught-courses`,
+              key: `/student/${studentId}/path`,
               label: (
-                <Link href={`/student/${studentId}/taught-courses`}>
-                  Cours programmés
+                <Link href={`/student/${studentId}/path`}>
+                  Parcours académique
                 </Link>
               ),
             },
@@ -138,20 +138,6 @@ export default function StudentLayout({
               ),
             },
             {
-              key: `/student/${studentId}/documents`,
-              label: (
-                <Link href={`/student/${studentId}/documents`}>
-                  Documents
-                </Link>
-              ),
-            },
-            {
-              key: `/student/${studentId}/health`,
-              label: (
-                <Link href={`/student/${studentId}/documents`}>Santé</Link>
-              ),
-            },
-            {
               key: `/student/${studentId}/discipline`,
               label: (
                 <Link href={`/student/${studentId}/discipline`}>
@@ -159,14 +145,7 @@ export default function StudentLayout({
                 </Link>
               ),
             },
-            {
-              key: `/student/${studentId}/path`,
-              label: (
-                <Link href={`/student/${studentId}/path`}>
-                  Parcours académique
-                </Link>
-              ),
-            },
+            
             {
               key: `/student/${studentId}/student-card`,
               label: (
@@ -175,46 +154,14 @@ export default function StudentLayout({
                 </Link>
               ),
             },
-            { key: "form", label: "Attestation d'admission", disabled: true },
-            { key: "transcript", label: "Relevé de notes", disabled: true },
-            {
-              key: "certificate",
-              label: "Certificat de scolarité",
-              disabled: true,
-            },
-            {
-              key: "schedule",
-              label: "Attestation de fréquentation",
-              disabled: true,
-            },
-            { key: "diploma", label: "Diplôme", disabled: true },
-            { key: "report", label: "Rapport de stage", disabled: true },
-            { key: "rules", label: "Règlement intérieur", disabled: true },
           ]}
         />
         <div
           style={{
             paddingTop: 24,
-            overflowY: "auto",
-            height: "calc(100vh - 110px)",
           }}
         >
           {children}
-          <Layout.Footer
-            style={{
-              display: "flex",
-              background: colorBgContainer,
-              padding: " 24px 0",
-            }}
-          >
-            <Typography.Text type="secondary">
-              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-            </Typography.Text>
-            <div className="flex-1" />
-            <Space>
-              <Palette />
-            </Space>
-          </Layout.Footer>
         </div>
       </Layout.Content>
     </Layout>
