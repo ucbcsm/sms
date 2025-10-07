@@ -11,9 +11,9 @@ import {
 } from "@ant-design/icons";
 import {
   Button,
-  Checkbox,
   Dropdown,
   Space,
+  Switch,
   Table,
   Tag,
   Typography,
@@ -65,7 +65,7 @@ export default function Page() {
             title: "Doc physique",
             dataIndex: "Dépo",
             key: "type",
-            render: () => <Checkbox />,
+            render: () => <Switch />,
           },
           {
             title: "Fichier électronique",

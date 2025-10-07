@@ -10,6 +10,7 @@ import {
   updateStudentInfo,
 } from "@/lib/api";
 import { countries } from "@/lib/data/countries";
+import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 import { Enrollment } from "@/types";
 import {
   CloseOutlined,
@@ -27,7 +28,6 @@ import {
   DatePicker,
   Divider,
   Drawer,
-  Flex,
   Form,
   Input,
   InputNumber,
@@ -61,6 +61,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
     mutationFn: updateStudentInfo,
   });
 
+  console.log(data?.user)
 
   const onFinish = (values: any) => {
     if (!data) {
@@ -80,11 +81,11 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               avatar: data?.user.avatar,
               matricule: values.matricule,
               pending_avatar: data?.user.pending_avatar,
-              is_active:data.user.is_active,
-              is_staff:data.user.is_staff,
-              is_student:data.user.is_student,
-              is_superuser:data.user.is_superuser,
-              is_permanent_teacher:data.user.is_permanent_teacher
+              is_active: data.user.is_active,
+              is_staff: data.user.is_staff,
+              is_student: data.user.is_student,
+              is_superuser: data.user.is_superuser,
+              is_permanent_teacher: data.user.is_permanent_teacher,
             },
             application_documents: formatApplicationDocumentsForEdition(
               data?.common_enrollment_infos.application_documents
@@ -138,7 +139,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
           <div className="text-white">
             Info étudiant:{" "}
             <Typography.Text
-              type="warning"
+              type="success"
               style={{ textTransform: "uppercase" }}
             >
               {data?.user.first_name} {data?.user.last_name}{" "}
@@ -314,7 +315,23 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               ]}
             />
           </Form.Item>
-          <Typography.Text>Langues parlées</Typography.Text>
+          <Form.Item
+            name="spoken_languages"
+            label="Langues parlées"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            style={{ flex: 1 }}
+          >
+            <Select
+              placeholder={`Langues parlées`}
+              options={spokenLanguagesAsOptions}
+              mode="multiple"
+            />
+          </Form.Item>
+          {/* <Typography.Text>Langues parlées</Typography.Text>
           <Form.List
             name={["spoken_languages"]}
             rules={[
@@ -379,7 +396,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
                 </Form.Item>
               </div>
             )}
-          </Form.List>
+          </Form.List> */}
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>Contacts</Typography.Title>
           </Divider>

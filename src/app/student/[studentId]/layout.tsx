@@ -110,67 +110,67 @@ export default function StudentLayout({
           mode="horizontal"
           items={[
             {
-              key: `/app/student/${studentId}`,
-              label: <Link href={`/app/student/${studentId}`}>Aperçu</Link>,
+              key: `/student/${studentId}`,
+              label: <Link href={`/student/${studentId}`}>Aperçu</Link>,
             },
             {
-              key: `/app/student/${studentId}/courses/`,
+              key: `/student/${studentId}/courses/`,
               label: (
-                <Link href={`/app/student/${studentId}/courses/`}>
+                <Link href={`/student/${studentId}/courses/`}>
                   Cours prévus
                 </Link>
               ),
             },
             {
-              key: `/app/student/${studentId}/taught-courses`,
+              key: `/student/${studentId}/taught-courses`,
               label: (
-                <Link href={`/app/student/${studentId}/taught-courses`}>
+                <Link href={`/student/${studentId}/taught-courses`}>
                   Cours programmés
                 </Link>
               ),
             },
             {
-              key: `/app/student/${studentId}/fees`,
+              key: `/student/${studentId}/fees`,
               label: (
-                <Link href={`/app/student/${studentId}/fees`}>
+                <Link href={`/student/${studentId}/fees`}>
                   Frais & Paiements
                 </Link>
               ),
             },
             {
-              key: `/app/student/${studentId}/documents`,
+              key: `/student/${studentId}/documents`,
               label: (
-                <Link href={`/app/student/${studentId}/documents`}>
+                <Link href={`/student/${studentId}/documents`}>
                   Documents
                 </Link>
               ),
             },
             {
-              key: `/app/student/${studentId}/health`,
+              key: `/student/${studentId}/health`,
               label: (
-                <Link href={`/app/student/${studentId}/documents`}>Santé</Link>
+                <Link href={`/student/${studentId}/documents`}>Santé</Link>
               ),
             },
             {
-              key: `/app/student/${studentId}/discipline`,
+              key: `/student/${studentId}/discipline`,
               label: (
-                <Link href={`/app/student/${studentId}/discipline`}>
+                <Link href={`/student/${studentId}/discipline`}>
                   Discipline
                 </Link>
               ),
             },
             {
-              key: `/app/student/${studentId}/path`,
+              key: `/student/${studentId}/path`,
               label: (
-                <Link href={`/app/student/${studentId}/path`}>
+                <Link href={`/student/${studentId}/path`}>
                   Parcours académique
                 </Link>
               ),
             },
             {
-              key: `/app/student/${studentId}/student-card`,
+              key: `/student/${studentId}/student-card`,
               label: (
-                <Link href={`/app/student/${studentId}/student-card`}>
+                <Link href={`/student/${studentId}/student-card`}>
                   Carte d&apos;étudiant
                 </Link>
               ),

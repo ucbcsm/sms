@@ -67,7 +67,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
               level={4}
             >{`${data?.user.first_name} ${data?.user.last_name}`}</Typography.Title>
             <Typography.Text type="secondary">
-              Matr. {data?.user.matricule.padStart(6, "0")}
+              Matr. {data?.user.matricule}
             </Typography.Text>
           </div>
           <Descriptions

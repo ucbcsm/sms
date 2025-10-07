@@ -49,6 +49,7 @@ export async function updateUser({
   id: number;
   params: Partial<Omit<User, "id">>;
 }) {
+  console.log(params);
   const res = await api.put(`/account/users/${id}/`, {
     ...params,
     // avatar: null,

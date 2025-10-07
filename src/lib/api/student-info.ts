@@ -10,7 +10,7 @@ export async function updateStudentInfo({
 }: {
   id: number;
   params: Omit<StudentInfo, "id" | "user" | "spoken_language"> & {
-    spoken_languages: { language: string }[];
+    spoken_languages:  string [];
     user: {
       id: number;
       first_name: string;

@@ -59,6 +59,7 @@ import {
 } from "@/lib/api";
 import { countries } from "@/lib/data/countries";
 import dayjs from "dayjs";
+import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 
 type EditApplicationFormProps = {
   application: Application;
@@ -130,7 +131,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
       field_id: number;
       department_id: number;
       class_id: number;
-      spoken_languages: { language: string }[];
+      spoken_languages: string[];
     }
   ) => {
     mutateAsync(
@@ -456,72 +457,22 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
           >
             <Input placeholder="Numéro de téléphone 2" />
           </Form.Item>
-          <Typography.Text>Langues parlées</Typography.Text>
-          <Form.List
-            name={["spoken_languages"]}
-            rules={[
-              {
-                validator(_, value) {
-                  if (!value?.length) {
-                    return Promise.reject(
-                      new Error("Ajouter au moins une langue")
-                    );
-                  }
-                  return Promise.resolve();
-                },
-              },
-            ]}
-          >
-            {(fields, { add, remove }, { errors }) => (
-              <div className="pt-2">
-                {fields.map(({ key, name, ...restField }, index) => (
-                  <div className="" key={key}>
-                    <Flex gap={16}>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "language"]}
-                        label={`Langue ${index + 1}`}
-                        rules={[
-                          {
-                            required: true,
-                          },
-                        ]}
-                        style={{ flex: 1 }}
-                      >
-                        <Input placeholder={`Langue parlée ${index + 1}`} />
-                      </Form.Item>
-
-                      <Button
-                        danger
-                        type="text"
-                        onClick={() => remove(name)}
-                        icon={<CloseOutlined />}
-                        style={{ boxShadow: "none" }}
-                      />
-                    </Flex>
-                  </div>
-                ))}
-                {errors.map((Error) => (
-                  <Typography.Text type="danger">{Error}</Typography.Text>
-                ))}
-                <Form.Item style={{}}>
-                  <Button
-                    type="link"
-                    onClick={() => add()}
-                    icon={<PlusCircleOutlined />}
-                    block
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    Ajouter une langue parlée
-                  </Button>
+          <Form.Item
+                  name="spoken_languages"
+                  label="Langues parlées"
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                  style={{ flex: 1 }}
+                >
+                  <Select
+                    placeholder={`Langues parlées`}
+                    options={spokenLanguagesAsOptions}
+                    mode="multiple"
+                  />
                 </Form.Item>
-              </div>
-            )}
-          </Form.List>
 
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>
