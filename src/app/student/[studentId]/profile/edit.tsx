@@ -61,8 +61,6 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
     mutationFn: updateStudentInfo,
   });
 
-  console.log(data?.user)
-
   const onFinish = (values: any) => {
     if (!data) {
       messageApi.error("Aucune donnée disponible pour la mise à jour.");

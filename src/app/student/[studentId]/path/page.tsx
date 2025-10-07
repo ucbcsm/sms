@@ -61,7 +61,6 @@ export default function Page() {
           </Card>
         </Col>
       </Row>
-
       <Tabs
         items={[
           { key: "courses", label: "Cours", children: <CoursesTab /> },
