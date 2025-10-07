@@ -34,7 +34,6 @@ export default function Page() {
         </Space>
         <div className="flex-1" />
         <Space>
-          {<StudentsStatsDashboard />}
           {!isPendingFaculties ? (
             <Dropdown
               menu={{
@@ -58,6 +57,7 @@ export default function Page() {
               <Skeleton.Input active />
             </Form>
           )}
+            {<StudentsStatsDashboard />}
         </Space>
       </Layout.Header>
       <Layout.Content style={{ background: colorBgContainer }}>

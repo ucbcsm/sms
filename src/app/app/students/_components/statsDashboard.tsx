@@ -35,10 +35,11 @@ export const StudentsStatsDashboard = () => {
   return (
     <>
       <Button
-        type="text"
+        // type="text"
         icon={<DashboardOutlined />}
         onClick={() => setOpen(true)}
         title={`Statistiques étudiants ${data?.year.name}`}
+        style={{boxShadow:"none"}}
       />
       <Drawer
         title={`Statistiques ${data?.year.name}`}

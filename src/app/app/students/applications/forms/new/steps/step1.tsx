@@ -4,8 +4,9 @@ import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
 import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 import { Step1ApplicationFormDataType } from "@/types";
-import { CloseOutlined } from "@ant-design/icons";
+import { useQuery } from "@tanstack/react-query";
 import {
+  Alert,
   Button,
   DatePicker,
   Flex,
@@ -13,7 +14,6 @@ import {
   Input,
   Radio,
   Select,
-  Typography,
 } from "antd";
 import dayjs from "dayjs";
 import {
@@ -22,6 +22,12 @@ import {
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
+import { useCheckMatricule } from "../hooks/useCheckMatricule";
+import {
+  CheckCircleFilled,
+  CloseCircleFilled,
+  LoadingOutlined,
+} from "@ant-design/icons";
 
 type Props = {
   setStep: (
@@ -33,6 +39,13 @@ type Props = {
 
 export const Step1: FC<Props> = ({ setStep, isFormer }) => {
   const [form] = Form.useForm<Step1ApplicationFormDataType>();
+  const matricule = Form.useWatch("former_matricule", form);
+  const {
+    matriculeExists,
+    isPending: isPendingMatricule,
+    isLoading: isLoadingMatricule,
+    refetch: refreshMatricule,
+  } = useCheckMatricule(matricule);
 
   useEffect(() => {
     const savedData = localStorage.getItem("d1");
@@ -65,17 +78,59 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
           rules={[{ required: true }]}
           tooltip="Matricule déjà assigné à l'étudiant"
         >
-          <Input placeholder="Matricule" />
+          <Input
+            placeholder="Matricule"
+            suffix={
+              isLoadingMatricule ? (
+                <LoadingOutlined />
+              ) : !matriculeExists && matricule ? (
+                matricule?.length >= 3 ? (
+                  <CheckCircleFilled style={{ color: "greenyellow" }} />
+                ) : undefined
+              ) : matriculeExists && matricule ? (
+                matricule?.length >= 3 ? (
+                  <CloseCircleFilled style={{ color: "red" }} />
+                ) : undefined
+              ) : undefined
+            }
+          />
         </Form.Item>
       )}
+      {matriculeExists ? (
+        <Alert
+          type="error"
+          message="Ce matricule existe déjà dans le système. Passez par le formulaire de réinscription comme l'étudiant existe déjà."
+          description="Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administrateur."
+          showIcon
+          style={{ marginBottom: 16, border: 0 }}
+        />
+      ) : null}
       <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
-        <Input placeholder="Nom" />
+        <Input
+          placeholder="Nom"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item label="Postnom" name="last_name" rules={[{ required: true }]}>
-        <Input placeholder="Postnom" />
+        <Input
+          placeholder="Postnom"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item label="Prénom" name="surname" rules={[{ required: true }]}>
-        <Input placeholder="Prénom" />
+        <Input
+          placeholder="Prénom"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>
         <Radio.Group
@@ -83,6 +138,10 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
             { value: "M", label: "Homme" },
             { value: "F", label: "Femme" },
           ]}
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
         />
       </Form.Item>
       <Form.Item
@@ -90,7 +149,13 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
         name="place_of_birth"
         rules={[{ required: true }]}
       >
-        <Input placeholder="Lieu de naissance" />
+        <Input
+          placeholder="Lieu de naissance"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item
         label="Date de naissance"
@@ -101,6 +166,10 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
           placeholder="DD/MM/YYYY"
           format={{ format: "DD/MM/YYYY" }}
           picker="date"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
         />
       </Form.Item>
       <Form.Item
@@ -108,7 +177,15 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
         name="nationality"
         rules={[{ required: true }]}
       >
-        <Select placeholder="Nationalité" options={countries} showSearch />
+        <Select
+          placeholder="Nationalité"
+          options={countries}
+          showSearch
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item
         label="État civil"
@@ -122,6 +199,10 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
             { value: "divorced", label: "Divorcé(e)" },
             { value: "widowed", label: "Veuf(ve)" },
           ]}
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
         />
       </Form.Item>
       <Form.Item
@@ -129,7 +210,13 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
         name="religious_affiliation"
         rules={[{ required: true }]}
       >
-        <Input placeholder="Affiliation religieuse" />
+        <Input
+          placeholder="Affiliation religieuse"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item
         label="Aptitude physique"
@@ -141,6 +228,10 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
             { value: "normal", label: "Normale" },
             { value: "disabled", label: "Handicapé" },
           ]}
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
         />
       </Form.Item>
       {/* <Typography.Text>Langues parlées</Typography.Text>
@@ -180,6 +271,10 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
           placeholder={`Langues parlées`}
           options={spokenLanguagesAsOptions}
           mode="multiple"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
         />
       </Form.Item>
 
@@ -219,21 +314,39 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
         name="email"
         rules={[{ required: true }, { type: "email" }]}
       >
-        <Input placeholder="Email" />
+        <Input
+          placeholder="Email"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item
         label="Téléphone 1"
         name="phone_number_1"
         rules={[{ required: true }]}
       >
-        <Input placeholder="Téléphone 1" />
+        <Input
+          placeholder="Téléphone 1"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Form.Item
         label="Téléphone 2"
         name="phone_number_2"
         rules={[{ required: false }]}
       >
-        <Input placeholder="Numéro de téléphone 2" />
+        <Input
+          placeholder="Numéro de téléphone 2"
+          disabled={
+            (matriculeExists && matricule && matricule?.length >= 3) ||
+            isLoadingMatricule
+          }
+        />
       </Form.Item>
       <Flex justify="space-between" align="center">
         <Palette />
@@ -248,6 +361,10 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
             type="primary"
             htmlType="submit"
             style={{ boxShadow: "none" }}
+            disabled={
+              (matriculeExists && matricule && matricule?.length >= 3) ||
+              isLoadingMatricule
+            }
           >
             Suivant
           </Button>
