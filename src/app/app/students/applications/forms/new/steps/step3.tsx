@@ -64,7 +64,7 @@ export const Step3: FC<Props> = ({ setStep }) => {
         <Input placeholder="Ville ou Territoire d'origine" />
       </Form.Item>
       <Form.Item
-        label="Êtes-vous étranger?"
+        label="Est-il étranger?"
         name="is_foreign_registration"
         valuePropName="checked"
       >

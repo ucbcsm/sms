@@ -28,7 +28,12 @@ export default function Page() {
         }}
       >
         <Space>
-          <Typography.Title level={3} className="" style={{ marginBottom: 0 }}>
+          <Typography.Title
+            type="secondary"
+            level={3}
+            className=""
+            style={{ marginBottom: 0 }}
+          >
             Étudiants
           </Typography.Title>
         </Space>
@@ -57,7 +62,7 @@ export default function Page() {
               <Skeleton.Input active />
             </Form>
           )}
-            {<StudentsStatsDashboard />}
+          {<StudentsStatsDashboard />}
         </Space>
       </Layout.Header>
       <Layout.Content style={{ background: colorBgContainer }}>

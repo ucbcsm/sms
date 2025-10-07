@@ -427,7 +427,9 @@ export const Enrollment = z.object({
   departement: Department,
   class_year: Class,
   common_enrollment_infos: StudentInfo,
-  type_of_enrollment: z.enum(["new_application", "reapplication"]).nullable(),
+  type_of_enrollment: z
+    .enum(["new_application", "reapplication", "former_application"])
+    .nullable(),
   enrollment_fees: z.enum(["paid", "partially_paid", "unpaid"]).nullable(),
   status: z.enum(["enabled", "disabled"]).nullable(),
   date_of_enrollment: z.date(),

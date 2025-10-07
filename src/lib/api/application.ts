@@ -397,7 +397,6 @@ export async function validateEditedApplication({
   oldParams: Application;
   newParams: ApplicationEditFormDataType;
 }) {
-  console.log("Cycle:",newParams.cycle_id)
   
   const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
     ...newParams,

@@ -89,7 +89,9 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           is_foreign_registration: sdata.is_foreign_registration || null,
           former_matricule: sdata.former_matricule || null,
           former_year_enrollment_id: null,
-          type_of_enrollment: "new_application",
+          type_of_enrollment: isFormer
+            ? "former_application"
+            : "new_application",
           surname: sdata.surname,
           last_name: sdata.last_name,
           first_name: sdata.first_name,
@@ -106,9 +108,7 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
             removeData();
             setStep(null);
             setOpen(null);
-            messageApi.success(
-              "Votre candidature a été soumise avec succès."
-            );
+            messageApi.success("Votre candidature a été soumise avec succès.");
           },
           onError: (error) => {
             messageApi.error(

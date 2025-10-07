@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 export const useCheckMatricule = (matricule: string | null) => {
-   const {data, isPending, isLoading, isError, refetch}= useQuery({
+   const { data, isPending, isLoading, isError, refetch } = useQuery({
      queryKey: ["check_enrollments", matricule],
      queryFn: ({ queryKey }) =>
        getYearEnrollments({
@@ -14,8 +14,6 @@ export const useCheckMatricule = (matricule: string | null) => {
        }),
      enabled: false,
    });
-
-   console.log({ matricule, data: data?.results });
 
    useEffect(() => {
      if (matricule && matricule.trim() !== "" && matricule.length >= 3) {
