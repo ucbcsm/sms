@@ -104,7 +104,9 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
         },
         {
           onSuccess: () => {
+
             queryClient.invalidateQueries({ queryKey: ["applications"] });
+            queryClient.invalidateQueries({ queryKey: ["year_enrollments"] });
             removeData();
             setStep(null);
             setOpen(null);
