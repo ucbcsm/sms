@@ -33,7 +33,12 @@ export default function Page() {
             </Space>
             <div className="flex-1" />
             <Space>
-              <Button icon={<PlusOutlined />} style={{ boxShadow: "none" }}>
+              <Button
+                icon={<PlusOutlined />}
+                variant="dashed"
+                color="primary"
+                style={{ boxShadow: "none" }}
+              >
                 Ajouter un document
               </Button>
             </Space>
@@ -152,11 +157,8 @@ export default function Page() {
             },
           },
         ]}
-        rowKey="key"
+        rowKey="id"
         rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-        rowSelection={{
-          type: "checkbox",
-        }}
         size="small"
         pagination={{
           defaultPageSize: 10,
