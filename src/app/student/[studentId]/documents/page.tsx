@@ -16,6 +16,7 @@ import { useParams } from "next/navigation";
 import { useYearEnrollment } from "@/hooks/useYearEnrollment";
 import { getApplicationStatusName, getApplicationTagColor } from "@/lib/api";
 import { useAllRequiredDocuments } from "@/hooks/useAllRequiredDocuments";
+import { record } from "zod";
 
 export default function Page() {
   const { studentId } = useParams();
@@ -41,6 +42,7 @@ const {data:documents}=useAllRequiredDocuments()
               currentDocuments={
                 enrollment?.common_enrollment_infos.application_documents
               }
+              yearEnrollment={enrollment}
             />
           </Space>
         </header>
@@ -89,6 +91,7 @@ const {data:documents}=useAllRequiredDocuments()
                   <Button
                     icon={<DownloadOutlined />}
                     style={{ boxShadow: "none" }}
+                    disabled
                   >
                     Télécharger
                   </Button>
@@ -96,6 +99,7 @@ const {data:documents}=useAllRequiredDocuments()
                   <Button
                     icon={<UploadOutlined />}
                     style={{ boxShadow: "none" }}
+                    disabled
                   >
                     Téléverser
                   </Button>
@@ -139,6 +143,27 @@ const {data:documents}=useAllRequiredDocuments()
               {getApplicationStatusName(record.status)}
             </Tag>
           ),
+        },
+        {
+          key: "actions",
+          dataIndex: "actions",
+          title: "",
+          render: (_, record) => (
+            <Space>
+              <Button
+                type="text"
+                icon={<EditOutlined />}
+                title="Modifier le document du dossier"
+              />
+              <Button
+                type="text"
+                icon={<DeleteOutlined />}
+                danger
+                title="Retirer le document du dossier"
+              />
+            </Space>
+          ),
+          width: 96,
         },
       ]}
       rowKey="id"

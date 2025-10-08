@@ -34,7 +34,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
 
   const getDocumentsAsOptions = () => {
     return documents?.map((doc) => ({
-      label: doc.title,
+      label: `${doc.title}${doc.required ? " (Obligatoire)" : ""}`,
       value: doc.id,
       disabled:
         currentDocuments?.some((d) => d.required_document?.id === doc.id) ||
@@ -42,19 +42,31 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
     }));
   };
 
+  const onClose=()=>{
+    setOpen(false)
+    form.resetFields()
+  }
+
   const onFinish = (values: {
     docsIds: number[];
     exist: boolean;
     status: "pending" | "rejected" | "validated";
   }) => {
     if (!yearEnrollment) {
-      messageApi.error("Aucune donnée disponible pour la mise à jour.");
+      messageApi.error("Une erreur s'est produite. Veuillez réessayer.");
     } else {
+      const newDocs = values.docsIds.map((id) => ({
+        required_document: id,
+        exist: values.exist,
+        status: values.status,
+        file_url: null,
+      }));
+
       mutateAsync(
         {
           id: Number(yearEnrollment?.common_enrollment_infos.id),
           params: {
-            ...values,
+            ...yearEnrollment.common_enrollment_infos,
             user: {
               id: yearEnrollment?.user.id,
               first_name: yearEnrollment.user.first_name!,
@@ -70,7 +82,12 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
               is_superuser: yearEnrollment?.user.is_superuser,
               is_permanent_teacher: yearEnrollment?.user.is_permanent_teacher,
             },
+            spoken_languages:
+              yearEnrollment?.common_enrollment_infos.spoken_language.split(
+                ","
+              ) || [],
             application_documents: [
+              ...newDocs,
               ...formatApplicationDocumentsForEdition(
                 yearEnrollment?.common_enrollment_infos.application_documents
               ),
@@ -99,7 +116,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
           },
           onError: () => {
             messageApi.error(
-                "Une erreur s'est produite lors de l'ajout. Veuillez réessayer."
+              "Une erreur s'est produite lors de l'ajout. Veuillez réessayer."
             );
           },
         }
@@ -123,12 +140,20 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
       <Modal
         destroyOnHidden
         open={open}
-        onCancel={() => setOpen(false)}
+        onCancel={onClose}
         title="Ajouter des documents au dossier"
         styles={{ body: { paddingTop: 16 } }}
-        okButtonProps={{ htmlType: "submit", style: { boxShadow: "none" } }}
+        okButtonProps={{
+          htmlType: "submit",
+          style: { boxShadow: "none" },
+          loading: isPending,
+        }}
         cancelButtonProps={{ style: { boxShadow: "none" } }}
-        modalRender={(dom) => <Form form={form}>{dom}</Form>}
+        modalRender={(dom) => (
+          <Form form={form} onFinish={onFinish} disabled={isPending}>
+            {dom}
+          </Form>
+        )}
       >
         <Form.Item
           name="docsIds"
@@ -142,7 +167,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
         >
           <Select
             showSearch
-            placeholder="Sélectionner un document"
+            placeholder="Sélectionner un ou plusieurs documents"
             options={getDocumentsAsOptions()}
             optionFilterProp="children"
             filterOption={filterOption}
@@ -159,6 +184,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
               message: "Veuillez indiquer si le document physique est présent",
             },
           ]}
+          initialValue={true}
         >
           <Switch checkedChildren="✓ Présent" unCheckedChildren="✗ Absent" />
         </Form.Item>

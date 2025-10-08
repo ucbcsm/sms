@@ -1,4 +1,4 @@
-import { StudentInfo } from "@/types";
+import { ApplicationDocument, Enrollment, EnrollmentQA, StudentInfo, TestResult } from "@/types";
 import api from "../fetcher";
 import dayjs from "dayjs";
 import { formatLanguages } from "./application";
@@ -9,8 +9,32 @@ export async function updateStudentInfo({
   params,
 }: {
   id: number;
-  params: Omit<StudentInfo, "id" | "user" | "spoken_language"> & {
-    spoken_languages:  string [];
+  params: Omit<
+    StudentInfo,
+    | "id"
+    | "user"
+    | "spoken_language"
+    | "application_documents"
+    | "enrollment_question_response"
+    | "admission_test_result"
+  > & {
+    spoken_languages: string[];
+    application_documents: (Omit<
+      ApplicationDocument,
+      "id" | "required_document"
+    > & {
+      id?: number | null;
+      required_document: number | null;
+    })[];
+    enrollment_question_response: (Omit<
+      EnrollmentQA,
+      "registered_enrollment_question"
+    > & {
+      registered_enrollment_question: number | null;
+    })[];
+    admission_test_result: (Omit<TestResult, "course_test"> & {
+      course_test: number | null;
+    })[];
     user: {
       id: number;
       first_name: string;
@@ -20,11 +44,11 @@ export async function updateStudentInfo({
       matricule: string;
       avatar: string | null;
       pending_avatar: string | null;
-      is_active:boolean,
-      is_staff:boolean,
-      is_student:boolean,
-      is_superuser:boolean,
-      is_permanent_teacher:boolean,
+      is_active: boolean;
+      is_staff: boolean;
+      is_student: boolean;
+      is_superuser: boolean;
+      is_permanent_teacher: boolean;
     };
   };
 }) {

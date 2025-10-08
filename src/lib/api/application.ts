@@ -533,30 +533,35 @@ export function parseLanguages(languagesString: string): string[] {
 }
 
 export function formatApplicationDocumentsForEdition(
-  docs: ApplicationDocument[]
+  docs?: ApplicationDocument[]
 ) {
-  return docs.map((doc) => ({
-    ...doc,
-    required_document: doc.required_document?.id || null,
-  }));
+  return (
+    docs?.map((doc) => ({
+      ...doc,
+      id: doc.id || null,
+      required_document: doc.required_document?.id || null,
+    })) || []
+  );
 }
 
 export function formatEnrollmentQuestionResponseForEdition(
-  questionsResponses: EnrollmentQA[]
+  questionsResponses?: EnrollmentQA[]
 ) {
-  return questionsResponses.map((qa) => ({
-    ...qa,
-    registered_enrollment_question:
-      qa.registered_enrollment_question?.id || null,
-  }));
+  return (
+    questionsResponses?.map((qa) => ({
+      ...qa,
+      registered_enrollment_question:
+        qa.registered_enrollment_question?.id || null,
+    })) || []
+  );
 }
 
-export function formatAdmissionTestResultsForEdition(results: TestResult[]) {
-  return results.map((res) => ({
+export function formatAdmissionTestResultsForEdition(results?: TestResult[]) {
+  return results?.map((res) => ({
     ...res,
     result: res.result || null,
     course_test: res.course_test?.id || null,
-  }));
+  }))|| [];
 }
 
 export async function createReapplication(params: {
