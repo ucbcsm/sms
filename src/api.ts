@@ -156,18 +156,23 @@ import { Faculty } from "./types";
 //  https://ciucbc.pythonanywhere.com/api/v01/jury/announcement
 //  https://ciucbc.pythonanywhere.com/api/v01/jury/retake-course
 
+// https://ciucbc.pythonanywhere.com/api/v01/jury/deliberation-minutes/
+// https://ciucbc.pythonanywhere.com/api/v01/jury/grade-report/
+// https://ciucbc.pythonanywhere.com/api/v01/jury/result-presentation/
+
 // https://ciucbc.pythonanywhere.com/api/v01/faculty/attendance-list/?course__id=&attendance_reached
 
 // https://ciucbc.pythonanywhere.com/api/v01/apparitorat/year-enrollment/registration/
-{
-    academic_year: number;
-    field: number;
-    faculty: Faculty;
-    departement: number;
-    class_year: number;
-    cycle: number;
-    year_enrollment: number;
-    enrollement_fees:"paid"| "unpa" |"PARTIALY_PAID";
-    status: "pending" | "validated" | "rejected" | ;
-    type_of_enrollment: "new_application" | "reapplication" | "former_application";
-}
+// {
+//     academic_year: number;
+//     field: number;
+//     faculty: Faculty;
+//     departement: number;
+//     class_year: number;
+//     cycle: number;
+//     year_enrollment: number;
+//     enrollement_fees:"paid"| "unpa" |"PARTIALY_PAID";
+//     status: "pending" | "validated" | "rejected" | ;
+//     type_of_enrollment: "new_application" | "reapplication" | "former_application";
+// }
+
