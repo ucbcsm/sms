@@ -1,4 +1,9 @@
-import { ApplicationDocument, Enrollment, EnrollmentQA, StudentInfo, TestResult } from "@/types";
+import {
+  ApplicationDocument,
+  EnrollmentQA,
+  StudentInfo,
+  TestResult,
+} from "@/types";
 import api from "../fetcher";
 import dayjs from "dayjs";
 import { formatLanguages } from "./application";
@@ -94,5 +99,28 @@ export async function updateStudentInfo({
     admission_test_result: params.admission_test_result,
   });
   await updateUser({ id: params.user.id, params: { ...params.user } });
+  return res.data;
+}
+
+export async function updateSingleApplicationDocument({
+  id,
+  params,
+}: {
+  id: number;
+  params: Omit<ApplicationDocument, "id" | "required_document"> & {
+    required_document: number | null;
+  };
+}) {
+  const res = await api.put(`/apparitorat/application-documents/${id}/`, {
+    exist: params.exist,
+    status: params.status,
+    file_url: params.file_url || null,
+    required_document: params.required_document,
+  });
+  return res.data;
+}
+
+export async function deleteSingleApplicationDocument(id: number) {
+  const res = await api.delete(`/apparitorat/application-documents/${id}/`);
   return res.data;
 }

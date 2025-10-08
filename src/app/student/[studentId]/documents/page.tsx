@@ -2,28 +2,25 @@
 
 import {
   DeleteOutlined,
-  DownloadOutlined,
-  EditOutlined,
   EyeOutlined,
   FileOutlined,
   FolderOutlined,
-  MoreOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
-import { Button, Dropdown, Space, Switch, Table, Tag, Typography } from "antd";
+import { Button, Space, Switch, Table, Tag, Typography } from "antd";
 import { ButtonAddNewDocument } from "./_components/addNewDocument";
 import { useParams } from "next/navigation";
 import { useYearEnrollment } from "@/hooks/useYearEnrollment";
 import { getApplicationStatusName, getApplicationTagColor } from "@/lib/api";
 import { useAllRequiredDocuments } from "@/hooks/useAllRequiredDocuments";
-import { record } from "zod";
+import { EditDocument } from "./_components/editDocument";
+import { DeleteDocument } from "./_components/deleteDocument";
 
 export default function Page() {
   const { studentId } = useParams();
-  const { data: enrollment, isPending: isPendingEnrollment } = useYearEnrollment(Number(studentId));
-  
+  const { data: enrollment, isPending: isPendingEnrollment } =
+    useYearEnrollment(Number(studentId));
 
-const {data:documents}=useAllRequiredDocuments()
+  const { data: documents } = useAllRequiredDocuments();
 
   return (
     <Table
@@ -67,12 +64,13 @@ const {data:documents}=useAllRequiredDocuments()
           key: "type",
           render: (_, record) => (
             <Switch
-              // checked={record.exist}
+              checked={record.exist}
               checkedChildren="✓ Présent"
               unCheckedChildren="✗ Absent"
               disabled
             />
           ),
+          width:110
         },
         {
           title: "Version électronique",
@@ -84,47 +82,9 @@ const {data:documents}=useAllRequiredDocuments()
                   icon={<EyeOutlined />}
                   style={{
                     boxShadow: "none",
-                    display: record.status === "validated" ? "block" : "none",
+                    display: record.file_url ? "block" : "none",
                   }}
                 />
-                {record.status === "validated" ? (
-                  <Button
-                    icon={<DownloadOutlined />}
-                    style={{ boxShadow: "none" }}
-                    disabled
-                  >
-                    Télécharger
-                  </Button>
-                ) : (
-                  <Button
-                    icon={<UploadOutlined />}
-                    style={{ boxShadow: "none" }}
-                    disabled
-                  >
-                    Téléverser
-                  </Button>
-                )}
-                <Dropdown
-                  menu={{
-                    items: [
-                      { key: "1", label: "Modifier", icon: <EditOutlined /> },
-                      {
-                        key: "2",
-                        label: "Supprimer",
-                        danger: true,
-                        icon: <DeleteOutlined />,
-                      },
-                    ],
-                  }}
-                >
-                  <Button
-                    icon={<MoreOutlined />}
-                    style={{
-                      boxShadow: "none",
-                      display: record.status === "validated" ? "block" : "none",
-                    }}
-                  />
-                </Dropdown>
               </Space>
             );
           },
@@ -132,7 +92,7 @@ const {data:documents}=useAllRequiredDocuments()
         {
           key: "status",
           dataIndex: "status",
-          title: "Statut de verification",
+          title: "Statut de vérification",
           ellipsis: true,
           render: (_, record) => (
             <Tag
@@ -150,17 +110,14 @@ const {data:documents}=useAllRequiredDocuments()
           title: "",
           render: (_, record) => (
             <Space>
-              <Button
-                type="text"
-                icon={<EditOutlined />}
-                title="Modifier le document du dossier"
+              <EditDocument
+                doc={record}
+                documents={documents}
+                currentDocuments={
+                  enrollment?.common_enrollment_infos.application_documents
+                }
               />
-              <Button
-                type="text"
-                icon={<DeleteOutlined />}
-                danger
-                title="Retirer le document du dossier"
-              />
+              <DeleteDocument doc={record} />
             </Space>
           ),
           width: 96,

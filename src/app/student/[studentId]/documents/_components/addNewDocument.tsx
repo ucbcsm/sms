@@ -139,6 +139,8 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
 
       <Modal
         destroyOnHidden
+        closable={!isPending}
+        maskClosable={!isPending}
         open={open}
         onCancel={onClose}
         title="Ajouter des documents au dossier"
@@ -148,7 +150,10 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
           style: { boxShadow: "none" },
           loading: isPending,
         }}
-        cancelButtonProps={{ style: { boxShadow: "none" } }}
+        cancelButtonProps={{
+          style: { boxShadow: "none" },
+          disabled: isPending,
+        }}
         modalRender={(dom) => (
           <Form form={form} onFinish={onFinish} disabled={isPending}>
             {dom}
@@ -190,7 +195,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
         </Form.Item>
         <Form.Item
           name="status"
-          label="Statut"
+          label="Statut de vérification"
           rules={[
             { required: true, message: "Veuillez sélectionner un statut" },
           ]}

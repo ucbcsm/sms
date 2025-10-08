@@ -189,7 +189,7 @@ export default function Page() {
           key: "matricule",
           render: (_, record) => (
             <Link href={`/student/${record.id}`}>
-              {record.user.matricule.padStart(6, "0")}
+              {record.user.matricule}
             </Link>
           ),
           width: 80,
@@ -199,7 +199,8 @@ export default function Page() {
           title: "Genre",
           dataIndex: "gender",
           key: "gender",
-          render: (_, record, __) => record.common_enrollment_infos.gender,
+          render: (_, record, __) =>
+            record.common_enrollment_infos.gender || "",
           width: 56,
           align: "center",
         },
@@ -252,14 +253,14 @@ export default function Page() {
           render: (_, record, __) => (
             <Space>
               <Link href={`/student/${record.id}`}>
-              <Button
-                color="primary"
-                variant="dashed"
-                // onClick={() => router.push(`/student/${record.id}`)}
-                style={{ boxShadow: "none" }}
-              >
-                Gérer
-              </Button>
+                <Button
+                  color="primary"
+                  variant="dashed"
+                  // onClick={() => router.push(`/student/${record.id}`)}
+                  style={{ boxShadow: "none" }}
+                >
+                  Gérer
+                </Button>
               </Link>
               {/* <Dropdown
                 menu={{
@@ -282,7 +283,7 @@ export default function Page() {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: 'calc(100vh - 346px)' }}
+      scroll={{ y: "calc(100vh - 346px)" }}
       size="small"
       loading={isPendingEnrollememts}
       pagination={{

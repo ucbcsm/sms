@@ -9,11 +9,17 @@ import { EditStudentProfileForm } from "./edit";
 type ProfileDetailsProps = {
   data?: Enrollment;
   isError: boolean;
+
 };
 
 export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }) => {
-  if (isError) {
-    return <DataFetchErrorResult />;
+ 
+  if (!data){
+    return (
+    <div className="p-6">
+      <DataFetchPendingSkeleton />
+    </div>
+  );
   }
 
   if (data)
@@ -352,9 +358,5 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
       </>
     );
 
-  return (
-    <div className="p-6">
-      <DataFetchPendingSkeleton />
-    </div>
-  );
+  
 };
