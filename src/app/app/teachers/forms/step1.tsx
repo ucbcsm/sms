@@ -17,25 +17,6 @@ type Props = {
   ) => Promise<URLSearchParams>;
 };
 
-// const formSchema = z.object({
-//     first_name: z.string(),
-//     last_name: z.string(),
-//     surname: z.string(),
-//     gender: z.enum(["M", "F"]),
-//     place_of_birth: z.string(),
-//     date_of_birth: z.string(),
-//     nationality: z.string(),
-//     city: z.string(),
-//     adress: z.string(),
-//     marital_status: z.enum(["single", "married", "divorced", "widowed"]),
-//     religious_affiliation: z.string(),
-//     physical_ability: z.enum(["normal", "disabled"]),
-//     email: z.string().email("Adresse email invalide"),
-//     phone_number_1: z.string(),
-//     phone_number_2: z.string().optional(),
-// });
-
-// type FormSchemaType = z.infer<typeof formSchema>;
 
 export const Step1: FC<Props> = ({ setStep }) => {
   const [form] = Form.useForm<Step1TeacherFormDataType>();
@@ -63,13 +44,13 @@ export const Step1: FC<Props> = ({ setStep }) => {
       }}
       style={{ maxWidth: 520, margin: "auto" }}
     >
-      <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
+      <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
         <Input placeholder="Nom" />
       </Form.Item>
       <Form.Item label="Postnom" name="last_name" rules={[{ required: true }]}>
         <Input placeholder="Postnom" />
       </Form.Item>
-      <Form.Item label="Prénom" name="surname" rules={[{ required: true }]}>
+      <Form.Item label="Prénom" name="first_name" rules={[{ required: true }]}>
         <Input placeholder="Prénom" />
       </Form.Item>
       <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>

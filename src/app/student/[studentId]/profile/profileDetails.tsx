@@ -71,7 +71,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
             )}
             <Typography.Title
               level={4}
-            >{`${data?.user.first_name} ${data?.user.last_name}`}</Typography.Title>
+            >{`${data?.user.surname} ${data?.user.last_name}`}</Typography.Title>
             <Typography.Text type="secondary">
               Matr. {data?.user.matricule}
             </Typography.Text>
@@ -83,7 +83,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
               {
                 key: "name",
                 label: "Nom",
-                children: data?.user.first_name || "",
+                children: data?.user.surname || "",
               },
               {
                 key: "postnom",
@@ -93,13 +93,13 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
               {
                 key: "prenom",
                 label: "Prénom",
-                children: data?.user.surname || "",
+                children: data?.user.first_name || "",
               },
               {
                 key: "sex",
                 label: "Sexe",
                 children:
-                  data?.common_enrollment_infos.gender === "M"
+                  data?.user.gender === "M"
                     ? "Masculin"
                     : "Féminin",
               },

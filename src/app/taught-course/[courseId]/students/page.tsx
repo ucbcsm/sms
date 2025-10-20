@@ -1,7 +1,6 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
   getApplicationStatusName,
   getApplicationStatusTypographyType,

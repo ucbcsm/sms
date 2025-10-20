@@ -89,13 +89,11 @@ export const SelectAStudent: FC<SelectAStudentProps> = ({
           : undefined
       }
       options={(data?.results ?? []).map((enrollment) => ({
-        label: `${enrollment.user.matricule} - ${enrollment.user.first_name} ${enrollment.user.last_name} ${enrollment.user.surname}`,
+        label: `${enrollment.user.matricule} - ${enrollment.user.surname} ${enrollment.user.last_name} ${enrollment.user.first_name}`,
         value: enrollment.id,
         avatar:
           enrollment.user.avatar ||
           `${enrollment.user.first_name
-            ?.charAt(0)
-            .toUpperCase()}${enrollment.user.last_name
             ?.charAt(0)
             .toUpperCase()}`,
       }))}

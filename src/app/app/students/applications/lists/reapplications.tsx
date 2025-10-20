@@ -1,17 +1,7 @@
 "use client";
 
-import {
-  getPendingApplications,
-  getRejectedApplications,
-  getValidatedApplications,
-} from "@/lib/api";
-import { SearchOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
-import { Badge, Input, List, Tabs } from "antd";
+import { Badge, Tabs } from "antd";
 import { FC } from "react";
-import { ListItemApplication } from "./listItem";
-import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchingSkeleton } from "./new_applications";
 import { useYid } from "@/hooks/use-yid";
 import { usePendingApplications } from "@/hooks/use-pending-application";
 import { ListPendingApplications } from "./listPending";
@@ -21,8 +11,6 @@ import { ListValidatedApplications } from "./listValidated";
 export const ListReApplications: FC = () => {
   const {yid}=useYid()
  const {data}=usePendingApplications("is_old_student", yid)
-
- 
 
   return (
     <Tabs

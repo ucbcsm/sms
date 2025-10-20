@@ -211,14 +211,13 @@ export default function Page() {
                   <Avatar
                     style={{
                       backgroundColor: getHSLColor(
-                        `${record.student?.user.first_name} ${record.student?.user.last_name} ${record.student?.user.surname}`
+                        `${record.student?.user.surname} ${record.student?.user.last_name} ${record.student?.user.first_name}`
                       ),
                     }}
                   >
                     {record.student?.user.first_name?.charAt(0).toUpperCase()}
-                    {record.student?.user.last_name?.charAt(0).toUpperCase()}
                   </Avatar>
-                  {`${record.student.user.first_name} ${record.student.user.last_name} ${record.student?.user.surname}`}
+                  {`${record.student?.user.surname} ${record.student.user.last_name} ${record.student.user.first_name}`}
                 </Space>
               ),
             },

@@ -36,17 +36,16 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
             src={item.avatar}
             style={{
               backgroundColor: getHSLColor(
-                `${item.first_name} ${item.last_name} ${item.surname}`
+                `${item.surname} ${item.last_name} ${item.first_name}`
               ),
             }}
           >
             {item.first_name?.charAt(0).toUpperCase()}
-            {item.last_name?.charAt(0).toUpperCase()}
           </Avatar>
         }
         title={
           <Typography.Text>
-            {item.first_name} {item.last_name} {item.surname}
+            {item.surname} {item.last_name} {item.first_name}
           </Typography.Text>
         }
         description={

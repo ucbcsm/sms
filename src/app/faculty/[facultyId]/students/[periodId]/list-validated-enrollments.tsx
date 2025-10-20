@@ -286,12 +286,11 @@ export const ListPeriodValidatedStudents: FC<
               src={record.year_enrollment.user.avatar || null}
               style={{
                 backgroundColor: getHSLColor(
-                  `${record.year_enrollment.user.first_name} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.surname}`
+                  `${record.year_enrollment.user.surname} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.first_name}`
                 ),
               }}
             >
               {record.year_enrollment.user.first_name?.charAt(0).toUpperCase()}
-              {record.year_enrollment.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 56,
@@ -301,8 +300,8 @@ export const ListPeriodValidatedStudents: FC<
           dataIndex: "matricule",
           key: "matricule",
           render: (_, record) => (
-            <Link href={`/app/student/${record.year_enrollment.id}`}>
-              {record.year_enrollment.user.matricule.padStart(6, "0")}
+            <Link href={`/student/${record.year_enrollment.id}`}>
+              {record.year_enrollment.user.matricule}
             </Link>
           ),
           width: 80,
@@ -313,10 +312,10 @@ export const ListPeriodValidatedStudents: FC<
           dataIndex: "name",
           key: "name",
           render: (_, record) => (
-            <Link href={`/app/student/${record.year_enrollment.id}`}>
-              {record.year_enrollment.user.first_name}{" "}
+            <Link href={`/student/${record.year_enrollment.id}`}>
+              {record.year_enrollment.user.surname}{" "}
               {record.year_enrollment.user.last_name}{" "}
-              {record.year_enrollment.user.surname}
+              {record.year_enrollment.user.first_name}
             </Link>
           ),
           ellipsis: true,
@@ -370,7 +369,7 @@ export const ListPeriodValidatedStudents: FC<
       rowSelection={{
         type: "checkbox",
       }}
-       scroll={{ y: 'calc(100vh - 346px)' }}
+      scroll={{ y: "calc(100vh - 346px)" }}
       size="small"
       loading={isPendingPeriodEnrollments}
       pagination={{

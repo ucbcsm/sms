@@ -105,7 +105,7 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
           style={{ marginBottom: 16, border: 0 }}
         />
       ) : null}
-      <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
+      <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
         <Input
           placeholder="Nom"
           disabled={
@@ -123,7 +123,7 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
           }
         />
       </Form.Item>
-      <Form.Item label="Prénom" name="surname" rules={[{ required: true }]}>
+      <Form.Item label="Prénom" name="first_name" rules={[{ required: true }]}>
         <Input
           placeholder="Prénom"
           disabled={

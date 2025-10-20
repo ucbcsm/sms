@@ -86,14 +86,14 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
                   marginBottom: 16,
                 }}
               >
-                {`${data?.user.first_name?.[0]}${data?.user.last_name?.[0]}`}
+                {`${data?.user.first_name?.[0]}`}
               </Avatar>
             )}
             <Typography.Title level={4}>
-              {data?.user.first_name} {data?.user.last_name}
+              {data?.user.surname} {data?.user.last_name} 
             </Typography.Title>
             <Typography.Text type="secondary">
-              ID: {data?.user.matricule.padStart(6, "0")}
+              Matr. {data?.user.matricule}
             </Typography.Text>
           </div>
           <Descriptions
@@ -103,7 +103,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
               {
                 key: "name",
                 label: "Nom",
-                children: data?.user.first_name || "",
+                children: data?.user.surname || "",
               },
               {
                 key: "postnom",
@@ -113,7 +113,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
               {
                 key: "prenom",
                 label: "Prénom",
-                children: data?.user.surname || "",
+                children: data?.user.first_name || "",
               },
               {
                 key: "sex",
@@ -127,7 +127,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
               },
               {
                 key: "stranger",
-                label: "Etranger?",
+                label: "Est t-il étranger?",
                 children: data?.is_foreign_country_teacher ? "Oui" : "Non",
               },
               {

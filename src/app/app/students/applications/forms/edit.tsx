@@ -229,8 +229,8 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
               type="warning"
               style={{ textTransform: "uppercase" }}
             >
-              {application.first_name} {application.last_name}{" "}
-              {application.surname}
+              {application.surname} {application.last_name}{" "}
+              {application.first_name}
             </Typography.Text>
           </div>
         }
@@ -357,7 +357,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             </Typography.Title>
           </Divider>
 
-          <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
+          <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
             <Input placeholder="Nom" />
           </Form.Item>
           <Form.Item
@@ -367,7 +367,7 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
           >
             <Input placeholder="Postnom" />
           </Form.Item>
-          <Form.Item label="Prénom" name="surname" rules={[{ required: true }]}>
+          <Form.Item label="Prénom" name="first_name" rules={[{ required: true }]}>
             <Input placeholder="Prénom" />
           </Form.Item>
           <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>
@@ -458,21 +458,21 @@ export const EditApplicationForm: React.FC<EditApplicationFormProps> = ({
             <Input placeholder="Numéro de téléphone 2" />
           </Form.Item>
           <Form.Item
-                  name="spoken_languages"
-                  label="Langues parlées"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                  style={{ flex: 1 }}
-                >
-                  <Select
-                    placeholder={`Langues parlées`}
-                    options={spokenLanguagesAsOptions}
-                    mode="multiple"
-                  />
-                </Form.Item>
+            name="spoken_languages"
+            label="Langues parlées"
+            rules={[
+              {
+                required: true,
+              },
+            ]}
+            style={{ flex: 1 }}
+          >
+            <Select
+              placeholder={`Langues parlées`}
+              options={spokenLanguagesAsOptions}
+              mode="multiple"
+            />
+          </Form.Item>
 
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>

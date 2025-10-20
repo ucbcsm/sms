@@ -77,6 +77,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               surname: values.surname,
               email: values.email,
               avatar: data?.user.avatar,
+              gender: values.gender,
               matricule: values.matricule,
               pending_avatar: data?.user.pending_avatar,
               is_active: data.user.is_active,
@@ -148,7 +149,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
         width="100%"
         closable={false}
         onClose={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         styles={{ header: { background: colorPrimary } }}
         extra={
           <Space>
@@ -234,7 +235,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>Identité</Typography.Title>
           </Divider>
-          <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
+          <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
             <Input placeholder="Nom" />
           </Form.Item>
           <Form.Item
@@ -244,7 +245,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
           >
             <Input placeholder="Postnom" />
           </Form.Item>
-          <Form.Item label="Prénom" name="surname" rules={[{ required: true }]}>
+          <Form.Item label="Prénom" name="first_name" rules={[{ required: true }]}>
             <Input placeholder="Prénom" />
           </Form.Item>
           <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>

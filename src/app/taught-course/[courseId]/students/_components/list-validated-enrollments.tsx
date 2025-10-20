@@ -179,7 +179,7 @@ export const ListCourseValidatedStudents: FC<
               placeholder="Rechercher ..."
               onChange={(e) => {
                 e.preventDefault();
-                
+
                 const results = getCourseEnrollmentsByStatus(
                   courseEnrollments,
                   "validated"
@@ -255,14 +255,11 @@ export const ListCourseValidatedStudents: FC<
               src={record.student.year_enrollment.user.avatar || null}
               style={{
                 backgroundColor: getHSLColor(
-                  `${record.student.year_enrollment.user.first_name} ${record.student.year_enrollment.user.last_name} ${record.student.year_enrollment.user.surname}`
+                  `${record.student.year_enrollment.user.surname} ${record.student.year_enrollment.user.last_name} ${record.student.year_enrollment.user.first_name}`
                 ),
               }}
             >
               {record.student.year_enrollment.user.first_name
-                ?.charAt(0)
-                .toUpperCase()}
-              {record.student.year_enrollment.user.last_name
                 ?.charAt(0)
                 .toUpperCase()}
             </Avatar>
@@ -276,7 +273,7 @@ export const ListCourseValidatedStudents: FC<
           key: "matricule",
           width: 92,
           render: (_, record, __) =>
-            record.student.year_enrollment.user.matricule.padStart(6, "0"),
+            record.student.year_enrollment.user.matricule,
           align: "center",
         },
         {
@@ -285,9 +282,9 @@ export const ListCourseValidatedStudents: FC<
           key: "available_course",
           render: (_, record) => (
             <>
-              {record.student.year_enrollment.user.first_name}{" "}
+              {record.student.year_enrollment.user.surname}{" "}
               {record.student.year_enrollment.user.last_name}{" "}
-              {record.student.year_enrollment.user.surname}
+              {record.student.year_enrollment.user.first_name}
             </>
           ),
           ellipsis: true,

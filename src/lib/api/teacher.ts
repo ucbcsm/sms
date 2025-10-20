@@ -107,7 +107,7 @@ export function getTeachersAsOptions(teachers?: Teacher[]) {
   return teachers?.map((teacher) => {
     return {
       value: teacher.id,
-      label: `${teacher.user.first_name} ${teacher.user.last_name} ${teacher.user.surname} (${teacher.user.matricule})`,
+      label: `${teacher.user.surname} ${teacher.user.last_name} ${teacher.user.first_name} (${teacher.user.matricule})`,
       disabled: !teacher.user.is_active,
     };
   });

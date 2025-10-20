@@ -23,8 +23,11 @@ import {
   Result,
   Dropdown,
   Switch,
+  Skeleton,
+  Spin,
 } from "antd";
 import {
+  BulbOutlined,
   CheckOutlined,
   CloseOutlined,
   DeleteOutlined,
@@ -68,9 +71,12 @@ import { ValidateApplicationForm } from "./forms/decisions/validate";
 import { Options } from "nuqs";
 import { MarkAsPendingForm } from "./forms/decisions/mark-as-pending";
 import { spokenLanguagesAsOptions } from "@/lib/data/languages";
+import { DataFetchErrorResult } from "@/components/errorResult";
 
 type ViewEditApplicationFormProps = {
   application?: Application;
+  isPendingApplication: boolean;
+  isErrorApplication: boolean;
   courses?: TestCourse[];
   documents?: RequiredDocument[];
   cycles?: Cycle[];
@@ -88,6 +94,8 @@ export const ViewEditApplicationForm: React.FC<
   ViewEditApplicationFormProps
 > = ({
   application,
+  isPendingApplication,
+  isErrorApplication,
   courses,
   documents,
   cycles,
@@ -130,7 +138,7 @@ export const ViewEditApplicationForm: React.FC<
       field_id: number;
       department_id: number;
       class_id: number;
-      spoken_languages:  string[];
+      spoken_languages: string[];
     }
   ) => {
     if (typeof application === "undefined") {
@@ -225,38 +233,42 @@ export const ViewEditApplicationForm: React.FC<
   }, [application, documents]);
 
   useEffect(() => {
-    if(application){
-    form.setFieldsValue({
-      ...application,
-      date_of_birth: dayjs(application.date_of_birth),
-      spoken_languages: parseLanguages(application.spoken_language),
-      cycle_id: application.cycle.id,
-      field_id: application.field.id,
-      faculty_id: application.faculty.id,
-      department_id: application.departement.id,
-      class_id: application.class_year?.id,
-      enrollment_question_response: application.enrollment_question_response,
-      year_of_diploma_obtained: dayjs(
-        `${application.year_of_diploma_obtained}`,
-        "YYYY"
-      ),
-    });
+    if (application) {
+      form.setFieldsValue({
+        ...application,
+        date_of_birth: dayjs(application.date_of_birth),
+        spoken_languages: parseLanguages(application.spoken_language),
+        cycle_id: application.cycle.id,
+        field_id: application.field.id,
+        faculty_id: application.faculty.id,
+        department_id: application.departement.id,
+        class_id: application.class_year?.id,
+        enrollment_question_response: application.enrollment_question_response,
+        year_of_diploma_obtained: dayjs(
+          `${application.year_of_diploma_obtained}`,
+          "YYYY"
+        ),
+      });
     }
   }, [application, form]);
 
-  if (typeof application === "undefined") {
+  if (isPendingApplication) {
     return (
       <div
         className="flex flex-col justify-center"
         style={{ height: "calc(100vh - 64px)" }}
       >
         <Result
-          status="404"
-          title="Contenu introuvable"
-          subTitle="Impossible d'afficher cette candidature. Veuillez réessayer ou sélectionner une autre candidature."
+          icon={<Spin />}
+          title=" Chargement de la candidature..."
+          subTitle="Veuillez patienter pendant que nous récupérons les informations de la candidature."
         />
       </div>
     );
+  }
+
+  if (isErrorApplication) {
+    return <DataFetchErrorResult />;
   }
 
   return (
@@ -281,15 +293,15 @@ export const ViewEditApplicationForm: React.FC<
               type="success"
               style={{ marginBottom: 0, textTransform: "uppercase" }}
             >
-              {application.first_name} {application.last_name}{" "}
-              {application.surname}
+              {application?.surname} {application?.last_name}{" "}
+              {application?.first_name}
             </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>
             <Typography.Text type="secondary">
               {new Intl.DateTimeFormat("FR", { dateStyle: "full" }).format(
-                new Date(application.date_of_submission)
+                new Date(`${application?.date_of_submission}`)
               )}
             </Typography.Text>
             <Button
@@ -334,13 +346,13 @@ export const ViewEditApplicationForm: React.FC<
               }
             }
             onFinish={onFinish}
-            disabled={isPending || application.status !== "pending"}
+            disabled={isPending || application?.status !== "pending"}
             style={{ maxWidth: 520, margin: "auto" }}
           >
-            {application.status === "pending" && (
+            {application?.status === "pending" && (
               <Alert
                 showIcon
-                // closable
+                icon={<BulbOutlined />}
                 message="Veuillez examiner les informations avec soin."
                 description="Tout formulaire qui contiendrait de faux renseignements ne doit pas étre validé!"
               />
@@ -351,11 +363,7 @@ export const ViewEditApplicationForm: React.FC<
               </Typography.Title>
             </Divider>
 
-            <Form.Item
-              label="Nom"
-              name="first_name"
-              rules={[{ required: true }]}
-            >
+            <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
               <Input placeholder="Nom" />
             </Form.Item>
             <Form.Item
@@ -367,7 +375,7 @@ export const ViewEditApplicationForm: React.FC<
             </Form.Item>
             <Form.Item
               label="Prénom"
-              name="surname"
+              name="first_name"
               rules={[{ required: true }]}
             >
               <Input placeholder="Prénom" />
@@ -932,7 +940,7 @@ export const ViewEditApplicationForm: React.FC<
                               style={{ marginRight: 6 }}
                             />
                             {
-                              application.enrollment_question_response[index]
+                              application?.enrollment_question_response[index]
                                 .registered_enrollment_question?.question
                             }
                           </>
@@ -969,8 +977,9 @@ export const ViewEditApplicationForm: React.FC<
                             level={5}
                             style={{ marginBottom: 0 }}
                           >
-                            {application.application_documents?.length > 0
-                              ? application.application_documents?.[index]
+                            {application?.application_documents &&
+                            application?.application_documents?.length > 0
+                              ? application?.application_documents?.[index]
                                   .required_document?.title
                               : documents?.[index].title}
                           </Typography.Title>
@@ -1046,7 +1055,7 @@ export const ViewEditApplicationForm: React.FC<
                         <Select
                           placeholder="Matière"
                           options={getTestCoursesByFacAsOptions(
-                            application.faculty.id,
+                            Number(application?.faculty.id),
                             courses
                           )}
                           disabled
@@ -1121,9 +1130,9 @@ export const ViewEditApplicationForm: React.FC<
               showIcon
               message="Frais d'inscription"
               type={
-                application.enrollment_fees === "paid"
+                application?.enrollment_fees === "paid"
                   ? "success"
-                  : application.enrollment_fees === "partially_paid"
+                  : application?.enrollment_fees === "partially_paid"
                   ? "warning"
                   : "error"
               }
@@ -1152,7 +1161,7 @@ export const ViewEditApplicationForm: React.FC<
             <Alert
               showIcon
               message="Statut de la candidature"
-              type={getApplicationStatusAlertType(application.status!)}
+              type={getApplicationStatusAlertType(application?.status!)}
               description={
                 <Form.Item
                   name="status"
@@ -1187,7 +1196,7 @@ export const ViewEditApplicationForm: React.FC<
         >
           <Palette />
 
-          {application.status === "pending" && (
+          {application?.status === "pending" && (
             <Space>
               <Button
                 type="primary"
@@ -1223,7 +1232,7 @@ export const ViewEditApplicationForm: React.FC<
               </Button>
             </Space>
           )}
-          {application.status === "rejected" && (
+          {application?.status === "rejected" && (
             <Space>
               <Typography.Text type="danger">
                 Cette candidature a été rejetée. Nous la gardons juste comme
@@ -1231,7 +1240,7 @@ export const ViewEditApplicationForm: React.FC<
               </Typography.Text>
             </Space>
           )}
-          {application.status === "validated" && (
+          {application?.status === "validated" && (
             <Space>
               <Typography.Text type="success">
                 Cette candidature est valide. Vous pouvez la gérer complètement
@@ -1243,21 +1252,21 @@ export const ViewEditApplicationForm: React.FC<
           <Dropdown
             menu={{
               items: [
-                application.status === "pending"
+                application?.status === "pending"
                   ? {
                       key: "validate",
                       label: "Accepter",
                       icon: <CheckOutlined />,
                     }
                   : null,
-                application.status === "rejected"
+                application?.status === "rejected"
                   ? {
                       key: "pending",
                       label: "Marquer comme en attente",
                       icon: <HourglassOutlined />,
                     }
                   : null,
-                application.status === "pending"
+                application?.status === "pending"
                   ? {
                       key: "reject",
                       label: "Rejeter",
@@ -1290,23 +1299,23 @@ export const ViewEditApplicationForm: React.FC<
       </Layout>
 
       <MarkAsPendingForm
-        application={application}
+        application={application!}
         open={openMarkAsPending}
         setOpen={setOpenMarkAsPending}
       />
       <DeleteApplicationForm
-        application={application}
+        application={application!}
         open={openDelete}
         setOpen={setOpenDelete}
         setView={setView}
       />
       <RejectApplicationForm
-        application={application}
+        application={application!}
         open={openReject}
         setOpen={setOpenReject}
       />
       <ValidateApplicationForm
-        application={application}
+        application={application!}
         open={openValidate}
         setOpen={setOpenValidate}
         editedApplication={null}

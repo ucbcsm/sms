@@ -257,7 +257,7 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
                       {
                         key: "first_name",
                         label: "Nom",
-                        children: selectedStudent?.user.first_name || "",
+                        children: selectedStudent?.user.surname || "",
                       },
                       {
                         key: "last_name",
@@ -267,7 +267,7 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
                       {
                         key: "surname",
                         label: "Prénom",
-                        children: selectedStudent?.user.surname || "",
+                        children: selectedStudent?.user.first_name || "",
                       },
                     ]}
                   />

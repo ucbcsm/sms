@@ -20,16 +20,12 @@ import { Step1 } from "./step1";
 import { Step2 } from "./step2";
 import { Step3 } from "./step3";
 import { useTeacherStepsData } from "@/hooks/use-teacher-steps-data";
-import { Department, Faculty } from "@/types";
 
 type NewTeacherFormProps = {
-  // departments?: Department[];
-  // faculties?: Faculty[];
+  
 };
 
 export const NewTeacherForm: FC<NewTeacherFormProps> = ({
-  // departments,
-  // faculties,
 }) => {
   const {
     token: { colorPrimary },
@@ -54,8 +50,6 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
       content: (
         <Step2
           setStep={setStep}
-          // departments={departments}
-          // faculties={faculties}
         />
       ),
     },
@@ -84,7 +78,6 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
       >
         Créer
       </Button>
-      {/* </Dropdown> */}
 
       <Drawer
         styles={{ header: { background: colorPrimary, color: "#fff" } }}

@@ -200,7 +200,7 @@ export default function Page() {
           dataIndex: "gender",
           key: "gender",
           render: (_, record, __) =>
-            record.common_enrollment_infos.gender || "",
+            record.user.gender || "",
           width: 56,
           align: "center",
         },
@@ -210,8 +210,7 @@ export default function Page() {
           key: "name",
           render: (value, record) => (
             <Link href={`/student/${record.id}`}>
-              {record.user.first_name} {record.user.last_name}{" "}
-              {record.user.surname}
+              {record.user.surname} {record.user.last_name} {record.user.first_name}
             </Link>
           ),
           ellipsis: true,

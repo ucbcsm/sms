@@ -103,7 +103,7 @@ export async function getStudentDashboard(
 export function getYearEnrollementsAsOptions(data?: Enrollment[]) {
   const options = data?.map((enrollment) => ({
     value: enrollment.id,
-    label: `${enrollment.user.first_name} ${enrollment.user.last_name} ${enrollment.user.surname}`,
+    label: `${enrollment.user.surname} ${enrollment.user.last_name} ${enrollment.user.first_name}`,
   }));
 
   return options

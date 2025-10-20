@@ -10,17 +10,11 @@ import {
   getEnabledTestCourses,
   getFaculties,
   getFields,
-  getYearDashboard,
 } from "@/lib/api";
-import { toFixedNumber } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Card,
   Flex,
   Layout,
-  Progress,
-  Skeleton,
-  Statistic,
   Tag,
   theme,
   Typography,
@@ -130,7 +124,12 @@ export default function StudentsLayout({
             marginBottom: 16,
           }}
         >
-          <Typography.Title type="secondary" level={3} className="" style={{ marginBottom: 0 }}>
+          <Typography.Title
+            type="secondary"
+            level={3}
+            className=""
+            style={{ marginBottom: 0 }}
+          >
             Candidatures
           </Typography.Title>
           <EnrollButton
@@ -184,7 +183,7 @@ export default function StudentsLayout({
           padding: "0 28px",
         }}
       >
-        {!isPendingApplication && view > 0 && (
+        {view > 0 && (
           <ViewEditApplicationForm
             application={application}
             courses={test_courses}
@@ -195,6 +194,8 @@ export default function StudentsLayout({
             departments={departments}
             classes={classes}
             setView={setView}
+            isPendingApplication={isPendingApplication}
+            isErrorApplication={isErrorApplication}
           />
         )}
         {view === 0 && children}

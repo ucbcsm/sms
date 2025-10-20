@@ -132,20 +132,19 @@ export const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
               src={item.year_enrollment.user.avatar || null}
               style={{
                 backgroundColor: getHSLColor(
-                  `${item.year_enrollment.user.first_name} ${item.year_enrollment.user.last_name} ${item.year_enrollment.user.surname}`
+                  `${item.year_enrollment.user.surname} ${item.year_enrollment.user.last_name} ${item.year_enrollment.user.first_name}`
                 ),
                 cursor: "pointer",
               }}
             >
               {item.year_enrollment.user.first_name?.charAt(0).toUpperCase()}
-              {item.year_enrollment.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           }
           title={
             <Typography.Text style={{ cursor: "pointer" }}>
-              {item.year_enrollment.user.first_name}{" "}
+              {item.year_enrollment.user.surname}{" "}
               {item.year_enrollment.user.last_name}{" "}
-              {item.year_enrollment.user.surname}
+              {item.year_enrollment.user.first_name}
             </Typography.Text>
           }
           description={

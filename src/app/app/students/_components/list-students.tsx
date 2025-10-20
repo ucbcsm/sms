@@ -215,12 +215,11 @@ export const ListStudents: FC = () => {
               src={record.user.avatar || null}
               style={{
                 backgroundColor: getHSLColor(
-                  `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                  `${record.user.surname} ${record.user.last_name} ${record.user.first_name}`
                 ),
               }}
             >
               {record?.user.first_name?.charAt(0).toUpperCase()}
-              {record?.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 56,
@@ -239,7 +238,7 @@ export const ListStudents: FC = () => {
           title: "Genre",
           dataIndex: "gender",
           key: "gender",
-          render: (_, record, __) => record.common_enrollment_infos.gender,
+          render: (_, record, __) => record.user.gender,
           width: 56,
           align: "center",
         },
@@ -249,8 +248,8 @@ export const ListStudents: FC = () => {
           key: "name",
           render: (value, record) => (
             <Link href={`/student/${record.id}`}>
-              {record.user.first_name} {record.user.last_name}{" "}
-              {record.user.surname}
+              {record.user.surname} {record.user.last_name}{" "}
+              {record.user.first_name}
             </Link>
           ),
           ellipsis: true,

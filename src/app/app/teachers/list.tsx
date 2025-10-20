@@ -153,12 +153,11 @@ export function ListTeachers() {
               <Avatar
                 style={{
                   backgroundColor: getHSLColor(
-                    `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                    `${record.user.surname} ${record.user.last_name} ${record.user.first_name}`
                   ),
                 }}
               >
                 {record.user.first_name?.charAt(0).toUpperCase()}
-                {record.user.last_name?.charAt(0).toUpperCase()}
               </Avatar>
             ),
             width: 58,
@@ -171,7 +170,7 @@ export function ListTeachers() {
             width: 92,
             render: (_, record, __) => (
               <Link href={`/app/teacher/${record.id}`}>
-                {record.user.matricule.padStart(6, "0")}
+                {record.user.matricule}
               </Link>
             ),
             align: "center",
@@ -182,8 +181,8 @@ export function ListTeachers() {
             key: "name",
             render: (_, record, __) => (
               <Link href={`/app/teacher/${record.id}`}>
-                {record.user.first_name} {record.user.last_name}{" "}
-                {record.user.surname}
+                {record.user.surname} {record.user.last_name}{" "}
+                {record.user.first_name}
               </Link>
             ),
             ellipsis: true,

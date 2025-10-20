@@ -2,7 +2,7 @@
 
 import { getHSLColor } from "@/lib/utils";
 import { Faculty } from "@/types";
-import { Avatar, Button, Divider, Dropdown, List, Tag, Typography } from "antd";
+import { Avatar, Button, Divider, Dropdown, List, Space, Tag, Typography } from "antd";
 import { FC } from "react";
 
 type FacultyMembersListProps = {
@@ -45,20 +45,24 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                     <Avatar
                       style={{
                         backgroundColor: getHSLColor(
-                          `${faculty?.coordinator?.user.first_name} ${faculty?.coordinator?.user.last_name} ${faculty?.coordinator?.user.surname}`
+                          `${faculty?.coordinator?.user.surname} ${faculty?.coordinator?.user.last_name} ${faculty?.coordinator?.user.first_name}`
                         ),
                       }}
                     >
                       {faculty?.coordinator?.user.first_name
                         ?.charAt(0)
                         .toUpperCase()}
-                      {faculty.coordinator?.user.last_name
-                        ?.charAt(0)
-                        .toUpperCase()}
                     </Avatar>
                   }
-                  title={`${faculty.coordinator?.user.first_name} ${faculty.coordinator?.user.last_name} ${faculty.coordinator?.user.surname}`}
-                  description={faculty?.coordinator?.academic_title}
+                  title={`${faculty.coordinator?.user.surname} ${faculty.coordinator?.user.last_name} ${faculty.coordinator?.user.first_name}`}
+                  description={
+                    <Space>
+                      <Typography.Text type="secondary">Matr.</Typography.Text>
+                      <Typography.Text>
+                        {faculty?.coordinator?.user.matricule}
+                      </Typography.Text>
+                    </Space>
+                  }
                 />
               </List.Item>
             )}
@@ -102,20 +106,24 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                     <Avatar
                       style={{
                         backgroundColor: getHSLColor(
-                          `${faculty?.secretary?.user.first_name} ${faculty.secretary?.user.last_name} ${faculty.secretary?.user.surname}`
+                          `${faculty.secretary?.user.surname} ${faculty.secretary?.user.last_name} ${faculty?.secretary?.user.first_name}`
                         ),
                       }}
                     >
                       {faculty?.secretary?.user.first_name
                         ?.charAt(0)
                         .toUpperCase()}
-                      {faculty?.secretary?.user.last_name
-                        ?.charAt(0)
-                        .toUpperCase()}
                     </Avatar>
                   }
-                  title={`${faculty.secretary?.user.first_name} ${faculty.secretary?.user.last_name} ${faculty.secretary?.user.surname}`}
-                  description={faculty.secretary?.academic_title}
+                  title={`${faculty.secretary?.user.surname} ${faculty.secretary?.user.last_name} ${faculty.secretary?.user.first_name}`}
+                  description={
+                    <Space>
+                      <Typography.Text type="secondary">Matr.</Typography.Text>
+                      <Typography.Text>
+                        {faculty.secretary?.user.matricule}
+                      </Typography.Text>
+                    </Space>
+                  }
                 />
               </List.Item>
             )}
@@ -160,16 +168,20 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                     <Avatar
                       style={{
                         backgroundColor: getHSLColor(
-                          `${item?.user?.first_name} ${item?.user?.last_name} ${item?.user?.surname}`
+                          `${item?.user?.surname} ${item?.user?.last_name} ${item?.user?.first_name}`
                         ),
                       }}
                     >
                       {item?.user?.first_name?.charAt(0).toUpperCase()}
-                      {item?.user?.last_name?.charAt(0).toUpperCase()}
                     </Avatar>
                   }
-                  title={`${item?.user?.first_name} ${item?.user?.last_name} ${item?.user.surname}`}
-                  description={item?.academic_title}
+                  title={`${item?.user.surname} ${item?.user?.last_name} ${item?.user?.first_name}`}
+                  description={
+                    <Space>
+                      <Typography.Text type="secondary">Matr.</Typography.Text>
+                      <Typography.Text>{item?.user.matricule}</Typography.Text>
+                    </Space>
+                  }
                 />
               </List.Item>
             )}

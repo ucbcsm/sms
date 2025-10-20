@@ -2,15 +2,13 @@
 
 import { Palette } from "@/components/palette";
 import {
-  // getCurrentDepartmentsAsOptions,
-  // getCurrentFacultiesAsOptions,
   updateTeacher,
 } from "@/lib/api";
 import { countries } from "@/lib/data/countries";
 
 import {
-  //  Department, Faculty, 
-  Teacher } from "@/types";
+  Teacher,
+} from "@/types";
 import { CloseOutlined, EditOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -34,14 +32,10 @@ import { FC, useState } from "react";
 
 type EditTeacherProfileFormProps = {
   teacher?: Teacher;
-  // departments?: Department[];
-  // faculties?: Faculty[];
 };
 
 export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   teacher,
-  // faculties,
-  // departments,
 }) => {
   const {
     token: { colorPrimary },
@@ -55,7 +49,6 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateTeacher,
   });
-
 
   const onFinish = (values: any) => {
     if (!teacher) {
@@ -183,12 +176,6 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           initialValues={{
             ...teacher,
             ...teacher?.user,
-            // assigned_departements: teacher?.assigned_departements?.map(
-            //   (dept) => dept.id
-            // ),
-            // assigned_faculties: teacher?.assigned_faculties?.map(
-            //   (fac) => fac.id
-            // ),
             is_permanent_teacher: teacher?.user.is_permanent_teacher,
             date_of_birth: dayjs(`${teacher?.date_of_birth}`, "YYYY-MM-DD"),
           }}
@@ -250,7 +237,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             <Typography.Title level={3}>Identité</Typography.Title>
           </Divider>
 
-          <Form.Item label="Nom" name="first_name" rules={[{ required: true }]}>
+          <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
             <Input placeholder="Nom" />
           </Form.Item>
           <Form.Item
@@ -260,7 +247,11 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           >
             <Input placeholder="Postnom" />
           </Form.Item>
-          <Form.Item label="Prénom" name="surname" rules={[{ required: true }]}>
+          <Form.Item
+            label="Prénom"
+            name="first_name"
+            rules={[{ required: true }]}
+          >
             <Input placeholder="Prénom" />
           </Form.Item>
           <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>
@@ -529,28 +520,6 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               ]}
             />
           </Form.Item>
-          {/* <Form.Item
-            label="Facultés assignées"
-            name="assigned_faculties"
-            rules={[{ required: true }]}
-          >
-            <Select
-              mode="multiple"
-              placeholder="Facultés assignées"
-              options={getCurrentFacultiesAsOptions(faculties)}
-            />
-          </Form.Item>
-          <Form.Item
-            label="Départements assignés"
-            name="assigned_departements"
-            rules={[{ required: true }]}
-          >
-            <Select
-              mode="multiple"
-              placeholder="Départements assignés"
-              options={getCurrentDepartmentsAsOptions(departments)}
-            />
-          </Form.Item> */}
           <Form.Item
             label="Autres responsabilités/Charge administrative"
             name="other_responsabilities"

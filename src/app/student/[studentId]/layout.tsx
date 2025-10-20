@@ -1,6 +1,4 @@
 "use client";
-import BackButton from "@/components/backButton";
-import { Palette } from "@/components/palette";
 import { getYearEnrollment } from "@/lib/api";
 import { CloseOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -85,7 +83,7 @@ export default function StudentLayout({
           <Space>
             {!isPending ? (
               <Typography.Title level={3} style={{ marginBottom: 0, textTransform: "uppercase" }}>
-                {`${enrolledStudent?.user.first_name} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.surname}`}
+                {`${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`}
               </Typography.Title>
             ) : (
               <Form>

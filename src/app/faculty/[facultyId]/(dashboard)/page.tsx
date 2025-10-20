@@ -272,7 +272,7 @@ export default function Page() {
               <Col span={24}>
                 {/* <Card loading={isPending}> */}
                   <Descriptions
-                    title="Détails"
+                    title="Détails de la filière"
                     extra={
                       <Button
                         type="link"
@@ -323,7 +323,7 @@ export default function Page() {
           }}
         >
           <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            © {new Date().getFullYear()} UCBC. Tous droits réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>

@@ -144,12 +144,11 @@ export const ListNewPeriodEnrollments: FC<ListNewPeriodEnrollmentsProps> = ({
                 backgroundColor: existsInPeriodEnrollments(record.id)
                   ? colorTextDisabled
                   : getHSLColor(
-                      `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                      `${record.user.surname} ${record.user.last_name} ${record.user.first_name}`
                     ),
               }}
             >
               {record.user.first_name?.charAt(0).toUpperCase()}
-              {record.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 58,
@@ -168,7 +167,7 @@ export const ListNewPeriodEnrollments: FC<ListNewPeriodEnrollmentsProps> = ({
                   : "",
               }}
             >
-              {record.user.matricule.padStart(6, "0")}
+              {record.user.matricule}
             </Typography.Text>
           ),
           align: "center",
@@ -185,8 +184,8 @@ export const ListNewPeriodEnrollments: FC<ListNewPeriodEnrollmentsProps> = ({
                   : "",
               }}
             >
-              {record.user.first_name} {record.user.last_name}{" "}
-              {record.user.surname}
+              {record.user.surname} {record.user.last_name}{" "}
+              {record.user.first_name}
             </Typography.Text>
           ),
         },
@@ -220,7 +219,7 @@ export const ListNewPeriodEnrollments: FC<ListNewPeriodEnrollmentsProps> = ({
       }}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-      scroll={{ y: 'calc(100vh - 270px)' }}
+      scroll={{ y: "calc(100vh - 270px)" }}
       size="small"
       pagination={false}
       onRow={(record) => ({
