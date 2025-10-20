@@ -11,6 +11,9 @@ import {
   getYearEnrollementsAsOptions,
 } from "@/lib/api";
 import { Class, Department, Enrollment } from "@/types";
+import { DebounceEnrollmentSelect } from "./debounceSelectStudent";
+import { useYid } from "@/hooks/use-yid";
+import { useParams } from "next/navigation";
 
 type FormDataType = {
   class_year_id: number;
@@ -29,6 +32,8 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
   departments,
   students,
 }) => {
+  const { yid } = useYid();
+  const { facultyId } = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [open, setOpen] = useState(false);
@@ -39,16 +44,27 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
+    console.log(values);
     mutateAsync(values, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["class_presidents"] });
         messageApi.success("Délégué de classe créé avec succès !");
         setOpen(false);
       },
-      onError: () => {
+      onError: (error) => {
+        if ((error as any).status === 403) {
+              messageApi.error(
+                `Vous n'avez pas la permission d'effectuer cette action`
+              );
+            } else if ((error as any).status === 401) {
+              messageApi.error(
+                "Vous devez être connecté pour effectuer cette action."
+              );
+            } else {
         messageApi.error(
-          "Une erreur s'est produite lors de la création du délégué."
-        );
+          (error as any)?.response?.data?.message ||
+            "Une erreur s'est produite lors de la création du délégué."
+        );}
       },
     });
   };
@@ -82,6 +98,7 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
+        closable={{ disabled: isPending }}
         destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
@@ -98,16 +115,15 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
           </Form>
         )}
       >
-        
         <Form.Item
           name="department_id"
-          label="Département"
+          label="Mention"
           rules={[
-            { required: true, message: "Veuillez sélectionner un département" },
+            { required: true, message: "Veuillez sélectionner une mention" },
           ]}
         >
           <Select
-            placeholder="Sélectionnez un département"
+            placeholder="Sélectionnez une mention"
             options={getCurrentDepartmentsAsOptions(departments)}
           />
         </Form.Item>
@@ -133,7 +149,7 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
             { required: true, message: "Veuillez sélectionner un étudiant" },
           ]}
         >
-          <Select
+          {/* <Select
             placeholder="Sélectionnez un étudiant"
             options={getYearEnrollementsAsOptions(students)}
             showSearch
@@ -142,6 +158,15 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
                 ?.toLowerCase()
                 .includes(input.toLowerCase())
             }
+          /> */}
+          <DebounceEnrollmentSelect
+            placeholder="Rechercher ou Sélectionnez un étudiant"
+            facultyId={Number(facultyId)}
+            yearId={yid}
+            debounceTimeout={400}
+            onChange={(value) => {
+              return value;
+            }}
           />
         </Form.Item>
       </Modal>

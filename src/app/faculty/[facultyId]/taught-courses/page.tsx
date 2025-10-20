@@ -1,20 +1,16 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import {
   getAllCourses,
   getAllTeachers,
   getClassrooms,
-  getCourses,
-  getCoursesByFacultyId,
   getCurrentDepartmentsAsOptions,
   getCurrentPeriodsAsOptions,
   getDepartmentsByFacultyId,
   getPeriods,
   getTaughtCourses,
-  getTaughtCoursesByFacultyId,
   getTeachingUnitsByfaculty,
   getYearStatusColor,
   getYearStatusName,
@@ -226,11 +222,6 @@ export default function Page() {
     queryFn: getPeriods,
   });
 
-  // const { data: faculties } = useQuery({
-  //   queryKey: ["faculties"],
-  //   queryFn: getFaculties,
-  // });
-
   const { data: teachingUnits } = useQuery({
     queryKey: ["teaching-units", facultyId],
     queryFn: ({ queryKey }) => getTeachingUnitsByfaculty(Number(queryKey[1])),
@@ -376,7 +367,7 @@ export default function Page() {
               dataIndex: "title",
               key: "title",
               render: (_, record, __) => record?.available_course?.name,
-              ellipsis:true
+              ellipsis: true,
             },
             {
               title: "Code",
@@ -475,23 +466,10 @@ export default function Page() {
               title: "Enseignant",
               dataIndex: "teacher",
               key: "teacher",
-              render: (_, record, __) => (
-                <Space>
-                  {record.teacher && (
-                    <Avatar
-                      style={{
-                        backgroundColor: getHSLColor(
-                          `${record.teacher?.user.first_name} ${record.teacher?.user.last_name} ${record.teacher?.user.surname}`
-                        ),
-                      }}
-                    >
-                      {record.teacher?.user.first_name?.charAt(0).toUpperCase()}
-                      {record.teacher?.user.last_name?.charAt(0).toUpperCase()}
-                    </Avatar>
-                  )}{" "}
-                  {record.teacher?.user.surname}
-                </Space>
-              ),
+              render: (_, record, __) =>
+                `
+                  ${record.teacher?.user.surname} ${record.teacher?.user.last_name}
+               `,
               ellipsis: true,
             },
             {

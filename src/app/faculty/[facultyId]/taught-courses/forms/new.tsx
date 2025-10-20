@@ -35,7 +35,6 @@ import {
   getClassroomsAsOptionsWithDisabled,
   getCoursesAsOptions,
   getCurrentDepartmentsAsOptions,
-  getCurrentFacultiesAsOptions,
   getCurrentPeriodsAsOptions,
   getTeachersAsOptions,
   getTeachingUnitsAsOptions,
@@ -169,7 +168,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   ▪ Remplissez tous les champs obligatoires du formulaire.
                 </li>
                 <li>
-                  ▪ Vérifiez que les informations du cours (intitulé, horaires,
+                  ▪ Vérifiez que les informations du cours (intitulé, heures,
                   enseignants, etc.) sont exactes.
                 </li>
                 <li>

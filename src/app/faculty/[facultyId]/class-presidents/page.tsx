@@ -112,9 +112,6 @@ export default function Page() {
     enabled: !!yid && !!facultyId,
   });
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -157,6 +154,7 @@ export default function Page() {
         </Layout.Header>
 
         <Table
+          loading={isPending}
           title={() => (
             <header className="flex pb-3">
               <Space>
@@ -245,7 +243,7 @@ export default function Page() {
             },
           ]}
           rowKey="id"
-          rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+          rowClassName={`bg-white odd:bg-[#f5f5f5]`}
           // rowSelection={{
           //   type: "checkbox",
           // }}

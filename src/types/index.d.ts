@@ -555,6 +555,7 @@ export const Application = Enrollment.merge(StudentInfo).extend({
   surname: z.string(),
   last_name: z.string(),
   first_name: z.string(),
+  gender: z.enum(["M", "F"]),
   email: z.string().email(),
   status: z.enum(["pending", "validated", "reoriented", "rejected"]).nullable(),
   avatar: z.string().nullable(),

@@ -41,7 +41,7 @@ export async function updateClassPresident({
     "id" | "departement" | "class_year" | "student"
   > & { department_id: number; class_year_id: number; student_id: number };
 }) {
-  const res = await api.put(`/faculty/class-president/${id}`, {
+  const res = await api.put(`/faculty/class-president/${id}/`, {
     departement: data.department_id,
     class_year: data.class_year_id,
     student: data.student_id,
