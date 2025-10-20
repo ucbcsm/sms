@@ -103,7 +103,7 @@ export default function YearLayout({
         >
           {children}
         </Card>
-        <Layout.Footer
+        {/* <Layout.Footer
           style={{
             display: "flex",
             background: colorBgContainer,
@@ -117,7 +117,7 @@ export default function YearLayout({
           <Space>
             <Palette />
           </Space>
-        </Layout.Footer>
+        </Layout.Footer> */}
       </Layout.Content>
 
       <Layout.Sider

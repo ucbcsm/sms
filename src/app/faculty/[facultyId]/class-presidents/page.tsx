@@ -162,7 +162,6 @@ export default function Page() {
                 <Typography.Title level={5} style={{ marginBottom: 0 }} type="secondary" >
                   Liste des chefs
                 </Typography.Title>
-                {/* <Input.Search placeholder="Rechercher un chef" /> */}
               </Space>
               <div className="flex-1" />
               <Space>

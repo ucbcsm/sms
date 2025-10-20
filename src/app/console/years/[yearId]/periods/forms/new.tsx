@@ -7,6 +7,7 @@ import {
   DatePicker,
   Form,
   Input,
+  InputNumber,
   message,
   Modal,
   Row,
@@ -90,7 +91,7 @@ export const NewPeriodForm: React.FC<NewPeriodFormProps> = ({ cycles }) => {
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -114,7 +115,7 @@ export const NewPeriodForm: React.FC<NewPeriodFormProps> = ({ cycles }) => {
               required: true,
             },
           ]}
-          style={{marginTop:24}}
+          style={{ marginTop: 24 }}
         >
           <Select
             placeholder="Sélectionner un type de période"
@@ -124,24 +125,32 @@ export const NewPeriodForm: React.FC<NewPeriodFormProps> = ({ cycles }) => {
         <Form.Item
           name="order_number"
           label="No d'ordre"
-          rules={[{ required: true }]}
+          tooltip="Entrez une valeur multiple de 0.5 (ex: 1, 1.5, 2, 2.5...)"
+          rules={[
+            { required: true, message: "Veuillez entrer le No d'ordre" },
+            {
+              validator: (_, value) => {
+                if (value === undefined || value === null)
+                  return Promise.resolve();
+                if (value % 0.5 !== 0) {
+                  return Promise.reject(
+                    new Error(
+                      "La valeur doit être un multiple de 0.5 (ex: 1, 1.5, 2...)"
+                    )
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
         >
-          <Select
-            placeholder="Exemple: 1, 2, ..."
-            options={[
-              { value: 1, label: "1" },
-              { value: 2, label: "2" },
-              { value: 3, label: "3" },
-              { value: 4, label: "4" },
-            ]}
-          />
+          <InputNumber min={1} step={0.5} placeholder="Ex.: 2.5" />
         </Form.Item>
-        
+
         <Form.Item
           name="name"
           label="Nom de la période"
           rules={[{ required: true }]}
-          
         >
           <Input placeholder="Nom de la période" />
         </Form.Item>
@@ -150,7 +159,7 @@ export const NewPeriodForm: React.FC<NewPeriodFormProps> = ({ cycles }) => {
           label="Code de la période"
           rules={[{ required: true }]}
         >
-          <Input placeholder="Ex: S1, S2, BS1, ..." style={{width:120}} />
+          <Input placeholder="Ex: S1, S2, BS1, ..." style={{ width: 120 }} />
         </Form.Item>
         <Form.Item
           name="cycle_id"

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { Dispatch, SetStateAction } from "react";
-import { Col, DatePicker, Form, Input, message, Modal, Row, Select } from "antd";
+import { Col, DatePicker, Form, Input, InputNumber, message, Modal, Row, Select } from "antd";
 import { Cycle, Period } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getCurrentCyclesAsOptions, getPeriodTypesAsOptions, updatePeriod } from "@/lib/api";
@@ -72,7 +72,7 @@ export const EditPeriodForm: React.FC<EditPeriodFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -111,17 +111,26 @@ export const EditPeriodForm: React.FC<EditPeriodFormProps> = ({
         <Form.Item
           name="order_number"
           label="No d'ordre"
-          rules={[{ required: true }]}
+          tooltip="Entrez une valeur multiple de 0.5 (ex: 1, 1.5, 2, 2.5...)"
+          rules={[
+            { required: true, message: "Veuillez entrer le No d'ordre" },
+            {
+              validator: (_, value) => {
+                if (value === undefined || value === null)
+                  return Promise.resolve();
+                if (value % 0.5 !== 0) {
+                  return Promise.reject(
+                    new Error(
+                      "La valeur doit être un multiple de 0.5 (ex: 1, 1.5, 2...)"
+                    )
+                  );
+                }
+                return Promise.resolve();
+              },
+            },
+          ]}
         >
-          <Select
-            placeholder="Exemple: 1, 2, ..."
-            options={[
-              { value: 1, label: "1" },
-              { value: 2, label: "2" },
-              { value: 3, label: "3" },
-              { value: 4, label: "4" },
-            ]}
-          />
+          <InputNumber min={1} step={0.5} placeholder="Ex.: 2.5" />
         </Form.Item>
 
         <Form.Item
