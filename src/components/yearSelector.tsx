@@ -27,6 +27,7 @@ import { useEffect, useRef, useState } from "react";
 import { Palette } from "./palette";
 import { DataFetchErrorResult } from "./errorResult";
 import { useSessionStore } from "@/store";
+import { useInstitution } from "@/hooks/use-institution";
 
 type FormDataType = {
   yid: number;
@@ -38,6 +39,7 @@ export function YearSelector() {
   const [percent, setPercent] = useState(-50);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
   const faculty = useSessionStore((state) => state.faculty);
+  const {data:institution}=useInstitution()
 
   const {
     data: years,
@@ -177,7 +179,8 @@ export function YearSelector() {
               </Form>
             </Card>
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+              réservés.
             </Typography.Text>
           </div>
         ) : (
@@ -191,14 +194,14 @@ export function YearSelector() {
             }}
           >
             <Image
-              src="/ucbc-logo.png"
-              alt="logo ucbc"
+              src={institution?.logo || "/ucbc-logo.png"}
+              alt="logo"
               height="auto"
               width={180}
               preview={false}
             />
             <Progress
-              strokeColor={"#E84C37"}
+              strokeColor={"#410a02ff"}
               percent={percent}
               showInfo={false}
             />
@@ -206,7 +209,8 @@ export function YearSelector() {
               Academic Workspace
             </Typography.Title>
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+              réservés.
             </Typography.Text>
           </Flex>
         )}

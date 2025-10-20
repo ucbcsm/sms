@@ -145,18 +145,19 @@ export function ListPeriods() {
           ellipsis: true,
         },
         {
-          dataIndex: "type_of_period",
-          key: "type_of_period",
-          title: "Type",
-          render: (_, record, __) => getPeriodTypeName(record.type_of_period),
-        },
-        {
           key: "acronym",
           dataIndex: "acronym",
           title: "Code",
           width: 50,
           align: "center",
         },
+        {
+          dataIndex: "type_of_period",
+          key: "type_of_period",
+          title: "Type",
+          render: (_, record, __) => getPeriodTypeName(record.type_of_period),
+        },
+
         {
           key: "order_number",
           dataIndex: "order_number",

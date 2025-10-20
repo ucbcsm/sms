@@ -12,6 +12,8 @@ import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { usePathname, useRouter } from "next/navigation";
 import { ListCycles } from "./(cycles)/list";
+import { use } from "react";
+import { useInstitution } from "@/hooks/use-institution";
 
 export default function FieldsLayout({
   children,
@@ -23,8 +25,7 @@ export default function FieldsLayout({
   } = theme.useToken();
   const router = useRouter();
   const pathname = usePathname();
-
- 
+  const { data: institution } = useInstitution();
 
   return (
     <Layout>
@@ -78,7 +79,7 @@ export default function FieldsLayout({
           }}
         >
           <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            © {new Date().getFullYear()} {institution?.acronym}. Tous droits réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>

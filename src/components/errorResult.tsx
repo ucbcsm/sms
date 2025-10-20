@@ -6,6 +6,7 @@ import { Palette } from "./palette";
 import { FC } from "react";
 import { useSessionStore } from "@/store";
 import { redirect } from "next/navigation";
+import { useInstitution } from "@/hooks/use-institution";
 
 type DataFetchErrorResultProps = {
   variant?: "default" | "card" | "page";
@@ -49,6 +50,7 @@ export const DataFetchErrorResult: FC<DataFetchErrorResultProps> = ({
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+  const {data:institution}=useInstitution();
 
   if (variant === "page") {
     return (
@@ -87,7 +89,8 @@ export const DataFetchErrorResult: FC<DataFetchErrorResultProps> = ({
             }}
           >
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+              réservés.
             </Typography.Text>
             <div className="flex-1" />
             <Space>

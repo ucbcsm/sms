@@ -1,6 +1,7 @@
 "use client";
 
 import { Palette } from "@/components/palette";
+import { useInstitution } from "@/hooks/use-institution";
 import { login } from "@/lib/api/auth";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import {
@@ -31,6 +32,7 @@ export function LoginForm() {
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const {data:institution}= useInstitution()
 
   const onFinish = (values: FormSchema) => {
     setLoading(true);
@@ -85,7 +87,7 @@ export function LoginForm() {
           >
             <Space>
               <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                UCBC
+                {institution?.acronym}
               </Typography.Title>
             </Space>
             <div className="flex-1" />
@@ -153,7 +155,8 @@ export function LoginForm() {
             }}
           >
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+              réservés.
             </Typography.Text>
           </Layout.Footer>
         </div>

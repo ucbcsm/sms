@@ -1,6 +1,7 @@
 'use client'
 
 import { Palette } from "@/components/palette";
+import { useInstitution } from "@/hooks/use-institution";
 import { resetPassword } from "@/lib/api/auth";
 import { MailOutlined } from "@ant-design/icons";
 import {
@@ -36,6 +37,7 @@ export default function Page() {
     "pending-email",
     parseAsBoolean.withDefault(false)
   );
+  const {data:institution}= useInstitution()
 
   const onFinish = (values: FormSchema) => {
     setLoading(true);
@@ -90,7 +92,7 @@ export default function Page() {
           >
             <Space>
               <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                UCBC
+                {institution?.acronym}
               </Typography.Title>
             </Space>
             <div className="flex-1" />
@@ -124,7 +126,11 @@ export default function Page() {
                           required: true,
                           message: "Veuillez entrer votre e-mail.",
                         },
-                        {type: "email", message: "Le format de l'adresse mail n'est pas valide!",}
+                        {
+                          type: "email",
+                          message:
+                            "Le format de l'adresse mail n'est pas valide!",
+                        },
                       ]}
                     >
                       <Input
@@ -182,7 +188,8 @@ export default function Page() {
             }}
           >
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+              réservés.
             </Typography.Text>
           </Layout.Footer>
         </div>

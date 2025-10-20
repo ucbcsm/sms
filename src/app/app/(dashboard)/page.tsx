@@ -6,6 +6,7 @@ import { parseAsStringEnum, useQueryState } from "nuqs";
 import { StudentsStatistics } from "./statistics/students";
 import { TeachersStatistics } from "./statistics/teachers";
 import { DepartmentsStatistics } from "./statistics/departments";
+import { useInstitution } from "@/hooks/use-institution";
 
 export default function Page() {
   const {
@@ -16,6 +17,7 @@ export default function Page() {
     "tab",
     parseAsStringEnum(["students", "teachers"]).withDefault("students")
   );
+  const { data: institution } = useInstitution();
 
   // const [dashTab, setDashTab] = useQueryState(
   //   "dash_tab",
@@ -95,7 +97,8 @@ export default function Page() {
           }}
         >
           <Typography.Text type="secondary">
-            © {new Date().getFullYear()} UCBC. Tous droits réservés.
+            © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+            réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>

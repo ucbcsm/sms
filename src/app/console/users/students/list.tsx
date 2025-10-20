@@ -265,6 +265,7 @@ export const ListStudentsUsers: FC<ListStudentsUsersProps> = ({
       // rowSelection={{
       //   type: "checkbox",
       // }}
+      scroll={{y:`calc(100vh - 410px)`}}
       size="small"
       pagination={{
         defaultPageSize: 10,

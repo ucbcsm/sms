@@ -18,16 +18,14 @@ import {
   Typography,
 } from "antd";
 import { EditInstitutionForm } from "./forms/edit";
+import { useInstitution } from "@/hooks/use-institution";
 
 export default function Page() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const { data, isPending, isError } = useQuery({
-    queryKey: ["institution"],
-    queryFn: getInstitution,
-  });
+  const { data, isPending, isError } = useInstitution();
 
   return (
     <Layout>
@@ -183,7 +181,7 @@ export default function Page() {
                 <div style={{ textAlign: "center", marginBottom: 28 }}>
                   <Image
                     src={data?.logo || "/ucbc-logo.png"}
-                    alt="Logo ucbc"
+                    alt="Logo"
                     style={{
                       marginBottom: 28,
                     }}
@@ -204,7 +202,7 @@ export default function Page() {
           }}
         >
           <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            © {new Date().getFullYear()} {data?.acronym}. Tous droits réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>

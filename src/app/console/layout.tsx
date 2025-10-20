@@ -2,6 +2,7 @@
 
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
+import { useInstitution } from "@/hooks/use-institution";
 import {
   ApartmentOutlined,
   CheckCircleOutlined,
@@ -44,6 +45,7 @@ export default function ConsoleLayout({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
+  const {data:institution}= useInstitution();
 
   return (
     <Layout>
@@ -98,7 +100,7 @@ export default function ConsoleLayout({
         <div className=" flex items-center px-4">
           <Image
             src="/ucbc-logo.png"
-            alt="Logo ucbc"
+            alt="Logo"
             width={36}
             preview={false}
             style={{}}
@@ -106,7 +108,7 @@ export default function ConsoleLayout({
         </div>
         <Space style={{}}>
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
-            CI-UCBC
+            {institution?.acronym}
           </Typography.Title>
           <Divider type="vertical" />
           <Typography.Text type="secondary">

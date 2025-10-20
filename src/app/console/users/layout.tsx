@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPermissions } from "@/lib/api";
 import { GroupList } from "./groups/list";
 import { NewGroupForm } from "./groups/new";
+import { useInstitution } from "@/hooks/use-institution";
 
 export default function UsersLayout({
   children,
@@ -20,6 +21,7 @@ export default function UsersLayout({
 
   const pathname = usePathname();
   const router = useRouter();
+  const {data:institution}=useInstitution();
 
   const {
     data: permissions,
@@ -68,7 +70,7 @@ export default function UsersLayout({
         >
           {children}
         </Card>
-        <Layout.Footer
+        {/* <Layout.Footer
           style={{
             display: "flex",
             background: colorBgContainer,
@@ -76,13 +78,14 @@ export default function UsersLayout({
           }}
         >
           <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+            réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>
             <Palette />
           </Space>
-        </Layout.Footer>
+        </Layout.Footer> */}
       </Layout.Content>
 
       <Layout.Sider

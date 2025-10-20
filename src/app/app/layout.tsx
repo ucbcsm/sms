@@ -3,6 +3,7 @@
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { SupportDrawer } from "@/components/support-drawer";
 import { YearSelector } from "@/components/yearSelector";
+import { useInstitution } from "@/hooks/use-institution";
 import { useYid } from "@/hooks/use-yid";
 import { getFaculties } from "@/lib/api";
 import { logout } from "@/lib/api/auth";
@@ -50,6 +51,7 @@ export default function AppLayout({
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
   const { removeYid } = useYid();
+  const { data: institution } = useInstitution();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -85,13 +87,13 @@ export default function AppLayout({
           <div className="flex items-center pr-3">
             <Image
               src="/ucbc-logo.png"
-              alt="Logo ucbc"
+              alt="Logo"
               width={36}
               preview={false}
             />
           </div>
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
-            UCBC
+            {institution?.acronym}
           </Typography.Title>
         </Link>
         <Menu

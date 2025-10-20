@@ -12,6 +12,7 @@ import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { useInstitution } from "@/hooks/use-institution";
 
 export default function CoursesLayout({
   children,
@@ -22,6 +23,7 @@ export default function CoursesLayout({
 
   const pathname = usePathname();
   const router = useRouter();
+  const { data: institution } = useInstitution();
 
   return (
     <Layout>
@@ -84,7 +86,8 @@ export default function CoursesLayout({
           }}
         >
           <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+            réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>

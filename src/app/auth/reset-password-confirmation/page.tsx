@@ -1,6 +1,7 @@
 "use client";
 
 import { Palette } from "@/components/palette";
+import { useInstitution } from "@/hooks/use-institution";
 import { LockOutlined } from "@ant-design/icons";
 import {
   Button,
@@ -37,6 +38,7 @@ export default function Page() {
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+  const {data: institution } = useInstitution();
 
   const onFinish = (values: FormSchema) => {
     setLoading(true);
@@ -81,7 +83,7 @@ export default function Page() {
           >
             <Space>
               <Typography.Title level={4} style={{ marginBottom: 0 }}>
-                UCBC
+                {institution?.acronym}
               </Typography.Title>
             </Space>
             <div className="flex-1" />
@@ -170,7 +172,8 @@ export default function Page() {
             }}
           >
             <Typography.Text type="secondary">
-              © {new Date().getFullYear()} UCBC. Tous droits réservés.
+              © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+              réservés.
             </Typography.Text>
           </Layout.Footer>
         </div>

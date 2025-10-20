@@ -10,11 +10,14 @@ import {
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { ListYears } from "./list";
+import { useInstitution } from "@/hooks/use-institution";
 
 export default function Page() {
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const { data: institution } = useInstitution();
   
 
   return (
@@ -53,7 +56,7 @@ export default function Page() {
           }}
         >
           <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
+            © {new Date().getFullYear()} {institution?.acronym}. Tous droits réservés.
           </Typography.Text>
           <div className="flex-1" />
           <Space>
