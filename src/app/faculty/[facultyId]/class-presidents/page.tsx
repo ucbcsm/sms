@@ -155,10 +155,14 @@ export default function Page() {
 
         <Table
           loading={isPending}
+          // bordered
           title={() => (
             <header className="flex pb-3">
               <Space>
-                <Input.Search placeholder="Rechercher un chef" />
+                <Typography.Title level={5} style={{ marginBottom: 0 }} type="secondary" >
+                  Liste des chefs
+                </Typography.Title>
+                {/* <Input.Search placeholder="Rechercher un chef" /> */}
               </Space>
               <div className="flex-1" />
               <Space>
@@ -201,23 +205,36 @@ export default function Page() {
           dataSource={class_presidents}
           columns={[
             {
-              title: "Chef",
+              title: "Photo",
+              dataIndex: "student",
+              key: "photo",
+              render: (_, record, __) => (
+                <Avatar
+                  style={{
+                    backgroundColor: getHSLColor(
+                      `${record.student?.user.surname} ${record.student?.user.last_name} ${record.student?.user.first_name}`
+                    ),
+                  }}
+                  src={record.student?.user.avatar || null}
+                >
+                  {record.student?.user.first_name?.charAt(0).toUpperCase()}
+                </Avatar>
+              ),
+              width: 56,
+            },
+            {
+              title: "Matricule",
+              dataIndex: "student",
+              key: "matricule",
+              render: (_, record, __) => record.student?.user.matricule,
+              width:80
+            },
+            {
+              title: "Noms",
               dataIndex: "student",
               key: "student",
-              render: (_, record, __) => (
-                <Space>
-                  <Avatar
-                    style={{
-                      backgroundColor: getHSLColor(
-                        `${record.student?.user.surname} ${record.student?.user.last_name} ${record.student?.user.first_name}`
-                      ),
-                    }}
-                  >
-                    {record.student?.user.first_name?.charAt(0).toUpperCase()}
-                  </Avatar>
-                  {`${record.student?.user.surname} ${record.student.user.last_name} ${record.student.user.first_name}`}
-                </Space>
-              ),
+              render: (_, record, __) =>
+                `${record.student?.user.surname} ${record.student.user.last_name} ${record.student.user.first_name}`,
             },
             {
               title: "Promotion",
