@@ -738,9 +738,10 @@ export type ApplicationEditFormDataType = Omit<
   field_id: number;
   department_id: number;
   class_id: number;
-  spoken_languages:  string [];
+  spoken_languages: string[];
   application_documents: Array<
-    Omit<ApplicationDocument, "required_document"> & {
+    Omit<ApplicationDocument, "id" | "required_document"> & {
+      id: number | null;
       required_document: number | null;
     }
   >;
