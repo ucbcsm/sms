@@ -114,12 +114,25 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           messageApi.success("Liste de présence créée avec succès !");
           setNewAttendance(false);
           form.resetFields();
-          setAttendanceItems(getAttendanceItemsFromCourseEnrollments(courseEnrollements!));
-        },
-        onError: () => {
-          messageApi.error(
-            "Erreur lors de la création de la liste de présence."
+          setAttendanceItems(
+            getAttendanceItemsFromCourseEnrollments(courseEnrollements!)
           );
+        },
+        onError: (error) => {
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any)?.response?.data?.message ||
+                "Erreur lors de la création de la liste de présence."
+            );
+          }
         },
       }
     );

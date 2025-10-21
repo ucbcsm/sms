@@ -38,11 +38,21 @@ export const RejectSingleCourseEnrollmentForm: FC<
             messageApi.success("Inscription au cours rejetée avec succès !");
             setOpen(false);
           },
-          onError: () => {
+          onError: (error) => {
+            if ((error as any).status === 403) {
             messageApi.error(
-              "Une erreur s'est produite lors du rejet de l'inscription au cours."
+              `Vous n'avez pas la permission d'effectuer cette action`
             );
-          },
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any)?.response?.data?.message ||
+                "Une erreur s'est produite lors du rejet de l'inscription au cours."
+            );
+          }}
         }
       );
     }

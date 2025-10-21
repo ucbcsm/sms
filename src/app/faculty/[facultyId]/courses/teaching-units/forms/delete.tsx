@@ -4,6 +4,7 @@ import { Alert, Form, Input, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTeachingUnit } from "@/lib/api";
 import { TeachingUnit } from "@/types";
+import { error } from "console";
 
 type FormDataType = {
   validate: string;
@@ -35,11 +36,22 @@ export const DeleteTeachingUnitForm: FC<DeleteTeachingUnitFormProps> = ({
           messageApi.success("Unité d'enseignement supprimée avec succès !");
           setOpen(false);
         },
-        onError: () => {
-          messageApi.error(
-            "Une erreur s'est produite lors de la suppression de l'unité d'enseignement."
-          );
-        },
+        onError: (error) => {
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any)?.response?.data?.message ||
+                "Une erreur s'est produite lors de la suppression de l'unité d'enseignement."
+            );
+          }
+        }
       });
     } else {
       messageApi.error("Le nom saisi ne correspond pas à l'unité d'enseignement.");

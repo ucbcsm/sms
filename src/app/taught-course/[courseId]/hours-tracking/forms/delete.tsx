@@ -35,15 +35,28 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
     if (values.validate === dateStr) {
       mutateAsync(hourTracking.id, {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["course_hours_tracking"] });
+          queryClient.invalidateQueries({
+            queryKey: ["course_hours_tracking"],
+          });
           messageApi.success("Suivi d'heures supprimé avec succès !");
           setOpen(false);
         },
-        onError: () => {
-          messageApi.error(
-            "Une erreur s'est produite lors de la suppression du suivi d'heures."
-          );
-        },
+        onError: (error) => {
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any)?.response?.data?.message ||
+                "Une erreur s'est produite lors de la suppression du suivi d'heures."
+            );
+          }
+        }
       });
     } else {
       messageApi.error(

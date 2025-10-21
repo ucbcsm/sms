@@ -100,9 +100,22 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
           form.resetFields();
           setOpenNewEnrollments(false);
         },
-        onError: () => {
-          messageApi.error("Erreur lors de l'inscription. Veuillez réessayer.");
-        },
+        onError: (error) => {
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any)?.response?.data?.message ||
+                "Erreur lors de l'inscription. Veuillez réessayer."
+            );
+          }
+        }
       }
     );
   };

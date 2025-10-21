@@ -43,13 +43,23 @@ export const ExemptSingleCourseEnrollmentForm: FC<
             );
             setOpen(false);
           },
-          onError: () => {
-            messageApi.error(
-              isCurrentlyExempted
-                ? "Une erreur s'est produite lors du retrait de l'exemption d'assiduité."
-                : "Une erreur s'est produite lors de l'exemption d'assiduité."
-            );
-          },
+          onError: (error) => {
+            if ((error as any).status === 403) {
+              messageApi.error(
+                `Vous n'avez pas la permission d'effectuer cette action`
+              );
+            } else if ((error as any).status === 401) {
+              messageApi.error(
+                "Vous devez être connecté pour effectuer cette action."
+              );
+            } else {
+              messageApi.error(
+                isCurrentlyExempted
+                  ? "Une erreur s'est produite lors du retrait de l'exemption d'assiduité."
+                  : "Une erreur s'est produite lors de l'exemption d'assiduité."
+              );
+            }
+          }
         }
       );
     }

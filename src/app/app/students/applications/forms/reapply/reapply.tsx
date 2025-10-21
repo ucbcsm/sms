@@ -138,10 +138,20 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
           onClose();
         },
         onError: (error) => {
-          messageApi.error(
-            (error as any).response.data.message ||
-              "Une erreur est survenue lors de la création de la réinscription, veuillez réessayer."
-          );
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any).response.data.message ||
+                "Une erreur est survenue lors de la création de la réinscription, veuillez réessayer."
+            );
+          }
         }
       }
     );
