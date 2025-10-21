@@ -74,7 +74,26 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
       <Drawer
         styles={{ header: { background: colorPrimary, color: "#fff" } }}
         width={`100%`}
-        title="Nouvel enseignant"
+        title={
+          isFormer ? (
+            <Badge count="Ancien staff">
+              <Typography.Title
+                style={{ marginBottom: 0, color: "#fff" }}
+                level={5}
+              >
+                Enregistrement
+              </Typography.Title>
+            </Badge>
+          ) : (
+            <Typography.Title
+              style={{ marginBottom: 0, color: "#fff" }}
+              level={5}
+              ellipsis={{}}
+            >
+              Nouvel enseignant
+            </Typography.Title>
+          )
+        }
         onClose={onClose}
         open={open}
         closable={false}
