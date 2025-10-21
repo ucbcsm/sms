@@ -798,6 +798,7 @@ export const Teacher = z.object({
 export type Teacher = z.infer<typeof Teacher>;
 
 export const Step1TeacherFormDataType = z.object({
+  matricule: z.string().optional(),
   first_name: z.string(),
   last_name: z.string(),
   surname: z.string(),

@@ -2,9 +2,11 @@
 import { FC, ReactNode, useState } from "react";
 import {
   Alert,
+  Badge,
   Button,
   Card,
   Drawer,
+  Dropdown,
   Flex,
   Modal,
   Space,
@@ -13,28 +15,33 @@ import {
   theme,
   Typography,
 } from "antd";
-import { parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
+import { Options, parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
 
-import { CloseOutlined, UserAddOutlined } from "@ant-design/icons";
+import { CloseOutlined, PlusCircleOutlined, UserAddOutlined } from "@ant-design/icons";
 import { Step1 } from "./step1";
 import { Step2 } from "./step2";
 import { Step3 } from "./step3";
 import { useTeacherStepsData } from "@/hooks/use-teacher-steps-data";
 
 type NewTeacherFormProps = {
-  
+  open: boolean;
+  setOpen: (
+    value: boolean | ((old: boolean) => boolean | null) | null,
+    options?: Options
+  ) => Promise<URLSearchParams>;
+  isFormer: boolean;
 };
 
 export const NewTeacherForm: FC<NewTeacherFormProps> = ({
+  open,
+  setOpen,
+  isFormer,
 }) => {
   const {
     token: { colorPrimary },
   } = theme.useToken();
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
-  const [newTeacher, setNewTeacher] = useQueryState(
-    "new",
-    parseAsBoolean.withDefault(false)
-  );
+  
   const [cancel, setCancel] = useState<boolean>(false);
   const { removeData } = useTeacherStepsData();
 
@@ -43,23 +50,19 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
   >([
     {
       title: "Info personnelles",
-      content: <Step1 setStep={setStep} />,
+      content: <Step1 setStep={setStep} isFormer={isFormer} />,
     },
     {
       title: "Etudes et titres académiques",
-      content: (
-        <Step2
-          setStep={setStep}
-        />
-      ),
+      content: <Step2 setStep={setStep} />,
     },
     {
       title: "Confirmation",
-      content: <Step3 setStep={setStep} />,
+      content: <Step3 setStep={setStep} isFormer={isFormer} />,
     },
   ]);
   const onClose = () => {
-    setNewTeacher(false);
+   setOpen(false)
   };
 
   const getStepItems = (): StepProps[] | undefined => {
@@ -68,23 +71,12 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
 
   return (
     <>
-      <Button
-        icon={<UserAddOutlined />}
-        type="primary"
-        style={{ boxShadow: "none" }}
-        variant="dashed"
-        title="Créer un nouvel enseignant"
-        onClick={() => setNewTeacher(true)}
-      >
-        Créer
-      </Button>
-
       <Drawer
         styles={{ header: { background: colorPrimary, color: "#fff" } }}
         width={`100%`}
         title="Nouvel enseignant"
         onClose={onClose}
-        open={newTeacher}
+        open={open}
         closable={false}
         extra={
           <Space>
@@ -107,7 +99,7 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
               open={cancel}
               onOk={() => {
                 removeData();
-                setNewTeacher(false);
+                setOpen(false);
                 setStep(null);
                 setCancel(false);
               }}

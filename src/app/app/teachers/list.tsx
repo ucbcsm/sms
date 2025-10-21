@@ -5,10 +5,13 @@ import {
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
+  PlusCircleOutlined,
   PrinterOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
+  Badge,
   Button,
   Dropdown,
   Input,
@@ -23,7 +26,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTeachers } from "@/lib/api";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
-import {  parseAsInteger, parseAsStringEnum, useQueryState } from "nuqs";
+import {  parseAsBoolean, parseAsInteger, parseAsStringEnum, useQueryState } from "nuqs";
 
 export function ListTeachers() {
 
@@ -42,6 +45,13 @@ export function ListTeachers() {
     "page_size",
     parseAsInteger.withDefault(0)
   );
+
+  const [openNewTeacherForm, setOpenNewTeacherForm] = useQueryState(
+      "new",
+      parseAsBoolean.withDefault(false)
+    );
+    const [openNewFormerTeacherForm, setOpenNewFormerTeacherForm] =
+      useQueryState("new-former", parseAsBoolean.withDefault(false));
 
 
   const { data, isPending, isError } = useQuery({
@@ -110,9 +120,43 @@ export function ListTeachers() {
             </Space>
             <div className="flex-1" />
             <Space>
-              <NewTeacherForm
-              //  departments={departments} faculties={faculties}
-              />
+              <Dropdown
+                menu={{
+                  items: [
+                    {
+                      key: "new",
+                      label: " Nouvel enseignant",
+                      icon: <UserAddOutlined />,
+                      onClick: () => {
+                        setOpenNewTeacherForm(true);
+                      },
+                    },
+                    {
+                      type: "divider",
+                    },
+                    {
+                      key: "new-former",
+                      label: "Enregistrement",
+                      icon: <PlusCircleOutlined />,
+                      onClick: () => {
+                        setOpenNewFormerTeacherForm(true);
+                      },
+                      extra: <Badge count="Ancien staff" />,
+                    },
+                  ],
+                }}
+              >
+                <Button
+                  icon={<UserAddOutlined />}
+                  color="primary"
+                  style={{ boxShadow: "none" }}
+                  variant="dashed"
+                  title="Créer un nouvel enseignant"
+                >
+                  Créer
+                </Button>
+              </Dropdown>
+
               <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
                 Imprimer
               </Button>
@@ -292,6 +336,16 @@ export function ListTeachers() {
             setPageSize(pageSize);
           },
         }}
+      />
+      <NewTeacherForm
+        open={openNewTeacherForm}
+        setOpen={setOpenNewTeacherForm}
+        isFormer={false}
+      />
+      <NewTeacherForm
+        open={openNewFormerTeacherForm}
+        setOpen={setOpenNewFormerTeacherForm}
+        isFormer={true}
       />
     </>
   );

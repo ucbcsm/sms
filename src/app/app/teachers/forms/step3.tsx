@@ -23,6 +23,7 @@ type Props = {
     value: number | ((old: number) => number | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
+  isFormer: boolean;
 };
 
 const formSchema = z.object({
@@ -38,7 +39,7 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
-export const Step3: FC<Props> = ({ setStep }) => {
+export const Step3: FC<Props> = ({ setStep, isFormer }) => {
   const [form] = Form.useForm<FormSchemaType>();
   const [messageApi, contextHolder] = message.useMessage();
   const is_permanent_teacher = Form.useWatch("is_permanent_teacher", form);
@@ -56,6 +57,7 @@ export const Step3: FC<Props> = ({ setStep }) => {
     if (sdata) {
       mutateAsync(
         {
+          matricule: !isFormer ? sdata.matricule : undefined,
           is_permanent_teacher: values.is_permanent_teacher,
           // assigned_faculties: sdata.assigned_faculties,
           // assigned_departements: sdata.assigned_departements,
@@ -85,7 +87,7 @@ export const Step3: FC<Props> = ({ setStep }) => {
             : null,
           city_or_territory: sdata.city_or_territory || "",
           address: sdata.address || "",
-          is_foreign_country_teacher: sdata.is_foreign_country_teacher||false,
+          is_foreign_country_teacher: sdata.is_foreign_country_teacher || false,
         },
         {
           onSuccess: () => {
@@ -96,7 +98,7 @@ export const Step3: FC<Props> = ({ setStep }) => {
             removeData();
           },
           onError: (error) => {
-             if ((error as any).status === 403) {
+            if ((error as any).status === 403) {
               messageApi.error(
                 `Vous n'avez pas la permission d'effectuer cette action`
               );
@@ -105,11 +107,12 @@ export const Step3: FC<Props> = ({ setStep }) => {
                 "Vous devez être connecté pour effectuer cette action."
               );
             } else {
-            messageApi.error(
-              (error as any)?.response?.data?.message ||
-                "Une erreur est survenue lors de la création du profil enseignant."
-            );
-          }}
+              messageApi.error(
+                (error as any)?.response?.data?.message ||
+                  "Une erreur est survenue lors de la création du profil enseignant."
+              );
+            }
+          },
         }
       );
     }

@@ -61,6 +61,7 @@ export async function createTeacher(
     is_permanent_teacher: boolean;
     // assigned_departements: number[];
     // assigned_faculties: number[];
+    matricule?: string;
     first_name: string;
     last_name: string;
     surname: string;

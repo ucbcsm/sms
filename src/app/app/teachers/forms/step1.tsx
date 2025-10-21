@@ -1,7 +1,8 @@
 'use client'
 import { countries } from "@/lib/data/countries";
 import { Step1TeacherFormDataType } from "@/types";
-import { Button, Checkbox, DatePicker, Form, Input, Radio, Select, Space } from "antd";
+import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined } from "@ant-design/icons";
+import { Alert, Button, Checkbox, DatePicker, Form, Input, Radio, Select, Space } from "antd";
 import dayjs from "dayjs";
 import {
   compressToEncodedURIComponent,
@@ -9,17 +10,26 @@ import {
 } from "lz-string";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
+import { useCheckTeacherMatricule } from "./hooks/useCheckTeacherMatricule";
 
 type Props = {
   setStep: (
     value: number | ((old: number) => number | null) | null,
     options?: Options
   ) => Promise<URLSearchParams>;
+  isFormer:boolean;
 };
 
 
-export const Step1: FC<Props> = ({ setStep }) => {
+export const Step1: FC<Props> = ({ setStep, isFormer }) => {
   const [form] = Form.useForm<Step1TeacherFormDataType>();
+  const matricule = Form.useWatch("former_matricule", form);
+    const {
+      matriculeExists,
+      isPending: isPendingMatricule,
+      isLoading: isLoadingMatricule,
+      refetch: refreshMatricule,
+    } = useCheckTeacherMatricule(matricule);
 
   useEffect(() => {
     const savedData = localStorage.getItem("dt1");
@@ -44,6 +54,40 @@ export const Step1: FC<Props> = ({ setStep }) => {
       }}
       style={{ maxWidth: 520, margin: "auto" }}
     >
+      {isFormer && (
+        <Form.Item
+          label="Matricule"
+          name="former_matricule"
+          rules={[{ required: true }]}
+          tooltip="Matricule déjà assigné à l'enseignant"
+        >
+          <Input
+            placeholder="Matricule"
+            suffix={
+              isLoadingMatricule ? (
+                <LoadingOutlined />
+              ) : !matriculeExists && matricule ? (
+                matricule?.length >= 3 ? (
+                  <CheckCircleFilled style={{ color: "greenyellow" }} />
+                ) : undefined
+              ) : matriculeExists && matricule ? (
+                matricule?.length >= 3 ? (
+                  <CloseCircleFilled style={{ color: "red" }} />
+                ) : undefined
+              ) : undefined
+            }
+          />
+        </Form.Item>
+      )}
+      {matriculeExists ? (
+        <Alert
+          type="error"
+          message="Le matricule existe déjà pour un autre enseignant."
+          description="Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administrateur."
+          showIcon
+          style={{ marginBottom: 16, border: 0 }}
+        />
+      ) : null}
       <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
         <Input placeholder="Nom" />
       </Form.Item>
@@ -61,18 +105,10 @@ export const Step1: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-      <Form.Item
-        label="Lieu de naissance"
-        name="place_of_birth"
-        rules={[]}
-      >
+      <Form.Item label="Lieu de naissance" name="place_of_birth" rules={[]}>
         <Input placeholder="Lieu de naissance" />
       </Form.Item>
-      <Form.Item
-        label="Date de naissance"
-        name="date_of_birth"
-        rules={[]}
-      >
+      <Form.Item label="Date de naissance" name="date_of_birth" rules={[]}>
         <DatePicker
           placeholder="DD/MM/YYYY"
           format={{ format: "DD/MM/YYYY" }}
@@ -136,7 +172,11 @@ export const Step1: FC<Props> = ({ setStep }) => {
           ]}
         />
       </Form.Item>
-      <Form.Item label="Email" name="email" rules={[{ required: true, type:"email" }]}>
+      <Form.Item
+        label="Email"
+        name="email"
+        rules={[{ required: true, type: "email" }]}
+      >
         <Input placeholder="Email" />
       </Form.Item>
       <Form.Item
