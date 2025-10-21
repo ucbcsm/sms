@@ -44,7 +44,7 @@ export const NewClassPresidentForm: React.FC<NewClassPresidentFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log(values);
+   
     mutateAsync(values, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["class_presidents"] });
