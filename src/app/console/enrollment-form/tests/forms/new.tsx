@@ -43,11 +43,22 @@ export const NewTestCourseForm: React.FC<NewTestCourseFormProps> = ({
         messageApi.success("Cours créé avec succès !");
         setOpen(false);
       },
-      onError: () => {
-        messageApi.error(
-          "Une erreur s'est produite lors de la création du cours."
-        );
-      },
+      onError: (error) => {
+        if ((error as any).status === 403) {
+          messageApi.error(
+            `Vous n'avez pas la permission d'effectuer cette action`
+          );
+        } else if ((error as any).status === 401) {
+          messageApi.error(
+            "Vous devez être connecté pour effectuer cette action."
+          );
+        } else {
+          messageApi.error(
+            (error as any)?.response?.data?.message ||
+              "Une erreur s'est produite lors de la création du cours."
+          );
+        }
+      }
     });
   };
 
@@ -80,7 +91,7 @@ export const NewTestCourseForm: React.FC<NewTestCourseFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -137,11 +148,14 @@ export const NewTestCourseForm: React.FC<NewTestCourseFormProps> = ({
           label="Description"
           rules={[{ required: true }]}
         >
-          <Input.TextArea placeholder="Décrire la matière pour le test" rows={4} />
+          <Input.TextArea
+            placeholder="Décrire la matière pour le test"
+            rows={4}
+          />
         </Form.Item>
-         <Form.Item name="enabled" label="Visible" >
-            <Switch />
-          </Form.Item>
+        <Form.Item name="enabled" label="Visible">
+          <Switch />
+        </Form.Item>
       </Modal>
     </>
   );

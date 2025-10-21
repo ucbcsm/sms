@@ -34,7 +34,6 @@ export const NewClassForm: React.FC<NewClassFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(values, {
       onSuccess: () => {
@@ -42,11 +41,22 @@ export const NewClassForm: React.FC<NewClassFormProps> = ({
         messageApi.success("Promotion créée avec succès !");
         setOpen(false);
       },
-      onError: () => {
-        messageApi.error(
-          "Une erreur s'est produite lors de la création de la promotion."
-        );
-      },
+      onError: (error) => {
+        if ((error as any).status === 403) {
+          messageApi.error(
+            `Vous n'avez pas la permission d'effectuer cette action`
+          );
+        } else if ((error as any).status === 401) {
+          messageApi.error(
+            "Vous devez être connecté pour effectuer cette action."
+          );
+        } else {
+          messageApi.error(
+            (error as any)?.response?.data?.message ||
+              "Une erreur s'est produite lors de la création de la promotion."
+          );
+        }
+      }
     });
   };
 
@@ -79,7 +89,7 @@ export const NewClassForm: React.FC<NewClassFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form

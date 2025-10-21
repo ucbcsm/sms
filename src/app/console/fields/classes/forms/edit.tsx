@@ -47,11 +47,22 @@ export const EditClassForm: React.FC<EditClassFormProps> = ({
           messageApi.success("Promotion modifiée avec succès !");
           setOpen(false);
         },
-        onError: () => {
-          messageApi.error(
-            "Une erreur s'est produite lors de la modification de la promotion"
-          );
-        },
+        onError: (error) => {
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any)?.response?.data?.message ||
+                "Une erreur s'est produite lors de la modification de la promotion"
+            );
+          }
+        }
       }
     );
   };
@@ -75,7 +86,7 @@ export const EditClassForm: React.FC<EditClassFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form

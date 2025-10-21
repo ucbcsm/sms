@@ -31,7 +31,6 @@ export const NewClassroomForm: React.FC = () => {
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(values, {
       onSuccess: () => {
@@ -39,11 +38,22 @@ export const NewClassroomForm: React.FC = () => {
         messageApi.success("Salle de classe créée avec succès !");
         setOpen(false);
       },
-      onError: () => {
-        messageApi.error(
-          "Une erreur s'est produite lors de la création de la salle de classe."
-        );
-      },
+      onError: (error) => {
+        if ((error as any).status === 403) {
+          messageApi.error(
+            `Vous n'avez pas la permission d'effectuer cette action`
+          );
+        } else if ((error as any).status === 401) {
+          messageApi.error(
+            "Vous devez être connecté pour effectuer cette action."
+          );
+        } else {
+          messageApi.error(
+            (error as any)?.response?.data?.message ||
+              "Une erreur s'est produite lors de la création de la salle de classe."
+          );
+        }
+      }
     });
   };
 
@@ -75,7 +85,7 @@ export const NewClassroomForm: React.FC = () => {
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form
@@ -91,7 +101,7 @@ export const NewClassroomForm: React.FC = () => {
           </Form>
         )}
       >
-        <Row gutter={[16,16]} style={{ marginTop: 24 }}>
+        <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
           <Col span={16}>
             <Form.Item
               name="name"
@@ -121,33 +131,35 @@ export const NewClassroomForm: React.FC = () => {
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={[16,16]}>
-            <Col span={16}>
+        <Row gutter={[16, 16]}>
+          <Col span={16}>
             <Form.Item
-            name="room_type"
-            label="Type de salle"
-            rules={[
-            {
-              required: true,
-              message: "Veuillez sélectionner un type de salle",
-            },
-            ]}
-          >
-            <Select
-            placeholder="Sélectionnez un type"
-            options={getRoomsTypeAsOptions}
-            />
-          </Form.Item>
-            </Col>
-        <Col span={8}>
-        <Form.Item
-          name="capacity"
-          label="Capacité"
-          rules={[{ required: true, message: "Veuillez entrer la capacité" }]}
-        >
-          <InputNumber type="number" placeholder="Capacité" />
-        </Form.Item>
-        </Col>
+              name="room_type"
+              label="Type de salle"
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez sélectionner un type de salle",
+                },
+              ]}
+            >
+              <Select
+                placeholder="Sélectionnez un type"
+                options={getRoomsTypeAsOptions}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              name="capacity"
+              label="Capacité"
+              rules={[
+                { required: true, message: "Veuillez entrer la capacité" },
+              ]}
+            >
+              <InputNumber type="number" placeholder="Capacité" />
+            </Form.Item>
+          </Col>
         </Row>
         <Form.Item
           name="status"

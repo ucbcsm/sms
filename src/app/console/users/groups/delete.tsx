@@ -30,16 +30,27 @@ export const DeleteGroupForm: FC<DeleteGroupFormProps> = ({
     const onFinish = (values: FormDataType) => {
         if (values.validate === group.name) {
             mutateAsync(group.id, {
-                onSuccess: () => {
-                    queryClient.invalidateQueries({ queryKey: ["groups"] });
-                    messageApi.success("Groupe supprimé avec succès !");
-                    setOpen(false);
-                },
-                onError: () => {
-                    messageApi.error(
-                        "Une erreur s'est produite lors de la suppression du groupe."
-                    );
-                },
+              onSuccess: () => {
+                queryClient.invalidateQueries({ queryKey: ["groups"] });
+                messageApi.success("Groupe supprimé avec succès !");
+                setOpen(false);
+              },
+              onError: (error) => {
+                if ((error as any).status === 403) {
+                  messageApi.error(
+                    `Vous n'avez pas la permission d'effectuer cette action`
+                  );
+                } else if ((error as any).status === 401) {
+                  messageApi.error(
+                    "Vous devez être connecté pour effectuer cette action."
+                  );
+                } else {
+                  messageApi.error(
+                    (error as any)?.response?.data?.message ||
+                      "Une erreur s'est produite lors de la suppression du groupe."
+                  );
+                }
+              }
             });
         } else {
             messageApi.error("Le nom saisi ne correspond pas au groupe.");

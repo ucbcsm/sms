@@ -28,9 +28,22 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
       messageApi.success("Cycle créé avec succès !");
       setOpen(false);
       },
-      onError: () => {
-      messageApi.error("Une erreur s'est produite lors de la création du cycle.");
-      },
+      onError: (error) => {
+        if ((error as any).status === 403) {
+          messageApi.error(
+            `Vous n'avez pas la permission d'effectuer cette action`
+          );
+        } else if ((error as any).status === 401) {
+          messageApi.error(
+            "Vous devez être connecté pour effectuer cette action."
+          );
+        } else {
+          messageApi.error(
+            (error as any)?.response?.data?.message ||
+              "Une erreur s'est produite lors de la création du cycle."
+          );
+        }
+      }
     });
   };
 
@@ -63,7 +76,7 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         modalRender={(dom) => (
           <Form
             form={form}
@@ -86,10 +99,14 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
             { required: true, message: "Veuillez entrer le nom du cycle" },
           ]}
         >
-          <Select options={getCyclesLMDAsOptionsWithDisabled(cycles)} placeholder="Nom du cycle" onSelect={(value)=>{
-            const selectedCycle= getCycleLMD(value)
-            form.setFieldsValue({...selectedCycle})
-          }} />
+          <Select
+            options={getCyclesLMDAsOptionsWithDisabled(cycles)}
+            placeholder="Nom du cycle"
+            onSelect={(value) => {
+              const selectedCycle = getCycleLMD(value);
+              form.setFieldsValue({ ...selectedCycle });
+            }}
+          />
         </Form.Item>
 
         <Form.Item
@@ -102,7 +119,7 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
             },
           ]}
         >
-          <Input placeholder="" disabled variant="borderless"  />
+          <Input placeholder="" disabled variant="borderless" />
         </Form.Item>
         <Form.Item
           name="order_number"
@@ -111,7 +128,11 @@ export const NewCycleForm: React.FC<Props> = ({ cycles }) => {
             { required: true, message: "Veuillez entrer le numéro d'ordre" },
           ]}
         >
-          <InputNumber placeholder="Numéro d'ordre" disabled variant="borderless" />
+          <InputNumber
+            placeholder="Numéro d'ordre"
+            disabled
+            variant="borderless"
+          />
         </Form.Item>
         <Form.Item name="planned_credits" label="Crédits prévus" rules={[]}>
           <InputNumber placeholder="Nombre de crédits prévus" />
