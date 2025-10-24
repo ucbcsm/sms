@@ -17,6 +17,7 @@ import { AttendanceTab } from "./_components/attendance/attendanceTab";
 
 export default function Page() {
   const [selectedTab, setSelectedTab] = useQueryState("tab");
+  
   return (
     <div className="p-6">
       <Typography.Title type="secondary" level={5} style={{ marginBottom: 16 }}>

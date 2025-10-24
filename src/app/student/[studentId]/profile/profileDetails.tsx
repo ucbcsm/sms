@@ -28,7 +28,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
         <Flex
           justify="space-between"
           align="center"
-          style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
+          style={{ paddingLeft: 28, paddingRight: 20, paddingTop: 12 }}
         >
           <Typography.Title level={5} className="" style={{ marginBottom: 0 }}>
             Identité

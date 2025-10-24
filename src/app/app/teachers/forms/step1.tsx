@@ -24,7 +24,7 @@ type Props = {
 export const Step1: FC<Props> = ({ setStep, isFormer }) => {
   const [form] = Form.useForm<Step1TeacherFormDataType>();
   const matricule = Form.useWatch("matricule", form);
-  
+
     const {
       matriculeExists,
       isPending: isPendingMatricule,
@@ -157,7 +157,7 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
       <Form.Item
         label="Affiliation religieuse"
         name="religious_affiliation"
-        rules={[]}
+        rules={[{  }]}
       >
         <Input placeholder="Affiliation religieuse" />
       </Form.Item>
