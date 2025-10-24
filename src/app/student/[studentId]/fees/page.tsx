@@ -27,12 +27,13 @@ import {
 
 export default function Page() {
   return (
-    <Row gutter={[24, 24]}>
-      <Col span={24}>
-        <Typography.Title level={5} style={{ marginBottom: 16 }}>
-          Frais à payer
-        </Typography.Title>
-    
+    <div className="p-6">
+      <Row gutter={[24, 24]}>
+        <Col span={24}>
+          <Typography.Title level={5} style={{ marginBottom: 16 }}>
+            Frais à payer
+          </Typography.Title>
+
           <List
             dataSource={[
               {
@@ -56,7 +57,7 @@ export default function Page() {
                 amount: 30,
               },
             ]}
-            renderItem={(item,index) => (
+            renderItem={(item, index) => (
               <List.Item
                 key={item.key}
                 extra={`${new Intl.NumberFormat("fr", {
@@ -68,19 +69,18 @@ export default function Page() {
                 }).format(item.amount)}`}
               >
                 <List.Item.Meta
-                  avatar={<Avatar>{index+1}</Avatar>}
+                  avatar={<Avatar>{index + 1}</Avatar>}
                   title={item.feeName}
                   description={"Obligatoire"}
                 />
               </List.Item>
             )}
           />
-        
-      </Col>
-      <Col span={24}>
-        <Typography.Title level={5} style={{ marginBottom: 16 }}>
-          Transactions des paiements
-        </Typography.Title>
+        </Col>
+        <Col span={24}>
+          <Typography.Title level={5} style={{ marginBottom: 16 }}>
+            Transactions des paiements
+          </Typography.Title>
           <Table
             title={() => (
               <header className="flex pb-3">
@@ -239,7 +239,8 @@ export default function Page() {
               size: "small",
             }}
           />
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </div>
   );
 }

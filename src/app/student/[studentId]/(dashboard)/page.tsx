@@ -9,14 +9,21 @@ import {
   Col,
   Descriptions,
   Flex,
+  Layout,
   Progress,
   Row,
   Skeleton,
   Statistic,
+  theme,
+  Typography,
 } from "antd";
 import { useParams } from "next/navigation";
+import { StudentProfileDetails } from "../profile/profileDetails";
 
 export default function Page() {
+   const {
+     token: { colorBgContainer, colorBorderSecondary },
+   } = theme.useToken();
   const { studentId } = useParams();
   const {yid}=useYid()
 
@@ -47,76 +54,87 @@ export default function Page() {
     }
 
   return (
-    <Row gutter={24}>
-      <Col span={16}>
-        <Row gutter={[24, 24]}>
-          <Col span={12}>
-            <Card>
-              <Statistic
-                loading={isPendingDashboard}
-                title="Promotion actuelle"
-                value={enrolledStudent?.class_year?.acronym}
-              />
-            </Card>
-          </Col>
+    <Layout>
+      <Layout.Sider
+        width={280}
+        theme="light"
+        style={{ borderRight: `1px solid ${colorBorderSecondary}` }}
+      >
+        <StudentProfileDetails data={enrolledStudent} isError={isError} />
+      </Layout.Sider>
+      <Layout.Content style={{ background: colorBgContainer, padding:24 }}>
+        <Row gutter={24}>
+          <Col span={16}>
+            <Row gutter={[24, 24]}>
+              <Col span={12}>
+                <Card>
+                  <Statistic
+                    loading={isPendingDashboard}
+                    title="Promotion"
+                    value={enrolledStudent?.class_year?.acronym}
+                  />
+                </Card>
+              </Col>
 
-          <Col span={12}>
-            <Card>
-              <Flex justify="space-between">
-                <Statistic
-                  loading={isPendingDashboard}
-                  title="Statut"
-                  value={
-                    enrolledStudent?.status === "enabled" ? "Actif" : "Abandon"
-                  }
-                />
-                {!isPendingDashboard ? (
-                  <Progress
-                    type="dashboard"
-                    size={58}
-                    percent={100}
-                    status={
-                      enrolledStudent?.status === "enabled"
-                        ? "success"
-                        : "exception"
-                    }
-                  />
-                ) : (
-                  <Skeleton.Avatar size={58} active />
-                )}
-              </Flex>
-            </Card>
-          </Col>
-          <Col span={12}>
-            <Card>
-              <Flex justify="space-between">
-                <Statistic
-                  loading={isPendingDashboard}
-                  title="Frais d'inscription"
-                  value={
-                    enrolledStudent?.enrollment_fees === "paid"
-                      ? "Payé"
-                      : "Non payé"
-                  }
-                />
-                {!isPendingDashboard ? (
-                  <Progress
-                    type="dashboard"
-                    percent={100}
-                    size={58}
-                    status={
-                      enrolledStudent?.enrollment_fees === "paid"
-                        ? "success"
-                        : "exception"
-                    }
-                  />
-                ) : (
-                  <Skeleton.Avatar size={58} active />
-                )}
-              </Flex>
-            </Card>
-          </Col>
-          {/* <Col span={8}>
+              <Col span={12}>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPendingDashboard}
+                      title="Statut"
+                      value={
+                        enrolledStudent?.status === "enabled"
+                          ? "Actif"
+                          : "Abandon"
+                      }
+                    />
+                    {!isPendingDashboard ? (
+                      <Progress
+                        type="dashboard"
+                        size={58}
+                        percent={100}
+                        status={
+                          enrolledStudent?.status === "enabled"
+                            ? "success"
+                            : "exception"
+                        }
+                      />
+                    ) : (
+                      <Skeleton.Avatar size={58} active />
+                    )}
+                  </Flex>
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPendingDashboard}
+                      title="Frais d'inscription"
+                      value={
+                        enrolledStudent?.enrollment_fees === "paid"
+                          ? "Payé"
+                          : "Non payé"
+                      }
+                    />
+                    {!isPendingDashboard ? (
+                      <Progress
+                        type="dashboard"
+                        percent={100}
+                        size={58}
+                        status={
+                          enrolledStudent?.enrollment_fees === "paid"
+                            ? "success"
+                            : "exception"
+                        }
+                      />
+                    ) : (
+                      <Skeleton.Avatar size={58} active />
+                    )}
+                  </Flex>
+                </Card>
+              </Col>
+              {/* <Col span={8}>
             <Card>
               <Statistic
                 loading={isPending}
@@ -131,8 +149,8 @@ export default function Page() {
               />
             </Card>
           </Col> */}
-          
-          {/* <Col span={8}>
+
+              {/* <Col span={8}>
             <Card>
               <Flex justify="space-between">
                 <Statistic
@@ -168,55 +186,57 @@ export default function Page() {
             </Card>
           </Col> */}
 
-          <Col span={12}>
-            <Card>
-              <Statistic
-                loading={isPending}
-                title="Date de validation"
-                value={
-                  enrolledStudent?.date_of_enrollment
-                    ? `${new Intl.DateTimeFormat("fr", {
-                        dateStyle: "long",
-                      }).format(
-                        new Date(`${enrolledStudent?.date_of_enrollment}`)
-                      )}`
-                    : ""
-                }
-              />
-            </Card>
+              <Col span={12}>
+                <Card>
+                  <Statistic
+                    loading={isPending}
+                    title="Date de validation"
+                    value={
+                      enrolledStudent?.date_of_enrollment
+                        ? `${new Intl.DateTimeFormat("fr", {
+                            dateStyle: "long",
+                          }).format(
+                            new Date(`${enrolledStudent?.date_of_enrollment}`)
+                          )}`
+                        : ""
+                    }
+                  />
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={8}>
+            {/* <Card loading={isPending}> */}
+            <Descriptions
+              title="Filière"
+              column={1}
+              items={[
+                {
+                  key: "domaine",
+                  label: "Domaine",
+                  children: enrolledStudent?.field.name || "",
+                },
+                {
+                  key: "faculte",
+                  label: "Filière",
+                  children: enrolledStudent?.faculty.name || "",
+                },
+                {
+                  key: "department",
+                  label: "Mention",
+                  children: enrolledStudent?.departement.name || "",
+                },
+                {
+                  key: "cycle",
+                  label: "Cycle",
+                  children: enrolledStudent?.cycle.name,
+                },
+              ]}
+            />
+            {/* </Card> */}
           </Col>
         </Row>
-      </Col>
-      <Col span={8}>
-        {/* <Card loading={isPending}> */}
-          <Descriptions
-            title="Filière"
-            column={1}
-            items={[
-              {
-                key: "domaine",
-                label: "Domaine",
-                children: enrolledStudent?.field.name || "",
-              },
-              {
-                key: "faculte",
-                label: "Filière",
-                children: enrolledStudent?.faculty.name || "",
-              },
-              {
-                key: "department",
-                label: "Mention",
-                children: enrolledStudent?.departement.name || "",
-              },
-              {
-                key: "cycle",
-                label: "Cycle",
-                children: enrolledStudent?.cycle.name,
-              },
-            ]}
-          />
-        {/* </Card> */}
-      </Col>
-    </Row>
+      </Layout.Content>
+    </Layout>
   );
 }

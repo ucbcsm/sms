@@ -3,8 +3,11 @@ import { getYearEnrollment } from "@/lib/api";
 import { CloseOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Avatar,
   Button,
+  Divider,
   Form,
+  Image,
   Layout,
   Menu,
   Skeleton,
@@ -13,8 +16,9 @@ import {
   Typography,
 } from "antd";
 import { useParams, usePathname } from "next/navigation";
-import { StudentProfileDetails } from "./profile/profileDetails";
 import Link from "next/link";
+import { useInstitution } from "@/hooks/use-institution";
+import { getHSLColor } from "@/lib/utils";
 
 export default function StudentLayout({
   children,
@@ -22,6 +26,7 @@ export default function StudentLayout({
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+  const { data: institution } = useInstitution();
 
   const { studentId } = useParams();
   const pathname = usePathname();
@@ -37,74 +42,78 @@ export default function StudentLayout({
   });
 
   return (
-    <Layout>
-      <Layout.Sider
-        width={280}
-        theme="light"
-        style={{ borderRight: `1px solid ${colorBorderSecondary}` }}
-      >
-        <div
-          style={{
-            height: 64,
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            borderBottom: `1px solid ${colorBorderSecondary}`,
-            paddingLeft: 32,
-            paddingRight: 32,
-          }}
-        >
-          <Typography.Title
-            type="secondary"
-            style={{ marginBottom: 0 }}
-            level={5}
-            ellipsis={{}}
-          >
-            Compte étudiant
-          </Typography.Title>
-        </div>
-        <StudentProfileDetails data={enrolledStudent} isError={isError} />
-      </Layout.Sider>
-      <Layout.Content
+    <div>
+      <Layout.Header
         style={{
-          minHeight: 280,
-          padding: "0 32px 0 32px",
+          display: "flex",
+          alignItems: "center",
           background: colorBgContainer,
+          padding: "0 28px",
         }}
       >
-        <Layout.Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            padding: 0,
-          }}
-        >
-          <Space>
-            {!isPending ? (
-              <Typography.Title level={3} style={{ marginBottom: 0, textTransform: "uppercase" }}>
-                {`${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`}
-              </Typography.Title>
-            ) : (
-              <Form>
-                <Skeleton.Input active />
-              </Form>
-            )}
-          </Space>
-          <div className="flex-1" />
-          <Space>
-            <Typography.Text type="secondary">
-              {enrolledStudent?.academic_year.name}
-            </Typography.Text>
-            <Link href={`/faculty/${enrolledStudent?.faculty.id}/students`}>
-              <Button
-                type="text"
-                icon={<CloseOutlined />}
-                title="Quitter le compte"
+        <Space>
+          <Link
+            href={`/student/${studentId}`}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <div className="flex items-center pr-3">
+              <Image
+                src={institution?.logo || "/ucbc-logo.png"}
+                alt="Logo"
+                width={36}
+                height="auto"
+                preview={false}
               />
-            </Link>
-          </Space>
-        </Layout.Header>
+            </div>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {institution?.acronym}
+            </Typography.Title>
+          </Link>
+          <Divider type="vertical" />
+          <Typography.Text type="secondary">Étudiant:</Typography.Text>
+          {enrolledStudent && (
+            <Avatar
+              style={{
+                background: getHSLColor(
+                  `${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`
+                ),
+              }}
+              size="small"
+              shape="square"
+            >
+              {`${enrolledStudent?.user.first_name?.charAt(0).toUpperCase()}`}
+            </Avatar>
+          )}
+
+          {!isPending ? (
+            <Typography.Title
+              level={5}
+              style={{ marginBottom: 0, textTransform: "uppercase" }}
+            >
+              {`${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`}
+            </Typography.Title>
+          ) : (
+            <Form>
+              <Skeleton.Input active />
+            </Form>
+          )}
+        </Space>
+
+        <div className="flex-1" />
+        <Space>
+          <Typography.Text type="secondary">
+            {enrolledStudent?.academic_year.name}
+          </Typography.Text>
+          <Link href={`/faculty/${enrolledStudent?.faculty.id}/students`}>
+            <Button
+              type="text"
+              icon={<CloseOutlined />}
+              title="Quitter le compte"
+            />
+          </Link>
+        </Space>
+      </Layout.Header>
+      <div>
         <Menu
           selectedKeys={[pathname]}
           mode="horizontal"
@@ -143,7 +152,7 @@ export default function StudentLayout({
                 </Link>
               ),
             },
-            
+
             {
               key: `/student/${studentId}/student-card`,
               label: (
@@ -154,14 +163,8 @@ export default function StudentLayout({
             },
           ]}
         />
-        <div
-          style={{
-            paddingTop: 24,
-          }}
-        >
-          {children}
-        </div>
-      </Layout.Content>
-    </Layout>
+      </div>
+      <div>{children}</div>
+    </div>
   );
 }

@@ -30,10 +30,9 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
           align="center"
           style={{ paddingLeft: 28, paddingRight: 28, paddingTop: 12 }}
         >
-          <Typography.Title level={5} className="">
-            Profile
+          <Typography.Title level={5} className="" style={{ marginBottom: 0 }}>
+            Identité
           </Typography.Title>
-
           <EditStudentProfileForm data={data} />
         </Flex>
 
@@ -43,7 +42,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
           style={{
             padding: "40px 0 40px 28px",
             width: "100%",
-            height: "calc(100vh - 108px)",
+            height: "calc(100vh - 154px)",
             overflowY: "auto",
           }}
         >
@@ -98,10 +97,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
               {
                 key: "sex",
                 label: "Sexe",
-                children:
-                  data?.user.gender === "M"
-                    ? "Masculin"
-                    : "Féminin",
+                children: data?.user.gender === "M" ? "Masculin" : "Féminin",
               },
               {
                 key: "lieu_naissance",
@@ -308,7 +304,9 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
               {
                 key: "diploma_percent",
                 label: "Pourcentage du diplome",
-                children:  percentageFormatter(Number(data?.common_enrollment_infos.diploma_percentage)),
+                children: percentageFormatter(
+                  Number(data?.common_enrollment_infos.diploma_percentage)
+                ),
               },
               {
                 key: "country",
