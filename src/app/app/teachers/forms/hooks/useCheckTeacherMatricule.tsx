@@ -2,13 +2,13 @@ import { getTeachers } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-export const useCheckTeacherMatricule = (matricule: string | null) => {
+export const useCheckTeacherMatricule = (matricule?: string | null) => {
    const { data, isPending, isLoading, isError, refetch } = useQuery({
      queryKey: ["check_teachers", matricule],
      queryFn: ({ queryKey }) =>
        getTeachers({
          search:
-           matricule !== null && matricule.trim() !== ""
+           matricule !== null && matricule?.trim() !== ""
              ? matricule
              : undefined,
        }),

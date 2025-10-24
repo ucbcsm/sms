@@ -59,6 +59,7 @@ export async function createTeacher(
     //  | "assigned_departements" | "assigned_faculties"
   > & {
     is_permanent_teacher: boolean;
+    gender: "M" | "F";
     // assigned_departements: number[];
     // assigned_faculties: number[];
     matricule?: string;
@@ -88,6 +89,7 @@ export async function updateTeacher({
       avatar: string | null;
       pending_avatar: string | null;
       matricule: string;
+      gender: "M" | "F";
       is_permanent_teacher: boolean;
       is_active: boolean;
       is_staff: boolean;

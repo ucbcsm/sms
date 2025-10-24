@@ -23,7 +23,8 @@ type Props = {
 
 export const Step1: FC<Props> = ({ setStep, isFormer }) => {
   const [form] = Form.useForm<Step1TeacherFormDataType>();
-  const matricule = Form.useWatch("former_matricule", form);
+  const matricule = Form.useWatch("matricule", form);
+  
     const {
       matriculeExists,
       isPending: isPendingMatricule,
@@ -57,7 +58,7 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
       {isFormer && (
         <Form.Item
           label="Matricule"
-          name="former_matricule"
+          name="matricule"
           rules={[{ required: true }]}
           tooltip="Matricule déjà assigné à l'enseignant"
         >

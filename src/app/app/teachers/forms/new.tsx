@@ -58,9 +58,12 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
     },
     {
       title: "Confirmation",
-      content: <Step3 setStep={setStep} isFormer={isFormer} />,
+      content: (
+        <Step3 setStep={setStep} isFormer={isFormer} setOpen={setOpen} />
+      ),
     },
   ]);
+  
   const onClose = () => {
    setOpen(false)
   };

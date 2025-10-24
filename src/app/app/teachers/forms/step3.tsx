@@ -24,6 +24,10 @@ type Props = {
     options?: Options
   ) => Promise<URLSearchParams>;
   isFormer: boolean;
+  setOpen: (
+    value: boolean | ((old: boolean | null) => boolean | null) | null,
+    options?: Options
+  ) => Promise<URLSearchParams>;
 };
 
 const formSchema = z.object({
@@ -39,11 +43,11 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
-export const Step3: FC<Props> = ({ setStep, isFormer }) => {
+export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
   const [form] = Form.useForm<FormSchemaType>();
   const [messageApi, contextHolder] = message.useMessage();
   const is_permanent_teacher = Form.useWatch("is_permanent_teacher", form);
-  const [newTeacher, setNewTeacher] = useQueryState("new", parseAsBoolean);
+  // const [newTeacher, setNewTeacher] = useQueryState("new", parseAsBoolean);
   const { data: sdata, removeData } = useTeacherStepsData();
 
   const queryClient = useQueryClient();
@@ -53,11 +57,12 @@ export const Step3: FC<Props> = ({ setStep, isFormer }) => {
   });
 
   const onFinish = (values: FormSchemaType) => {
-    console.log(sdata);
+    // console.log(sdata)
+    
     if (sdata) {
       mutateAsync(
         {
-          matricule: !isFormer ? sdata.matricule : undefined,
+          matricule: isFormer ? sdata.matricule : undefined,
           is_permanent_teacher: values.is_permanent_teacher,
           // assigned_faculties: sdata.assigned_faculties,
           // assigned_departements: sdata.assigned_departements,
@@ -93,7 +98,7 @@ export const Step3: FC<Props> = ({ setStep, isFormer }) => {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["teachers"] });
             messageApi.success("Profil enseignant créé avec succès.");
-            setNewTeacher(null);
+            setOpen(false);
             setStep(null);
             removeData();
           },
