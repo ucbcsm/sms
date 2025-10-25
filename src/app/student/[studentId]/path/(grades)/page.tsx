@@ -29,6 +29,8 @@ export default function Page() {
   return (
     <div className="px-6">
       <Tabs
+        defaultActiveKey={selectedTab}
+        activeKey={selectedTab}
         type="line"
         items={[
           {

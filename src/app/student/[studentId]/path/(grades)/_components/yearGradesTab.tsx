@@ -1,76 +1,32 @@
-import React, { FC } from 'react';
-import { Card, Table, Tag, Space, Typography, Statistic, Divider, Tabs } from 'antd';
-import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
-import { useQuery } from '@tanstack/react-query';
-import { getStudentYearGrades } from '@/lib/api/grade-report';
-import { record } from 'zod';
+import React, { FC } from "react";
+import { Table, Space, Typography } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { getStudentYearGrades } from "@/lib/api/grade-report";
+import { parseAsInteger, useQueryState } from "nuqs";
 
-type YearGradesTabProps={
-  userId?:number;
-}
+type YearGradesTabProps = {
+  userId?: number;
+};
 
-export const YearGradesTab:FC<YearGradesTabProps> = ({userId}) => {
-   const { data, isPending } = useQuery({
-     queryKey: ["student-year-grades", userId],
-     queryFn: ({ queryKey }) =>
-       getStudentYearGrades({ userId: Number(queryKey[1]) }),
-     enabled: !!userId,
-   });
+export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+  const [pageSize, setPageSize] = useQueryState(
+    "size",
+    parseAsInteger.withDefault(0)
+  );
+
+  const { data, isPending } = useQuery({
+    queryKey: ["student-year-grades", userId, page, pageSize],
+    queryFn: ({ queryKey }) =>
+      getStudentYearGrades({
+        userId: Number(queryKey[1]),
+        page: page !== 0 ? page : undefined,
+        pageSize: pageSize !== 0 ? pageSize : undefined,
+      }),
+    enabled: !!userId,
+  });
 
   console.log(data);
-  // Données simulées pour le relevé de notes
-  const gradesData = [
-    {
-      key: '1',
-      subject: 'Mathématiques',
-      grade: 16,
-      coefficient: 4,
-      status: 'Validé',
-      date: '2024-01-15'
-    },
-    {
-      key: '2',
-      subject: 'Physique',
-      grade: 14,
-      coefficient: 3,
-      status: 'Validé',
-      date: '2024-01-18'
-    },
-    {
-      key: '3',
-      subject: 'Informatique',
-      grade: 18,
-      coefficient: 5,
-      status: 'Validé',
-      date: '2024-01-20'
-    },
-    {
-      key: '4',
-      subject: 'Anglais',
-      grade: 12,
-      coefficient: 2,
-      status: 'En cours',
-      date: '2024-02-01'
-    }
-  ];
-
-  const calculateAverage = () => {
-    const total = gradesData.reduce((sum, item) => {
-      if (item.status === 'Validé') {
-        return sum + (item.grade * item.coefficient);
-      }
-      return sum;
-    }, 0);
-    
-    const totalCoefficients = gradesData.reduce((sum, item) => {
-      if (item.status === 'Validé') {
-        return sum + item.coefficient;
-      }
-      return sum;
-    }, 0);
-    
-    return totalCoefficients > 0 ? (total / totalCoefficients).toFixed(2) : 0;
-  };
 
   return (
     <div style={{}}>
@@ -97,7 +53,6 @@ export const YearGradesTab:FC<YearGradesTabProps> = ({userId}) => {
             </div>
           </Space>
         </Card> */}
-
         <Table
           size="small"
           loading={isPending}
@@ -157,7 +112,20 @@ export const YearGradesTab:FC<YearGradesTabProps> = ({userId}) => {
             },
           ]}
           dataSource={data?.results}
-          pagination={false}
+          rowKey="id"
+          pagination={{
+            defaultPageSize: 25,
+            pageSizeOptions: [25, 50, 75, 100],
+            size: "small",
+            showSizeChanger: true,
+            total: data?.count,
+            current: page !== 0 ? page : 1,
+            pageSize: pageSize !== 0 ? pageSize : 25,
+            onChange: (page, pageSize) => {
+              setPage(page);
+              setPageSize(pageSize);
+            },
+          }}
         />
       </Space>
     </div>

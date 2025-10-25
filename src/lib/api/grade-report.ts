@@ -1,10 +1,20 @@
 import api from "../fetcher";
 
 
-export async function getStudentPeriodGrades(searchParams: { userId: number }) {
-  const {userId}=searchParams
+export async function getStudentPeriodGrades(searchParams: {
+  userId: number;
+  page?: number;
+  pageSize?: number;
+}) {
+  const { userId, page, pageSize } = searchParams;
   const query = new URLSearchParams();
   query.append("user__id", userId.toString());
+  if (page !== undefined) {
+    query.append("page", page.toString());
+  }
+  if (pageSize !== undefined) {
+    query.append("page_size", pageSize.toString());
+  }
   const res = await api.get(`/jury/period-grades/?${query.toString()}`);
   return res.data as {
     count: number;
@@ -14,10 +24,20 @@ export async function getStudentPeriodGrades(searchParams: { userId: number }) {
   };
 }
 
-export async function getStudentYearGrades(searchParams: { userId: number }) {
-  const {userId}=searchParams
+export async function getStudentYearGrades(searchParams: {
+  userId: number;
+  page?: number;
+  pageSize?: number;
+}) {
+  const { userId, page, pageSize } = searchParams;
   const query = new URLSearchParams();
   query.append("user__id", userId.toString());
+  if (page !== undefined) {
+    query.append("page", page.toString());
+  }
+  if (pageSize !== undefined) {
+    query.append("page_size", pageSize.toString());
+  }
   const res = await api.get(`/jury/year-grades/?${query.toString()}`);
   return res.data as {
     count: number;
