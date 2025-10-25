@@ -1,31 +1,54 @@
 "use client";
 
 import {
-  Typography,
-  Statistic,
-  Row,
-  Col,
-  Card,
-  Flex,
-  Progress,
   Tabs,
 } from "antd";
-import { CoursesTab } from "./_components/courses/coursesTab";
-import { useQueryState } from "nuqs";
-import { GradesTab } from "./_components/grades/gradesTab";
-import { AttendanceTab } from "./_components/attendance/attendanceTab";
+import { parseAsStringEnum, useQueryState } from "nuqs";
+import { PeriodGradesTab } from "./_components/periodGradesTab";
+import { YearGradesTab } from "./_components/yearGradesTab";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { getYearEnrollment } from "@/lib/api";
 
 export default function Page() {
-  const [selectedTab, setSelectedTab] = useQueryState("tab");
+  const [selectedTab, setSelectedTab] = useQueryState(
+    "tab",
+    parseAsStringEnum(["year-grade", "period-grade"]).withDefault("year-grade")
+  );
+  const { studentId } = useParams();
+    const {
+      data: enrolledStudent,
+      isPending,
+      isError,
+    } = useQuery({
+      queryKey: ["enrollment", studentId],
+      queryFn: ({ queryKey }) => getYearEnrollment(Number(queryKey[1])),
+      enabled: !!studentId,
+    });
   
   return (
-    <div className="p-6">
-      <Typography.Title type="secondary" level={5} style={{ marginBottom: 16 }}>
-        Parcours académique
-      </Typography.Title>
+    <div className="px-6">
+      <Tabs
+        type="line"
+        items={[
+          {
+            key: "year-grade",
+            label: "Rélevé de notes annuel",
+            children: <YearGradesTab userId={enrolledStudent?.user.id} />,
+          },
+          {
+            key: "period-grade",
+            label: "Rélevé de notes par période",
+            children: <PeriodGradesTab userId={enrolledStudent?.user.id} />,
+          },
+        ]}
+        onChange={(key) => {
+          setSelectedTab(key as "year-grade" | "period-grade");
+        }}
+      />
 
       {/* Résumé des crédits */}
-      <Row gutter={[16, 16]} className="mb-4">
+      {/* <Row gutter={[16, 16]} className="mb-4">
         <Col xs={24} sm={24} md={12} lg={6}>
           <Card>
             <Flex justify="space-between">
@@ -61,24 +84,7 @@ export default function Page() {
             </Flex>
           </Card>
         </Col>
-      </Row>
-      <Tabs
-        items={[
-          { key: "courses", label: "Cours", children: <CoursesTab /> },
-          {
-            key: "grades",
-            label: "Relevé de notes",
-            children: <GradesTab />,
-          },
-          {
-            key: "attendance",
-            label: "Attestation de fréquentation",
-            children: <AttendanceTab />,
-          },
-        ]}
-        activeKey={selectedTab || "courses"}
-        onChange={(key) => setSelectedTab(key)}
-      />
+      </Row> */}
     </div>
   );
 }

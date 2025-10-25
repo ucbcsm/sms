@@ -1,10 +1,23 @@
-import React from 'react';
-import { Card, Table, Tag, Space, Typography, Statistic, Divider } from 'antd';
+import React, { FC } from 'react';
+import { Card, Table, Tag, Space, Typography, Statistic, Divider, Tabs } from 'antd';
 import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
+import { getStudentYearGrades } from '@/lib/api/grade-report';
+import { record } from 'zod';
 
-const { Title, Text } = Typography;
+type YearGradesTabProps={
+  userId?:number;
+}
 
-export const GradesTab = () => {
+export const YearGradesTab:FC<YearGradesTabProps> = ({userId}) => {
+   const { data, isPending } = useQuery({
+     queryKey: ["student-year-grades", userId],
+     queryFn: ({ queryKey }) =>
+       getStudentYearGrades({ userId: Number(queryKey[1]) }),
+     enabled: !!userId,
+   });
+
+  console.log(data);
   // Données simulées pour le relevé de notes
   const gradesData = [
     {
@@ -62,7 +75,7 @@ export const GradesTab = () => {
   return (
     <div style={{}}>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
-        <Card>
+        {/* <Card>
           <Space size="large">
             <div>
               <Statistic
@@ -83,49 +96,51 @@ export const GradesTab = () => {
               />
             </div>
           </Space>
-        </Card>
+        </Card> */}
 
         <Table
+          size="small"
+          loading={isPending}
           columns={[
-            {
-              title: "Semestre",
-              dataIndex: "semester",
-              key: "semester",
-            },
             {
               title: "Année",
               dataIndex: "year",
               key: "year",
+              render: (_, record) => record.student.academic_year.name,
+              width: 86,
+            },
+            {
+              key: "session",
+              dataIndex: "session",
+              title: "Session",
+            },
+            {
+              key: "moment",
+              dataIndex: "moment",
+              title: "Moment",
             },
             {
               title: "Moyenne",
-              dataIndex: "average",
-              key: "average",
-              render: (average) => <Text strong>{average}/20</Text>,
+              dataIndex: "weighted_average",
+              key: "weighted_average",
+              render: (value) => <Typography.Text>{value}/20</Typography.Text>,
             },
             {
-              title: "Matières validées",
-              dataIndex: "validatedSubjects",
-              key: "validatedSubjects",
+              title: "Pourcentage",
+              dataIndex: "percentage",
+              key: "percentage",
+              render: (value) => value,
             },
             {
-              title: "Statut",
-              dataIndex: "status",
-              key: "status",
-              render: (status) => (
-                <Tag
-                  icon={
-                    status === "Validé" ? (
-                      <CheckCircleOutlined />
-                    ) : (
-                      <ClockCircleOutlined />
-                    )
-                  }
-                  color={status === "Validé" ? "success" : "processing"}
-                >
-                  {status}
-                </Tag>
-              ),
+              key: "grade_letter",
+              dataIndex: "grade_letter",
+              title: "Grade",
+              render: (_, record) => record.grade_letter.grade_letter,
+            },
+            {
+              key: "final_decision",
+              dataIndex: "final_decision",
+              title: "Décision",
             },
             {
               title: "Télécharger",
@@ -141,24 +156,7 @@ export const GradesTab = () => {
               ),
             },
           ]}
-          dataSource={[
-            {
-              key: "1",
-              semester: "Semestre 1",
-              year: "2023-2024",
-              average: "15.67",
-              validatedSubjects: 3,
-              status: "Validé",
-            },
-            {
-              key: "2",
-              semester: "Semestre 2",
-              year: "2023-2024",
-              average: "14.25",
-              validatedSubjects: 2,
-              status: "En cours",
-            },
-          ]}
+          dataSource={data?.results}
           pagination={false}
         />
       </Space>
