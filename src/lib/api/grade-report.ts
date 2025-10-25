@@ -47,7 +47,7 @@ export async function getStudentYearGrades(searchParams: {
   };
 }
 
-export async function getGradeReport(searchParams: {
+export async function getStudentGradeReport(searchParams: {
   mode?: "PERIOD-GRADE" | "YEAR-GRADE";
   period_grade__id?: number;
   year_grade__id?: number;

@@ -4,7 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getStudentYearGrades } from "@/lib/api/grade-report";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { getDecisionColor, getDecisionText, getMomentText, getSessionText } from "@/lib/api";
+import {
+  getDecisionColor,
+  getDecisionText,
+  getMomentText,
+  getSessionText,
+} from "@/lib/api";
 
 type YearGradesTabProps = {
   userId?: number;
@@ -15,6 +20,11 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
   const [pageSize, setPageSize] = useQueryState(
     "size",
     parseAsInteger.withDefault(0)
+  );
+
+  const [yearGradeId, setYearGradeId] = useQueryState(
+    "year-period",
+    parseAsInteger
   );
 
   const { data, isPending } = useQuery({
@@ -144,6 +154,7 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
                   color="primary"
                   variant="dashed"
                   style={{ boxShadow: "none" }}
+                  onClick={() => setYearGradeId(record.id)}
                 >
                   Voir détails
                 </Button>

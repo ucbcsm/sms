@@ -1,6 +1,14 @@
 "use client";
 import { getYearEnrollment } from "@/lib/api";
-import { CloseOutlined } from "@ant-design/icons";
+import {
+  CloseOutlined,
+  ContactsOutlined,
+  DashboardOutlined,
+  DollarOutlined,
+  FolderOutlined,
+  RedoOutlined,
+  SolutionOutlined,
+} from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
@@ -121,12 +129,14 @@ export default function StudentLayout({
             {
               key: `/student/${studentId}`,
               label: <Link href={`/student/${studentId}`}>Aperçu</Link>,
+              icon: <DashboardOutlined />,
             },
             {
               key: `/student/${studentId}/documents`,
               label: (
                 <Link href={`/student/${studentId}/documents`}>Documents</Link>
               ),
+              icon: <FolderOutlined />,
             },
             {
               key: `/student/${studentId}/path`,
@@ -135,6 +145,7 @@ export default function StudentLayout({
                   Rélevés de notes
                 </Link>
               ),
+              icon: <SolutionOutlined />,
             },
             {
               key: `/student/${studentId}/fees`,
@@ -143,16 +154,17 @@ export default function StudentLayout({
                   Frais & Paiements
                 </Link>
               ),
+              icon: <DollarOutlined />,
             },
             {
-              key: `/student/${studentId}/discipline`,
+              key: `/student/${studentId}/retake`,
               label: (
-                <Link href={`/student/${studentId}/discipline`}>
-                  Discipline
+                <Link href={`/student/${studentId}/retake`}>
+                  Cours à reprendre
                 </Link>
               ),
+              icon: <RedoOutlined />,
             },
-
             {
               key: `/student/${studentId}/student-card`,
               label: (
@@ -160,6 +172,7 @@ export default function StudentLayout({
                   Carte d&apos;étudiant
                 </Link>
               ),
+              icon: <ContactsOutlined />,
             },
           ]}
         />

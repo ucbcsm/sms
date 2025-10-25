@@ -1,10 +1,18 @@
+"use client";
+
 import React, { FC } from "react";
 import { Table, Space, Typography, Button, Popover, Tag } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { getStudentPeriodGrades } from "@/lib/api/grade-report";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { getDecisionColor, getDecisionText, getMomentText, getSessionText } from "@/lib/api";
+import {
+  getDecisionColor,
+  getDecisionText,
+  getMomentText,
+  getSessionText,
+} from "@/lib/api";
+import { ViewPeriodGradeReport } from "./viewPeriodGradeReport";
 
 type PeriodGradesTabProps = {
   userId?: number;
@@ -28,7 +36,6 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
     enabled: !!userId,
   });
 
-  console.log(data);
 
   return (
     <div style={{}}>
@@ -150,16 +157,9 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               title: "",
               key: "actions",
               render: (_, record) => (
-                <Button
-                  color="primary"
-                  variant="dashed"
-                  style={{ boxShadow: "none" }}
-                >
-                  Voir détails
-                </Button>
+                <ViewPeriodGradeReport periodGradeId={record.id} />
               ),
               width: 116,
-              
             },
           ]}
           dataSource={data?.results}
