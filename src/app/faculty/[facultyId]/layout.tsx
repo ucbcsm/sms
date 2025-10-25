@@ -11,7 +11,6 @@ import {
   LoadingOutlined,
   LogoutOutlined,
   MenuOutlined,
-  QuestionOutlined,
   SubnodeOutlined,
   UserOutlined,
 } from "@ant-design/icons";

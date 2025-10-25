@@ -71,6 +71,14 @@ export function getDecisionText(decision: "passed" | "postponed") {
   }
   return "";
 }
+export function getDecisionColor(decision: "passed" | "postponed") {
+  if (decision === "passed") {
+    return "success";
+  } else if (decision === "postponed") {
+    return "error";
+  }
+  return "default";
+}
 
 export async function deleteGradeFromGrid(periodEnrollmentId: number) {
   const res = await api.delete(`/jury/period-grades/${periodEnrollmentId}/`);

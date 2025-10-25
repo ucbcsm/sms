@@ -1,7 +1,9 @@
 "use client";
 
 import {
+  Card,
   Tabs,
+  Typography,
 } from "antd";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { PeriodGradesTab } from "./_components/periodGradesTab";
@@ -27,7 +29,8 @@ export default function Page() {
     });
   
   return (
-    <div className="px-6">
+    <Card variant="borderless" style={{ boxShadow: "none" }}>
+      <Typography.Title level={3}>Rélevés de notes</Typography.Title>
       <Tabs
         defaultActiveKey={selectedTab}
         activeKey={selectedTab}
@@ -35,12 +38,12 @@ export default function Page() {
         items={[
           {
             key: "year-grade",
-            label: "Rélevé de notes annuel",
+            label: "Annuels",
             children: <YearGradesTab userId={enrolledStudent?.user.id} />,
           },
           {
             key: "period-grade",
-            label: "Rélevé de notes par période",
+            label: "Périodiques",
             children: <PeriodGradesTab userId={enrolledStudent?.user.id} />,
           },
         ]}
@@ -48,7 +51,8 @@ export default function Page() {
           setSelectedTab(key as "year-grade" | "period-grade");
         }}
       />
-
+    </Card>
+  );
       {/* Résumé des crédits */}
       {/* <Row gutter={[16, 16]} className="mb-4">
         <Col xs={24} sm={24} md={12} lg={6}>
@@ -87,6 +91,6 @@ export default function Page() {
           </Card>
         </Col>
       </Row> */}
-    </div>
-  );
+
+  
 }

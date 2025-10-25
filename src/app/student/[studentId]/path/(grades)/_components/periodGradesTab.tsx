@@ -1,9 +1,10 @@
 import React, { FC } from "react";
-import { Table, Space, Typography, Button, Popover } from "antd";
+import { Table, Space, Typography, Button, Popover, Tag } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { getStudentPeriodGrades } from "@/lib/api/grade-report";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { getDecisionColor, getDecisionText, getMomentText, getSessionText } from "@/lib/api";
 
 type PeriodGradesTabProps = {
   userId?: number;
@@ -78,23 +79,30 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               key: "session",
               dataIndex: "session",
               title: "Session",
+              render: (_, record) => getSessionText(record.session),
+              width: 120,
             },
             {
               key: "moment",
               dataIndex: "moment",
               title: "Moment",
+              render: (_, record) => getMomentText(record.moment),
+              width: 120,
             },
             {
               title: "Moyenne",
               dataIndex: "weighted_average",
               key: "weighted_average",
               render: (value) => <Typography.Text>{value}/20</Typography.Text>,
+              width: 80,
             },
             {
               title: "Pourcentage",
               dataIndex: "percentage",
               key: "percentage",
               render: (value) => value,
+              width: 102,
+              align: "right",
             },
             {
               key: "grade_letter",
@@ -126,6 +134,16 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               key: "period_decision",
               dataIndex: "period_decision",
               title: "Décision",
+              render: (_, record) => (
+                <Tag
+                  color={getDecisionColor(record.period_decision)}
+                  bordered={false}
+                  style={{ marginRight: 0, width: "100%", textAlign: "center" }}
+                >
+                  {getDecisionText(record.period_decision)}
+                </Tag>
+              ),
+              width: 96,
             },
             {
               title: "",
@@ -139,11 +157,12 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
                   Voir détails
                 </Button>
               ),
-              width: 102,
+              width: 112,
             },
           ]}
           dataSource={data?.results}
           rowKey="id"
+          scroll={{ y: "calc(100vh - 448px)" }}
           pagination={{
             defaultPageSize: 25,
             pageSizeOptions: [25, 50, 75, 100],

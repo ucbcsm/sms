@@ -1,9 +1,10 @@
 import React, { FC } from "react";
-import { Table, Space, Typography, Button, Popover } from "antd";
+import { Table, Space, Typography, Button, Popover, Tag } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { getStudentYearGrades } from "@/lib/api/grade-report";
 import { parseAsInteger, useQueryState } from "nuqs";
 import { QuestionCircleOutlined } from "@ant-design/icons";
+import { getDecisionColor, getDecisionText, getMomentText, getSessionText } from "@/lib/api";
 
 type YearGradesTabProps = {
   userId?: number;
@@ -63,29 +64,35 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
               dataIndex: "year",
               key: "year",
               render: (_, record) => record.student.academic_year.name,
-              width: 86,
             },
             {
               key: "session",
               dataIndex: "session",
               title: "Session",
+              render: (_, record) => getSessionText(record.session),
+              width: 120,
             },
             {
               key: "moment",
               dataIndex: "moment",
               title: "Moment",
+              render: (_, record) => getMomentText(record.moment),
+              width: 120,
             },
             {
               title: "Moyenne",
               dataIndex: "weighted_average",
               key: "weighted_average",
               render: (value) => <Typography.Text>{value}/20</Typography.Text>,
+              width: 80,
             },
             {
               title: "Pourcentage",
               dataIndex: "percentage",
               key: "percentage",
               render: (value) => value,
+              width: 102,
+              align: "right",
             },
             {
               key: "grade_letter",
@@ -117,6 +124,16 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
               key: "final_decision",
               dataIndex: "final_decision",
               title: "Décision",
+              render: (_, record) => (
+                <Tag
+                  color={getDecisionColor(record.final_decision)}
+                  bordered={false}
+                  style={{ marginRight: 0, width: "100%", textAlign: "center" }}
+                >
+                  {getDecisionText(record.final_decision)}
+                </Tag>
+              ),
+              width: 96,
             },
             {
               title: "",
