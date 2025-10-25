@@ -132,7 +132,7 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
           }
         />
       </Form.Item>
-      <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>
+      <Form.Item label="Genre" name="gender" rules={[{ required: true }]}>
         <Radio.Group
           options={[
             { value: "M", label: "Homme" },
@@ -176,6 +176,7 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
         label="Nationalité"
         name="nationality"
         rules={[{ required: true }]}
+        tooltip="Sélectionnez votre pays"
       >
         <Select
           placeholder="Nationalité"

@@ -49,7 +49,7 @@ export const Step4: FC<Props> = ({ setStep }) => {
         <Input placeholder="Ville actuelle" />
       </Form.Item>
       <Form.Item
-        label="Municipalité actuelle"
+        label="Commune actuelle"
         name="current_municipality"
         rules={[{ required: true }]}
       >

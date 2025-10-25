@@ -1,16 +1,15 @@
-import React, { FC } from 'react';
-import { Table, Space, Typography} from 'antd';
-import { useQuery } from '@tanstack/react-query';
-import { getStudentPeriodGrades } from '@/lib/api/grade-report';
-import { parseAsInteger, useQueryState } from 'nuqs';
+import React, { FC } from "react";
+import { Table, Space, Typography, Button, Popover } from "antd";
+import { useQuery } from "@tanstack/react-query";
+import { getStudentPeriodGrades } from "@/lib/api/grade-report";
+import { parseAsInteger, useQueryState } from "nuqs";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
-type PeriodGradesTabProps={
-  userId?:number
-}
-
+type PeriodGradesTabProps = {
+  userId?: number;
+};
 
 export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
-
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
   const [pageSize, setPageSize] = useQueryState(
     "size",
@@ -101,7 +100,27 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               key: "grade_letter",
               dataIndex: "grade_letter",
               title: "Grade",
-              render: (_, record) => record.grade_letter.grade_letter,
+              render: (_, record) => (
+                <Space>
+                  <Typography.Text strong>
+                    {record.grade_letter.grade_letter}
+                  </Typography.Text>
+                  {record.grade_letter?.grade_letter && (
+                    <Popover
+                      content={record.grade_letter?.appreciation}
+                      title="Appréciation"
+                    >
+                      <Button
+                        type="text"
+                        icon={<QuestionCircleOutlined />}
+                        shape="circle"
+                        size="small"
+                      />
+                    </Popover>
+                  )}
+                </Space>
+              ),
+              width: 74,
             },
             {
               key: "period_decision",
@@ -109,34 +128,35 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               title: "Décision",
             },
             {
-              title: "Télécharger",
-              key: "download",
+              title: "",
+              key: "actions",
               render: (_, record) => (
-                <a
-                  href={`/api/grades/download?semester=${record.semester}&year=${record.year}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Button
+                  color="primary"
+                  variant="dashed"
+                  style={{ boxShadow: "none" }}
                 >
-                  Télécharger
-                </a>
+                  Voir détails
+                </Button>
               ),
+              width: 102,
             },
           ]}
           dataSource={data?.results}
           rowKey="id"
           pagination={{
-        defaultPageSize: 25,
-        pageSizeOptions: [25, 50, 75, 100],
-        size: "small",
-        showSizeChanger: true,
-        total: data?.count,
-        current: page !== 0 ? page : 1,
-        pageSize: pageSize !== 0 ? pageSize : 25,
-        onChange: (page, pageSize) => {
-          setPage(page);
-          setPageSize(pageSize);
-        },
-      }}
+            defaultPageSize: 25,
+            pageSizeOptions: [25, 50, 75, 100],
+            size: "small",
+            showSizeChanger: true,
+            total: data?.count,
+            current: page !== 0 ? page : 1,
+            pageSize: pageSize !== 0 ? pageSize : 25,
+            onChange: (page, pageSize) => {
+              setPage(page);
+              setPageSize(pageSize);
+            },
+          }}
         />
       </Space>
     </div>

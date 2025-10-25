@@ -851,3 +851,379 @@ export const LetterGrading = z.object({
 });
 
 export type LetterGrading = z.infer<typeof LetterGrading>;
+export const GradeClass = z.object({
+  id: z.number(),
+  student: PeriodEnrollment,
+  jury: Jury,
+  course: TaughtCourse,
+  continuous_assessment: z.number().nullable(),
+  exam: z.number().nullable(),
+  total: z.number(),
+  grade_letter: LetterGrading,
+  earned_credits: z.number(),
+  validation: z.enum(["validated", "no_validated"]),
+  moment: z.enum(["before_appeal", "after_appeal"]),
+  session: z.enum(["main_session", "retake_session"]),
+  status: z.enum(["validated", "pending"]),
+  is_retaken: z.boolean(),
+});
+
+export type GradeClass = z.infer<typeof GradeClass>;
+
+export type NewGradeClass = Omit<
+  GradeClass,
+  | "id"
+  | "status"
+  | "is_retaken"
+  | "moment"
+  | "session"
+  | "validation"
+  | "earned_credits"
+  | "grade_letter"
+  | "total"
+  | "course"
+  | "jury"
+  | "continuous_assessment"
+  | "exam"
+  | "student"
+> & {
+  id?: number;
+  status?: "validated" | "pending";
+  is_retaken?: boolean;
+  moment?: "before_appeal" | "after_appeal";
+  session?: "main_session" | "retake_session";
+  validation?: "validated" | "no_validated";
+  earned_credits?: number;
+  grade_letter?: LetterGrading;
+  total?: number;
+  course?: TaughtCourse;
+  jury?: Jury;
+  continuous_assessment?: number | null;
+  exam?: number | null;
+  student?: PeriodEnrollment;
+};
+
+export const TeachingUnitGrades = z.object({
+  id: z.number(),
+  jury: Jury,
+  student: PeriodEnrollment,
+  teaching_unit: TeachingUnit,
+  course_grades_list: z.array(GradeClass),
+  credit_sum: z.number(),
+  validated_credit_sum: z.number(),
+  unvalidated_credit_sum: z.number(),
+  weighted_average: z.number(),
+  percentage: z.number(),
+  grade_letter: LetterGrading,
+  moment: z.enum(["before_appeal", "after_appeal"]),
+  session: z.enum(["main_session", "retake_session"]),
+  validated_courses_sum: z.number(),
+  unvalidated_courses_sum: z.number(),
+  validation_status: z.enum(["validated", "no_validated"]),
+});
+
+export type TeachingUnitGrades = z.infer<typeof TeachingUnitGrades>;
+
+export const PeriodGrades = z.object({
+  id: z.number(),
+  jury: Jury,
+  student: PeriodEnrollment,
+  period: Period,
+  teaching_unit_grades_list: z.array(TeachingUnitGrades),
+  credit_sum: z.number(),
+  validated_credit_sum: z.number(),
+  unvalidated_credit_sum: z.number(),
+  weighted_average: z.number(),
+  percentage: z.number(),
+  grade_letter: LetterGrading,
+  moment: z.enum(["before_appeal", "after_appeal"]),
+  session: z.enum(["main_session", "retake_session"]),
+  validated_TU_sum: z.number(),
+  unvalidated_TU_sum: z.number(),
+  period_decision: z.enum(["passed", "postponed"]),
+});
+
+export type PeriodGrades = z.infer<typeof PeriodGrades>;
+
+export const YearGrades = z.object({
+  id: z.number(),
+  student: Enrollment,
+  jury: Jury,
+  period_grade_list: z.array(PeriodGrades),
+  credit_sum: z.number(),
+  validated_credit_sum: z.number(),
+  unvalidated_credit_sum: z.number(),
+  weighted_average: z.number(),
+  percentage: z.number(),
+  grade_letter: LetterGrading,
+  moment: z.enum(["before_appeal", "after_appeal"]),
+  session: z.enum(["main_session", "retake_session"]),
+  validated_TU_sum: z.number(),
+  unvalidated_TU_sum: z.number(),
+  final_decision: z.enum(["passed", "postponed"]),
+});
+
+export type YearGrades = z.infer<typeof YearGrades>;
+
+export const Announcement = z.object({
+  id: z.number(),
+  academic_year: Year,
+  period: Period,
+  faculty: Faculty,
+  departement: Department,
+  class_year: Class,
+  total_students: z.number(),
+  graduated_students: z.number(),
+  non_graduated_students: z.number(),
+  moment: z.enum(["before_appeal", "after_appeal"]),
+  session: z.enum(["main_session", "retake_session"]),
+  date_created: z.string(),
+  date_updated: z.string(),
+  status: z.enum(["locked", "unlocked"]),
+  mode:z.enum(["ALL-STUDENTS", "SOME-STUDENTS"])
+});
+
+export type Announcement = z.infer<typeof Announcement>;
+
+
+export const RetakeCourseReason = z.object({
+  id: z.number(),
+  reason: z.enum(["low_attendance", "missing_course", "failed_course"]),
+  academic_year: Year,
+  available_course: Course,
+  class_year: Class,
+});
+
+export type RetakeCourseReason = z.infer<typeof RetakeCourseReason>;
+
+export const RetakeCourse = z.object({
+  id: z.number(),
+  user: User,
+  retake_course_list: z.array(RetakeCourseReason),
+  retake_course_done_list: z.array(RetakeCourseReason),
+  faculty: Faculty,
+  departement: Department,
+});
+
+export type RetakeCourse = z.infer<typeof RetakeCourse>;
+
+export const ResultGrid = z.object({
+  HeaderData: z.object({
+    no_retaken: z.object({
+      course_list: z.array(z.array(TaughtCourse)),
+      credits: z.array(z.array(z.number())),
+      period_list: z.array(
+        z.object({
+          course_counter: z.number(),
+          period: Period,
+          teaching_unit_counter: z.number(),
+        })
+      ),
+      teaching_unit_list: z.array(
+        z.array(
+          z.object({
+            course_counter: z.number(),
+            course_id_list: z.array(z.number()),
+            teaching_unit: TeachingUnit,
+          })
+        )
+      ),
+    }),
+    retaken: z.object({
+      course_list: z.array(TaughtCourse),
+      credits: z.array(number),
+      header: z.array(
+        z.object({
+          course_counter: z.number(),
+          retake_title: z.string(),
+          teaching_unit_counter: z.number(),
+        })
+      ),
+      teaching_unit_list: z.array(
+        z.object({
+          course_counter: z.number(),
+          course_id_list: z.array(number),
+          teaching_unit: TeachingUnit,
+        })
+      ),
+    }),
+  }),
+  BodyDataList: z.array(
+    z.object({
+      credit_sum: z.number(),
+      decision: z.enum(["passed", "postponed"]),
+      first_name: z.string(),
+      gender: z.enum(["M", "F"]),
+      grade_letter: z.string(),
+      id: z.number(),
+      last_name: z.string(),
+      matricule: z.string(),
+      year_enrollment_id: z.number(),
+      user_id: z.number(),
+      percentage: z.number(),
+      surname: z.string(),
+      unvalidated_TU_count: z.number(),
+      unvalidated_credit_sum: z.number(),
+      validated_TU_count: z.number(),
+      validated_courses_count: z.number(),
+      unvalidated_courses_count: z.number(),
+      validated_credit_sum: z.number(),
+      weighted_average: z.number(),
+      no_retaken: z.object({
+        continuous_assessments: z.array(z.array(z.number())),
+        course_decisions: z.array(
+          z.array(z.enum(["validated", "no_validated"]))
+        ),
+        earned_credits: z.array(z.array(z.number())),
+        exams: z.array(z.array(z.number())),
+        grade_letters: z.array(z.array(z.string())),
+        teaching_unit_decisions: z.array(
+          z.array(
+            z.object({
+              cols_counter: z.number(),
+              name: z.string(),
+              value: z.enum(["validated", "no_validated"]),
+            })
+          )
+        ),
+        teaching_units: z.array(z.array(z.number())),
+        totals: z.array(z.array(z.number())),
+      }),
+      retaken: z.object({
+        continuous_assessments: z.array(z.number()),
+        course_decisions: z.array(z.enum(["validated", "no_validated"])),
+        earned_credits: z.array(z.number()),
+        exams: z.array(z.number()),
+        grade_letters: z.array(string),
+        teaching_unit_decisions: z.array(
+          z.object({
+            cols_counter: z.number(),
+            name: z.string(),
+            value: z.enum(["validated", "no_validated"]),
+          })
+        ),
+        teaching_units: z.array(z.number()),
+        totals: z.array(z.number()),
+      }),
+    })
+  ),
+});
+
+export type ResultGrid = z.infer<typeof ResultGrid>;
+
+
+export const Appeal = z.object({
+  id: z.number(),
+  student: Enrollment,
+  jury: Jury,
+  subject: z.string(),
+  description: z.string(),
+  submission_date: z.string(),
+  courses: z.array(TaughtCourse),
+  status: z.enum([
+    "submitted",
+    "in_progress",
+    "processed",
+    "rejected",
+    "archived",
+  ]),
+  response: z.string().nullable(),
+  file: z.string().nullable(),
+  session: z.enum(["main_session", "retake_session"]),
+});
+
+export type Appeal = z.infer<typeof Appeal>;
+
+
+export type PeriodResultPresentionItem={
+    decision: "passed" | "postponed";
+    expected_total_credit: number;
+    first_name: string;
+    gender: "M" | "F";
+    grade: string;
+    id: number;
+    id_user_obj: number;
+    last_name: string;
+    matricule: string;
+    percentage: number;
+    surname: string;
+    unvalidated_credit_sum: number;
+    validated_credit_sum: number;
+    weighted_average: number;
+  }
+
+export type YearResultPresentationItem = {
+  decision: "passed" | "postponed";
+  expected_total_credit: number;
+  first_name: string;
+  gender: "M" | "F";
+  grade: string;
+  id: number;
+  id_user_obj: number;
+  last_name: string;
+  matricule: string;
+  percentage: number;
+  period_0_acronym: string;
+  period_0_total_credit: number;
+  period_0_validated_credit_sum: number;
+  period_0_weighted_average: number;
+  period_1_acronym: string;
+  period_1_total_credit: number;
+  period_1_validated_credit_sum: number;
+  period_1_weighted_average: number;
+  period_2_acronym: string;
+  period_2_total_credit: number;
+  period_2_validated_credit_sum: number;
+  period_2_weighted_average: number;
+  surname: string;
+  validated_credit_total: number;
+  weighted_average: number;
+};
+
+const DeliberationMinutesDataBodyItem = z.object({
+  title: z.string(),
+  student_list: z.array(
+    z.object({
+      decision: z.enum(["passed", "postponed"]),
+      first_name: z.string(),
+      gender: z.enum(["M", "F"]),
+      grade: z.string(),
+      id: z.number(),
+      last_name: z.string(),
+      matricule: z.string(),
+      percentage: z.number(),
+      surname: z.string(),
+      weighted_average: z.number(),
+    })
+  ),
+});
+
+export const DeliberationMinutesData = z.object({
+  body: z.object({
+    A: DeliberationMinutesDataBodyItem,
+    B: DeliberationMinutesDataBodyItem,
+    C: DeliberationMinutesDataBodyItem,
+    D: DeliberationMinutesDataBodyItem,
+    E: DeliberationMinutesDataBodyItem,
+    F: DeliberationMinutesDataBodyItem,
+    G: DeliberationMinutesDataBodyItem,
+  }),
+  general_statistics: z.object({
+    female_count: z.number(),
+    male_count: z.number(),
+    passed_count: z.number(),
+    postponed_count: z.number(),
+    total_class_announced: z.number(),
+    total_class_enrolled: z.number(),
+  }),
+  grade_statistics: z.object({
+    A: z.object({ count: z.number(), percentage: z.number() }),
+    B: z.object({ count: z.number(), percentage: z.number() }),
+    C: z.object({ count: z.number(), percentage: z.number() }),
+    D: z.object({ count: z.number(), percentage: z.number() }),
+    E: z.object({ count: z.number(), percentage: z.number() }),
+    F: z.object({ count: z.number(), percentage: z.number() }),
+    G: z.object({ count: z.number(), percentage: z.number() }),
+  }),
+});
+export type DeliberationMinutesData = z.infer<typeof DeliberationMinutesData>;

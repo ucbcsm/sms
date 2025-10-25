@@ -104,3 +104,11 @@ export const getCourseEnrollmentsCountByStatus = (
 ) => {
   return getCourseEnrollmentsByStatus(enrollments, status)?.length || 0;
 };
+
+export const getCourseEnrollmentsAsOptions = (enrollments?: CourseEnrollment[]) => {
+  const options = enrollments?.map((item) => ({
+    value: item.id,
+    label: `[${item.student.year_enrollment.user.matricule}] ${item.student.year_enrollment.user.first_name} ${item.student.year_enrollment.user.last_name} ${item.student.year_enrollment.user.surname}`,
+  }));
+  return options;
+};
