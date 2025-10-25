@@ -27,7 +27,7 @@ export default function StudentLayout({
     // });
   return (
     <Layout>
-      <Layout.Header
+      {/* <Layout.Header
         style={{
           background: colorBgContainer,
           padding: "0 28px",
@@ -43,9 +43,9 @@ export default function StudentLayout({
             Parcours académique
           </Typography.Title>
         </Space>
-      </Layout.Header>
+      </Layout.Header> */}
       <Layout>
-        <Layout.Sider
+        {/* <Layout.Sider
           width={260}
           style={{
             borderRight: `1px solid ${colorBorderSecondary}`,
@@ -89,7 +89,7 @@ export default function StudentLayout({
               },
             ]}
           />
-        </Layout.Sider>
+        </Layout.Sider> */}
         <Layout.Content style={{ background: colorBgContainer }}>
           {children}
         </Layout.Content>

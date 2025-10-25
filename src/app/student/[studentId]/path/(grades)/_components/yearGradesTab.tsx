@@ -85,6 +85,7 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
               key: "weighted_average",
               render: (value) => <Typography.Text>{value}/20</Typography.Text>,
               width: 80,
+              align: "right",
             },
             {
               title: "Pourcentage",
@@ -147,11 +148,12 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
                   Voir détails
                 </Button>
               ),
-              width: 102,
+              width: 116,
             },
           ]}
           dataSource={data?.results}
           rowKey="id"
+          scroll={{ y: "calc(100vh - 380px)" }}
           pagination={{
             defaultPageSize: 25,
             pageSizeOptions: [25, 50, 75, 100],

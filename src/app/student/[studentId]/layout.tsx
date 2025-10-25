@@ -132,7 +132,7 @@ export default function StudentLayout({
               key: `/student/${studentId}/path`,
               label: (
                 <Link href={`/student/${studentId}/path`}>
-                  Parcours académique
+                  Rélevés de notes
                 </Link>
               ),
             },

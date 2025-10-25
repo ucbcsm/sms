@@ -95,6 +95,7 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               key: "weighted_average",
               render: (value) => <Typography.Text>{value}/20</Typography.Text>,
               width: 80,
+              align: "right",
             },
             {
               title: "Pourcentage",
@@ -157,12 +158,13 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
                   Voir détails
                 </Button>
               ),
-              width: 112,
+              width: 116,
+              
             },
           ]}
           dataSource={data?.results}
           rowKey="id"
-          scroll={{ y: "calc(100vh - 448px)" }}
+          scroll={{ y: "calc(100vh - 380px)" }}
           pagination={{
             defaultPageSize: 25,
             pageSizeOptions: [25, 50, 75, 100],

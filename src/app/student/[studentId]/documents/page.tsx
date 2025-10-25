@@ -29,8 +29,8 @@ export default function Page() {
         title={() => (
           <header className="flex pb-3">
             <Space>
-              <Typography.Title level={5} style={{ marginBottom: 0 }}>
-                <FolderOutlined /> Eléments du dossier
+              <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                Eléments du dossier
               </Typography.Title>
             </Space>
             <div className="flex-1" />
