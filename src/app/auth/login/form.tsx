@@ -39,8 +39,9 @@ export function LoginForm() {
     login(values)
       .then(() => {
         messageApi.success("Redirection en cours...");
+        router.push("/");
         // router.refresh()
-        window.location.reload();
+        // window.location.reload();
       })
       .catch((error) => {
         setLoading(false);

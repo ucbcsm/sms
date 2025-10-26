@@ -65,12 +65,12 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
           style={{
             padding: "16px 0 40px 28px",
             width: "100%",
-            height: "calc(100vh - 64px)",
+            height: "calc(100vh - 110px)",
             overflowY: "auto",
           }}
         >
           <Descriptions
-            title="Départements"
+            title=""
             column={1}
             items={[
               {
@@ -98,7 +98,7 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
               },
               {
                 key: "faculty",
-                label: "Faculté",
+                label: "Filière",
                 children: data?.faculty.name || "",
               },
               {

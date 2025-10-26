@@ -2,8 +2,9 @@
 
 import {
   Button,
-  Card,
+  Divider,
   Form,
+  Image,
   Layout,
   Menu,
   Skeleton,
@@ -12,7 +13,6 @@ import {
   theme,
   Typography,
 } from "antd";
-import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ReactNode } from "react";
@@ -21,7 +21,6 @@ import {
   getAllCourses,
   getClassrooms,
   getDepartmentsByFacultyId,
-  getFaculties,
   getPeriods,
   getTaughtCours,
   getTeachersByFaculty,
@@ -32,6 +31,11 @@ import {
 import { TaughtCourseDetails } from "./(dashboard)/course-details";
 import { CloseOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { LanguageSwitcher } from "@/components/languageSwitcher";
+import { SupportDrawer } from "@/components/support-drawer";
+import { AppsButton } from "@/components/appsButton";
+import { UserProfileButton } from "@/components/userProfileButton";
+import { useInstitution } from "@/hooks/use-institution";
 
 export default function FacultyLayout({
   children,
@@ -42,7 +46,8 @@ export default function FacultyLayout({
 
   const { courseId } = useParams();
   const pathname = usePathname();
-  const router = useRouter();
+
+   const {data:institution} = useInstitution();
 
   const {
     data: course,
@@ -92,100 +97,69 @@ export default function FacultyLayout({
 
   return (
     <Layout>
-      <Layout.Sider
-        width={280}
-        theme="light"
-        style={{ borderRight: `1px solid ${colorBorderSecondary}` }}
-      >
-        <div
-          style={{
-            height: 64,
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            borderBottom: `1px solid ${colorBorderSecondary}`,
-            paddingLeft: 32,
-            paddingRight: 32,
-          }}
-        >
-          <Space>
-            <Typography.Title
-              type="secondary"
-              style={{ marginBottom: 0 }}
-              level={5}
-              ellipsis={{}}
-            >
-              Gestion du cours
-            </Typography.Title>
-          </Space>
-        </div>
-        <TaughtCourseDetails
-          data={course}
-          isError={isError}
-          departments={departments}
-          periods={periods}
-          teachers={teachers}
-          courses={courses}
-          teachingUnits={teachingUnits}
-          classrooms={classrooms}
-        />
-      </Layout.Sider>
-      <Layout.Content
+      <Layout.Header
         style={{
-          padding: "0 32px 0 32px",
+          display: "flex",
+          alignItems: "center",
           background: colorBgContainer,
+          padding: "0 28px",
         }}
       >
-        <Layout.Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            padding: 0,
-          }}
-        >
-          <Space>
-            <BackButton />
-            {!isPending ? (
-              <Typography.Title
-                level={3}
-                style={{ marginBottom: 0 }}
-                ellipsis={{}}
-              >
-                {course?.available_course.name} (Cours)
-              </Typography.Title>
-            ) : (
-              <Form>
-                <Skeleton.Input active />
-              </Form>
-            )}
-          </Space>
-          <div className="flex-1" />
-          <Space>
-            {!isPending ? (
-              <Space>
-                <Typography.Text type="secondary">Statut:</Typography.Text>
-                <Tag
-                  color={getYearStatusColor(course?.status!)}
-                  style={{ border: 0 }}
-                >
-                  {getYearStatusName(course?.status!)}
-                </Tag>
-              </Space>
-            ) : (
-              <Form>
-                <Skeleton.Input active />
-              </Form>
-            )}
-            <Link href={`/faculty/${course?.faculty.id}/taught-courses`} >
-              <Button
-                type="text"
-                icon={<CloseOutlined />}
-                title="Quitter le cours"
+        <Space>
+          <Link
+            href={`/taught-course/${courseId}`}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <div className="flex items-center pr-3">
+              <Image
+                src={institution?.logo || "/ucbc-logo.png"}
+                alt="Logo"
+                width={36}
+                height="auto"
+                preview={false}
               />
-            </Link>
-          </Space>
-        </Layout.Header>
+            </div>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {institution?.acronym}
+            </Typography.Title>
+          </Link>
+          <Divider type="vertical" />
+          <Typography.Text type="secondary">Cours:</Typography.Text>
+
+          {!isPending ? (
+            <Typography.Title
+              level={5}
+              style={{ marginBottom: 0 }}
+              ellipsis={{}}
+            >
+              {course?.available_course.name}
+            </Typography.Title>
+          ) : (
+            <Form>
+              <Skeleton.Input active />
+            </Form>
+          )}
+        </Space>
+
+        <div className="flex-1" />
+        <Space>
+          {/* <Typography.Text type="secondary">
+            {enrolledStudent?.academic_year.name}
+          </Typography.Text> */}
+          <Link href={`/faculty/${course?.faculty.id}/taught-courses`}>
+            <Button
+              type="text"
+              icon={<CloseOutlined />}
+              title="Quitter le cours"
+            />
+          </Link>
+          <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
+        </Space>
+      </Layout.Header>
+      <div>
         <Menu
           mode="horizontal"
           selectedKeys={[pathname]}
@@ -236,32 +210,11 @@ export default function FacultyLayout({
             },
           ]}
         />
-
-        <div
-          style={{
-            overflowY: "auto",
-            height: "calc(100vh - 110px)",
-            paddingTop: 16,
-          }}
-        >
+      </div>
+     
+        <div>
           {children}
-          {/* <Layout.Footer
-            style={{
-              display: "flex",
-              background: colorBgContainer,
-              padding: "24px 0",
-            }}
-          >
-            <Typography.Text type="secondary">
-              © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-            </Typography.Text>
-            <div className="flex-1" />
-            <Space>
-              <Palette />
-            </Space>
-          </Layout.Footer> */}
         </div>
-      </Layout.Content>
     </Layout>
   );
 }

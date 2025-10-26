@@ -1,35 +1,26 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
   getAttendanceAbsentCount,
-  getAttendanceJustifiedCount,
   getAttendancePresentCount,
   getAttendancesListByCourse,
   getCourseEnrollments,
   getCourseEnrollmentsByStatus,
   getTaughtCours,
 } from "@/lib/api";
-import { getHSLColor } from "@/lib/utils";
 import { AttendanceList, CourseEnrollment, TaughtCourse } from "@/types";
 import {
-  CheckCircleFilled,
-  CheckCircleOutlined,
   DeleteOutlined,
-  DownOutlined,
   EditOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
   MoreOutlined,
-  PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Avatar,
   Button,
   DatePicker,
   Dropdown,
+  Layout,
   Space,
   Table,
 } from "antd";
@@ -138,27 +129,28 @@ export default function Page() {
   }
 
   return (
-    <Table
-      title={() => (
-        <header className="flex pb-3">
-          <Space>
-            <DatePicker
-              variant="filled"
-              placeholder="DD/MM/YYYY"
-              format="DD/MM/YYYY"
-            />
-          </Space>
-          <div className="flex-1" />
-          <Space>
-            <NewAttendanceListForm
-              course={course}
-              courseEnrollements={getCourseEnrollmentsByStatus(
-                enrollments,
-                "validated"
-              )}
-            />
-            <AttendanceCourseReport course={course} />
-            {/* <Dropdown
+    <Layout.Content style={{ padding: "16px 16px 0 16px" }}>
+      <Table
+        title={() => (
+          <header className="flex pb-3">
+            <Space>
+              <DatePicker
+                variant="filled"
+                placeholder="DD/MM/YYYY"
+                format="DD/MM/YYYY"
+              />
+            </Space>
+            <div className="flex-1" />
+            <Space>
+              <NewAttendanceListForm
+                course={course}
+                courseEnrollements={getCourseEnrollmentsByStatus(
+                  enrollments,
+                  "validated"
+                )}
+              />
+              <AttendanceCourseReport course={course} />
+              {/* <Dropdown
               menu={{
                 items: [
                   {
@@ -182,106 +174,107 @@ export default function Page() {
                 style={{ boxShadow: "none" }}
               />
             </Dropdown> */}
-          </Space>
-        </header>
-      )}
-      dataSource={data}
-      columns={[
-        {
-          title: "Date",
-          dataIndex: "date",
-          key: "date",
-          render: (_, record, __) =>
-            record.date
-              ? new Intl.DateTimeFormat("fr", { dateStyle: "short" }).format(
-                  new Date(`${record.date}`)
-                )
-              : "",
-          width: 100,
-        },
-        {
-          title: "Heure",
-          dataIndex: "time",
-          key: "time",
-          render: (_, record, __) => record?.time.substring(0, 5),
-        },
-        {
-          title: "Présences",
-          dataIndex: "presence_count",
-          key: "presence_count",
-          render: (_, record, __) =>
-            getAttendancePresentCount(record.student_attendance_status),
-        },
-        {
-          title: "Absences",
-          dataIndex: "absence_count",
-          key: "absence_count",
-          render: (_, record, __) =>
-            getAttendanceAbsentCount(record.student_attendance_status),
-        },
-        // {
-        //   title: "Justifiées",
-        //   dataIndex: "justified_count",
-        //   key: "justified_count",
-        //   render: (_, record, __) =>
-        //     getAttendanceJustifiedCount(record.student_attendance_status),
-        // },
-        {
-          title: "Étudiants",
-          dataIndex: "students",
-          key: "students",
-          render: (_, record, __) => record.student_attendance_status.length,
-        },
-        {
-          title: "Opérateur",
-          dataIndex: "operator",
-          key: "operator",
-          render: (_, record, __) =>
-            `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`,
-          // <Space>
-          //   {record.verified_by && (
-          //     <Avatar
-          //       style={{
-          //         backgroundColor: getHSLColor(
-          //           `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`
-          //         ),
-          //       }}
-          //     >
-          //       {record.verified_by.first_name?.charAt(0).toUpperCase()}
-          //       {record.verified_by.last_name?.charAt(0).toUpperCase()}
-          //     </Avatar>
-          //   )}{" "}
-          //   {record.verified_by.surname}
-          // </Space>
-          ellipsis: true,
-        },
-        {
-          title: "",
-          key: "actions",
-          render: (_, record, __) => {
-            return (
-              <ActionsBar
-                record={record}
-                course={course}
-                enrollments={enrollments}
-              />
-            );
+            </Space>
+          </header>
+        )}
+        dataSource={data}
+        columns={[
+          {
+            title: "Date",
+            dataIndex: "date",
+            key: "date",
+            render: (_, record, __) =>
+              record.date
+                ? new Intl.DateTimeFormat("fr", { dateStyle: "short" }).format(
+                    new Date(`${record.date}`)
+                  )
+                : "",
+            width: 100,
           },
-          width: 174,
-        },
-      ]}
-      rowKey="id"
-      rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-      rowSelection={{
-        type: "checkbox",
-      }}
-      loading={isPending}
-      size="small"
-      pagination={{
-        defaultPageSize: 25,
-        pageSizeOptions: [25, 50, 75, 100],
-        size: "small",
-      }}
-    />
+          {
+            title: "Heure",
+            dataIndex: "time",
+            key: "time",
+            render: (_, record, __) => record?.time.substring(0, 5),
+          },
+          {
+            title: "Présences",
+            dataIndex: "presence_count",
+            key: "presence_count",
+            render: (_, record, __) =>
+              getAttendancePresentCount(record.student_attendance_status),
+          },
+          {
+            title: "Absences",
+            dataIndex: "absence_count",
+            key: "absence_count",
+            render: (_, record, __) =>
+              getAttendanceAbsentCount(record.student_attendance_status),
+          },
+          // {
+          //   title: "Justifiées",
+          //   dataIndex: "justified_count",
+          //   key: "justified_count",
+          //   render: (_, record, __) =>
+          //     getAttendanceJustifiedCount(record.student_attendance_status),
+          // },
+          {
+            title: "Étudiants",
+            dataIndex: "students",
+            key: "students",
+            render: (_, record, __) => record.student_attendance_status.length,
+          },
+          {
+            title: "Opérateur",
+            dataIndex: "operator",
+            key: "operator",
+            render: (_, record, __) =>
+              `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`,
+            // <Space>
+            //   {record.verified_by && (
+            //     <Avatar
+            //       style={{
+            //         backgroundColor: getHSLColor(
+            //           `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`
+            //         ),
+            //       }}
+            //     >
+            //       {record.verified_by.first_name?.charAt(0).toUpperCase()}
+            //       {record.verified_by.last_name?.charAt(0).toUpperCase()}
+            //     </Avatar>
+            //   )}{" "}
+            //   {record.verified_by.surname}
+            // </Space>
+            ellipsis: true,
+          },
+          {
+            title: "",
+            key: "actions",
+            render: (_, record, __) => {
+              return (
+                <ActionsBar
+                  record={record}
+                  course={course}
+                  enrollments={enrollments}
+                />
+              );
+            },
+            width: 174,
+          },
+        ]}
+        rowKey="id"
+        rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+        rowSelection={{
+          type: "checkbox",
+        }}
+        loading={isPending}
+        size="small"
+        pagination={{
+          defaultPageSize: 25,
+          pageSizeOptions: [25, 50, 75, 100],
+          size: "small",
+        }}
+      />
+    </Layout.Content>
   );
 }

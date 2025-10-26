@@ -208,7 +208,7 @@ export function StudentsStatistics() {
                 />
               )}
             />
-            <Link href={"/app/enrollments"}>
+            <Link href={"/app/students"}>
             <Button
               type="primary"
               style={{ boxShadow: "none" }}

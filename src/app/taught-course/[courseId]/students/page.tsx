@@ -20,6 +20,7 @@ import {
   Checkbox,
   Col,
   Dropdown,
+  Layout,
   List,
   Row,
   Space,
@@ -233,72 +234,82 @@ export default function Page() {
   }
 
   return (
-    <Row gutter={[24, 24]} style={{marginRight:0}}>
-      <Col span={16}>
-        <ListCourseValidatedStudents
-          courseEnrollments={courseEnrollments}
-          course={course}
-          periodEnrollments={periodEnrollements}
-          departments={departments}
-          classes={classes}
-          isPending={isPending}
-        />
-      </Col>
-      <Col span={8}>
-        <div>
-          <Typography.Title level={3}>Autres</Typography.Title>
-          <Tabs
-            tabBarStyle={{}}
-            items={[
-              {
-                key: "pending",
-                label: (
-                  <Badge
-                    count={getCourseEnrollmentsCountByStatus(
-                      courseEnrollments,
-                      "pending"
-                    )}
-                    color="red"
-                    overflowCount={9}
-                  >
-                    En attentes
-                  </Badge>
-                ),
-                children: (
-                  <div>
-                    <List
-                      dataSource={getCourseEnrollmentsByStatus(
-                        courseEnrollments,
-                        "pending"
-                      )}
-                      renderItem={(item) => (
-                        <ListCourseEnrollmentItem key={item.id} item={item} />
-                      )}
-                    />
-                  </div>
-                ),
-              },
-              {
-                key: "rejected",
-                label: "Rejetées",
-                children: (
-                  <div>
-                    <List
-                      dataSource={getCourseEnrollmentsByStatus(
-                        courseEnrollments,
-                        "rejected"
-                      )}
-                      renderItem={(item) => (
-                        <ListCourseEnrollmentItem key={item.id} item={item} />
-                      )}
-                    />
-                  </div>
-                ),
-              },
-            ]}
-          />
-        </div>
-      </Col>
-    </Row>
+    <Layout>
+      <Layout.Content style={{padding:`16px 16px 0 16px`}}>
+        <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
+          <Col span={16}>
+            <ListCourseValidatedStudents
+              courseEnrollments={courseEnrollments}
+              course={course}
+              periodEnrollments={periodEnrollements}
+              departments={departments}
+              classes={classes}
+              isPending={isPending}
+            />
+          </Col>
+          <Col span={8}>
+            <div>
+              <Typography.Title level={3}>Autres</Typography.Title>
+              <Tabs
+                tabBarStyle={{}}
+                items={[
+                  {
+                    key: "pending",
+                    label: (
+                      <Badge
+                        count={getCourseEnrollmentsCountByStatus(
+                          courseEnrollments,
+                          "pending"
+                        )}
+                        color="red"
+                        overflowCount={9}
+                      >
+                        En attentes
+                      </Badge>
+                    ),
+                    children: (
+                      <div>
+                        <List
+                          dataSource={getCourseEnrollmentsByStatus(
+                            courseEnrollments,
+                            "pending"
+                          )}
+                          renderItem={(item) => (
+                            <ListCourseEnrollmentItem
+                              key={item.id}
+                              item={item}
+                            />
+                          )}
+                        />
+                      </div>
+                    ),
+                  },
+                  {
+                    key: "rejected",
+                    label: "Rejetées",
+                    children: (
+                      <div>
+                        <List
+                          dataSource={getCourseEnrollmentsByStatus(
+                            courseEnrollments,
+                            "rejected"
+                          )}
+                          renderItem={(item) => (
+                            <ListCourseEnrollmentItem
+                              key={item.id}
+                              item={item}
+                            />
+                          )}
+                        />
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            </div>
+          </Col>
+        </Row>
+      </Layout.Content>
+    </Layout>
   );
 }

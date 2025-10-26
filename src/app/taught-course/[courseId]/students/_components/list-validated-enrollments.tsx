@@ -342,7 +342,7 @@ export const ListCourseValidatedStudents: FC<
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 283px)" }}
+      scroll={{ y: "calc(100vh - 281px)" }}
       size="small"
       pagination={{
         defaultPageSize: 25,

@@ -37,7 +37,7 @@ export default function Page() {
           height: "calc(100vh - 64px)",
         }}
       >
-        <Layout.Header
+        {/* <Layout.Header
           style={{
             background: colorBgContainer,
             display: "flex",
@@ -51,13 +51,16 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Header>
+          
+        </Layout.Header> */}
         <Flex vertical={true} gap={24}>
           <Card
-            title="Statistiques"
+            variant="borderless"
+            title={
+              <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                Tableau de bord
+              </Typography.Title>
+            }
             tabList={[
               { key: "students", label: "Etudiants" },
               { key: "teachers", label: "Enseignants" },
@@ -67,6 +70,7 @@ export default function Page() {
               setStatTab(key as "teachers" | "students");
             }}
             activeTabKey={statTab}
+            style={{ boxShadow: "none" }}
           >
             {statTab === "teachers" ? (
               <TeachersStatistics />
@@ -74,20 +78,6 @@ export default function Page() {
               <StudentsStatistics />
             )}
           </Card>
-          {/* <Card
-            title={
-              <>
-                Candidatures en attente{" "}
-                <Badge count={41} color="red" overflowCount={9} />
-              </>
-            }
-          >
-            <div
-              style={{ display: dashTab === "enrollment" ? "block" : "none" }}
-            >
-              <EnrollmentsStatistics />
-            </div>
-          </Card> */}
         </Flex>
         <Layout.Footer
           style={{

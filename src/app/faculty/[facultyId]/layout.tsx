@@ -1,36 +1,17 @@
 "use client";
 
+import { AppsButton } from "@/components/appsButton";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { SupportDrawer } from "@/components/support-drawer";
+import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
-import { useYid } from "@/hooks/use-yid";
 import { getDepartmentsByFacultyId, getFaculty } from "@/lib/api";
-import { logout } from "@/lib/api/auth";
-import {
-  LoadingOutlined,
-  LogoutOutlined,
-  MenuOutlined,
-  SubnodeOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { MenuOutlined, SubnodeOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Button,
-  Divider,
-  Dropdown,
-  Image,
-  Layout,
-  Menu,
-  message,
-  Space,
-  Spin,
-  theme,
-  Typography,
-} from "antd";
+import { Divider, Form, Image, Layout, Menu, Skeleton, Space, theme, Typography } from "antd";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 
 export default function FacultyLayout({
   children,
@@ -40,12 +21,9 @@ export default function FacultyLayout({
   const {
     token: { colorBgContainer, borderRadiusLG, colorBorderSecondary },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
-  const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
-  const { facultyId } = useParams();
-  const {data:institution}=useInstitution()
 
-  const { removeYid } = useYid();
+  const { facultyId } = useParams();
+  const { data: institution } = useInstitution();
 
   const {
     data: faculty,
@@ -81,7 +59,6 @@ export default function FacultyLayout({
 
   return (
     <Layout>
-      {contextHolder}
       <Layout.Header
         style={{
           display: "flex",
@@ -111,7 +88,17 @@ export default function FacultyLayout({
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
-          <Typography.Text type="secondary">{faculty?.acronym}</Typography.Text>
+          <Typography.Text type="secondary">Filière:</Typography.Text>
+
+          {!isPending ? (
+            <Typography.Text>
+              {faculty?.acronym}
+            </Typography.Text>
+          ) : (
+            <Form>
+              <Skeleton.Input active />
+            </Form>
+          )}
         </Space>
 
         {/* <Menu
@@ -149,56 +136,11 @@ export default function FacultyLayout({
         <div className="flex-1" />
         <Space>
           <YearSelector />
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: "/app/profile",
-                  label: "Mon profile",
-                  icon: <UserOutlined />,
-                },
-                {
-                  type: "divider",
-                },
-                {
-                  key: "logout",
-                  label: "Déconnexion",
-                  icon: <LogoutOutlined />,
-                },
-              ],
-              onClick: async ({ key }) => {
-                if (key === "logout") {
-                  setIsLoadingLogout(true);
-                  await logout()
-                    .then(() => {
-                      removeYid();
-                      window.location.href = "/auth/login";
-                    })
-                    .catch((error) => {
-                      console.log(
-                        "Error",
-                        error.response?.status,
-                        error.message
-                      );
-                      messageApi.error(
-                        "Ouf, une erreur est survenue, Veuillez réessayer!"
-                      );
-                      setIsLoadingLogout(false);
-                    });
-                }
-              },
-            }}
-            trigger={["hover"]}
-          >
-            <Button
-              disabled={isLoadingLogout}
-              type="text"
-              icon={<UserOutlined />}
-            />
-          </Dropdown>
 
-          <SupportDrawer />
           <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
         </Space>
       </Layout.Header>
       <Layout>
@@ -265,6 +207,14 @@ export default function FacultyLayout({
                       label: (
                         <Link href={`/faculty/${facultyId}/class-presidents`}>
                           Chefs de promotion
+                        </Link>
+                      ),
+                    },
+                    {
+                      key: `/faculty/${facultyId}/courses-to-retake`,
+                      label: (
+                        <Link href={`/faculty/${facultyId}/courses-to-retake`}>
+                          Cours à reprendre
                         </Link>
                       ),
                     },
@@ -353,44 +303,6 @@ export default function FacultyLayout({
           }}
         /> */}
             {children}
-            <div
-              className=""
-              style={{
-                display: isLoadingLogout ? "flex" : "none",
-                flexDirection: "column",
-                background: "#fff",
-                position: "fixed",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: 99,
-                height: "100vh",
-                width: "100%",
-              }}
-            >
-              <div
-                style={{
-                  width: 440,
-                  margin: "auto",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Spin
-                  indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-                />
-                <Typography.Title
-                  type="secondary"
-                  level={3}
-                  style={{ marginTop: 10 }}
-                >
-                  Déconnexion en cours ...
-                </Typography.Title>
-              </div>
-            </div>
           </div>
         </Layout.Content>
       </Layout>

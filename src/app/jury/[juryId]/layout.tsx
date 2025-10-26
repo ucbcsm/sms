@@ -5,7 +5,6 @@ import {
   getAppeals,
   getFacultiesAAsOptionsWithAcronym,
 } from "@/lib/api";
-import { logout } from "@/lib/api/auth";
 import { filterOption } from "@/lib/utils";
 import {
   AppstoreOutlined,
@@ -13,13 +12,9 @@ import {
   FileTextOutlined,
   FontSizeOutlined,
   FormOutlined,
-  LoadingOutlined,
-  LogoutOutlined,
   MailOutlined,
   MenuOutlined,
   RedoOutlined,
-  SolutionOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -31,20 +26,22 @@ import {
   Image,
   Layout,
   Menu,
-  message,
   Select,
   Skeleton,
   Space,
-  Spin,
   theme,
   Typography,
 } from "antd";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
-import { useState } from "react";
 import { ListLetterGradings } from "./[facultyId]/letter-gradings/_components/list-letter-gradings";
 import { useJury } from "@/hooks/useJury";
+import { UserProfileButton } from "@/components/userProfileButton";
+import { AppsButton } from "@/components/appsButton";
+import { useInstitution } from "@/hooks/use-institution";
+import { SupportDrawer } from "@/components/support-drawer";
+import { LanguageSwitcher } from "@/components/languageSwitcher";
 
 export default function FacultyLayout({
   children,
@@ -54,8 +51,6 @@ export default function FacultyLayout({
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
-  const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
   const { juryId, facultyId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -63,8 +58,9 @@ export default function FacultyLayout({
     "letter_gradings",
     parseAsBoolean.withDefault(false)
   );
+  const {data:institution}=useInstitution();
 
-  const { yid,removeYid } = useYid();
+  const { yid } = useYid();
 
   const { data: jury, isPending } = useJury(Number(juryId));
 
@@ -86,7 +82,6 @@ export default function FacultyLayout({
 
   return (
     <Layout>
-      {contextHolder}
       <Layout.Header
         style={{
           display: "flex",
@@ -104,15 +99,15 @@ export default function FacultyLayout({
           >
             <div className="flex items-center pr-3">
               <Image
-                src="/ucbc-logo.png"
-                alt="Logo ucbc"
+                src={institution?.logo || "/ucbc-logo.png"}
+                alt="Logo"
                 width={36}
                 height="auto"
                 preview={false}
               />
             </div>
             <Typography.Title level={5} style={{ marginBottom: 0 }}>
-              UCBC
+              {institution?.acronym}
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
@@ -151,68 +146,39 @@ export default function FacultyLayout({
 
         <div className="flex-1" />
         <Space>
-          <Typography.Title
-            level={5}
-            type="secondary"
-            style={{ marginBottom: 0 }}
-          >
-            {jury?.academic_year.name}
-          </Typography.Title>
           <Dropdown
             menu={{
               items: [
                 {
-                  key: "/app/profile",
-                  label: "Mon profile",
-                  icon: <UserOutlined />,
-                },
-                {
-                  type: "divider",
-                },
-                {
-                  key: "logout",
-                  label: "Déconnexion",
-                  icon: <LogoutOutlined />,
+                  key: "change-year",
+                  label: "Changer l'année",
+                  onClick: () => {
+                    router.push("/jury");
+                  },
                 },
               ],
-              onClick: async ({ key }) => {
-                if (key === "logout") {
-                  setIsLoadingLogout(true);
-                  await logout()
-                    .then(() => {
-                      removeYid();
-                      window.location.href = "/auth/login";
-                    })
-                    .catch((error) => {
-                      console.log(
-                        "Error",
-                        error.response?.status,
-                        error.message
-                      );
-                      messageApi.error(
-                        "Ouf, une erreur est survenue, Veuillez réessayer!"
-                      );
-                      setIsLoadingLogout(false);
-                    });
-                }
-              },
             }}
-            trigger={["hover"]}
           >
-            <Button
-              disabled={isLoadingLogout}
-              type="text"
-              icon={<UserOutlined />}
-            />
+            <Typography.Title
+              level={5}
+              type="secondary"
+              style={{ marginBottom: 0 }}
+            >
+              {jury?.academic_year.name}
+            </Typography.Title>
           </Dropdown>
-          <Button
+          <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
+          {/* <Button
             type="text"
             icon={<CloseOutlined />}
             title="Fermer"
             onClick={() => {
-              router.push("/jury");
+             
             }}
-          />
+          /> */}
           {/* <LanguageSwitcher /> */}
         </Space>
       </Layout.Header>
@@ -304,45 +270,6 @@ export default function FacultyLayout({
               />
             </div>
             {children}
-
-            <div
-              className=""
-              style={{
-                display: isLoadingLogout ? "flex" : "none",
-                flexDirection: "column",
-                background: "#fff",
-                position: "fixed",
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: 99,
-                height: "100vh",
-                width: "100%",
-              }}
-            >
-              <div
-                style={{
-                  width: 440,
-                  margin: "auto",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Spin
-                  indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-                />
-                <Typography.Title
-                  type="secondary"
-                  level={3}
-                  style={{ marginTop: 10 }}
-                >
-                  Déconnexion en cours ...
-                </Typography.Title>
-              </div>
-            </div>
           </div>
         </Layout.Content>
       </Layout>

@@ -1,5 +1,16 @@
 import { title } from "process";
+import React from "react";
 import { number, z } from "zod";
+
+export type AppItem = {
+  id: string;
+  name: string;
+  description: string;
+  href: string;
+  color: string;
+  roles: string[];
+  icon: React.ReactNode;
+};
 
 /**
  * Represents a Year object with various properties.

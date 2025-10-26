@@ -27,6 +27,10 @@ import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useInstitution } from "@/hooks/use-institution";
 import { getHSLColor } from "@/lib/utils";
+import { UserProfileButton } from "@/components/userProfileButton";
+import { AppsButton } from "@/components/appsButton";
+import { SupportDrawer } from "@/components/support-drawer";
+import { LanguageSwitcher } from "@/components/languageSwitcher";
 
 export default function StudentLayout({
   children,
@@ -119,6 +123,10 @@ export default function StudentLayout({
               title="Quitter le compte"
             />
           </Link>
+          <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
         </Space>
       </Layout.Header>
       <div>

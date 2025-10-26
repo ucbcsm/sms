@@ -1,7 +1,12 @@
 "use client";
 
+import { AppsButton } from "@/components/appsButton";
 import { DataFetchErrorResult } from "@/components/errorResult";
+import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { Palette } from "@/components/palette";
+import { SupportDrawer } from "@/components/support-drawer";
+import { UserProfileButton } from "@/components/userProfileButton";
+import { useInstitution } from "@/hooks/use-institution";
 import { useYid } from "@/hooks/use-yid";
 import { getUserIsJury, getYears } from "@/lib/api";
 import { logout } from "@/lib/api/auth";
@@ -15,21 +20,30 @@ import {
   Alert,
   Button,
   Card,
+  Divider,
   Flex,
+  Image,
   Layout,
   List,
   message,
+  Space,
   Spin,
+  theme,
   Typography,
 } from "antd";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Page() {
+  const {
+    token: { colorBgContainer, colorBorderSecondary },
+  } = theme.useToken();
   const [yearId, setYearId] = useState<number | undefined>();
   const [messageApi, contextHolder] = message.useMessage();
-  const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
   const { setYid,removeYid } = useYid();
+
+  const { data: institution } = useInstitution();
 
   const {
     data: years,
@@ -86,7 +100,7 @@ export default function Page() {
       "status" in error &&
       ((error as any).status === 404 || (error as any).status === 503)
     ) {
-      messageApi.error("Vous n'êtes associé(e) à aucun jury!");
+      messageApi.error("Vous n'êtes pas associé(e) à ce jury!");
     } else if (isErrorJury) {
       messageApi.error("Erreur inconnue. Merci de réessayer.");
       setYearId(undefined);
@@ -96,18 +110,58 @@ export default function Page() {
   return (
     <Layout>
       {contextHolder}
+
+      <Layout.Header
+        style={{
+          background: colorBgContainer,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
+          paddingLeft: 32,
+          paddingRight: 32,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Space>
+          <Link
+            href={`/jury`}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <div className="flex items-center pr-3">
+              <Image
+                src={institution?.logo || "/ucbc-logo.png"}
+                alt="Logo"
+                width={36}
+                height="auto"
+                preview={false}
+              />
+            </div>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {institution?.acronym}
+            </Typography.Title>
+          </Link>
+          <Divider type="vertical" />
+          <Typography.Text type="secondary">Jury</Typography.Text>
+        </Space>
+        <div className="flex-1" />
+        <Space>
+          <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
+        </Space>
+      </Layout.Header>
       <Layout.Content
         style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          minHeight: "100vh",
           width: "100%",
           padding: 28,
+          background: colorBgContainer,
         }}
       >
-        <div style={{ width: 400, margin: "auto" }}>
+        <div style={{ width: 600, margin: "auto" }}>
           {isErrorJury &&
             ((error as any).status === 404 ||
               (error as any).status === 503) && (
@@ -115,33 +169,22 @@ export default function Page() {
                 showIcon
                 type="info"
                 message="Accès non autorisé"
-                description="Vous n'êtes associé(e) à aucun jury dans le système. Merci de contacter l'administrateur afin qu'il vous associe à un jury."
+                description="Vous n'êtes associé(e) à ce jury dans le système. Merci de contacter l'administrateur afin qu'il vous associe à un jury."
                 style={{ marginBottom: 20, border: 0 }}
                 action={
-                  <Button
-                    type="primary"
-                    style={{ boxShadow: "none" }}
-                    onClick={() => {
-                      setIsLoadingLogout(true);
-                      logout()
-                        .then(() => {
-                          removeYid();
-                          window.location.href = "/auth/login";
-                        })
-                        .catch((error) => {
-                          messageApi.error(
-                            "Ouf, une erreur est survenue, Veuillez réessayer!"
-                          );
-                          setIsLoadingLogout(false);
-                        });
-                    }}
-                  >
-                    OK
-                  </Button>
+                  <Link href="/">
+                    <Button type="primary" style={{ boxShadow: "none" }}>
+                      OK
+                    </Button>
+                  </Link>
                 }
               />
             )}
-          <Card loading={isPending}>
+          <Card
+            loading={isPending}
+            variant="borderless"
+            style={{ boxShadow: "none" }}
+          >
             <Typography.Title level={4}>Année</Typography.Title>
             <List
               dataSource={years}
@@ -181,44 +224,6 @@ export default function Page() {
             </Typography.Text>
             <Palette />
           </Flex>
-        </div>
-        <div
-          className=""
-          style={{
-            display: isLoadingLogout ? "flex" : "none",
-            flexDirection: "column",
-            background: "#fff",
-            position: "fixed",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            zIndex: 99,
-            height: "100vh",
-            width: "100%",
-          }}
-        >
-          <div
-            style={{
-              width: 440,
-              margin: "auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Spin
-              indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-            />
-            <Typography.Title
-              type="secondary"
-              level={3}
-              style={{ marginTop: 10 }}
-            >
-              Déconnexion en cours ...
-            </Typography.Title>
-          </div>
         </div>
       </Layout.Content>
     </Layout>

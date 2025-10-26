@@ -143,7 +143,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
       {contextHolder}
       <Drawer
         styles={{ header: { background: colorPrimary, color: "#fff" } }}
-        width={`100%`}
+        width={`50%`}
         title="Modification d'un cours programmé"
         onClose={onClose}
         open={open}

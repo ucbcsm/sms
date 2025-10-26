@@ -1,11 +1,9 @@
 "use client";
 
 import {
-  ArrowLeftOutlined,
   CloseOutlined,
   PhoneOutlined,
   QuestionCircleOutlined,
-  QuestionOutlined,
   WhatsAppOutlined,
 } from "@ant-design/icons";
 import { Button, Card, Drawer, Result, Space, Typography } from "antd";
@@ -24,10 +22,11 @@ export const SupportDrawer = () => {
     <>
       <Button
         type="text"
-        icon={<QuestionOutlined />}
+        icon={<QuestionCircleOutlined />}
         onClick={() => {
           setOpen(true);
         }}
+        title="Assistance technique"
       />
       <Drawer
         open={open}
@@ -35,12 +34,12 @@ export const SupportDrawer = () => {
         closable={false}
         title={
           <Space>
-            <Button
+            {/* <Button
               type="text"
               icon={<ArrowLeftOutlined />}
               shape="circle"
               onClick={onclose}
-            />
+            /> */}
             <Typography.Title level={5} style={{ marginBottom: 0 }}>
               Assistance technique
             </Typography.Title>

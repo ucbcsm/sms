@@ -1,6 +1,9 @@
 "use client";
 
+import { AppsButton } from "@/components/appsButton";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
+import { SupportDrawer } from "@/components/support-drawer";
+import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
 import {
@@ -29,7 +32,7 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function ConsoleLayout({
@@ -40,11 +43,8 @@ export default function ConsoleLayout({
   const {
     token: { colorBgContainer, colorBorderSecondary, colorPrimary },
   } = theme.useToken();
-
-  const { yearId } = useParams();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const router = useRouter();
-  const pathname = usePathname();
   const {data:institution}= useInstitution();
 
   return (
@@ -77,7 +77,7 @@ export default function ConsoleLayout({
             centered
             open={isModalOpen}
             onOk={() => {
-              router.push("/app");
+              router.push("/");
               setIsModalOpen(false);
             }}
             onCancel={() => setIsModalOpen(false)}
@@ -118,31 +118,10 @@ export default function ConsoleLayout({
         <div className="flex-1" />
         <Space>
           <YearSelector />
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: "/app/profile",
-                  label: "Mon profile",
-                  icon: <UserOutlined />,
-                },
-                {
-                  type: "divider",
-                },
-                {
-                  key: "logout",
-                  label: "Déconnexion",
-                  icon: <LogoutOutlined />,
-                },
-              ],
-              onClick: ({ key }) => {},
-            }}
-            trigger={["hover"]}
-            destroyOnHidden={true}
-          >
-            <Button type="text" icon={<UserOutlined />} />
-          </Dropdown>
           <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
         </Space>
       </Layout.Header>
       <Layout>

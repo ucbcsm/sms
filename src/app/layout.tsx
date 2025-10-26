@@ -6,14 +6,21 @@ import { getServerSession } from "@/lib/api/auth";
 import { Suspense } from "react";
 
 const inter = Inter({
-  // variable: "--font-inter",
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Academic Workspace",
   description: "Student Management System",
 };
+
+// const auth = await getServerSession();
+
+  //   if (auth?.user) {
+  //     redirect(auth.faculty ? `/faculty/${auth.faculty.id}` : "/app");
+  //   }
 
 export default async function RootLayout({
   children,
@@ -24,7 +31,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className}  antialiased`}>
+      <body className={`${inter.className} antialiased`}>
         <Suspense>
           <ClientProvider session={session}>{children}</ClientProvider>
         </Suspense>

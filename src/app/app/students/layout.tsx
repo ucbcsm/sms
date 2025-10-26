@@ -130,7 +130,7 @@ export default function StudentsLayout({
             className=""
             style={{ marginBottom: 0 }}
           >
-            Candidatures
+            Inscriptions
           </Typography.Title>
           <EnrollButton
             setReapply={setReapply}

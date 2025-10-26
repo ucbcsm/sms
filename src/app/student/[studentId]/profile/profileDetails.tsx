@@ -51,9 +51,16 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
               <Image
                 height={100}
                 width={100}
-                src={data?.user.avatar || ""}
-                className=" bg-gray-400 object-cover rounded-full"
-                style={{ marginBottom: 16 }}
+                src={data?.user.avatar}
+                className=" object-cover rounded-full"
+                style={{
+                  marginBottom: 16,
+                  background: getHSLColor(
+                    `${data.user.surname} ${data.user.last_name} ${data.user.first_name}`
+                  ),
+                }}
+                alt=""
+                preview={true}
               />
             ) : (
               <Avatar

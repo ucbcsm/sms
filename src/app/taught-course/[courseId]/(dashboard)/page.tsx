@@ -38,16 +38,21 @@ import {
   Space,
   Statistic,
   Tag,
+  theme,
   Typography,
 } from "antd";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
+import { TaughtCourseDetails } from "./course-details";
 
 export default function Page() {
+  const {
+    token: { colorBgContainer, colorBorderSecondary },
+  } = theme.useToken();
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const { courseId } = useParams();
-const {yid}=useYid()
+  const { yid } = useYid();
 
   const {
     data: course,
@@ -144,248 +149,280 @@ const {yid}=useYid()
   }
 
   return (
-    <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
-      <Col span={16}>
-        <Row gutter={[16, 16]}>
-          <Col span={8}>
-            <Card>
-              <Flex justify="space-between">
-                <Statistic
-                  loading={isPending}
-                  title="Inscriptions"
-                  value={getCourseEnrollmentsCountByStatus(
-                    enrollments,
-                    "validated"
-                  )}
-                />
-                <Link href={`/taught-course/${courseId}/students`}>
-                  <Button style={{ marginTop: 32 }} type="link">
-                    Inscrire
-                  </Button>
-                </Link>
-              </Flex>
-            </Card>
+    <Layout>
+      <Layout.Sider
+        width={280}
+        theme="light"
+        style={{ borderRight: `1px solid ${colorBorderSecondary}` }}
+      >
+        <TaughtCourseDetails
+          data={course}
+          isError={isError}
+          departments={departments}
+          periods={periods}
+          teachers={teachers}
+          courses={courses}
+          teachingUnits={teachingUnits}
+          classrooms={classrooms}
+        />
+      </Layout.Sider>
+      <Layout.Content style={{ padding: "16px", background: colorBgContainer }}>
+        <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
+          <Col span={16}>
+            <Row gutter={[16, 16]}>
+              <Col span={8}>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPending}
+                      title="Inscriptions"
+                      value={getCourseEnrollmentsCountByStatus(
+                        enrollments,
+                        "validated"
+                      )}
+                    />
+                    <Link href={`/taught-course/${courseId}/students`}>
+                      <Button style={{ marginTop: 32 }} type="link">
+                        Inscrire
+                      </Button>
+                    </Link>
+                  </Flex>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPending}
+                      title="Heures"
+                      value={`${getCumulativeHours(hours)}/${
+                        course?.theoretical_hours! + course?.practical_hours!
+                      }`}
+                    />
+                    <Link href={`/taught-course/${courseId}/hours-tracking`}>
+                      <Button style={{ marginTop: 32 }} type="link">
+                        Suivre
+                      </Button>
+                    </Link>
+                  </Flex>
+                </Card>
+              </Col>
+              <Col span={8}>
+                <Card>
+                  <Flex justify="space-between">
+                    <Statistic
+                      loading={isPending}
+                      title="Statut des inscriptions"
+                      value={getYearStatusName(course?.status!)}
+                    />
+                    {!isPending ? (
+                      <Progress
+                        type="dashboard"
+                        percent={toFixedNumber(
+                          (getCumulativeHours(hours) /
+                            (course.theoretical_hours! +
+                              course.practical_hours!)) *
+                            100,
+                          1
+                        )}
+                        size={58}
+                        status={getCourseProgressStatus(course?.status!)}
+                      />
+                    ) : (
+                      <Skeleton.Avatar size={58} active />
+                    )}
+                  </Flex>
+                </Card>
+              </Col>
+              <Col span={24}>
+                <Card loading={isPending}>
+                  <Space direction="vertical" style={{ width: "100%" }}>
+                    <Typography.Title level={5}>
+                      Équipe pédagogique
+                    </Typography.Title>
+                    <div>
+                      <Typography.Text type="secondary">
+                        Enseignant principal
+                      </Typography.Text>
+                      <List
+                        dataSource={[{ ...course?.teacher }]}
+                        renderItem={(item, index) => (
+                          <List.Item key={item.id}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  style={{
+                                    backgroundColor: getHSLColor(
+                                      `${item?.user?.first_name} ${item.user?.last_name} ${item.user?.surname}`
+                                    ),
+                                  }}
+                                >
+                                  {item.user?.first_name
+                                    ?.charAt(0)
+                                    .toUpperCase()}
+                                  {item.user?.last_name
+                                    ?.charAt(0)
+                                    .toUpperCase()}
+                                </Avatar>
+                              }
+                              title={`${item?.user?.first_name} ${item?.user?.last_name} ${item?.user?.surname}`}
+                              description={item.academic_title}
+                            />
+                          </List.Item>
+                        )}
+                      />
+                    </div>
+                    <div>
+                      <Typography.Text type="secondary">
+                        Assistants
+                      </Typography.Text>
+                      <List
+                        dataSource={course?.assistants!}
+                        renderItem={(item, index) => (
+                          <List.Item key={item.id}>
+                            <List.Item.Meta
+                              avatar={
+                                <Avatar
+                                  style={{
+                                    backgroundColor: getHSLColor(
+                                      `${item.user.first_name} ${item.user.last_name} ${item.user.surname}`
+                                    ),
+                                  }}
+                                >
+                                  {item.user.first_name
+                                    ?.charAt(0)
+                                    .toUpperCase()}
+                                  {item.user.last_name?.charAt(0).toUpperCase()}
+                                </Avatar>
+                              }
+                              title={`${item?.user.first_name} ${item?.user.last_name} ${item?.user.surname}`}
+                              description={item.academic_title}
+                            />
+                          </List.Item>
+                        )}
+                      />
+                    </div>
+                  </Space>
+                </Card>
+              </Col>
+            </Row>
           </Col>
           <Col span={8}>
-            <Card>
-              <Flex justify="space-between">
-                <Statistic
-                  loading={isPending}
-                  title="Heures"
-                  value={`${getCumulativeHours(hours)}/${
-                    course?.theoretical_hours! + course?.practical_hours!
-                  }`}
-                />
-                <Link href={`/taught-course/${courseId}/hours-tracking`}>
-                  <Button style={{ marginTop: 32 }} type="link">
-                    Suivre
-                  </Button>
-                </Link>
-              </Flex>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card>
-              <Flex justify="space-between">
-                <Statistic
-                  loading={isPending}
-                  title="Statut"
-                  value={getYearStatusName(course?.status!)}
-                />
-                {!isPending ? (
-                  <Progress
-                    type="dashboard"
-                    percent={toFixedNumber(
-                      (getCumulativeHours(hours) /
-                        (course.theoretical_hours! + course.practical_hours!)) *
-                        100,
-                      1
-                    )}
-                    size={58}
-                    status={getCourseProgressStatus(course?.status!)}
+            <Descriptions
+              title="Détails du cours"
+              extra={
+                <>
+                  <Button
+                    icon={<EditOutlined />}
+                    type="link"
+                    style={{ marginRight: 16 }}
+                    onClick={() => setOpenEdit(true)}
                   />
-                ) : (
-                  <Skeleton.Avatar size={58} active />
-                )}
-              </Flex>
-            </Card>
-          </Col>
-          <Col span={24}>
-            <Card loading={isPending}>
-              <Space direction="vertical" style={{ width: "100%" }}>
-                <Typography.Title level={5}>
-                  Équipe pédagogique
-                </Typography.Title>
-                <div>
-                  <Typography.Text type="secondary">
-                    Enseignant principal
-                  </Typography.Text>
-                  <List
-                    dataSource={[{ ...course?.teacher }]}
-                    renderItem={(item, index) => (
-                      <List.Item key={item.id}>
-                        <List.Item.Meta
-                          avatar={
-                            <Avatar
-                              style={{
-                                backgroundColor: getHSLColor(
-                                  `${item?.user?.first_name} ${item.user?.last_name} ${item.user?.surname}`
-                                ),
-                              }}
-                            >
-                              {item.user?.first_name?.charAt(0).toUpperCase()}
-                              {item.user?.last_name?.charAt(0).toUpperCase()}
-                            </Avatar>
-                          }
-                          title={`${item?.user?.first_name} ${item?.user?.last_name} ${item?.user?.surname}`}
-                          description={item.academic_title}
-                        />
-                      </List.Item>
-                    )}
+                  <EditTaughtCourseForm
+                    open={openEdit}
+                    setOpen={setOpenEdit}
+                    taughtCourse={course!}
+                    // faculties={faculties}
+                    departments={departments}
+                    periods={periods}
+                    teachers={teachers}
+                    courses={courses}
+                    teachingUnits={teachingUnits}
+                    classrooms={classrooms}
                   />
-                </div>
-                <div>
-                  <Typography.Text type="secondary">Assistants</Typography.Text>
-                  <List
-                    dataSource={course?.assistants!}
-                    renderItem={(item, index) => (
-                      <List.Item key={item.id}>
-                        <List.Item.Meta
-                          avatar={
-                            <Avatar
-                              style={{
-                                backgroundColor: getHSLColor(
-                                  `${item.user.first_name} ${item.user.last_name} ${item.user.surname}`
-                                ),
-                              }}
-                            >
-                              {item.user.first_name?.charAt(0).toUpperCase()}
-                              {item.user.last_name?.charAt(0).toUpperCase()}
-                            </Avatar>
-                          }
-                          title={`${item?.user.first_name} ${item?.user.last_name} ${item?.user.surname}`}
-                          description={item.academic_title}
-                        />
-                      </List.Item>
-                    )}
-                  />
-                </div>
-              </Space>
-            </Card>
+                </>
+              }
+              column={1}
+              items={[
+                {
+                  key: "name",
+                  label: "Intitulé",
+                  children: course?.available_course.name || "",
+                },
+                {
+                  key: "code",
+                  label: "Code du cours",
+                  children: course?.available_course.code || "",
+                },
+                {
+                  key: "category",
+                  label: "Catégorie",
+                  children:
+                    getCourseTypeName(course?.available_course.code!) || "",
+                },
+                {
+                  key: "credits",
+                  label: "Crédits",
+                  children: course?.credit_count || "",
+                },
+                {
+                  key: "max",
+                  label: "Note maximale",
+                  children: course?.max_value || "",
+                },
+                {
+                  key: "hours",
+                  label: "Heures",
+                  children:
+                    course?.theoretical_hours! + course?.practical_hours! || "",
+                },
+                {
+                  key: "theoretical_hours",
+                  label: "Heures théoriques",
+                  children: course?.theoretical_hours || "",
+                },
+                {
+                  key: "practical_hours",
+                  label: "Heures pratiques",
+                  children: course?.practical_hours || "",
+                },
+                {
+                  key: "teaching_unit",
+                  label: "UE",
+                  children: `${course?.teaching_unit?.name} ${
+                    course?.teaching_unit?.code &&
+                    `(${course?.teaching_unit?.code})`
+                  }`,
+                },
+                {
+                  key: "teaching_unit_category",
+                  label: "Catgorie UE",
+                  children: getTeachingUnitCategoryName(
+                    course?.teaching_unit?.category!
+                  ),
+                },
+                {
+                  key: "start_date",
+                  label: "Date de début",
+                  children: course?.start_date
+                    ? new Intl.DateTimeFormat("fr", {
+                        dateStyle: "long",
+                      }).format(new Date(`${course.start_date}`))
+                    : "",
+                },
+                {
+                  key: "end_date",
+                  label: "Date de fin",
+                  children: course?.end_date
+                    ? new Intl.DateTimeFormat("fr", {
+                        dateStyle: "long",
+                      }).format(new Date(`${course.end_date}`))
+                    : "",
+                },
+                {
+                  key: "status",
+                  label: "Statut",
+                  children: (
+                    <Tag bordered={false}>
+                      {getYearStatusName(course?.status!)}
+                    </Tag>
+                  ),
+                },
+              ]}
+            />
           </Col>
         </Row>
-      </Col>
-      <Col span={8}>
-        <Descriptions
-          title="Détails du cours"
-          extra={
-            <>
-              <Button
-                icon={<EditOutlined />}
-                type="link"
-                style={{ marginRight: 16 }}
-                onClick={() => setOpenEdit(true)}
-              />
-              <EditTaughtCourseForm
-                open={openEdit}
-                setOpen={setOpenEdit}
-                taughtCourse={course!}
-                // faculties={faculties}
-                departments={departments}
-                periods={periods}
-                teachers={teachers}
-                courses={courses}
-                teachingUnits={teachingUnits}
-                classrooms={classrooms}
-              />
-            </>
-          }
-          column={1}
-          items={[
-            {
-              key: "name",
-              label: "Intitulé",
-              children: course?.available_course.name || "",
-            },
-            {
-              key: "code",
-              label: "Code du cours",
-              children: course?.available_course.code || "",
-            },
-            {
-              key: "category",
-              label: "Catégorie",
-              children: getCourseTypeName(course?.available_course.code!) || "",
-            },
-            {
-              key: "credits",
-              label: "Crédits",
-              children: course?.credit_count || "",
-            },
-            {
-              key: "max",
-              label: "Note maximale",
-              children: course?.max_value || "",
-            },
-            {
-              key: "hours",
-              label: "Heures",
-              children:
-                course?.theoretical_hours! + course?.practical_hours! || "",
-            },
-            {
-              key: "theoretical_hours",
-              label: "Heures théoriques",
-              children: course?.theoretical_hours || "",
-            },
-            {
-              key: "practical_hours",
-              label: "Heures pratiques",
-              children: course?.practical_hours || "",
-            },
-            {
-              key: "teaching_unit",
-              label: "UE",
-              children: `${course?.teaching_unit?.name} ${
-                course?.teaching_unit?.code &&
-                `(${course?.teaching_unit?.code})`
-              }`,
-            },
-            {
-              key: "teaching_unit_category",
-              label: "Catgorie UE",
-              children: getTeachingUnitCategoryName(
-                course?.teaching_unit?.category!
-              ),
-            },
-            {
-              key: "start_date",
-              label: "Date de début",
-              children: course?.start_date
-                ? new Intl.DateTimeFormat("fr", { dateStyle: "long" }).format(
-                    new Date(`${course.start_date}`)
-                  )
-                : "",
-            },
-            {
-              key: "end_date",
-              label: "Date de fin",
-              children: course?.end_date
-                ? new Intl.DateTimeFormat("fr", { dateStyle: "long" }).format(
-                    new Date(`${course.end_date}`)
-                  )
-                : "",
-            },
-            {
-              key: "status",
-              label: "Statut",
-              children: (
-                <Tag bordered={false}>{getYearStatusName(course?.status!)}</Tag>
-              ),
-            },
-          ]}
-        />
-      </Col>
-    </Row>
+      </Layout.Content>
+    </Layout>
   );
 }

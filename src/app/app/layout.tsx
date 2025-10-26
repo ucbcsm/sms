@@ -1,7 +1,9 @@
 "use client";
 
+import { AppsButton } from "@/components/appsButton";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { SupportDrawer } from "@/components/support-drawer";
+import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
 import { useYid } from "@/hooks/use-yid";
@@ -15,8 +17,6 @@ import {
   LogoutOutlined,
   MenuOutlined,
   NotificationOutlined,
-  QuestionOutlined,
-  SafetyCertificateOutlined,
   SettingOutlined,
   SubnodeOutlined,
   TeamOutlined,
@@ -85,12 +85,7 @@ export default function AppLayout({
       >
         <Link href="/app" style={{ display: "flex", alignItems: "center" }}>
           <div className="flex items-center pr-3">
-            <Image
-              src="/ucbc-logo.png"
-              alt="Logo"
-              width={36}
-              preview={false}
-            />
+            <Image src="/ucbc-logo.png" alt="Logo" width={36} preview={false} />
           </div>
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
             {institution?.acronym}
@@ -158,58 +153,17 @@ export default function AppLayout({
         />
         <Space>
           <YearSelector />
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: "/app/profile",
-                  label: "Mon profile",
-                  icon: <UserOutlined />,
-                },
-                {
-                  type: "divider",
-                },
-                {
-                  key: "logout",
-                  label: "Déconnexion",
-                  icon: <LogoutOutlined />,
-                },
-              ],
-              onClick: async ({ key }) => {
-                if (key === "logout") {
-                  setIsLoadingLogout(true);
-                  await logout()
-                    .then(() => {
-                      removeYid();
-                      window.location.href = "/auth/login";
-                    })
-                    .catch((error) => {
-                      console.log(
-                        "Error",
-                        error.response?.status,
-                        error.message
-                      );
-                      messageApi.error(
-                        "Ouf, une erreur est survenue, Veuillez réessayer!"
-                      );
-                      setIsLoadingLogout(false);
-                    });
-                }
-              },
-            }}
-            trigger={["hover"]}
-          >
-            <Button
-              disabled={isLoadingLogout}
-              type="text"
-              icon={<UserOutlined />}
-            />
-          </Dropdown>
-          <Link href="/console">
-            <Button type="text" icon={<SettingOutlined />} />
-          </Link>
-          <SupportDrawer />
           <LanguageSwitcher />
+          <SupportDrawer />
+          <Link href="/console">
+            <Button
+              type="text"
+              title="Console d'administration"
+              icon={<SettingOutlined />}
+            />
+          </Link>
+          <AppsButton />
+          <UserProfileButton />
         </Space>
       </Layout.Header>
       <Layout.Content>

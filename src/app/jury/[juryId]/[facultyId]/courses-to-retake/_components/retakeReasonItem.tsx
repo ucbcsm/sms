@@ -170,7 +170,7 @@ export const RetakeReasonItem: FC<RetakeReasonItemProps> = ({
               </Typography.Text>
             </Space>
             <Typography.Text type="secondary">
-              {itemData.academic_year.name} {itemData.class_year.acronym}
+              {itemData.class_year.acronym}: {itemData.academic_year.name}
             </Typography.Text>
           </Flex>
         }

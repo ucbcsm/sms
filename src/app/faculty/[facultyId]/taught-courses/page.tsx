@@ -26,13 +26,17 @@ import {
   TeachingUnit,
 } from "@/types";
 import {
+  CheckCircleOutlined,
+  ClockCircleOutlined,
   DeleteOutlined,
   DownOutlined,
   EditOutlined,
+  EyeOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -59,8 +63,6 @@ import { NewTaughtCourseForm } from "./forms/new";
 import { DeleteTaughtCourseForm } from "./forms/delete";
 import { EditTaughtCourseForm } from "./forms/edit";
 import { useRouter } from "next/navigation";
-import { ListTeachingUnits } from "../courses/teaching-units/list";
-import { Palette } from "@/components/palette";
 import { parseAsInteger, useQueryState } from "nuqs";
 import Link from "next/link";
 
@@ -125,6 +127,39 @@ const ActionsBar: FC<ActionsBarProps> = ({
               key: "edit",
               label: "Modifier",
               icon: <EditOutlined />,
+            },
+            {
+              type: "divider",
+            },
+            {
+              key: "view",
+              label: "Voir le cours",
+              onClick: () => router.push(`/taught-course/${record.id}`),
+              icon: <EyeOutlined />,
+            },
+            {
+              key: "students",
+              label: "Étudiants inscrits",
+              onClick: () =>
+                router.push(`/taught-course/${record.id}/students`),
+              icon: <TeamOutlined />,
+            },
+            {
+              key: "attendances",
+              label: "Listes de présences",
+              onClick: () =>
+                router.push(`/taught-course/${record.id}/attendances`),
+              icon: <CheckCircleOutlined />,
+            },
+            {
+              key: "hours_tracking",
+              label: "Suivi des heures",
+              onClick: () =>
+                router.push(`/taught-course/${record.id}/hours-tracking`),
+              icon: <ClockCircleOutlined />,
+            },
+            {
+              type: "divider",
             },
             {
               key: "delete",
@@ -266,9 +301,7 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
+          
         </Layout.Header>
         {/* <Row gutter={[24, 24]}>
           <Col span={18}> */}

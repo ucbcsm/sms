@@ -130,7 +130,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
 
       <Drawer
         styles={{ header: { background: colorPrimary, color: "#fff" } }}
-        width={`100%`}
+        width={`50%`}
         title="Plannification d'un cours"
         onClose={onClose}
         open={newTaughtCourse}
