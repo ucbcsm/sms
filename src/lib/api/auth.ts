@@ -23,6 +23,25 @@ export type Session = {
   faculty?: Faculty;
 } | null;
 
+export async function isAuthenticated(accessToken: string | undefined) {
+  if (!accessToken) return false; // Pas de token, pas authentifié.
+
+  try {
+    await authApi.get("/users/me/", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return true; // ✅ token valide
+  } catch (error: any) {
+    if (error?.response?.status === 401) {
+      return false; // ❌ token expiré ou invalide
+    }
+    throw error; // autre erreur → on la laisse remonter (problème serveur, etc.)
+  }
+}
+
 /**
  * Retrieves the server session, including access and refresh tokens, and user information.
  *
@@ -77,8 +96,11 @@ export const getServerSession = async (): Promise<Session> => {
       });
       faculty = resFaculty.data as Faculty | undefined;
     } catch (error: any) {
-
-      if (error?.response?.status !== 404 && error?.response?.status !== 503 && error?.response?.status !== 400) {
+      if (
+        error?.response?.status !== 404 &&
+        error?.response?.status !== 503 &&
+        error?.response?.status !== 400
+      ) {
         throw error;
       }
       // If 404 or 400 or 503, faculty remains undefined
@@ -95,7 +117,6 @@ export const getServerSession = async (): Promise<Session> => {
       faculty,
     };
   } catch (error: any) {
-    
     throw new Error(`${error.message} Failed to get server session`);
   }
 };
@@ -138,19 +159,18 @@ export const login = async (credentials: {
       access: string;
       refresh: string;
     };
-console.log("Auth,",res.data)
+
     if (!access || !refresh) {
       throw new Error("Invalid login response");
     } else {
-      
       const userResponse = await authApi.get("/users/me/", {
         headers: {
           Authorization: `Bearer ${access}`,
         },
       });
       const user = userResponse.data;
-      console.log("User,",user)
-      if ((user.is_superuser || user.is_staff) && user.is_active) {
+
+      if (user.is_active) {
         Cookies.set("accessToken", access);
         Cookies.set("refreshToken", refresh);
       } else {
