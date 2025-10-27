@@ -6,39 +6,30 @@ import { SupportDrawer } from "@/components/support-drawer";
 import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
-import { useYid } from "@/hooks/use-yid";
 import { getFaculties } from "@/lib/api";
-import { logout } from "@/lib/api/auth";
 import {
   BranchesOutlined,
   DashboardOutlined,
   DollarOutlined,
-  LoadingOutlined,
-  LogoutOutlined,
   MenuOutlined,
   NotificationOutlined,
   SettingOutlined,
   SubnodeOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
-  Dropdown,
   Image,
   Layout,
   Menu,
-  message,
   Space,
-  Spin,
   theme,
   Typography,
 } from "antd";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { usePathname} from "next/navigation";
 
 export default function AppLayout({
   children,
@@ -48,12 +39,8 @@ export default function AppLayout({
   const {
     token: { colorBgContainer, borderRadiusLG, colorBorderSecondary },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
-  const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
-  const { removeYid } = useYid();
   const { data: institution } = useInstitution();
 
-  const router = useRouter();
   const pathname = usePathname();
 
   const { data: faculties, isPending: isPendingFacalties } = useQuery({
@@ -66,13 +53,13 @@ export default function AppLayout({
       key: `/faculty/${fac.id}`,
       label: <Link href={`/faculty/${fac.id}`}>{fac.name}</Link>,
       icon: <SubnodeOutlined />,
+      disabled: isPendingFacalties,
     }));
     return facaltiesAsMenu;
   };
 
   return (
     <Layout>
-      {contextHolder}
       <Layout.Header
         style={{
           display: "flex",
@@ -103,11 +90,6 @@ export default function AppLayout({
               label: <Link href={`/app`}>Tableau de bord</Link>,
               icon: <DashboardOutlined />,
             },
-            // {
-            //   key: "/app/enrollments",
-            //   label: <Link href={`/app/enrollments`}>Inscriptions</Link>,
-            //   icon: <SafetyCertificateOutlined />,
-            // },
             {
               key: "/app/students",
               label: <Link href={`/app/students`}>Étudiants</Link>,
@@ -120,13 +102,14 @@ export default function AppLayout({
             },
             {
               key: "/app/finances",
-              label: <Link href={`/app/finances`}>Finances</Link>,
+              label: <Link href={`/finances`}>Finances</Link>,
               icon: <DollarOutlined />,
             },
             {
               key: "fields",
               label: "Filières",
               icon: <BranchesOutlined />,
+              disabled: isPendingFacalties,
               children: getFacultiesAsMenu(),
             },
             {
@@ -147,9 +130,6 @@ export default function AppLayout({
             },
           ]}
           style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-          // onClick={({ key }) => {
-          //   router.push(key);
-          // }}
         />
         <Space>
           <YearSelector />
@@ -175,44 +155,6 @@ export default function AppLayout({
           }}
         >
           {children}
-          <div
-            className=""
-            style={{
-              display: isLoadingLogout ? "flex" : "none",
-              flexDirection: "column",
-              background: "#fff",
-              position: "fixed",
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              zIndex: 99,
-              height: "100vh",
-              width: "100%",
-            }}
-          >
-            <div
-              style={{
-                width: 440,
-                margin: "auto",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Spin
-                indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />}
-              />
-              <Typography.Title
-                type="secondary"
-                level={3}
-                style={{ marginTop: 10 }}
-              >
-                Déconnexion en cours ...
-              </Typography.Title>
-            </div>
-          </div>
         </div>
       </Layout.Content>
     </Layout>

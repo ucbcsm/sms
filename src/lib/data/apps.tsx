@@ -1,6 +1,5 @@
 import { AppItem } from "@/types";
 import {
-  ApartmentOutlined,
   BulbOutlined,
   CheckCircleOutlined,
   DollarOutlined,
@@ -61,9 +60,9 @@ export const ALL_APPS: AppItem[] = [
   },
   {
     id: "finance",
-    name: "Finance",
+    name: "Finances",
     description: "Frais à payer, paiements et factures étudiants.",
-    href: "/finance",
+    href: "/finances",
     color: "#C026D3",
     roles: ["finance", "admin"],
     icon: <DollarOutlined />,

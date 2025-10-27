@@ -169,7 +169,7 @@ export default function Page() {
                 showIcon
                 type="info"
                 message="Accès non autorisé"
-                description="Vous n'êtes associé(e) à ce jury dans le système. Merci de contacter l'administrateur afin qu'il vous associe à un jury."
+                description="Vous n'êtes pas associé à ce jury dans le système. Merci de contacter l'administrateur afin qu'il vous associe à ce jury."
                 style={{ marginBottom: 20, border: 0 }}
                 action={
                   <Link href="/">

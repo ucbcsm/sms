@@ -1,0 +1,128 @@
+"use client";
+
+import {
+  AppstoreOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
+import {
+  Card,
+  Divider,
+  Image,
+  Layout,
+  Radio,
+  Space,
+  theme,
+  Typography,
+} from "antd";
+import { StaffList } from "./list";
+import Link from "next/link";
+import { Palette } from "@/components/palette";
+import BackButton from "@/components/backButton";
+import { UserProfileButton } from "@/components/userProfileButton";
+import { AppsButton } from "@/components/appsButton";
+import { SupportDrawer } from "@/components/support-drawer";
+import { LanguageSwitcher } from "@/components/languageSwitcher";
+import { YearSelector } from "@/components/yearSelector";
+import { useInstitution } from "@/hooks/use-institution";
+
+export default function Page() {
+  const {
+    token: { colorBgContainer, colorBorderSecondary },
+  } = theme.useToken();
+  const { data: institution } = useInstitution();
+  return (
+    <Layout>
+      <Layout.Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          background: colorBgContainer,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
+          paddingLeft: 32,
+          paddingRight: 32,
+        }}
+      >
+        <Space>
+          <Link
+            href={`/finances`}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <div className="flex items-center pr-3">
+              <Image
+                src={institution?.logo || "/ucbc-logo.png"}
+                alt="Logo"
+                width={36}
+                height="auto"
+                preview={false}
+              />
+            </div>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {institution?.acronym}
+            </Typography.Title>
+          </Link>
+          <Divider type="vertical" />
+          <Typography.Text>Finances</Typography.Text>
+        </Space>
+        <div className="flex-1" />
+        <Space>
+          <YearSelector />
+          <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
+        </Space>
+      </Layout.Header>
+      <Layout.Content
+        style={{
+          padding: "0 32px 0 32px",
+          background: colorBgContainer,
+          overflowY: "auto",
+          height: "calc(100vh - 64px)",
+        }}
+      >
+        <Layout.Header
+          style={{
+            display: "flex",
+            alignItems: "center",
+            background: colorBgContainer,
+            padding: 0,
+          }}
+        >
+          <Space>
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Finances
+            </Typography.Title>
+          </Space>
+          <div className="flex-1" />
+          <Space>
+            <Palette />
+          </Space>
+        </Layout.Header>
+        <Card
+          tabBarExtraContent={
+            <Radio.Group>
+              <Radio.Button value="grid">
+                <AppstoreOutlined />
+              </Radio.Button>
+              <Radio.Button value="list">
+                <UnorderedListOutlined />
+              </Radio.Button>
+            </Radio.Group>
+          }
+          tabList={[
+            {
+              key: "all",
+              label: "Factures",
+            },
+            {
+              key: "fees",
+              label: "Frais",
+            },
+          ]}
+        >
+          <StaffList />
+        </Card>
+      </Layout.Content>
+    </Layout>
+  );
+}

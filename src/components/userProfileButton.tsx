@@ -9,7 +9,7 @@ import {
   LogoutOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, message, Spin, Typography } from "antd";
+import { Avatar, Dropdown, message, Spin, Typography } from "antd";
 import { useState } from "react";
 
 export const UserProfileButton = () => {
@@ -58,13 +58,6 @@ export const UserProfileButton = () => {
         trigger={["hover"]}
         arrow
       >
-        {/* <Button
-          disabled={isLoadingLogout}
-          type="text"
-          icon={<UserOutlined />}
-          shape="circle"
-          style={{ background: "blue" }}
-        /> */}
         <Avatar
           src={user?.avatar}
           style={{

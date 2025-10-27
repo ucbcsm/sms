@@ -201,7 +201,7 @@ export function YearSelector() {
               preview={false}
             />
             <Progress
-              strokeColor={"#410a02ff"}
+              strokeColor={"#ED6851"}
               percent={percent}
               showInfo={false}
             />
