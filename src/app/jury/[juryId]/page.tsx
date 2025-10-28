@@ -3,7 +3,7 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { useJury } from "@/hooks/useJury";
 import { getHSLColor } from "@/lib/utils";
-import { RightOutlined, SafetyCertificateOutlined } from "@ant-design/icons";
+import { SafetyCertificateOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Button,

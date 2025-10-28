@@ -1238,3 +1238,29 @@ export const DeliberationMinutesData = z.object({
   }),
 });
 export type DeliberationMinutesData = z.infer<typeof DeliberationMinutesData>;
+
+export const GradeReportResponse = z.object({
+  academic_general_secretary: z.array(Teacher),
+  academic_year: z.string(),
+  body_semesters: z.array(PeriodGrades),
+  class_year: z.string(),
+  departement: z.string(),
+  faculty: z.string(),
+  first_name: z.string(),
+  generale_average: z.object({
+    credit_sum: z.number(),
+    decision: z.enum(["passed", "postponed"]),
+    grade_letter: LetterGrading,
+    percentage: z.number(),
+    unvalidated_credit_sum: z.number(),
+    validated_credit_sum: z.number(),
+    weighted_average: z.number(),
+  }),
+  id: z.number(),
+  id_user_obj: z.number(),
+  last_name: z.string(),
+  matricule: z.string(),
+  surname: z.string(),
+});
+
+export type GradeReportResponse = z.infer<typeof GradeReportResponse>;

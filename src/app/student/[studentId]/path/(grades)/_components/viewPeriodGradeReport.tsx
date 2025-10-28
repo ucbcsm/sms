@@ -1,5 +1,7 @@
 "use client";
 
+import { useInstitution } from "@/hooks/use-institution";
+import { getDecisionText, getMomentText, getSessionText } from "@/lib/api";
 import { getStudentGradeReport } from "@/lib/api/grade-report";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -7,15 +9,21 @@ import { Button, Divider, Drawer, Result, Space, Typography } from "antd";
 import {  parseAsInteger, useQueryState } from "nuqs";
 import React, { FC, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import { GradeTableReport } from "./gradeTableReport";
+import { PeriodGrades } from "@/types";
+import { PrintableGradeReport } from "./printable/printGradeReport";
+import { SecretarySignaturePlaceholder } from "./signature";
 
 type ViewPeriodGradeReportProps = {
  periodGradeId: number;
+ periodGrade:PeriodGrades
 };
 
 export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
- periodGradeId
+ periodGradeId,
+ periodGrade
 }) => {
-
+  const {data:institution}=useInstitution()
   const refToPrint = useRef<HTMLDivElement | null>(null);
    const [openId, setOpenId] = useQueryState(
      "view-period-report",
@@ -72,12 +80,14 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
               level={5}
               style={{ marginBottom: 0 }}
               ellipsis={{}}
-            ></Typography.Title>
+            >
+              {periodGrade.period.name}
+            </Typography.Title>
           </Space>
         }
         styles={{
           header: { borderColor: "#d1d5dc" },
-          body: { padding: "0 0 40px 0" },
+          // body: { padding: "0 0 40px 0" },
         }}
         style={{ padding: 0 }}
         loading={isPending}
@@ -88,13 +98,19 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
         extra={
           <Space>
             <Typography.Text type="secondary">Année: </Typography.Text>
-            <Typography.Text strong></Typography.Text>
+            <Typography.Text strong>
+              {periodGrade.student.year_enrollment.academic_year.name}
+            </Typography.Text>
             <Divider type="vertical" />
             <Typography.Text type="secondary">Session: </Typography.Text>
-            <Typography.Text strong></Typography.Text>
+            <Typography.Text strong>
+              {getSessionText(periodGrade.session)}
+            </Typography.Text>
             <Divider type="vertical" />
             <Typography.Text type="secondary">Moment: </Typography.Text>
-            <Typography.Text strong></Typography.Text>
+            <Typography.Text strong>
+              {getMomentText(periodGrade.moment)}
+            </Typography.Text>
             <Divider type="vertical" />
             <Button
               style={{
@@ -104,7 +120,7 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
               color="primary"
               variant="dashed"
               onClick={printReport}
-              disabled={isPending || data?.BodyDataList?.length === 0}
+              disabled={isPending || data?.length === 0}
             >
               Imprimer
             </Button>
@@ -118,27 +134,73 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
           </Space>
         }
       >
-        {isError && (
-          <Result
-            title="Erreur de récupération des données"
-            subTitle={
-              error
-                ? (error as any)?.response?.data?.message
-                : "Une erreur est survenue lors de la tentative de récupération des données depuis le serveur. Veuillez réessayer."
-            }
-            status={"error"}
-            extra={
-              <Button
-                type="link"
-                onClick={() => {
-                  window.location.reload();
-                }}
-              >
-                Réessayer
-              </Button>
-            }
-          />
-        )}
+        <div className=" max-w-4xl mx-auto">
+          {data && data?.length > 0 && (
+            <div>
+              <GradeTableReport data={data} />
+              <div className="grid grid-cols-2 pt-4">
+                <div className="flex flex-col">
+                  <Typography.Text>
+                    Crédits validés:{" "}
+                    {data?.[0].generale_average.validated_credit_sum}
+                  </Typography.Text>
+                  <Typography.Text>
+                    Poucentage: {data?.[0].generale_average.percentage}%
+                  </Typography.Text>
+                  <Typography.Text>
+                    Grade:{" "}
+                    {data?.[0].generale_average.grade_letter.grade_letter} (
+                    {data?.[0].generale_average.grade_letter.appreciation})
+                  </Typography.Text>
+                  <Typography.Text>
+                    Décision:{" "}
+                    {getDecisionText(data?.[0].generale_average.decision!)}
+                  </Typography.Text>
+                </div>
+                <div>
+                  Fait à {institution?.city}, le{" "}
+                  {new Date().toLocaleDateString("fr-FR")}
+                  <br />
+                  Le secrétaire général académique, chargé des enseignements et
+                  suivi du programme des cours
+                  <div className="mt-6">
+                    <SecretarySignaturePlaceholder data={data?.[0].academic_general_secretary} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isError && (
+            <Result
+              title="Erreur de récupération des données"
+              subTitle={
+                error
+                  ? (error as any)?.response?.data?.message
+                  : "Une erreur est survenue lors de la tentative de récupération des données depuis le serveur. Veuillez réessayer."
+              }
+              status={"error"}
+              extra={
+                <Button
+                  type="link"
+                  onClick={() => {
+                    window.location.reload();
+                  }}
+                >
+                  Réessayer
+                </Button>
+              }
+            />
+          )}
+          {data && (
+            <PrintableGradeReport
+              ref={refToPrint}
+              periodGrade={periodGrade}
+              data={data}
+              institution={institution}
+            />
+          )}
+        </div>
       </Drawer>
     </>
   );

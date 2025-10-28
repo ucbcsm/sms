@@ -10,6 +10,7 @@ import {
   getMomentText,
   getSessionText,
 } from "@/lib/api";
+import { ViewYearGradeReport } from "./viewYearGradeReport";
 
 type YearGradesTabProps = {
   userId?: number;
@@ -20,11 +21,6 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
   const [pageSize, setPageSize] = useQueryState(
     "size",
     parseAsInteger.withDefault(0)
-  );
-
-  const [yearGradeId, setYearGradeId] = useQueryState(
-    "year-period",
-    parseAsInteger
   );
 
   const { data, isPending } = useQuery({
@@ -150,14 +146,7 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
               title: "",
               key: "actions",
               render: (_, record) => (
-                <Button
-                  color="primary"
-                  variant="dashed"
-                  style={{ boxShadow: "none" }}
-                  onClick={() => setYearGradeId(record.id)}
-                >
-                  Voir détails
-                </Button>
+               <ViewYearGradeReport yearGradeId={record.id} yearGrade={record}/>
               ),
               width: 116,
             },

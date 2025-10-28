@@ -1,25 +1,22 @@
-import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { Enrollment } from "@/types";
 import { getHSLColor, getMaritalStatusName, percentageFormatter } from "@/lib/utils";
-import { Avatar, Descriptions, Flex, Image, Space, Typography } from "antd";
+import { Avatar, Descriptions, Flex, Image, Skeleton, Space, Typography } from "antd";
 import { FC } from "react";
 import { EditStudentProfileForm } from "./edit";
 
 type ProfileDetailsProps = {
   data?: Enrollment;
   isError: boolean;
-
 };
 
 export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }) => {
  
   if (!data){
     return (
-    <div className="p-6">
-      <DataFetchPendingSkeleton />
-    </div>
-  );
+      <div className="p-6">
+        <Skeleton active />
+      </div>
+    );
   }
 
   if (data)

@@ -1,3 +1,4 @@
+import { GradeReportResponse } from "@/types";
 import api from "../fetcher";
 
 
@@ -64,5 +65,5 @@ export async function getStudentGradeReport(searchParams: {
     query.append("year_grade__id", year_grade__id.toString());
   }
   const res = await api.get(`/jury/grade-report/?${query.toString()}`);
-  return res.data;
+  return res.data as GradeReportResponse[];
 }

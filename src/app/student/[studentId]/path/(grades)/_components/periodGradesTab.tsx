@@ -35,7 +35,7 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
       }),
     enabled: !!userId,
   });
-
+console.log("Period_grades",data);
 
   return (
     <div style={{}}>
@@ -157,7 +157,10 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               title: "",
               key: "actions",
               render: (_, record) => (
-                <ViewPeriodGradeReport periodGradeId={record.id} />
+                <ViewPeriodGradeReport
+                  periodGradeId={record.id}
+                  periodGrade={record}
+                />
               ),
               width: 116,
             },
