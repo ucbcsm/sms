@@ -27,7 +27,8 @@ export const PrintableGradeReport: FC<PrintableGradeReportProps> = ({
         <DocHeader />
         {periodGrade && (
           <Descriptions
-            title="Rélevé des notes "
+            title={`Rélevé des Notes et des Matières`}
+            extra={`No ${periodGrade.student.year_enrollment.user.matricule}/${institution?.acronym}/${periodGrade.student.year_enrollment.academic_year.name}`}
             size="small"
             bordered
             column={2}
@@ -36,6 +37,11 @@ export const PrintableGradeReport: FC<PrintableGradeReportProps> = ({
                 key: "names",
                 label: "Nom & Post-nom",
                 children: `${periodGrade.student.year_enrollment.user.surname} ${periodGrade.student.year_enrollment.user.last_name} ${periodGrade.student.year_enrollment.user.first_name}`,
+              },
+              {
+                key: "matricule",
+                label: "Matricule",
+                children: `${periodGrade.student.year_enrollment.user.matricule}`,
               },
               {
                 key: "cycle",
@@ -69,14 +75,20 @@ export const PrintableGradeReport: FC<PrintableGradeReportProps> = ({
 
         {yearGrade && (
           <Descriptions
-            title="Rélevé des notes"
+            title={`Rélevé des Notes et des Matières`}
             column={2}
+            extra={`No ${yearGrade.student.user.matricule}/${institution?.acronym}/${yearGrade.student.academic_year.name}`}
             bordered
             items={[
               {
                 key: "names",
                 label: "Nom & Post-nom",
                 children: `${yearGrade.student.user.surname} ${yearGrade.student.user.last_name} ${yearGrade.student.user.first_name}`,
+              },
+              {
+                key: "matricule",
+                label: "Matricule",
+                children: `${yearGrade.student.user.matricule}`,
               },
               {
                 key: "cycle",
