@@ -1,10 +1,10 @@
 "use client";
 
 import React, { FC } from "react";
-import { Table, Space, Typography, Button, Popover, Tag } from "antd";
+import { Table, Space, Typography, Button, Popover, Tag, Select } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import { getStudentPeriodGrades } from "@/lib/api/grade-report";
-import { parseAsInteger, useQueryState } from "nuqs";
+import { parseAsInteger, parseAsStringEnum, useQueryState } from "nuqs";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import {
   getDecisionColor,
@@ -24,18 +24,39 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
     "size",
     parseAsInteger.withDefault(0)
   );
+  const [session, setSession] = useQueryState(
+    "session",
+    parseAsStringEnum(["main_session", "retake_session"]).withDefault(
+      "main_session"
+    )
+  );
+  const [moment, setMoment] = useQueryState(
+    "moment",
+    parseAsStringEnum(["before_appeal", "after_appeal"]).withDefault(
+      "before_appeal"
+    )
+  );
 
   const { data, isPending } = useQuery({
-    queryKey: ["student-period-grades", userId, page, pageSize],
+    queryKey: [
+      "student-period-grades",
+      userId,
+      session,
+      moment,
+      page,
+      pageSize,
+    ],
     queryFn: ({ queryKey }) =>
       getStudentPeriodGrades({
         userId: Number(queryKey[1]),
         page: page !== 0 ? page : undefined,
         pageSize: pageSize !== 0 ? pageSize : undefined,
+        session,
+        moment,
       }),
     enabled: !!userId,
   });
-console.log("Period_grades",data);
+  console.log("Period_grades", data);
 
   return (
     <div style={{}}>
@@ -64,6 +85,42 @@ console.log("Period_grades",data);
         </Card> */}
 
         <Table
+          title={() => (
+            <header className="flex pb-1 px-2">
+              <Space></Space>
+              <div className="flex-1" />
+              <Space>
+                <Typography.Text type="secondary">Session: </Typography.Text>
+                <Select
+                  variant="filled"
+                  placeholder="Session"
+                  value={session}
+                  options={[
+                    { value: "main_session", label: "Principale" },
+                    { value: "retake_session", label: "Rattrapage" },
+                  ]}
+                  style={{ width: 180 }}
+                  onSelect={(value) => {
+                    setSession(value as "main_session" | "retake_session");
+                  }}
+                />
+                <Typography.Text type="secondary">Moment: </Typography.Text>
+                <Select
+                  variant="filled"
+                  placeholder="Moment"
+                  value={moment}
+                  options={[
+                    { value: "before_appeal", label: "Avant recours" },
+                    { value: "after_appeal", label: "Après recours" },
+                  ]}
+                  style={{ width: 150 }}
+                  onSelect={(value) => {
+                    setMoment(value as "before_appeal" | "after_appeal");
+                  }}
+                />
+              </Space>
+            </header>
+          )}
           size="small"
           loading={isPending}
           columns={[

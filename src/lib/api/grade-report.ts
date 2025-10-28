@@ -6,8 +6,10 @@ export async function getStudentPeriodGrades(searchParams: {
   userId: number;
   page?: number;
   pageSize?: number;
+  session?: "main_session" | "retake_session";
+  moment?: "before_appeal" | "after_appeal";
 }) {
-  const { userId, page, pageSize } = searchParams;
+  const { userId, page, pageSize, session, moment } = searchParams;
   const query = new URLSearchParams();
   query.append("user__id", userId.toString());
   if (page !== undefined) {
@@ -15,6 +17,12 @@ export async function getStudentPeriodGrades(searchParams: {
   }
   if (pageSize !== undefined) {
     query.append("page_size", pageSize.toString());
+  }
+  if (session !== undefined) {
+    query.append("session", session.toString());
+  }
+  if (moment !== undefined) {
+    query.append("moment", moment.toString());
   }
   const res = await api.get(`/jury/period-grades/?${query.toString()}`);
   return res.data as {
@@ -29,8 +37,10 @@ export async function getStudentYearGrades(searchParams: {
   userId: number;
   page?: number;
   pageSize?: number;
+  session?: "main_session" | "retake_session";
+  moment?: "before_appeal" | "after_appeal";
 }) {
-  const { userId, page, pageSize } = searchParams;
+  const { userId, page, pageSize, session, moment } = searchParams;
   const query = new URLSearchParams();
   query.append("user__id", userId.toString());
   if (page !== undefined) {
@@ -38,6 +48,12 @@ export async function getStudentYearGrades(searchParams: {
   }
   if (pageSize !== undefined) {
     query.append("page_size", pageSize.toString());
+  }
+  if (session !== undefined) {
+    query.append("session", session.toString());
+  }
+  if (moment !== undefined) {
+    query.append("moment", moment.toString());
   }
   const res = await api.get(`/jury/year-grades/?${query.toString()}`);
   return res.data as {
