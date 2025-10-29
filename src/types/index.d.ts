@@ -1244,8 +1244,11 @@ export const GradeReportResponse = z.object({
   academic_year: z.string(),
   body_semesters: z.array(PeriodGrades),
   class_year: z.string(),
+  cycle: z.string(),
   departement: z.string(),
-  faculty: z.string(),
+  field: z.string(),
+  faculty_name: z.string(),
+  faculty_acronym: z.string(),
   first_name: z.string(),
   generale_average: z.object({
     credit_sum: z.number(),

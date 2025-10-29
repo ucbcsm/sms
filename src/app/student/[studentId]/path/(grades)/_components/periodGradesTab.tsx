@@ -56,7 +56,6 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
       }),
     enabled: !!userId,
   });
-  console.log("Period_grades", data);
 
   return (
     <div style={{}}>

@@ -41,8 +41,6 @@ export const ViewYearGradeReport: FC<ViewYearGradeReportProps> = ({
     enabled: !!yearGradeId,
   });
 
-  console.log(data);
-
   const onClose = () => {
     setOpenId(null);
   };
@@ -112,7 +110,7 @@ export const ViewYearGradeReport: FC<ViewYearGradeReportProps> = ({
               color="primary"
               variant="dashed"
               onClick={printReport}
-              disabled={isPending || data?.length === 0}
+              disabled={isPending || !data}
             >
               Imprimer
             </Button>
@@ -127,7 +125,7 @@ export const ViewYearGradeReport: FC<ViewYearGradeReportProps> = ({
         }
       >
         <div className=" max-w-4xl mx-auto">
-          {data && data?.length > 0 && (
+          {data && (
             <div>
               <GradeTableReport data={data} />
 
@@ -135,19 +133,17 @@ export const ViewYearGradeReport: FC<ViewYearGradeReportProps> = ({
                 <div className="flex flex-col">
                   <Typography.Text>
                     Crédits validés:{" "}
-                    {data?.[0].generale_average.validated_credit_sum}
+                    {data.generale_average.validated_credit_sum}
                   </Typography.Text>
                   <Typography.Text>
-                    Poucentage: {data?.[0].generale_average.percentage}%
+                    Poucentage: {data.generale_average.percentage}%
                   </Typography.Text>
                   <Typography.Text>
-                    Grade:{" "}
-                    {data?.[0].generale_average.grade_letter.grade_letter} (
-                    {data?.[0].generale_average.grade_letter.appreciation})
+                    Grade: {data.generale_average.grade_letter.grade_letter} (
+                    {data.generale_average.grade_letter.appreciation})
                   </Typography.Text>
                   <Typography.Text>
-                    Décision:{" "}
-                    {getDecisionText(data?.[0].generale_average.decision!)}
+                    Décision: {getDecisionText(data.generale_average.decision!)}
                   </Typography.Text>
                 </div>
                 <div>
@@ -158,7 +154,7 @@ export const ViewYearGradeReport: FC<ViewYearGradeReportProps> = ({
                   suivi du programme des cours
                   <div className="mt-6">
                     <SecretarySignaturePlaceholder
-                      data={data?.[0].academic_general_secretary}
+                      data={data.academic_general_secretary}
                     />
                   </div>
                 </div>
@@ -190,7 +186,7 @@ export const ViewYearGradeReport: FC<ViewYearGradeReportProps> = ({
           {data && (
             <PrintableGradeReport
               ref={refToPrint}
-              yearGrade={yearGrade}
+              mode="YEAR-GRADE"
               data={data}
               institution={institution}
             />

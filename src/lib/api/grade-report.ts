@@ -81,5 +81,5 @@ export async function getStudentGradeReport(searchParams: {
     query.append("year_grade__id", year_grade__id.toString());
   }
   const res = await api.get(`/jury/grade-report/?${query.toString()}`);
-  return res.data as GradeReportResponse[];
+  return res.data as GradeReportResponse | null;
 }

@@ -15,8 +15,8 @@ import { PrintableGradeReport } from "./printable/printGradeReport";
 import { SecretarySignaturePlaceholder } from "./signature";
 
 type ViewPeriodGradeReportProps = {
- periodGradeId: number;
- periodGrade:PeriodGrades
+  periodGradeId: number;
+  periodGrade: PeriodGrades;
 };
 
 export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
@@ -46,8 +46,6 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
       }),
     enabled:!!periodGradeId
   });
-
-   console.log(data);
 
   const onClose = () => {
     setOpenId(null);
@@ -120,7 +118,7 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
               color="primary"
               variant="dashed"
               onClick={printReport}
-              disabled={isPending || data?.length === 0}
+              disabled={isPending || !data}
             >
               Imprimer
             </Button>
@@ -135,26 +133,24 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
         }
       >
         <div className=" max-w-4xl mx-auto">
-          {data && data?.length > 0 && (
+          {data && (
             <div>
               <GradeTableReport data={data} />
               <div className="grid grid-cols-2 pt-4">
                 <div className="flex flex-col">
                   <Typography.Text>
                     Crédits validés:{" "}
-                    {data?.[0].generale_average.validated_credit_sum}
+                    {data.generale_average.validated_credit_sum}
                   </Typography.Text>
                   <Typography.Text>
-                    Poucentage: {data?.[0].generale_average.percentage}%
+                    Poucentage: {data.generale_average.percentage}%
                   </Typography.Text>
                   <Typography.Text>
-                    Grade:{" "}
-                    {data?.[0].generale_average.grade_letter.grade_letter} (
-                    {data?.[0].generale_average.grade_letter.appreciation})
+                    Grade: {data.generale_average.grade_letter.grade_letter} (
+                    {data.generale_average.grade_letter.appreciation})
                   </Typography.Text>
                   <Typography.Text>
-                    Décision:{" "}
-                    {getDecisionText(data?.[0].generale_average.decision!)}
+                    Décision: {getDecisionText(data.generale_average.decision!)}
                   </Typography.Text>
                 </div>
                 <div>
@@ -164,7 +160,9 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
                   Le secrétaire général académique, chargé des enseignements et
                   suivi du programme des cours
                   <div className="mt-6">
-                    <SecretarySignaturePlaceholder data={data?.[0].academic_general_secretary} />
+                    <SecretarySignaturePlaceholder
+                      data={data.academic_general_secretary}
+                    />
                   </div>
                 </div>
               </div>
@@ -195,7 +193,7 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
           {data && (
             <PrintableGradeReport
               ref={refToPrint}
-              periodGrade={periodGrade}
+              mode="PERIOD-GRADE"
               data={data}
               institution={institution}
             />

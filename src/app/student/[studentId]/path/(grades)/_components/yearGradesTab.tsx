@@ -48,8 +48,6 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
     enabled: !!userId,
   });
 
-  console.log(data);
-
   return (
     <div style={{}}>
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
