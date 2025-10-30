@@ -70,7 +70,7 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
           }}
         >
           <Descriptions
-            title=""
+            title="Info"
             column={1}
             items={[
               {

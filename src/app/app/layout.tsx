@@ -21,6 +21,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
+  Divider,
   Image,
   Layout,
   Menu,
@@ -66,18 +67,39 @@ export default function AppLayout({
           alignItems: "center",
           background: colorBgContainer,
           borderBottom: `1px solid ${colorBorderSecondary}`,
-          paddingLeft: 32,
-          paddingRight: 32,
+          paddingLeft: 28,
+          paddingRight: 28,
         }}
       >
-        <Link href="/app" style={{ display: "flex", alignItems: "center" }}>
-          <div className="flex items-center pr-3">
-            <Image src="/ucbc-logo.png" alt="Logo" width={36} preview={false} />
-          </div>
+        <Space>
+          <Link href="/app" style={{ display: "flex", alignItems: "center" }}>
+            <div className="flex items-center pr-3">
+              <Image
+                src="/ucbc-logo.png"
+                alt="Logo"
+                width={36}
+                preview={false}
+              />
+            </div>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {institution?.acronym}
+            </Typography.Title>
+          </Link>
+          <Divider type="vertical" />
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
-            {institution?.acronym}
+            Apparitorat
           </Typography.Title>
-        </Link>
+        </Space>
+        <div className="flex-1" />
+        <Space>
+          <YearSelector />
+          <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
+        </Space>
+      </Layout.Header>
+      <div>
         <Menu
           mode="horizontal"
           theme="light"
@@ -101,62 +123,35 @@ export default function AppLayout({
               icon: <TeamOutlined />,
             },
             {
-              key: "/app/finances",
-              label: <Link href={`/finances`}>Finances</Link>,
-              icon: <DollarOutlined />,
-            },
-            {
               key: "fields",
               label: "Filières",
               icon: <BranchesOutlined />,
               disabled: isPendingFacalties,
               children: getFacultiesAsMenu(),
             },
+            // {
+            //   key: "/app/finances",
+            //   label: <Link href={`/finances`}>Finances</Link>,
+            //   icon: <DollarOutlined />,
+            // },
             {
-              key: "7",
-              label: "Autres",
-              children: [
-                {
-                  key: "/app/announcements",
-                  label: <Link href={`/app/announcements`}>Annonces</Link>,
-                  icon: <NotificationOutlined />,
-                },
-                {
-                  key: "/console",
-                  label: <Link href={`/console`}>Paramètres</Link>,
-                  icon: <SettingOutlined />,
-                },
-              ],
+              key: "/app/announcements",
+              label: <Link href={`/app/announcements`}>Annonces</Link>,
+              icon: <NotificationOutlined />,
             },
           ]}
-          style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
+          style={{}}
         />
-        <Space>
-          <YearSelector />
-          <LanguageSwitcher />
-          <SupportDrawer />
-          <Link href="/console">
-            <Button
-              type="text"
-              title="Console d'administration"
-              icon={<SettingOutlined />}
-            />
-          </Link>
-          <AppsButton />
-          <UserProfileButton />
-        </Space>
-      </Layout.Header>
-      <Layout.Content>
-        <div
-          style={{
-            background: colorBgContainer,
-            minHeight: 280,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          {children}
-        </div>
-      </Layout.Content>
+      </div>
+      <div
+        style={{
+          background: colorBgContainer,
+          minHeight: 280,
+          borderRadius: borderRadiusLG,
+        }}
+      >
+        {children}
+      </div>
     </Layout>
   );
 }

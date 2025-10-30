@@ -125,7 +125,7 @@ export default function StudentsLayout({
           }}
         >
           <Typography.Title
-            type="secondary"
+            // type="secondary"
             level={3}
             className=""
             style={{ marginBottom: 0 }}

@@ -37,7 +37,7 @@ export const ListNewApplications: FC = () => {
           children: (
             <div
               style={{
-                height: "calc(100vh - 210px)",
+                height: "calc(100vh - 254px)",
                 overflowY: "auto",
                 paddingLeft: 16,
                 paddingRight: 16,
@@ -58,7 +58,7 @@ export const ListNewApplications: FC = () => {
           children: (
             <div
               style={{
-                height: "calc(100vh - 210px)",
+                height: "calc(100vh - 254px)",
                 overflowY: "auto",
                 paddingLeft: 16,
                 paddingRight: 16,
@@ -79,7 +79,7 @@ export const ListNewApplications: FC = () => {
           children: (
             <div
               style={{
-                height: "calc(100vh - 210px)",
+                height: "calc(100vh - 254px)",
                 overflowY: "auto",
                 paddingLeft: 16,
                 paddingRight: 16,

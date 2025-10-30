@@ -31,10 +31,10 @@ export default function Page() {
       <Layout.Content
         style={{
           minHeight: 280,
-          padding: "0 32px 0 32px",
+          padding: "0 28px 0 28px",
           background: colorBgContainer,
           overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 112px)",
         }}
       >
         {/* <Layout.Header

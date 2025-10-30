@@ -24,14 +24,14 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
   );
   const [session, setSession] = useQueryState(
     "session",
-    parseAsStringEnum(["main_session", "retake_session"]).withDefault(
-      "main_session"
+    parseAsStringEnum(["all","main_session", "retake_session"]).withDefault(
+      "all"
     )
   );
   const [moment, setMoment] = useQueryState(
     "moment",
-    parseAsStringEnum(["before_appeal", "after_appeal"]).withDefault(
-      "before_appeal"
+    parseAsStringEnum(["all", "before_appeal", "after_appeal"]).withDefault(
+      "all"
     )
   );
 
@@ -42,8 +42,8 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
         userId: Number(queryKey[1]),
         page: page !== 0 ? page : undefined,
         pageSize: pageSize !== 0 ? pageSize : undefined,
-        session,
-        moment,
+        session: session !== "all" ? session : undefined,
+        moment: moment !== "all" ? moment : undefined,
       }),
     enabled: !!userId,
   });
@@ -85,12 +85,15 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
                   placeholder="Session"
                   value={session}
                   options={[
+                    { value: "all", label: "Toutes les sessions" },
                     { value: "main_session", label: "Principale" },
                     { value: "retake_session", label: "Rattrapage" },
                   ]}
                   style={{ width: 180 }}
                   onSelect={(value) => {
-                    setSession(value as "main_session" | "retake_session");
+                    setSession(
+                      value as "all" | "main_session" | "retake_session"
+                    );
                   }}
                 />
                 <Typography.Text type="secondary">Moment: </Typography.Text>
@@ -99,12 +102,15 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
                   placeholder="Moment"
                   value={moment}
                   options={[
+                    { value: "all", label: "Tous les moments" },
                     { value: "before_appeal", label: "Avant recours" },
                     { value: "after_appeal", label: "Après recours" },
                   ]}
                   style={{ width: 150 }}
                   onSelect={(value) => {
-                    setMoment(value as "before_appeal" | "after_appeal");
+                    setMoment(
+                      value as "all" | "before_appeal" | "after_appeal"
+                    );
                   }}
                 />
               </Space>

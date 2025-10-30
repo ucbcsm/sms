@@ -24,10 +24,26 @@ export const SecretarySignaturePlaceholder:FC<SecretarySignaturePlaceholderProps
         ) : (
           <Alert
             message="Signature indisponible"
-            description="Soit aucun secrétaire général académique n'est défini, soit plusieurs sont définis. Veuillez contacter l'administration pour résoudre ce problème."
+            description={
+              data?.length === 0 ? (
+                "Aucun secrétaire général académique n'est défini dans le système. Veuillez contacter l'administration pour résoudre ce problème."
+              ) : (
+                <div>
+                  Plusieurs secrétaires généraux académique sont définis dans le
+                  système (
+                  {data?.map((teacher) => (
+                    <Typography.Text strong>
+                      {teacher.user.surname} {teacher.user.last_name}
+                    </Typography.Text>
+                  ))}
+                  ). Veuillez contacter l&apos;administration pour résoudre ce
+                  problème.
+                </div>
+              )
+            }
             type="warning"
             showIcon
-            style={{border:0}}
+            style={{ border: 0 }}
           />
         )}
       </div>

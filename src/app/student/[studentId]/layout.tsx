@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Alert,
   Avatar,
   Button,
   Divider,
@@ -18,12 +19,13 @@ import {
   Image,
   Layout,
   Menu,
+  Modal,
   Skeleton,
   Space,
   theme,
   Typography,
 } from "antd";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useInstitution } from "@/hooks/use-institution";
 import { getHSLColor } from "@/lib/utils";
@@ -31,14 +33,17 @@ import { UserProfileButton } from "@/components/userProfileButton";
 import { AppsButton } from "@/components/appsButton";
 import { SupportDrawer } from "@/components/support-drawer";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
+import { useState } from "react";
 
 export default function StudentLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBgContainer, colorBorderSecondary, colorPrimary },
   } = theme.useToken();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { data: institution } = useInstitution();
+  const router = useRouter();
 
   const { studentId } = useParams();
   const pathname = usePathname();
@@ -60,10 +65,50 @@ export default function StudentLayout({
           display: "flex",
           alignItems: "center",
           background: colorBgContainer,
-          padding: "0 28px",
+          paddingLeft: 0,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
         }}
       >
-        <Space>
+        <Space style={{ background: colorPrimary }}>
+          <Button
+            type="primary"
+            icon={<CloseOutlined />}
+            style={{
+              boxShadow: "none",
+              height: 64,
+              width: 64,
+              borderRadius: 0,
+            }}
+            size="large"
+            onClick={() => setIsModalOpen(true)}
+          />
+
+          <Modal
+            title={`Quitter`}
+            centered
+            open={isModalOpen}
+            onOk={() => {
+              router.push(`/faculty/${enrolledStudent?.faculty.id}/students`);
+              setIsModalOpen(false);
+            }}
+            onCancel={() => setIsModalOpen(false)}
+            okButtonProps={{ style: { boxShadow: "none" } }}
+            cancelButtonProps={{ style: { boxShadow: "none" } }}
+          >
+            <Alert
+              description={`Vous allez quitter le compte étudiant: ${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name} et retourner à la liste des étudiants.`}
+              message={`Information`}
+              type="info"
+              showIcon
+              style={{
+                marginTop: 16,
+                marginBottom: 32,
+                border: 0,
+              }}
+            />
+          </Modal>
+        </Space>
+        <Space style={{ marginLeft: 28 }}>
           <Link
             href={`/student/${studentId}`}
             style={{ display: "flex", alignItems: "center" }}
@@ -116,13 +161,7 @@ export default function StudentLayout({
           <Typography.Text type="secondary">
             {enrolledStudent?.academic_year.name}
           </Typography.Text>
-          <Link href={`/faculty/${enrolledStudent?.faculty.id}/students`}>
-            <Button
-              type="text"
-              icon={<CloseOutlined />}
-              title="Quitter le compte"
-            />
-          </Link>
+          <Divider type="vertical" />
           <LanguageSwitcher />
           <SupportDrawer />
           <AppsButton />

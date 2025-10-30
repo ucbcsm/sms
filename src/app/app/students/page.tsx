@@ -29,7 +29,7 @@ export default function Page() {
       >
         <Space>
           <Typography.Title
-            type="secondary"
+            // type="secondary"
             level={3}
             className=""
             style={{ marginBottom: 0 }}
@@ -42,7 +42,16 @@ export default function Page() {
           {!isPendingFaculties ? (
             <Dropdown
               menu={{
-                items: [...(getFacultiesAsDropdownMenu(faculties) || [])],
+                items: [
+                  {
+                    key: "",
+                    type: "group",
+                    label: "Filières",
+                    children: [
+                      ...(getFacultiesAsDropdownMenu(faculties) || []),
+                    ],
+                  },
+                ],
                 onClick: ({ key }) => {
                   router.push(`/faculty/${key}/students`);
                 },

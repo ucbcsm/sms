@@ -329,7 +329,7 @@ export const ViewEditApplicationForm: React.FC<
         <Layout.Content
           style={{
             overflowY: "auto",
-            height: "calc(100vh - 186px)",
+            height: "calc(100vh - 232px)",
             paddingTop: 28,
             paddingBottom: 28,
             // background:colorBgContainer

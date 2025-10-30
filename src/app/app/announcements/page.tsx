@@ -17,11 +17,11 @@ import {
   MoreOutlined,
   NotificationOutlined,
   PlusCircleOutlined,
+  PlusOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import { Palette } from "@/components/palette";
-import BackButton from "@/components/backButton";
 
 export default function Page() {
   const {
@@ -36,7 +36,7 @@ export default function Page() {
           padding: "0 32px 0 32px",
           background: colorBgContainer,
           overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 112px)",
         }}
       >
         <Layout.Header
@@ -48,7 +48,6 @@ export default function Page() {
           }}
         >
           <Space>
-            <BackButton />
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
               Annonces
             </Typography.Title>
@@ -59,15 +58,16 @@ export default function Page() {
           </Space>
         </Layout.Header>
         <Card
+          variant="borderless"
           tabBarExtraContent={
-            <Radio.Group>
-              <Radio.Button value="grid">
-                <AppstoreOutlined />
-              </Radio.Button>
-              <Radio.Button value="list">
-                <UnorderedListOutlined />
-              </Radio.Button>
-            </Radio.Group>
+            <Button
+              icon={<PlusOutlined />}
+              color="primary"
+              variant="dashed"
+              style={{ boxShadow: "none" }}
+            >
+              Créer une annonce
+            </Button>
           }
           tabList={[
             {
@@ -78,6 +78,7 @@ export default function Page() {
             { key: "events", label: "Événements" },
             { key: "others", label: "Autres" },
           ]}
+          style={{ boxShadow: "none" }}
         >
           <List
             dataSource={[
@@ -191,87 +192,7 @@ export default function Page() {
             )}
           />
         </Card>
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: " 24px 0",
-          }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
       </Layout.Content>
-      <Layout.Sider
-        width={280}
-        theme="light"
-        style={{ borderLeft: `1px solid ${colorBorderSecondary}` }}
-      >
-        <Card
-          variant="borderless"
-          title="Équipe de Communication"
-          style={{ boxShadow: "none" }}
-          extra={
-            <Button
-              type="link"
-              icon={<PlusCircleOutlined />}
-              title="Ajouter une annonce"
-            >
-              Ajouter
-            </Button>
-          }
-        >
-          <List
-            dataSource={[
-              {
-                id: "1",
-                title: "Planification des annonces",
-                description: "Réunion pour planifier les annonces du mois.",
-              },
-              {
-                id: "2",
-                title: "Validation des contenus",
-                description:
-                  "Vérification et validation des annonces à publier.",
-              },
-              {
-                id: "3",
-                title: "Mise à jour des canaux",
-                description: "Actualisation des canaux de communication.",
-              },
-              {
-                id: "4",
-                title: "Formation en communication",
-                description: "Atelier pour améliorer les compétences.",
-              },
-              {
-                id: "5",
-                title: "Analyse des retours",
-                description:
-                  "Évaluation des retours sur les annonces publiées.",
-              },
-            ]}
-            renderItem={(item, index) => (
-              <List.Item key={item.id}>
-                <List.Item.Meta
-                  avatar={
-                    <Avatar
-                      src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
-                    />
-                  }
-                  title={<Link href="#">{item.title}</Link>}
-                  description={item.description}
-                />
-              </List.Item>
-            )}
-          />
-        </Card>
-      </Layout.Sider>
     </Layout>
   );
 }

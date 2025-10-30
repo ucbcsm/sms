@@ -6,7 +6,7 @@ import {
   GradeReportResponse,
   Institute,
 } from "@/types";
-import { Descriptions, Typography } from "antd";
+import { Descriptions, Flex, Space, Typography } from "antd";
 import React, { FC, Fragment, RefObject } from "react";
 import { SecretarySignaturePlaceholder } from "../signature";
 
@@ -15,6 +15,7 @@ type PrintableGradeReportProps = {
   mode: "PERIOD-GRADE" | "YEAR-GRADE";
   data: GradeReportResponse;
   institution?: Institute;
+  periodName?: string;
 };
 
 const currentYear= new Date().getFullYear()
@@ -24,104 +25,153 @@ export const PrintableGradeReport: FC<PrintableGradeReportProps> = ({
   mode,
   data,
   institution,
+  periodName
 }) => {
   return (
     <div className="hidden">
       <div ref={ref} className=" ">
         <DocHeader />
         {mode === "PERIOD-GRADE" && (
-          <Descriptions
-            title={`Rélevé des Notes et des Matières`}
-            extra={`No ${data.id}/${data.matricule}/${data.faculty_acronym}/${institution?.acronym}/${currentYear}`}
-            size="small"
-            bordered
-            column={2}
-            items={[
-              {
-                key: "names",
-                label: "Nom & Post-nom",
-                children: `${data.surname} ${data.last_name} ${data.first_name}`,
-              },
-              {
-                key: "matricule",
-                label: "Matricule",
-                children: `${data.matricule}`,
-              },
-              {
-                key: "cycle",
-                label: "Niveau",
-                children: `${data.class_year} ${data.cycle} - LMD`,
-              },
-              {
-                key: "field",
-                label: "Domaine",
-                children: `${data.field}`,
-              },
-              {
-                key: "faculty",
-                label: "Filière",
-                children: `${data.faculty_name}`,
-              },
-              {
-                key: "department",
-                label: "Mention",
-                children: `${data.departement}`,
-              },
-              {
-                key: "year",
-                label: "Année académique",
-                children: `${data.academic_year}`,
-              },
-            ]}
-            style={{ marginBottom: 28 }}
-          />
+          <div className="mb-7">
+            <Flex
+              justify="space-between"
+              align="center"
+              style={{ marginBottom: 16 }}
+            >
+              <Space>
+                <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                  Rélevé des Notes et des Matières
+                </Typography.Title>
+              </Space>
+              <Space>
+                <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                  {`No ${data.id}/${data.matricule}/${data.faculty_acronym}/${institution?.acronym}/${currentYear}`}
+                </Typography.Title>
+              </Space>
+            </Flex>
+            <table className="min-w-full divide-y divide-gray-200 [&_th]:p-1 [&_th]:border [&_th]:border-gray-300 [&_td]:p-1 [&_td]:border [&_td]:border-gray-300">
+              <thead className=""></thead>
+              <tbody>
+                <tr>
+                  <td className="bg-gray-50">Nom & Post-nom</td>
+                  <td>{`${data.surname} ${data.last_name} ${data.first_name}`}</td>
+                  <td className="bg-gray-50">Matricule</td>
+                  <td>{`${data.matricule}`}</td>
+                </tr>
+                <tr>
+                  <td className="bg-gray-50">Niveau</td>
+                  <td>{`${data.class_year} ${data.cycle} - LMD`}</td>
+                  <td className="bg-gray-50">Domaine</td>
+                  <td>{`${data.field}`}</td>
+                </tr>
+                <tr>
+                  <td className="bg-gray-50">Filière</td>
+                  <td>{`${data.faculty_name}`}</td>
+                  <td className="bg-gray-50">Mention</td>
+                  <td>{`${data.departement}`}</td>
+                </tr>
+                <tr>
+                  <td className="bg-gray-50">Année académique</td>
+                  <td >{`${data.academic_year}`}</td>
+                  <td className="bg-gray-50">Période</td>
+                  <td>{periodName}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         )}
 
         {mode === "YEAR-GRADE" && (
-          <Descriptions
-            title={`Rélevé des Notes et des Matières`}
-            column={2}
-            extra={`No ${data.id}/${data.matricule}/${data.faculty_acronym}/${institution?.acronym}/${currentYear}`}
-            bordered
-            items={[
-              {
-                key: "names",
-                label: "Nom & Post-nom",
-                children: `${data.surname} ${data.last_name} ${data.first_name}`,
-              },
-              {
-                key: "matricule",
-                label: "Matricule",
-                children: `${data.matricule}`,
-              },
-              {
-                key: "cycle",
-                label: "Niveau",
-                children: `${data.class_year} ${data.cycle} - LMD`,
-              },
-              {
-                key: "field",
-                label: "Domaine",
-                children: `${data.field}`,
-              },
-              {
-                key: "faculty",
-                label: "Filière",
-                children: `${data.faculty_name}`,
-              },
-              {
-                key: "department",
-                label: "Mention",
-                children: `${data.departement}`,
-              },
-              {
-                key: "year",
-                label: "Année académique",
-                children: `${data.academic_year}`,
-              },
-            ]}
-            style={{ marginBottom: 28 }}
-          />
+          <div className="mb-7">
+            <Flex
+              justify="space-between"
+              align="center"
+              style={{ marginBottom: 16 }}
+            >
+              <Space>
+                <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                  Rélevé des Notes et des Matières
+                </Typography.Title>
+              </Space>
+              <Space>
+                <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                  {`No ${data.id}/${data.matricule}/${data.faculty_acronym}/${institution?.acronym}/${currentYear}`}
+                </Typography.Title>
+              </Space>
+            </Flex>
+            <table className="min-w-full divide-y divide-gray-200 [&_th]:p-1 [&_th]:border [&_th]:border-gray-300 [&_td]:p-1 [&_td]:border [&_td]:border-gray-300">
+              <thead className=""></thead>
+              <tbody>
+                <tr>
+                  <td className="bg-gray-50">Nom & Post-nom</td>
+                  <td>{`${data.surname} ${data.last_name} ${data.first_name}`}</td>
+                  <td className="bg-gray-50">Matricule</td>
+                  <td>{`${data.matricule}`}</td>
+                </tr>
+                <tr>
+                  <td className="bg-gray-50">Niveau</td>
+                  <td>{`${data.class_year} ${data.cycle} - LMD`}</td>
+                  <td className="bg-gray-50">Domaine</td>
+                  <td>{`${data.field}`}</td>
+                </tr>
+                <tr>
+                  <td className="bg-gray-50">Filière</td>
+                  <td>{`${data.faculty_name}`}</td>
+                  <td className="bg-gray-50">Mention</td>
+                  <td>{`${data.departement}`}</td>
+                </tr>
+                <tr>
+                  <td className="bg-gray-50">Année académique</td>
+                  <td colSpan={3}>{`${data.academic_year}`}</td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          // <Descriptions
+          //   title={`Rélevé des Notes et des Matières`}
+          //   column={2}
+          //   extra={`No ${data.id}/${data.matricule}/${data.faculty_acronym}/${institution?.acronym}/${currentYear}`}
+          //   bordered
+          //   items={[
+          //     {
+          //       key: "names",
+          //       label: "Nom & Post-nom",
+          //       children: `${data.surname} ${data.last_name} ${data.first_name}`,
+          //     },
+          //     {
+          //       key: "matricule",
+          //       label: "Matricule",
+          //       children: `${data.matricule}`,
+          //     },
+          //     {
+          //       key: "cycle",
+          //       label: "Niveau",
+          //       children: `${data.class_year} ${data.cycle} - LMD`,
+          //     },
+          //     {
+          //       key: "field",
+          //       label: "Domaine",
+          //       children: `${data.field}`,
+          //     },
+          //     {
+          //       key: "faculty",
+          //       label: "Filière",
+          //       children: `${data.faculty_name}`,
+          //     },
+          //     {
+          //       key: "department",
+          //       label: "Mention",
+          //       children: `${data.departement}`,
+          //     },
+          //     {
+          //       key: "year",
+          //       label: "Année académique",
+          //       children: `${data.academic_year}`,
+          //     },
+          //   ]}
+          //   style={{ marginBottom: 28 }}
+          // />
         )}
 
         <table className="min-w-full divide-y divide-gray-200 [&_th]:whitespace-nowrap [&_th]:p-1 [&_th]:border [&_th]:border-gray-300 [&_td]:whitespace-nowrap [&_td]:p-1 [&_td]:border [&_td]:border-gray-300">

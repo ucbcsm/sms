@@ -1,10 +1,7 @@
 "use client";
 
 import { useYid } from "@/hooks/use-yid";
-import {
-  getAppeals,
-  getFacultiesAAsOptionsWithAcronym,
-} from "@/lib/api";
+import { getAppeals, getFacultiesAAsOptionsWithAcronym } from "@/lib/api";
 import { filterOption } from "@/lib/utils";
 import {
   AppstoreOutlined,
@@ -18,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Alert,
   Badge,
   Button,
   Divider,
@@ -26,6 +24,7 @@ import {
   Image,
   Layout,
   Menu,
+  Modal,
   Select,
   Skeleton,
   Space,
@@ -42,6 +41,7 @@ import { AppsButton } from "@/components/appsButton";
 import { useInstitution } from "@/hooks/use-institution";
 import { SupportDrawer } from "@/components/support-drawer";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
+import { useState } from "react";
 
 export default function FacultyLayout({
   children,
@@ -49,8 +49,14 @@ export default function FacultyLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: {
+      colorBgContainer,
+      borderRadiusLG,
+      colorBorderSecondary,
+      colorPrimary,
+    },
   } = theme.useToken();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { juryId, facultyId } = useParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -58,7 +64,7 @@ export default function FacultyLayout({
     "letter_gradings",
     parseAsBoolean.withDefault(false)
   );
-  const {data:institution}=useInstitution();
+  const { data: institution } = useInstitution();
 
   const { yid } = useYid();
 
@@ -87,12 +93,51 @@ export default function FacultyLayout({
           display: "flex",
           alignItems: "center",
           background: colorBgContainer,
-          // borderBottom: `1px solid ${colorBorderSecondary}`,
-          paddingLeft: 12,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
+          paddingLeft: 0,
           paddingRight: 12,
         }}
       >
-        <Space>
+        <Space style={{ background: colorPrimary }}>
+          <Button
+            type="primary"
+            icon={<CloseOutlined />}
+            style={{
+              boxShadow: "none",
+              height: 64,
+              width: 64,
+              borderRadius: 0,
+            }}
+            size="large"
+            onClick={() => setIsModalOpen(true)}
+          />
+
+          <Modal
+            title={`Quitter`}
+            centered
+            open={isModalOpen}
+            onOk={() => {
+              router.push(`/jury`);
+              setIsModalOpen(false);
+            }}
+            onCancel={() => setIsModalOpen(false)}
+            okButtonProps={{ style: { boxShadow: "none" } }}
+            cancelButtonProps={{ style: { boxShadow: "none" } }}
+          >
+            <Alert
+              description={`Vous allez quitter le jury: ${jury?.name} et retourner à la liste des jurys par année.`}
+              message={`Information`}
+              type="info"
+              showIcon
+              style={{
+                marginTop: 16,
+                marginBottom: 32,
+                border: 0,
+              }}
+            />
+          </Modal>
+        </Space>
+        <Space style={{marginLeft:28}}>
           <Link
             href={`/jury/${juryId}`}
             style={{ display: "flex", alignItems: "center" }}
@@ -167,19 +212,11 @@ export default function FacultyLayout({
               {jury?.academic_year.name}
             </Typography.Title>
           </Dropdown>
+          <Divider type="vertical" />
           <LanguageSwitcher />
           <SupportDrawer />
           <AppsButton />
           <UserProfileButton />
-          {/* <Button
-            type="text"
-            icon={<CloseOutlined />}
-            title="Fermer"
-            onClick={() => {
-             
-            }}
-          /> */}
-          {/* <LanguageSwitcher /> */}
         </Space>
       </Layout.Header>
       <Layout>

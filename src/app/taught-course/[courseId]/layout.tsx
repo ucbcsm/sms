@@ -1,21 +1,21 @@
 "use client";
 
 import {
+  Alert,
   Button,
   Divider,
   Form,
   Image,
   Layout,
   Menu,
+  Modal,
   Skeleton,
   Space,
-  Tag,
   theme,
   Typography,
 } from "antd";
-import BackButton from "@/components/backButton";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   getAllCourses,
@@ -41,11 +41,13 @@ export default function FacultyLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBgContainer, colorBorderSecondary, colorPrimary },
   } = theme.useToken();
+const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { courseId } = useParams();
   const pathname = usePathname();
+  const router = useRouter()
 
    const {data:institution} = useInstitution();
 
@@ -102,10 +104,50 @@ export default function FacultyLayout({
           display: "flex",
           alignItems: "center",
           background: colorBgContainer,
-          padding: "0 28px",
+          paddingLeft: 0,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
         }}
       >
-        <Space>
+        <Space style={{ background: colorPrimary }}>
+          <Button
+            type="primary"
+            icon={<CloseOutlined />}
+            style={{
+              boxShadow: "none",
+              height: 64,
+              width: 64,
+              borderRadius: 0,
+            }}
+            size="large"
+            onClick={() => setIsModalOpen(true)}
+          />
+
+          <Modal
+            title={`Quitter`}
+            centered
+            open={isModalOpen}
+            onOk={() => {
+              router.push(`/faculty/${course?.faculty.id}/taught-courses`);
+              setIsModalOpen(false);
+            }}
+            onCancel={() => setIsModalOpen(false)}
+            okButtonProps={{ style: { boxShadow: "none" } }}
+            cancelButtonProps={{ style: { boxShadow: "none" } }}
+          >
+            <Alert
+              description={`Vous allez quitter le cours: ${course?.available_course.name} et retourner à la liste des cours.`}
+              message={`Information`}
+              type="info"
+              showIcon
+              style={{
+                marginTop: 16,
+                marginBottom: 32,
+                border: 0,
+              }}
+            />
+          </Modal>
+        </Space>
+        <Space style={{ marginLeft: 28 }}>
           <Link
             href={`/taught-course/${courseId}`}
             style={{ display: "flex", alignItems: "center" }}
@@ -146,13 +188,13 @@ export default function FacultyLayout({
           {/* <Typography.Text type="secondary">
             {enrolledStudent?.academic_year.name}
           </Typography.Text> */}
-          <Link href={`/faculty/${course?.faculty.id}/taught-courses`}>
+          {/* <Link href={`/faculty/${course?.faculty.id}/taught-courses`}>
             <Button
               type="text"
               icon={<CloseOutlined />}
               title="Quitter le cours"
             />
-          </Link>
+          </Link> */}
           <LanguageSwitcher />
           <SupportDrawer />
           <AppsButton />
@@ -211,10 +253,7 @@ export default function FacultyLayout({
           ]}
         />
       </div>
-     
-        <div>
-          {children}
-        </div>
+      <div>{children}</div>
     </Layout>
   );
 }

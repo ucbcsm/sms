@@ -5,7 +5,7 @@ import { getDecisionText, getMomentText, getSessionText } from "@/lib/api";
 import { getStudentGradeReport } from "@/lib/api/grade-report";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Divider, Drawer, Result, Space, Typography } from "antd";
+import { Button, Divider, Drawer, Flex, Result, Space, Typography } from "antd";
 import {  parseAsInteger, useQueryState } from "nuqs";
 import React, { FC, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
@@ -18,6 +18,7 @@ type ViewPeriodGradeReportProps = {
   periodGradeId: number;
   periodGrade: PeriodGrades;
 };
+const currentYear= new Date().getFullYear()
 
 export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
  periodGradeId,
@@ -135,6 +136,53 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
         <div className=" max-w-4xl mx-auto">
           {data && (
             <div>
+              <div className="mb-7">
+                <Flex
+                  justify="space-between"
+                  align="center"
+                  style={{ marginBottom: 16 }}
+                >
+                  <Space>
+                    <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                      Rélevé des Notes et des Matières
+                    </Typography.Title>
+                  </Space>
+                  <Space>
+                    <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                      {`No ${data.id}/${data.matricule}/${data.faculty_acronym}/${institution?.acronym}/${currentYear}`}
+                    </Typography.Title>
+                  </Space>
+                </Flex>
+                <table className="min-w-full divide-y divide-gray-200 [&_th]:p-1 [&_th]:border [&_th]:border-gray-300 [&_td]:p-1 [&_td]:border [&_td]:border-gray-300">
+                  <thead className=""></thead>
+                  <tbody>
+                    <tr>
+                      <td className="bg-gray-50">Nom & Post-nom</td>
+                      <td>{`${data.surname} ${data.last_name} ${data.first_name}`}</td>
+                      <td className="bg-gray-50">Matricule</td>
+                      <td>{`${data.matricule}`}</td>
+                    </tr>
+                    <tr>
+                      <td className="bg-gray-50">Niveau</td>
+                      <td>{`${data.class_year} ${data.cycle} - LMD`}</td>
+                      <td className="bg-gray-50">Domaine</td>
+                      <td>{`${data.field}`}</td>
+                    </tr>
+                    <tr>
+                      <td className="bg-gray-50">Filière</td>
+                      <td>{`${data.faculty_name}`}</td>
+                      <td className="bg-gray-50">Mention</td>
+                      <td>{`${data.departement}`}</td>
+                    </tr>
+                    <tr>
+                      <td className="bg-gray-50">Année académique</td>
+                      <td>{`${data.academic_year}`}</td>
+                      <td className="bg-gray-50">Période</td>
+                      <td>{periodGrade.period.name}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <GradeTableReport data={data} />
               <div className="grid grid-cols-2 pt-4">
                 <div className="flex flex-col">
@@ -196,6 +244,7 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
               mode="PERIOD-GRADE"
               data={data}
               institution={institution}
+              periodName={periodGrade.period.name}
             />
           )}
         </div>
