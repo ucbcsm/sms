@@ -1,23 +1,23 @@
 "use client";
 
+import { AutoUploadFormItem } from "@/components/autoUploadItem";
 import { Palette } from "@/components/palette";
 import { getRequiredDocuments } from "@/lib/api";
 import { Step9ApplicationFormDataType } from "@/types";
-import { FileOutlined, UploadOutlined } from "@ant-design/icons";
+import { FileOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Badge,
   Button,
   Card,
-  Checkbox,
   Flex,
   Form,
   InputNumber,
   Select,
+  Skeleton,
   Space,
   Switch,
   Typography,
-  Upload,
 } from "antd";
 import {
   compressToEncodedURIComponent,
@@ -36,7 +36,7 @@ type Props = {
 export const Step9: FC<Props> = ({ setStep }) => {
   const [form] = Form.useForm<any>();
 
-  const { data: required_documents } = useQuery({
+  const { data: required_documents, isPending } = useQuery({
     queryKey: ["required_documents"],
     queryFn: getRequiredDocuments,
   });
@@ -57,6 +57,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
       const data = JSON.parse(raw) as {
         application_documents: Step9ApplicationFormDataType;
       };
+      console.log("Loaded saved data for step 9:", data);
       form.setFieldsValue(data);
     } else {
       const initialValues = getApplicationDocsFromRequiredDocs();
@@ -64,12 +65,16 @@ export const Step9: FC<Props> = ({ setStep }) => {
     }
   }, [required_documents]);
 
+  if(isPending){
+    return <Skeleton active/>
+  }
+
   return (
     <Form
       form={form}
       layout="horizontal"
       onFinish={(values) => {
-        // console.log(values)
+        console.log(values);
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
         );
@@ -97,12 +102,15 @@ export const Step9: FC<Props> = ({ setStep }) => {
                 <Form.Item
                   {...restField}
                   name={[name, "exist"]}
-                  label="Document physique"
+                  label="Version papier"
                   rules={[{ required: required_documents?.[index].required }]}
                   valuePropName="checked"
                   style={{ marginTop: 8 }}
                 >
-                  <Switch />
+                  <Switch
+                    checkedChildren="✓ Présent"
+                    unCheckedChildren="✗ Absent"
+                  />
                 </Form.Item>
                 <Form.Item
                   {...restField}
@@ -110,9 +118,13 @@ export const Step9: FC<Props> = ({ setStep }) => {
                   label="Version électronique"
                   rules={[]}
                 >
-                  <Upload>
-                    <Button icon={<UploadOutlined />}>Téléverser</Button>
-                  </Upload>
+                  <AutoUploadFormItem
+                    // {...restField}
+                    name={["application_documents", name, "file_url"]}
+                    form={form}
+                    prefix={`students/documents`}
+                    accept="image/*,application/pdf"
+                  />
                 </Form.Item>
                 <Form.Item
                   {...restField}

@@ -68,3 +68,31 @@ export function percentageFormatter(value: number) {
 export function toFixedNumber(value: number | string, fixed: number = 0) {
   return Number(Number(value).toFixed(fixed));
 }
+
+
+/**
+ * Génère l’URL publique d’un fichier R2 à partir d’une URL privée.
+ * Vérifie que l’entrée est une URL valide et que l’URL pointe vers un fichier.
+ * Prend uniquement le dernier segment de l’URL (nom du fichier).
+ * Retourne null si l’entrée est null/undefined, invalide ou ne correspond pas à un fichier.
+ */
+export function getPublicR2Url(url?: string | null): string | null {
+  if (!url || typeof url !== "string") return null;
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(url);
+  } catch {
+    return null; // URL invalide
+  }
+
+  const urlParts = parsedUrl.pathname.split("/").filter(Boolean);
+  const fileName = urlParts[urlParts.length - 1];
+
+  // Vérifie que le dernier segment contient bien une extension de fichier
+  if (!fileName || !fileName.includes(".")) return null;
+
+  const pubUrl = `${process.env.NEXT_PUBLIC_R2_BUCKET_URL?.replace(/\/$/, "")}/${fileName}`;
+
+  return pubUrl;
+}

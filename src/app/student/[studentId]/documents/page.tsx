@@ -2,6 +2,7 @@
 
 import {
   DeleteOutlined,
+  ExportOutlined,
   EyeOutlined,
   FileOutlined,
   FolderOutlined,
@@ -14,6 +15,7 @@ import { getApplicationStatusName, getApplicationTagColor } from "@/lib/api";
 import { useAllRequiredDocuments } from "@/hooks/useAllRequiredDocuments";
 import { EditDocument } from "./_components/editDocument";
 import { DeleteDocument } from "./_components/deleteDocument";
+import { getPublicR2Url } from "@/lib/utils";
 
 export default function Page() {
   const { studentId } = useParams();
@@ -77,17 +79,37 @@ export default function Page() {
             title: "Version électronique",
             key: "file",
             render: (_, record) => {
-              return (
-                <Space>
-                  <Button
-                    icon={<EyeOutlined />}
-                    style={{
-                      boxShadow: "none",
-                      display: record.file_url ? "block" : "none",
-                    }}
-                  />
-                </Space>
-              );
+              return getPublicR2Url(record.file_url) ? (
+                <a
+                  href={getPublicR2Url(record.file_url) || undefined}
+                  target="_blank"
+                  className="w-full"
+                >
+                  <Space style={{ width: "100%" }}>
+                    <Tag
+                      icon={<FileOutlined />}
+                      bordered={false}
+                      style={{ borderRadius: 10, marginRight: 0 }}
+                    >
+                      .{record.file_url
+                        ?.split(".")
+                        [record.file_url.split(".").length - 1].toUpperCase()}
+                    </Tag>
+
+                    <Button
+                      type="link"
+                      title="Voir le fichier"
+                      style={{
+                        boxShadow: "none",
+                      }}
+                      shape="circle"
+                      size="small"
+                    >
+                      Voir le fichier <ExportOutlined />{" "}
+                    </Button>
+                  </Space>
+                </a>
+              ) : "-";
             },
           },
           {
@@ -117,6 +139,7 @@ export default function Page() {
                   currentDocuments={
                     enrollment?.common_enrollment_infos.application_documents
                   }
+                  userId={enrollment?.user.id}
                 />
                 <DeleteDocument doc={record} />
               </Space>

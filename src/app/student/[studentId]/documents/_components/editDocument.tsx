@@ -1,3 +1,6 @@
+import { uploadFile } from "@/actions/uploadFile";
+import { AutoUpload } from "@/components/autoUpload";
+import { AutoUploadFormItem } from "@/components/autoUploadItem";
 import { updateSingleApplicationDocument } from "@/lib/api";
 import { filterOption } from "@/lib/utils";
 import { ApplicationDocument, RequiredDocument } from "@/types";
@@ -10,12 +13,14 @@ type EditDocumentProps = {
   doc: ApplicationDocument;
   documents?: RequiredDocument[];
   currentDocuments?: ApplicationDocument[];
+  userId?: number;
 };
 
 export const EditDocument: FC<EditDocumentProps> = ({
   doc,
   documents,
   currentDocuments,
+  userId,
 }) => {
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
@@ -28,7 +33,6 @@ export const EditDocument: FC<EditDocumentProps> = ({
 
   const onClose = () => {
     setOpen(false);
-    form.resetFields();
   };
 
   const getDocumentsAsOptions = () => {
@@ -45,7 +49,9 @@ export const EditDocument: FC<EditDocumentProps> = ({
     docsIds: number[];
     exist: boolean;
     status: "pending" | "rejected" | "validated";
+    file_url?: string;
   }) => {
+  
     mutateAsync(
       {
         id: doc.id,
@@ -53,7 +59,7 @@ export const EditDocument: FC<EditDocumentProps> = ({
           required_document: Number(doc.required_document?.id),
           exist: values.exist,
           status: values.status,
-          file_url: doc.file_url,
+          file_url: values.file_url || null,
         },
       },
       {
@@ -69,32 +75,24 @@ export const EditDocument: FC<EditDocumentProps> = ({
           setOpen(false);
         },
         onError: (error) => {
-           if ((error as any).status === 403) {
-              messageApi.error(
-                `Vous n'avez pas la permission d'effectuer cette action`
-              );
-            } else if ((error as any).status === 401) {
-              messageApi.error(
-                "Vous devez être connecté pour effectuer cette action."
-              );
-            } else {
-          messageApi.error(
-            (error as any)?.response?.data?.message ||
-              "Une erreur s'est produite lors de la modification. Veuillez réessayer."
-          );
-        }}
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any)?.response?.data?.message ||
+                "Une erreur s'est produite lors de la modification. Veuillez réessayer."
+            );
+          }
+        },
       }
     );
   };
-  useEffect(() => {
-    if (doc) {
-      form.setFieldsValue({
-        docsIds: [doc.required_document?.id],
-        exist: doc.exist,
-        status: doc.status,
-      });
-    }
-  }, [doc]);
 
   return (
     <>
@@ -103,7 +101,15 @@ export const EditDocument: FC<EditDocumentProps> = ({
         type="text"
         icon={<EditOutlined />}
         title="Modifier le document du dossier"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          form.setFieldsValue({
+            docsIds: [doc.required_document?.id],
+            exist: doc.exist,
+            status: doc.status,
+            file_url: doc.file_url,
+          });
+          setOpen(true);
+        }}
       />
       <Modal
         destroyOnHidden
@@ -111,7 +117,7 @@ export const EditDocument: FC<EditDocumentProps> = ({
         maskClosable={!isPending}
         open={open}
         onCancel={onClose}
-        title="Modifier le document du dossier"
+        title="Modifier l'elément du dossier"
         styles={{ body: { paddingTop: 16 } }}
         okButtonProps={{
           htmlType: "submit",
@@ -158,6 +164,14 @@ export const EditDocument: FC<EditDocumentProps> = ({
           initialValue={true}
         >
           <Switch checkedChildren="✓ Présent" unCheckedChildren="✗ Absent" />
+        </Form.Item>
+        <Form.Item name="file_url" label="Version électronique">
+          <AutoUploadFormItem
+            name="file_url"
+            form={form}
+            prefix={`students/${userId}/documents`}
+            accept="image/*,application/pdf"
+          />
         </Form.Item>
         <Form.Item
           name="status"

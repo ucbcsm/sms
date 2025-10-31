@@ -1,6 +1,7 @@
 'use client';
 
 import { ALL_APPS } from "@/lib/data/apps";
+import { RightOutlined } from "@ant-design/icons";
 import { Button, List, Popover, Typography } from "antd";
 import Link from "next/link";
 
@@ -41,6 +42,7 @@ export const AppsButton = () => {
                   <List.Item
                     style={{ cursor: "pointer" }}
                     className=" hover:bg-[#f5f5f5] rounded-md"
+                    extra={<RightOutlined/>}
                   >
                     <List.Item.Meta
                       title={app.name}

@@ -3,7 +3,7 @@
 import { useSessionStore } from "@/store";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConfigProvider, ThemeConfig } from "antd";
+import { App, ConfigProvider, ThemeConfig } from "antd";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { useEffect } from "react";
 import NextTopLoader from 'nextjs-toploader';
@@ -39,9 +39,11 @@ export default function ClientProvider({
       <NuqsAdapter>
         <ConfigProvider theme={themeConfig} locale={locale}>
           <AntdRegistry>
-            <QueryClientProvider client={queryClient}>
-              {children}
-            </QueryClientProvider>
+            <App>
+              <QueryClientProvider client={queryClient}>
+                {children}
+              </QueryClientProvider>
+            </App>
           </AntdRegistry>
         </ConfigProvider>
       </NuqsAdapter>

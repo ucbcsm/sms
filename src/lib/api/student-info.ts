@@ -59,7 +59,6 @@ export async function updateStudentInfo({
 }) {
   const res = await api.put(`/apparitorat/common-enrollment-infos/${id}/`, {
     ...params,
-    gender: params.gender,
     place_of_birth: params.place_of_birth,
     date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
     nationality: params.nationality,

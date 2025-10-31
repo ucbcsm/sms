@@ -1,5 +1,8 @@
 "use client";
 
+import { uploadFile } from "@/actions/uploadFile";
+import { AutoUpload } from "@/components/autoUpload";
+import { AutoUploadFormItem } from "@/components/autoUploadItem";
 import {
   formatAdmissionTestResultsForEdition,
   formatApplicationDocumentsForEdition,
@@ -27,6 +30,8 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
+  const existElectronic = Form.useWatch("existElectronic", form);
+  // const [fileUrl, setFileUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateStudentInfo,
@@ -42,15 +47,17 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
     }));
   };
 
-  const onClose=()=>{
-    setOpen(false)
-    form.resetFields()
-  }
+  const onClose = () => {
+    setOpen(false);
+    form.resetFields();
+    // setFileUrl(null);
+  };
 
   const onFinish = (values: {
     docsIds: number[];
     exist: boolean;
     status: "pending" | "rejected" | "validated";
+    file_url?: string;
   }) => {
     if (!yearEnrollment) {
       messageApi.error("Une erreur s'est produite. Veuillez réessayer.");
@@ -59,7 +66,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
         required_document: id,
         exist: values.exist,
         status: values.status,
-        file_url: null,
+        file_url: values.file_url || null,
       }));
 
       mutateAsync(
@@ -129,7 +136,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
                   "Une erreur s'est produite lors de l'ajout. Veuillez réessayer."
               );
             }
-          }
+          },
         }
       );
     }
@@ -145,7 +152,7 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
-        Ajouter des documents
+        Ajouter un document
       </Button>
 
       <Modal
@@ -173,21 +180,22 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
       >
         <Form.Item
           name="docsIds"
-          label="Documents"
+          label="Document"
           rules={[
             {
               required: true,
-              message: "Veuillez sélectionner un ou plusieurs document",
+              message: "Veuillez sélectionner un document",
             },
           ]}
         >
           <Select
             showSearch
-            placeholder="Sélectionner un ou plusieurs documents"
+            placeholder="Sélectionner un document"
             options={getDocumentsAsOptions()}
             optionFilterProp="children"
             filterOption={filterOption}
             mode="multiple"
+            maxCount={1}
           />
         </Form.Item>
         <Form.Item
@@ -203,6 +211,17 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
           initialValue={true}
         >
           <Switch checkedChildren="✓ Présent" unCheckedChildren="✗ Absent" />
+        </Form.Item>
+        <Form.Item
+          name="file_url"
+          label="Version électronique"
+        >
+          <AutoUploadFormItem
+            name="file_url"
+            form={form}
+            prefix={`students/${yearEnrollment?.user.id}/documents`}
+            accept="image/*,application/pdf"
+          />
         </Form.Item>
         <Form.Item
           name="status"
