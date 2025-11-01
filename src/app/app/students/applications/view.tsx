@@ -220,6 +220,7 @@ export const ViewEditApplicationForm: React.FC<
       });
     }
   }, [application, courses]);
+  console.log(application);
 
   const getInitialRequiredDocuments = () => {
     return documents?.map((item) => ({

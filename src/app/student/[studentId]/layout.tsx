@@ -127,7 +127,13 @@ export default function StudentLayout({
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
-          <Typography.Text type="secondary">Étudiant:</Typography.Text>
+          <Typography.Title
+            level={5}
+            type="secondary"
+            style={{ marginBottom: 0 }}
+          >
+            Étudiant:
+          </Typography.Title>
           {enrolledStudent && (
             <Avatar
               style={{
@@ -137,6 +143,7 @@ export default function StudentLayout({
               }}
               size="small"
               shape="square"
+              src={getPublicR2Url(enrolledStudent?.user.avatar)}
             >
               {`${enrolledStudent?.user.first_name?.charAt(0).toUpperCase()}`}
             </Avatar>

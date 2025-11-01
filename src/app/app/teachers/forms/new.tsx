@@ -17,7 +17,7 @@ import {
 } from "antd";
 import { Options, parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
 
-import { CloseOutlined, PlusCircleOutlined, UserAddOutlined } from "@ant-design/icons";
+import { CloseOutlined,} from "@ant-design/icons";
 import { Step1 } from "./step1";
 import { Step2 } from "./step2";
 import { Step3 } from "./step3";

@@ -149,8 +149,12 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           description="L'Univertisté Chrétienne Bilingue du Congo est engagée et déterminée à poursuivre l'excellence dans la formation de la jeunesse congolaise pour la formtion intégrale. Ainsi des pratiques telles que la tricherie, le plagiat, la corruption, le vol, la débauche, l'ivrognerie, la promiscuité, le dérèglement social, l'accoutrement indécent, etc. sont strictement interdites et sévèrement sanctionnées. Ainsi, JE M'ENGAGE FERMEMENT à me soumettre à toutes les exigences de l'université et au code de conduite de l'étudiant tel que repris dans le manuel de l'étudiant en cas de mon admission à l'UCBC"
           style={{ border: 0 }}
         /> */}
-        <Form.Item label="Photo de profil" name="avatar">
-          <AutoUploadAvatar form={form} name="avatar" prefix="students/avatars" />
+        <Form.Item label="Photo de profil" name="avatar" layout="vertical">
+          <AutoUploadAvatar
+            form={form}
+            name="avatar"
+            prefix="students/avatars"
+          />
         </Form.Item>
         <Form.Item
           name="enrollment_fees"

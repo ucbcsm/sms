@@ -98,7 +98,7 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
       <Form.Item label="Prénom" name="first_name" rules={[{ required: true }]}>
         <Input placeholder="Prénom" />
       </Form.Item>
-      <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>
+      <Form.Item label="Genre" name="gender" rules={[{ required: true }]}>
         <Radio.Group
           options={[
             { value: "M", label: "Masculin" },

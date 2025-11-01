@@ -58,7 +58,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
           style={{
             padding: "40px 0 40px 28px",
             width: "100%",
-            height: "calc(100vh - 108px)",
+            height: "calc(100vh - 154px)",
             overflowY: "auto",
           }}
         >

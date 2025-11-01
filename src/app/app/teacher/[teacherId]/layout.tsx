@@ -60,7 +60,7 @@ export default function TeacherLayout({
           padding: "0 32px 0 32px",
           background: colorBgContainer,
           overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 110px)",
         }}
       >
         <Layout.Header
@@ -85,7 +85,6 @@ export default function TeacherLayout({
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette />
           </Space>
         </Layout.Header>
         <Card
@@ -128,22 +127,6 @@ export default function TeacherLayout({
         >
           {children}
         </Card>
-
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: " 24px 0",
-          }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} CI-UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
       </Layout.Content>
 
       <Layout.Sider
