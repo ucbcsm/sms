@@ -107,7 +107,7 @@ export default function StudentsLayout({
           padding: "0 32px 0 32px",
           background: colorBgContainer,
           overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 110px)",
         }}
       >
         <Layout.Header

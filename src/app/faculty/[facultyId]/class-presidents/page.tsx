@@ -33,7 +33,7 @@ import {
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 import { Palette } from "@/components/palette";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { NewClassPresidentForm } from "./forms/new";
 import { EditClassPresidentForm } from "./forms/edit";
 import { useYid } from "@/hooks/use-yid";
@@ -124,7 +124,7 @@ export default function Page() {
           padding: "0 32px 0 32px",
           background: colorBgContainer,
           overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 110px)",
         }}
       >
         <Layout.Header
@@ -149,7 +149,7 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette />
+            
           </Space>
         </Layout.Header>
 
@@ -159,7 +159,11 @@ export default function Page() {
           title={() => (
             <header className="flex pb-3">
               <Space>
-                <Typography.Title level={5} style={{ marginBottom: 0 }} type="secondary" >
+                <Typography.Title
+                  level={5}
+                  style={{ marginBottom: 0 }}
+                  type="secondary"
+                >
                   Liste des chefs
                 </Typography.Title>
               </Space>
@@ -176,7 +180,7 @@ export default function Page() {
                 >
                   Imprimer
                 </Button>
-                <Dropdown
+                {/* <Dropdown
                   menu={{
                     items: [
                       {
@@ -197,7 +201,7 @@ export default function Page() {
                   <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
                     Exporter
                   </Button>
-                </Dropdown>
+                </Dropdown> */}
               </Space>
             </header>
           )}
@@ -214,7 +218,7 @@ export default function Page() {
                       `${record.student?.user.surname} ${record.student?.user.last_name} ${record.student?.user.first_name}`
                     ),
                   }}
-                  src={record.student?.user.avatar || null}
+                  src={getPublicR2Url(record.student?.user.avatar)}
                 >
                   {record.student?.user.first_name?.charAt(0).toUpperCase()}
                 </Avatar>
@@ -226,7 +230,7 @@ export default function Page() {
               dataIndex: "student",
               key: "matricule",
               render: (_, record, __) => record.student?.user.matricule,
-              width:80
+              width: 80,
             },
             {
               title: "Noms",

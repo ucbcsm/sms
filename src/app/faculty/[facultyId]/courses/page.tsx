@@ -150,7 +150,7 @@ export default function Page() {
           padding: "0 32px 0 32px",
           background: colorBgContainer,
           overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 110px)",
         }}
       >
         <Layout.Header
@@ -269,7 +269,7 @@ export default function Page() {
           rowSelection={{
             type: "checkbox",
           }}
-          scroll={{ y: "calc(100vh - 283px)" }}
+          scroll={{ y: "calc(100vh - 329px)" }}
           size="small"
           loading={isPendngCourses}
           pagination={{

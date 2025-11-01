@@ -1,5 +1,5 @@
 "use client";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { PeriodEnrollment } from "@/types";
 import {
   CheckOutlined,
@@ -248,7 +248,7 @@ export const ListPeriodValidatedStudents: FC<
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
-            <Dropdown
+            {/* <Dropdown
               menu={{
                 items: [
                   {
@@ -271,7 +271,7 @@ export const ListPeriodValidatedStudents: FC<
                 icon={<MoreOutlined />}
                 style={{ boxShadow: "none" }}
               />
-            </Dropdown>
+            </Dropdown> */}
           </Space>
         </header>
       )}
@@ -283,7 +283,7 @@ export const ListPeriodValidatedStudents: FC<
           key: "avatar",
           render: (_, record) => (
             <Avatar
-              src={record.year_enrollment.user.avatar || null}
+              src={getPublicR2Url(record.year_enrollment.user.avatar)}
               style={{
                 backgroundColor: getHSLColor(
                   `${record.year_enrollment.user.surname} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.first_name}`
@@ -369,7 +369,7 @@ export const ListPeriodValidatedStudents: FC<
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 346px)" }}
+      scroll={{ y: "calc(100vh - 392px)" }}
       size="small"
       loading={isPendingPeriodEnrollments}
       pagination={{

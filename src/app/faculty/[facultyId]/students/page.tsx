@@ -4,7 +4,7 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import { getClasses, getClassesYearsAsOptions, getCurrentDepartmentsAsOptions, getDepartmentsByFacultyId, getYearEnrollments, getYearEnrollmentsByFacultyId } from "@/lib/api";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   DownOutlined,
   FileExcelOutlined,
@@ -170,7 +170,7 @@ export default function Page() {
           key: "avatar",
           render: (_, record) => (
             <Avatar
-              src={record.user.avatar || null}
+              src={getPublicR2Url(record.user.avatar)}
               style={{
                 backgroundColor: getHSLColor(
                   `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
@@ -178,7 +178,6 @@ export default function Page() {
               }}
             >
               {record?.user.first_name?.charAt(0).toUpperCase()}
-              {record?.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 56,
@@ -188,9 +187,7 @@ export default function Page() {
           dataIndex: "matricule",
           key: "matricule",
           render: (_, record) => (
-            <Link href={`/student/${record.id}`}>
-              {record.user.matricule}
-            </Link>
+            <Link href={`/student/${record.id}`}>{record.user.matricule}</Link>
           ),
           width: 80,
           align: "center",
@@ -199,8 +196,7 @@ export default function Page() {
           title: "Genre",
           dataIndex: "gender",
           key: "gender",
-          render: (_, record, __) =>
-            record.user.gender || "",
+          render: (_, record, __) => record.user.gender || "",
           width: 56,
           align: "center",
         },
@@ -210,7 +206,8 @@ export default function Page() {
           key: "name",
           render: (value, record) => (
             <Link href={`/student/${record.id}`}>
-              {record.user.surname} {record.user.last_name} {record.user.first_name}
+              {record.user.surname} {record.user.last_name}{" "}
+              {record.user.first_name}
             </Link>
           ),
           ellipsis: true,
@@ -282,7 +279,7 @@ export default function Page() {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 346px)" }}
+      scroll={{ y: "calc(100vh - 392px)" }}
       size="small"
       loading={isPendingEnrollememts}
       pagination={{

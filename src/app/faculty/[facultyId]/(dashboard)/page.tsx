@@ -99,7 +99,7 @@ export default function Page() {
           padding: "0 32px 0 32px",
           background: colorBgContainer,
           overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          height: "calc(100vh - 110px)",
         }}
       >
         <Layout.Header
@@ -112,19 +112,15 @@ export default function Page() {
         >
           <Space>
             {/* <BackButton /> */}
-           
-              <Typography.Title level={3} style={{ marginBottom: 0 }}>
-               Tableau de bord
-              </Typography.Title>
-            
+
+            <Typography.Title level={3} style={{ marginBottom: 0 }}>
+              Tableau de bord
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
+          <Space></Space>
         </Layout.Header>
-        {/* <Card> */}
-          {/* <Typography.Title level={5}>Tableau de bord</Typography.Title> */}
+
         <Row gutter={[24, 24]}>
           <Col xs={24} sm={24} md={24} lg={16}>
             <Row gutter={[16, 16]}>
@@ -144,7 +140,7 @@ export default function Page() {
                   </Flex>
                 </Card>
               </Col>
-              <Col  xs={24} sm={12} md={12} lg={8}>
+              <Col xs={24} sm={12} md={12} lg={8}>
                 <Card>
                   <Flex justify="space-between">
                     <Statistic
@@ -168,7 +164,7 @@ export default function Page() {
                   </Flex>
                 </Card>
               </Col>
-              <Col  xs={24} sm={12} md={12} lg={8}>
+              <Col xs={24} sm={12} md={12} lg={8}>
                 <Card>
                   <Flex justify="space-between">
                     <Statistic
@@ -215,7 +211,7 @@ export default function Page() {
                   </Flex>
                 </Card>
               </Col>
-              <Col  xs={24} sm={12} md={12} lg={8}>
+              <Col xs={24} sm={12} md={12} lg={8}>
                 <Card>
                   <Flex justify="space-between">
                     <Statistic
@@ -228,41 +224,43 @@ export default function Page() {
               </Col>
               <Col span={24}>
                 {/* <Card> */}
-                  <Typography.Title level={5}>Mentions</Typography.Title>
-                  <List
-                    dataSource={departments}
-                    renderItem={(item) => (
-                      <List.Item
-                        extra={
+                <Typography.Title level={5}>Mentions</Typography.Title>
+                <List
+                  dataSource={departments}
+                  renderItem={(item) => (
+                    <List.Item
+                      extra={
+                        <Space>
+                          <Button
+                            color="primary"
+                            variant="dashed"
+                            style={{ boxShadow: "none" }}
+                            onClick={() =>
+                              router.push(
+                                `/faculty/${facultyId}/department/${item.id}`
+                              )
+                            }
+                          >
+                            Gérer
+                          </Button>
+                        </Space>
+                      }
+                    >
+                      <List.Item.Meta
+                        title={`${item.name}`}
+                        description={
                           <Space>
-                            <Button
-                              color="primary"
-                              variant="dashed"
-                              style={{ boxShadow: "none" }}
-                              onClick={() =>
-                                router.push(`/faculty/${facultyId}/department/${item.id}`)
-                              }
-                            >
-                              Gérer
-                            </Button>
+                            Code:
+                            <Badge
+                              count={item?.acronym}
+                              color={getHSLColor(`${item?.name}`)}
+                            />
                           </Space>
                         }
-                      >
-                        <List.Item.Meta
-                          title={`${item.name}`}
-                          description={
-                            <Space>
-                              Code:
-                              <Badge
-                                count={item?.acronym}
-                                color={getHSLColor(`${item?.name}`)}
-                              />
-                            </Space>
-                          }
-                        />
-                      </List.Item>
-                    )}
-                  />
+                      />
+                    </List.Item>
+                  )}
+                />
                 {/* </Card> */}
               </Col>
             </Row>
@@ -271,37 +269,37 @@ export default function Page() {
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 {/* <Card loading={isPending}> */}
-                  <Descriptions
-                    title="Détails de la filière"
-                    extra={
-                      <Button
-                        type="link"
-                        icon={<EditOutlined />}
-                        onClick={() => setOpenEdit(true)}
-                      >
-                        Modifier
-                      </Button>
-                    }
-                    column={1}
-                    items={[
-                      {
-                        label: "Code",
-                        children: faculty?.acronym,
-                      },
-                      {
-                        label: "Nom",
-                        children: faculty?.name,
-                      },
-                      {
-                        label: "Domaine",
-                        children: faculty?.field.name,
-                      },
-                    ]}
-                  />
-                  <div className="pt-5">
-                    <Typography.Title level={5}>Membres</Typography.Title>
-                    <FacultyMembersList faculty={faculty} />
-                  </div>
+                <Descriptions
+                  title="Détails de la filière"
+                  extra={
+                    <Button
+                      type="link"
+                      icon={<EditOutlined />}
+                      onClick={() => setOpenEdit(true)}
+                    >
+                      Modifier
+                    </Button>
+                  }
+                  column={1}
+                  items={[
+                    {
+                      label: "Code",
+                      children: faculty?.acronym,
+                    },
+                    {
+                      label: "Nom",
+                      children: faculty?.name,
+                    },
+                    {
+                      label: "Domaine",
+                      children: faculty?.field.name,
+                    },
+                  ]}
+                />
+                <div className="pt-5">
+                  <Typography.Title level={5}>Membres</Typography.Title>
+                  <FacultyMembersList faculty={faculty} />
+                </div>
                 {/* </Card> */}
               </Col>
             </Row>

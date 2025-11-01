@@ -118,7 +118,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
       }
       style={{ boxShadow: "none", borderRadius: 0 }}
       extra={teaching_units && <NewTeachingUnitForm cycles={cycles} />}
-      styles={{ body: { height: `calc(100vh - 119px)`, overflow: "auto" } }}
+      styles={{ body: { height: `calc(100vh - 165px)`, overflow: "auto" } }}
     >
       <div>
         <List

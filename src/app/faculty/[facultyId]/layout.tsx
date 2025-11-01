@@ -118,38 +118,6 @@ export default function FacultyLayout({
           )}
         </Space>
 
-        {/* <Menu
-          mode="horizontal"
-          theme="light"
-          defaultSelectedKeys={[pathname]}
-          selectedKeys={[pathname]}
-          overflowedIndicator={<MenuOutlined />}
-          items={[
-            {
-              key: `/faculty/${facultyId}`,
-              label: "Aperçu",
-            },
-            { key: `/faculty/${facultyId}/students`, label: "Étudiants" },
-            {
-              key: `/faculty/${facultyId}/taught-courses`,
-              label: "Cours",
-            },
-            {
-              key: `/faculty/${facultyId}/courses`,
-              label: "Catalogue",
-            },
-            {
-              key: `departments`,
-              label: "Mentions",
-              //  icon: <BranchesOutlined />,
-              children: getDepartmentsAsMenu(),
-            },
-          ]}
-          style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-          onClick={({ key }) => {
-            router.push(key);
-          }}
-        /> */}
         <div className="flex-1" />
         <Space>
           <YearSelector />
@@ -160,169 +128,72 @@ export default function FacultyLayout({
           <UserProfileButton />
         </Space>
       </Layout.Header>
-      <Layout>
-        <Layout.Sider
-          width={260}
-          style={{
-            borderRight: `1px solid ${colorBorderSecondary}`,
-            paddingTop: 20,
-            background: colorBgContainer,
-            height: `calc(100vh - 64px)`,
-            overflow: "auto",
-          }}
-        >
-          <Layout style={{}}>
-            <Menu
-              mode="inline"
-              theme="light"
-              style={{ height: "100%", borderRight: 0 }}
-              defaultSelectedKeys={[pathname]}
-              selectedKeys={[pathname]}
-              overflowedIndicator={<MenuOutlined />}
-              items={[
-                {
-                  key: `/`,
-                  label: "Menu",
-                  type: "group",
-                  children: [
-                    {
-                      key: `/faculty/${facultyId}`,
-                      label: <Link href={`/faculty/${facultyId}`}>Aperçu</Link>,
-                    },
-                    {
-                      key: `/faculty/${facultyId}/students`,
-                      label: (
-                        <Link href={`/faculty/${facultyId}/students`}>
-                          Étudiants
-                        </Link>
-                      ),
-                    },
-                    {
-                      key: `/faculty/${facultyId}/taught-courses`,
-                      label: (
-                        <Link href={`/faculty/${facultyId}/taught-courses`}>
-                          Cours planifiés
-                        </Link>
-                      ),
-                    },
-                    {
-                      key: `/faculty/${facultyId}/courses`,
-                      label: (
-                        <Link href={`/faculty/${facultyId}/courses`}>
-                          Catalogue & UE
-                        </Link>
-                      ),
-                    },
-                    {
-                      key: `departments`,
-                      label: "Mentions",
-                      //  icon: <BranchesOutlined />,
-                      children: getDepartmentsAsMenu(),
-                    },
-                    {
-                      key: `/faculty/${facultyId}/class-presidents`,
-                      label: (
-                        <Link href={`/faculty/${facultyId}/class-presidents`}>
-                          Chefs de promotion
-                        </Link>
-                      ),
-                    },
-                    {
-                      key: `/faculty/${facultyId}/courses-to-retake`,
-                      label: (
-                        <Link href={`/faculty/${facultyId}/courses-to-retake`}>
-                          Cours à reprendre
-                        </Link>
-                      ),
-                    },
-                  ],
-                },
-              ]}
-              // style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-              // onClick={({ key }) => {
-              //   router.push(key);
-              // }}
-            />
-
-            {/* {
-                      key: "/console/classrooms",
-                      label: "Salles de classe",
-                      icon: <TagsOutlined />,
-                      className: "normal-case",
-                    },
-                {
-                  key: "/console/users",
-                  label: "Utilisateurs",
-                  icon: <TeamOutlined />,
-                },
-              ]}
-              onClick={({ key }) => {
-                router.push(key);
-              }}
-            /> */}
-            {/* <Layout.Footer
-              style={{
-                padding: "20px 16px",
-                borderTop: `1px solid ${colorBorderSecondary}`,
-                background: colorBgContainer,
-              }}
-            >
-              <Typography.Text type="secondary">
-                © 2025 CI-UCBC. Tous droits réservés.
-              </Typography.Text>
-            </Layout.Footer> */}
-          </Layout>
-        </Layout.Sider>
-        <Layout.Content>
-          <div
-            style={{
-              background: colorBgContainer,
-              minHeight: 280,
-              borderRadius: borderRadiusLG,
-            }}
-          >
-            {/* <Menu
+      <div>
+        <Menu
           mode="horizontal"
           theme="light"
+          style={{ height: "100%", borderRight: 0 }}
           defaultSelectedKeys={[pathname]}
           selectedKeys={[pathname]}
           overflowedIndicator={<MenuOutlined />}
           items={[
             {
-                  key: `/`,
-                  label: "Menu",
-                  type: "group",
-                  children:[
-            {
               key: `/faculty/${facultyId}`,
-              label: "Aperçu",
+              label: <Link href={`/faculty/${facultyId}`}>Aperçu</Link>,
             },
-            { key: `/faculty/${facultyId}/students`, label: "Étudiants" },
+            {
+              key: `/faculty/${facultyId}/students`,
+              label: (
+                <Link href={`/faculty/${facultyId}/students`}>Étudiants</Link>
+              ),
+            },
             {
               key: `/faculty/${facultyId}/taught-courses`,
-              label: "Cours",
+              label: (
+                <Link href={`/faculty/${facultyId}/taught-courses`}>
+                  Cours planifiés
+                </Link>
+              ),
             },
             {
               key: `/faculty/${facultyId}/courses`,
-              label: "Catalogue",
+              label: (
+                <Link href={`/faculty/${facultyId}/courses`}>
+                  Catalogue & UE
+                </Link>
+              ),
             },
             {
               key: `departments`,
               label: "Mentions",
               //  icon: <BranchesOutlined />,
               children: getDepartmentsAsMenu(),
-            },]
-          }
+            },
+            {
+              key: `/faculty/${facultyId}/class-presidents`,
+              label: (
+                <Link href={`/faculty/${facultyId}/class-presidents`}>
+                  Chefs de promotion
+                </Link>
+              ),
+            },
+            {
+              key: `/faculty/${facultyId}/courses-to-retake`,
+              label: (
+                <Link href={`/faculty/${facultyId}/courses-to-retake`}>
+                  Cours à reprendre
+                </Link>
+              ),
+            },
           ]}
-          style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-          onClick={({ key }) => {
-            router.push(key);
-          }}
-        /> */}
-            {children}
-          </div>
-        </Layout.Content>
-      </Layout>
+          // style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
+          // onClick={({ key }) => {
+          //   router.push(key);
+          // }}
+        />
+      </div>
+
+      <div>{children}</div>
     </Layout>
   );
 }
