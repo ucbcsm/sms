@@ -11,6 +11,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Skeleton,
   Space,
   Typography,
 } from "antd";
@@ -31,7 +32,7 @@ type Props = {
 export const Step8: FC<Props> = ({ setStep }) => {
   const [form] = Form.useForm<any>();
 
-  const { data: enrollment_questions } = useQuery({
+  const { data: enrollment_questions, isPending } = useQuery({
     queryKey: ["enrollment_questions"],
     queryFn: getEnrollmentQuestions,
   });
@@ -55,6 +56,10 @@ export const Step8: FC<Props> = ({ setStep }) => {
       form.setFieldsValue({ enrollment_q_a: initialValues });
     }
   }, [enrollment_questions]);
+
+  if(isPending){
+      return <Skeleton active/>
+    }
 
   return (
     <Form

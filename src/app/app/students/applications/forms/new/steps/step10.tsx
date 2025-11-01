@@ -1,9 +1,10 @@
 "use client";
+import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
 import { Palette } from "@/components/palette";
 import { useApplicationStepsData } from "@/hooks/use-application-steps-data";
 import { createApplication } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button, Form, Space, Checkbox, Alert, message, Flex, Select } from "antd";
+import { Button, Form, Space, Checkbox, message, Flex, Select } from "antd";
 import { Options } from "nuqs";
 import { FC } from "react";
 import { z } from "zod";
@@ -25,6 +26,7 @@ const formSchema = z.object({
   certified: z.boolean().refine((val) => val === true, {
     message: "Vous devez certifier que les renseignements sont exacts.",
   }),
+  avatar:z.string().nullable()
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -96,7 +98,7 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           last_name: sdata.last_name,
           first_name: sdata.first_name,
           email: sdata.email,
-          avatar: "",
+          avatar: values.avatar || null,
           is_former_student: false,
           status: "pending",
           enrollment_fees: values.enrollment_fees,
@@ -104,7 +106,6 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
         },
         {
           onSuccess: () => {
-
             queryClient.invalidateQueries({ queryKey: ["applications"] });
             queryClient.invalidateQueries({ queryKey: ["year_enrollments"] });
             removeData();
@@ -127,7 +128,7 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
                   "Une erreur s'est produite lors de la soumission. Veuillez réessayer."
               );
             }
-          }
+          },
         }
       );
     }
@@ -148,6 +149,9 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           description="L'Univertisté Chrétienne Bilingue du Congo est engagée et déterminée à poursuivre l'excellence dans la formation de la jeunesse congolaise pour la formtion intégrale. Ainsi des pratiques telles que la tricherie, le plagiat, la corruption, le vol, la débauche, l'ivrognerie, la promiscuité, le dérèglement social, l'accoutrement indécent, etc. sont strictement interdites et sévèrement sanctionnées. Ainsi, JE M'ENGAGE FERMEMENT à me soumettre à toutes les exigences de l'université et au code de conduite de l'étudiant tel que repris dans le manuel de l'étudiant en cas de mon admission à l'UCBC"
           style={{ border: 0 }}
         /> */}
+        <Form.Item label="Photo de profil" name="avatar">
+          <AutoUploadAvatar form={form} name="avatar" prefix="students/avatars" />
+        </Form.Item>
         <Form.Item
           name="enrollment_fees"
           label="Frais d'inscription"
@@ -161,7 +165,6 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
               { value: "partially_paid", label: "Partiellement payés" },
               { value: "unpaid", label: "Non payés" },
             ]}
-            // variant="filled"
             style={{ width: "100%" }}
           />
         </Form.Item>

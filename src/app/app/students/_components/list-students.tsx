@@ -23,7 +23,7 @@ import {
 } from "antd";
 import { FC } from "react";
 import { useYid } from "@/hooks/use-yid";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
 import { parseAsInteger, useQueryState } from "nuqs";
@@ -212,7 +212,7 @@ export const ListStudents: FC = () => {
           key: "avatar",
           render: (_, record) => (
             <Avatar
-              src={record.user.avatar || null}
+              src={getPublicR2Url(record.user.avatar)}
               style={{
                 backgroundColor: getHSLColor(
                   `${record.user.surname} ${record.user.last_name} ${record.user.first_name}`

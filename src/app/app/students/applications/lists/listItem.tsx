@@ -1,6 +1,6 @@
 "use client";
 
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { Application } from "@/types";
 import { getApplicationStatusName, getApplicationTagColor } from "@/lib/api";
 import { Avatar, Flex, List, Tag, theme, Typography } from "antd";
@@ -33,7 +33,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
       <List.Item.Meta
         avatar={
           <Avatar
-            src={item.avatar}
+            src={getPublicR2Url(item.avatar)}
             style={{
               backgroundColor: getHSLColor(
                 `${item.surname} ${item.last_name} ${item.first_name}`

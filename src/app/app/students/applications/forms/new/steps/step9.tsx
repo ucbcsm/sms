@@ -57,7 +57,6 @@ export const Step9: FC<Props> = ({ setStep }) => {
       const data = JSON.parse(raw) as {
         application_documents: Step9ApplicationFormDataType;
       };
-      console.log("Loaded saved data for step 9:", data);
       form.setFieldsValue(data);
     } else {
       const initialValues = getApplicationDocsFromRequiredDocs();

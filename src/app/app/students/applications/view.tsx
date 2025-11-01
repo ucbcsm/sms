@@ -72,6 +72,7 @@ import { Options } from "nuqs";
 import { MarkAsPendingForm } from "./forms/decisions/mark-as-pending";
 import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 import { DataFetchErrorResult } from "@/components/errorResult";
+import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
 
 type ViewEditApplicationFormProps = {
   application?: Application;
@@ -373,6 +374,15 @@ export const ViewEditApplicationForm: React.FC<
                 Informations personnelles
               </Typography.Title>
             </Divider>
+
+            <Form.Item label="Photo de profil" name="avatar" layout="vertical">
+              <AutoUploadAvatar
+                form={form}
+                name="avatar"
+                prefix="students/avatars"
+                disabled={isPending || application?.status !== "pending"}
+              />
+            </Form.Item>
 
             <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
               <Input placeholder="Nom" />

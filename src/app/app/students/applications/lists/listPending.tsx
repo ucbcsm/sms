@@ -42,6 +42,8 @@ export const ListPendingApplications: FC<ListPendingApplicationsProps> = ({
     enabled: !!year,
   });
 
+
+
   return (
     <>
       <Input
