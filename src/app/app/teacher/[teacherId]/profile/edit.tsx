@@ -1,5 +1,6 @@
 "use client";
 
+import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
 import { Palette } from "@/components/palette";
 import {
   updateTeacher,
@@ -69,7 +70,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               last_name: values.last_name,
               surname: values.surname,
               email: values.email,
-              avatar: teacher?.user.avatar,
+              avatar: values.avatar ||null,
               matricule: values.matricule,
               pending_avatar: teacher?.user.pending_avatar || null,
               is_permanent_teacher: values.is_permanent_teacher,
@@ -130,11 +131,11 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           <div className="text-white">
             Info enseignant:{" "}
             <Typography.Text
-              type="warning"
+              type="success"
               style={{ textTransform: "uppercase" }}
             >
-              {teacher?.user.first_name} {teacher?.user.last_name}{" "}
-              {teacher?.user.surname}
+              {teacher?.user.surname} {teacher?.user.last_name}{" "}
+              {teacher?.user.first_name}
             </Typography.Text>
           </div>
         }
@@ -219,6 +220,11 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
                 type="link"
                 icon={!editMatricule ? <EditOutlined /> : <LockOutlined />}
                 onClick={() => setEditMatricule((prev) => !prev)}
+                title={
+                  !editMatricule
+                    ? "Modifier le matricule"
+                    : "Vérouiller le matricule"
+                }
               />
             }
           />
@@ -247,7 +253,14 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>Identité</Typography.Title>
           </Divider>
-
+          <Form.Item label="Photo de profil" name="avatar" layout="vertical">
+            <AutoUploadAvatar
+              form={form}
+              name="avatar"
+              prefix="students/avatars"
+              initialValue={teacher?.user.avatar}
+            />
+          </Form.Item>
           <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
             <Input placeholder="Nom" />
           </Form.Item>

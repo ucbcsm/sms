@@ -10,6 +10,7 @@ import { useInstitution } from "@/hooks/use-institution";
 import { useYid } from "@/hooks/use-yid";
 import { getUserIsJury, getYears } from "@/lib/api";
 import { logout } from "@/lib/api/auth";
+import { getPublicR2Url } from "@/lib/utils";
 import {
   CalendarOutlined,
   LoadingOutlined,
@@ -128,7 +129,7 @@ export default function Page() {
           >
             <div className="flex items-center pr-3">
               <Image
-                src={institution?.logo || "/ucbc-logo.png"}
+                src={getPublicR2Url(institution?.logo) || undefined}
                 alt="Logo"
                 width={36}
                 height="auto"

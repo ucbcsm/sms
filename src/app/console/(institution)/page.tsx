@@ -19,6 +19,7 @@ import {
 } from "antd";
 import { EditInstitutionForm } from "./forms/edit";
 import { useInstitution } from "@/hooks/use-institution";
+import { getPublicR2Url, isImageUrl } from "@/lib/utils";
 
 export default function Page() {
   const {
@@ -180,7 +181,7 @@ export default function Page() {
               <Col span={8}>
                 <div style={{ textAlign: "center", marginBottom: 28 }}>
                   <Image
-                    src={data?.logo || "/ucbc-logo.png"}
+                    src={getPublicR2Url(data?.logo) || undefined}
                     alt="Logo"
                     style={{
                       marginBottom: 28,

@@ -4,7 +4,6 @@ import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
 import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 import { Step1ApplicationFormDataType } from "@/types";
-import { useQuery } from "@tanstack/react-query";
 import {
   Alert,
   Button,

@@ -7,6 +7,7 @@ import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
 import { getDepartmentsByFacultyId, getFaculty } from "@/lib/api";
+import { getPublicR2Url } from "@/lib/utils";
 import { MenuOutlined, SubnodeOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Divider, Form, Image, Layout, Menu, Skeleton, Space, theme, Typography } from "antd";
@@ -76,7 +77,7 @@ export default function FacultyLayout({
           >
             <div className="flex items-center pr-3">
               <Image
-                src={institution?.logo || "/ucbc-logo.png"}
+                src={getPublicR2Url(institution?.logo) || undefined}
                 alt="Logo"
                 width={36}
                 height="auto"
@@ -91,9 +92,7 @@ export default function FacultyLayout({
           <Typography.Text type="secondary">Filière:</Typography.Text>
 
           {!isPending ? (
-            <Typography.Text>
-              {faculty?.acronym}
-            </Typography.Text>
+            <Typography.Text>{faculty?.acronym}</Typography.Text>
           ) : (
             <Form>
               <Skeleton.Input active />

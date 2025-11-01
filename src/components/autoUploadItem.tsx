@@ -12,7 +12,7 @@ import {
   UploadOutlined,
 } from "@ant-design/icons";
 import { uploadFile } from "@/actions/uploadFile";
-import { getPublicR2Url } from "@/lib/utils";
+import { getPublicR2Url, isImageUrl } from "@/lib/utils";
 
 interface AutoUploadFormItemProps {
   name: string | number | (string | number)[];
@@ -69,13 +69,6 @@ const watchedValue = Form.useWatch(name, form);
     }
   };
 
-  // 🖼️ Détermine si l’URL correspond à une image
-  const isImageUrl = (url?: string | null) => {
-    if (!url) return false;
-    const u = url.toLowerCase();
-    if (u.startsWith("blob:") || u.startsWith("data:image/")) return true;
-    return /\.(png|jpe?g|gif|webp|svg|bmp|avif|heic|heif|ico)(\?.*)?$/.test(u);
-  };
 
   // 📤 Upload handler
   const handleBeforeUpload = async (file: RcFile) => {

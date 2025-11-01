@@ -1,4 +1,4 @@
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -70,7 +70,6 @@ export function ListTeachers() {
         page_size: pageSize !== 0 ? pageSize : undefined,
       }),
   });
-
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -195,6 +194,7 @@ export function ListTeachers() {
             key: "avatar",
             render: (_, record, __) => (
               <Avatar
+                src={getPublicR2Url(record.user.avatar)}
                 style={{
                   backgroundColor: getHSLColor(
                     `${record.user.surname} ${record.user.last_name} ${record.user.first_name}`

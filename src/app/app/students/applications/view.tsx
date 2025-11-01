@@ -381,6 +381,7 @@ export const ViewEditApplicationForm: React.FC<
                 name="avatar"
                 prefix="students/avatars"
                 disabled={isPending || application?.status !== "pending"}
+                initialValue={application?.avatar}
               />
             </Form.Item>
 

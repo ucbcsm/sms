@@ -1,5 +1,6 @@
 "use client";
 
+import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
 import { useTeacherStepsData } from "@/hooks/use-teacher-steps-data";
 import { createTeacher } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -39,6 +40,7 @@ const formSchema = z.object({
     message:
       "L'institution d'origine est requise pour les enseignants visiteurs.",
   }),
+  avatar: z.string().nullable(),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -57,7 +59,6 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
   });
 
   const onFinish = (values: FormSchemaType) => {
-    // console.log(sdata)
     
     if (sdata) {
       mutateAsync(
@@ -75,7 +76,7 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           other_responsabilities: sdata.other_responsabilities || "",
           nationality: sdata.nationality,
           phone_number_1: sdata.phone_number_1,
-          phone_number_2: sdata.phone_number_2,
+          phone_number_2: sdata.phone_number_2 || "",
           marital_status: sdata.marital_status,
           field_of_study: sdata.field_of_study,
           education_level: sdata.education_level,
@@ -85,7 +86,7 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           email: sdata.email,
           religious_affiliation: sdata.religious_affiliation || "",
           physical_ability: sdata.physical_ability,
-          avatar: null,
+          avatar: values.avatar || null,
           place_of_birth: sdata.place_of_birth || "",
           date_of_birth: sdata.date_of_birth
             ? dayjs(sdata.date_of_birth).format("YYYY-MM-DD")
@@ -133,6 +134,13 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
         style={{ maxWidth: 520, margin: "auto" }}
         disabled={isPending}
       >
+        <Form.Item label="Photo de profil" name="avatar" layout="vertical">
+          <AutoUploadAvatar
+            form={form}
+            name="avatar"
+            prefix="students/avatars"
+          />
+        </Form.Item>
         <Form.Item
           label="Type de personnel"
           name="is_permanent_teacher"
@@ -160,12 +168,6 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
             <Input placeholder="Institution ou organisation d'origine" />
           </Form.Item>
         )}
-        <Alert
-          type="info"
-          showIcon
-          description="En soumettant ce formulaire, je confirme que les informations fournies sont exactes et complètes. Je m'engage également à respecter les règlements et les exigences de l'établissement en tant qu'enseignant."
-          style={{ border: 0 }}
-        />
         <Form.Item
           name="certified"
           valuePropName="checked"
@@ -175,8 +177,7 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           style={{ marginTop: 16 }}
         >
           <Checkbox>
-            Je certifie sur honneur que les renseignements ci-haut fournis sont
-            exacts
+            Je certifie que les renseignements ci-haut fournis sont exacts
           </Checkbox>
         </Form.Item>
         <Form.Item
@@ -196,7 +197,7 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
               htmlType="submit"
               style={{ boxShadow: "none" }}
             >
-              Soumettre maintenant
+              Soumettre
             </Button>
           </Space>
         </Form.Item>

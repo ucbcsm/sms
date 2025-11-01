@@ -32,6 +32,8 @@ interface AutoUploadAvatarProps {
   /** Label facultatif pour un Form.Item externe */
   label?: string;
   disabled?: boolean;
+  shape?: "circle" | "square";
+  icon?: React.ReactNode;
 }
 
 /**
@@ -52,6 +54,8 @@ export const AutoUploadAvatar: React.FC<AutoUploadAvatarProps> = ({
   size = 100,
   label,
   disabled = false,
+  shape = "circle",
+  icon=<UserOutlined />
 }) => {
   const {
     token: { colorBorderSecondary },
@@ -157,24 +161,15 @@ export const AutoUploadAvatar: React.FC<AutoUploadAvatarProps> = ({
         <Avatar
           size={size}
           src={preview || undefined}
-          icon={
-            !preview ? (
-              uploading ? (
-                <LoadingOutlined />
-              ) : (
-                <UserOutlined />
-              )
-            ) : (
-              <UserOutlined />
-            )
-          }
+          icon={!preview ? uploading ? <LoadingOutlined /> : icon : icon}
           style={{
             border: `1px solid ${colorBorderSecondary}`,
           }}
+          shape={shape}
         />
         <Space>
           {preview && (
-            <Tooltip title="Supprimer l’avatar">
+            <Tooltip title="Supprimer la photo de profil">
               <Button
                 icon={<DeleteOutlined />}
                 size="small"
@@ -188,12 +183,12 @@ export const AutoUploadAvatar: React.FC<AutoUploadAvatarProps> = ({
             </Tooltip>
           )}
           <Upload {...uploadProps}>
-            <Tooltip title="Changer la photo de l'étudiant">
+            <Tooltip title="Changer la photo de profil">
               <Button
                 icon={uploading ? <LoadingOutlined /> : <UploadOutlined />}
                 color="primary"
                 type="dashed"
-                disabled={uploading ||disabled}
+                disabled={uploading || disabled}
                 style={{ boxShadow: "none" }}
               >
                 {uploading ? "Upload en cours..." : "Changer la photo"}

@@ -24,6 +24,7 @@ import { SupportDrawer } from "@/components/support-drawer";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
+import { getPublicR2Url } from "@/lib/utils";
 
 export default function Page() {
   const {
@@ -49,7 +50,7 @@ export default function Page() {
           >
             <div className="flex items-center pr-3">
               <Image
-                src={institution?.logo || "/ucbc-logo.png"}
+                src={getPublicR2Url(institution?.logo) || undefined}
                 alt="Logo"
                 width={36}
                 height="auto"

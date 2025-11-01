@@ -7,6 +7,7 @@ import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
 import { getFaculties } from "@/lib/api";
+import { getPublicR2Url } from "@/lib/utils";
 import {
   BranchesOutlined,
   DashboardOutlined,
@@ -75,7 +76,7 @@ export default function AppLayout({
           <Link href="/app" style={{ display: "flex", alignItems: "center" }}>
             <div className="flex items-center pr-3">
               <Image
-                src="/ucbc-logo.png"
+                src={getPublicR2Url(institution?.logo) || undefined}
                 alt="Logo"
                 width={36}
                 preview={false}

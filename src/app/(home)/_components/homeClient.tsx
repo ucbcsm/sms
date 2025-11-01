@@ -21,6 +21,7 @@ import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { UserProfileButton } from "@/components/userProfileButton";
 import { AppsButton } from "@/components/appsButton";
 import { Palette } from "@/components/palette";
+import { getPublicR2Url } from "@/lib/utils";
 
 type HomeClientProps = {
   visibleApps: AppItem[];
@@ -51,7 +52,7 @@ export const HomeClient: FC<HomeClientProps> = ({ visibleApps, userRoles }) => {
             <Link href={`/`} style={{ display: "flex", alignItems: "center" }}>
               <div className="flex items-center pr-3">
                 <Image
-                  src={institution?.logo || "/ucbc-logo.png"}
+                  src={getPublicR2Url(institution?.logo) || undefined}
                   alt="Logo"
                   width={36}
                   height="auto"
@@ -63,7 +64,9 @@ export const HomeClient: FC<HomeClientProps> = ({ visibleApps, userRoles }) => {
               </Typography.Title>
             </Link>
             <Divider type="vertical" />
-            <Typography.Text type="secondary">Apps</Typography.Text>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              Apps
+            </Typography.Title>
           </Space>
           <div className="flex-1" />
           <Space>

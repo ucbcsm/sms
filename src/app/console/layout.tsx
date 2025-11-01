@@ -6,6 +6,7 @@ import { SupportDrawer } from "@/components/support-drawer";
 import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
+import { getPublicR2Url } from "@/lib/utils";
 import {
   ApartmentOutlined,
   CheckCircleOutlined,
@@ -99,7 +100,7 @@ export default function ConsoleLayout({
         </Space>
         <div className=" flex items-center px-4">
           <Image
-            src="/ucbc-logo.png"
+            src={getPublicR2Url(institution?.logo) || undefined}
             alt="Logo"
             width={36}
             preview={false}

@@ -72,7 +72,6 @@ export default function TeacherLayout({
           }}
         >
           <Space>
-            <BackButton />
             {!isPending ? (
               <Typography.Title level={3} style={{ marginBottom: 0 }}>
                 {teacher?.user.first_name} {teacher?.user.last_name}{" "}

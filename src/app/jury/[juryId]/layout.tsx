@@ -2,7 +2,7 @@
 
 import { useYid } from "@/hooks/use-yid";
 import { getAppeals, getFacultiesAAsOptionsWithAcronym } from "@/lib/api";
-import { filterOption } from "@/lib/utils";
+import { filterOption, getPublicR2Url } from "@/lib/utils";
 import {
   AppstoreOutlined,
   CloseOutlined,
@@ -137,14 +137,14 @@ export default function FacultyLayout({
             />
           </Modal>
         </Space>
-        <Space style={{marginLeft:28}}>
+        <Space style={{ marginLeft: 28 }}>
           <Link
             href={`/jury/${juryId}`}
             style={{ display: "flex", alignItems: "center" }}
           >
             <div className="flex items-center pr-3">
               <Image
-                src={institution?.logo || "/ucbc-logo.png"}
+                src={getPublicR2Url(institution?.logo) || undefined}
                 alt="Logo"
                 width={36}
                 height="auto"

@@ -127,13 +127,14 @@ export const Step1: FC<Props> = ({ setStep, isFormer }) => {
         label="Nationalité"
         name="nationality"
         rules={[{ required: true }]}
+        tooltip="Sélectionnez votre pays"
       >
         <Select placeholder="Nationalité" options={countries} showSearch />
       </Form.Item>
       <Form.Item
         label="Ville ou Térritoire"
         name="city_or_territory"
-        rules={[]}
+        rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Input placeholder="Ville/Térritoire" />
       </Form.Item>

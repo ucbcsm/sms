@@ -36,6 +36,7 @@ import { SupportDrawer } from "@/components/support-drawer";
 import { AppsButton } from "@/components/appsButton";
 import { UserProfileButton } from "@/components/userProfileButton";
 import { useInstitution } from "@/hooks/use-institution";
+import { getPublicR2Url } from "@/lib/utils";
 
 export default function FacultyLayout({
   children,
@@ -154,7 +155,7 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
           >
             <div className="flex items-center pr-3">
               <Image
-                src={institution?.logo || "/ucbc-logo.png"}
+                src={getPublicR2Url(institution?.logo) || undefined}
                 alt="Logo"
                 width={36}
                 height="auto"

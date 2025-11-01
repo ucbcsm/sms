@@ -69,6 +69,14 @@ export function toFixedNumber(value: number | string, fixed: number = 0) {
   return Number(Number(value).toFixed(fixed));
 }
 
+ // 🖼️ Détermine si l’URL correspond à une image
+export const isImageUrl = (url?: string | null) => {
+  if (!url) return false;
+  const u = url.toLowerCase();
+  if (u.startsWith("blob:") || u.startsWith("data:image/")) return true;
+  return /\.(png|jpe?g|gif|webp|svg|bmp|avif|heic|heif|ico)(\?.*)?$/.test(u);
+};
+
 
 /**
  * Génère l’URL publique d’un fichier R2 à partir d’une URL privée.

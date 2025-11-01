@@ -1,5 +1,6 @@
 "use client";
 
+import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
 import { Palette } from "@/components/palette";
 import { useYid } from "@/hooks/use-yid";
 import {
@@ -76,10 +77,10 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               last_name: values.last_name,
               surname: values.surname,
               email: values.email,
-              avatar: data?.user.avatar,
               gender: values.gender,
               matricule: values.matricule,
               pending_avatar: data?.user.pending_avatar,
+              avatar:values.avatar || null,
               is_active: data.user.is_active,
               is_staff: data.user.is_staff,
               is_student: data.user.is_student,
@@ -131,7 +132,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
       );
     }
   };
-
+console.log("Rendering EditStudentProfileForm with data:", data);
   return (
     <>
       {contextHolder}
@@ -152,8 +153,8 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               type="success"
               style={{ textTransform: "uppercase" }}
             >
-              {data?.user.first_name} {data?.user.last_name}{" "}
-              {data?.user.surname}
+              {data?.user.surname} {data?.user.last_name}{" "}
+              {data?.user.first_name}
             </Typography.Text>
           </div>
         }
@@ -231,7 +232,11 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
                 status="error"
                 style={{ marginBottom: 0 }}
               >
-                <Input variant="filled" style={{ width: 120 }} disabled />
+                <Input
+                  variant="filled"
+                  style={{ width: 120 }}
+                  disabled={!editMatricule}
+                />
               </Form.Item>
             }
             style={{ marginTop: 8 }}
@@ -240,12 +245,21 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
                 type="link"
                 icon={!editMatricule ? <EditOutlined /> : <LockOutlined />}
                 onClick={() => setEditMatricule((prev) => !prev)}
+                title={!editMatricule ? "Modifier le matricule" : "Verouiller"}
               />
             }
           />
           <Divider orientation="left" orientationMargin={0}>
             <Typography.Title level={3}>Identité</Typography.Title>
           </Divider>
+          <Form.Item label="Photo de profil" name="avatar" layout="vertical">
+            <AutoUploadAvatar
+              form={form}
+              name="avatar"
+              prefix="students/avatars"
+              initialValue={data?.user.avatar}
+            />
+          </Form.Item>
           <Form.Item label="Nom" name="surname" rules={[{ required: true }]}>
             <Input placeholder="Nom" />
           </Form.Item>
@@ -256,10 +270,14 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
           >
             <Input placeholder="Postnom" />
           </Form.Item>
-          <Form.Item label="Prénom" name="first_name" rules={[{ required: true }]}>
+          <Form.Item
+            label="Prénom"
+            name="first_name"
+            rules={[{ required: true }]}
+          >
             <Input placeholder="Prénom" />
           </Form.Item>
-          <Form.Item label="Sexe" name="gender" rules={[{ required: true }]}>
+          <Form.Item label="Genre" name="gender" rules={[{ required: true }]}>
             <Radio.Group
               options={[
                 { value: "M", label: "Homme" },

@@ -1,7 +1,7 @@
 "use client";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getHSLColor, getMaritalStatusName } from "@/lib/utils";
+import { getHSLColor, getMaritalStatusName, getPublicR2Url, isImageUrl } from "@/lib/utils";
 import {
   //  Department, Faculty,
    Teacher } from "@/types";
@@ -64,11 +64,11 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
         >
           {/* Avatar */}
           <div style={{ textAlign: "center", marginBottom: 28 }}>
-            {data?.user.avatar ? (
+            {isImageUrl(data?.user.avatar) ? (
               <Image
                 height={100}
                 width={100}
-                src={data?.user.avatar || ""}
+                src={getPublicR2Url(data?.user.avatar) || undefined}
                 alt="Avatar de l'enseignant"
                 style={{
                   marginBottom: 28,
@@ -90,7 +90,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
               </Avatar>
             )}
             <Typography.Title level={4}>
-              {data?.user.surname} {data?.user.last_name} 
+              {data?.user.surname} {data?.user.last_name}
             </Typography.Title>
             <Typography.Text type="secondary">
               Matr. {data?.user.matricule}

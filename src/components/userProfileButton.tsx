@@ -2,7 +2,7 @@
 
 import { useYid } from "@/hooks/use-yid";
 import { logout } from "@/lib/api/auth";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { useSessionStore } from "@/store";
 import {
   LoadingOutlined,
@@ -59,7 +59,7 @@ export const UserProfileButton = () => {
         arrow
       >
         <Avatar
-          src={user?.avatar}
+          src={getPublicR2Url(user?.avatar)}
           style={{
             background: getHSLColor(
               `${user?.surname} ${user?.last_name} ${user?.first_name}`

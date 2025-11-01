@@ -4,7 +4,7 @@ import { Palette } from "@/components/palette";
 import { countries } from "@/lib/data/countries";
 import { Institute } from "@/types";
 import { createInstitution } from "@/lib/api";
-import { LockOutlined } from "@ant-design/icons";
+import { FileImageOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation } from "@tanstack/react-query";
 import {
   Alert,
@@ -23,6 +23,7 @@ import {
   Typography,
 } from "antd";
 import { useRouter } from "next/navigation";
+import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
 
 type FormSchemaType = Omit<Institute, "id"> & {
   email: string;
@@ -106,6 +107,15 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
             >
               Informations générales
             </Divider>
+            <Form.Item label="Logo" name="logo" layout="vertical">
+              <AutoUploadAvatar
+                form={form}
+                name="logo"
+                prefix="institutions/logos"
+                shape="square"
+                icon={<FileImageOutlined />}
+              />
+            </Form.Item>
             <Form.Item
               label="Nom"
               name="name"
@@ -211,9 +221,6 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
             <Form.Item label="Site web" name="web_site">
               <Input placeholder="Entrez le site web" />
             </Form.Item>
-            {/* <Form.Item label="Logo" name="logo">
-              <Input placeholder="Entrez l'URL du logo" />
-            </Form.Item> */}
             <Divider
               orientation="left"
               orientationMargin={0}
@@ -299,7 +306,7 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
               name="email"
               rules={[
                 {
-                  type:"email",
+                  type: "email",
                   required: true,
                 },
               ]}
@@ -331,18 +338,21 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
             <Form.Item
               label="Confirmer le mot de passe"
               name="confirm_password"
-              rules={[{ required: true },({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error(
-                      "Les deux mots de passe que vous avez saisis ne correspondent pas!"
-                    )
-                  );
-                },
-              }),]}
+              rules={[
+                { required: true },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "Les deux mots de passe que vous avez saisis ne correspondent pas!"
+                      )
+                    );
+                  },
+                }),
+              ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}

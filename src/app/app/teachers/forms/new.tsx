@@ -142,14 +142,14 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
         }
       >
         <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
-          <Alert
+          {/* <Alert
             type="info"
             message="Veuillez remplir toutes les informations nécessaires pour enregistrer un nouvel enseignant."
             description="Assurez-vous que toutes les données saisies sont exactes et complètes avant de soumettre."
             showIcon
             style={{ border: 0 }}
             closable
-          />
+          /> */}
           <Card
             title={
               <Typography.Title level={5}>{steps[step].title}</Typography.Title>

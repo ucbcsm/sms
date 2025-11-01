@@ -114,7 +114,7 @@ export async function createInstitution(
     status: params.status,
     vision: params.vision || "",
     web_site: params.web_site || null,
-    logo: null,
+    logo: params.logo || null,
   });
   return res.data;
 }
@@ -171,7 +171,6 @@ export async function updateInstitution({
 }) {
   const res = await api.put(`/main_config/institution/${id}/`, {
     ...params,
-    logo: null,
   });
   return res.data;
 }

@@ -1,5 +1,5 @@
 import { Enrollment } from "@/types";
-import { getHSLColor, getMaritalStatusName, percentageFormatter } from "@/lib/utils";
+import { getHSLColor, getMaritalStatusName, getPublicR2Url, isImageUrl, percentageFormatter } from "@/lib/utils";
 import { Avatar, Descriptions, Flex, Image, Skeleton, Space, Typography } from "antd";
 import { FC } from "react";
 import { EditStudentProfileForm } from "./edit";
@@ -44,11 +44,11 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
           }}
         >
           <div style={{ textAlign: "center", marginBottom: 28 }}>
-            {data.user.avatar ? (
+            {isImageUrl(data.user.avatar) ? (
               <Image
                 height={100}
                 width={100}
-                src={data?.user.avatar}
+                src={getPublicR2Url(data.user.avatar) || undefined}
                 className=" object-cover rounded-full"
                 style={{
                   marginBottom: 16,
@@ -69,7 +69,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
                   marginBottom: 16,
                 }}
               >
-                {`${data.user.first_name?.[0]}${data.user.last_name?.[0]}`}
+                {`${data.user.first_name?.[0].toUpperCase() || ""}`}
               </Avatar>
             )}
             <Typography.Title
