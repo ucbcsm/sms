@@ -73,6 +73,7 @@ import { MarkAsPendingForm } from "./forms/decisions/mark-as-pending";
 import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
+import { AutoUploadFormItem } from "@/components/autoUploadItem";
 
 type ViewEditApplicationFormProps = {
   application?: Application;
@@ -1014,12 +1015,15 @@ export const ViewEditApplicationForm: React.FC<
                       <Form.Item
                         {...restField}
                         name={[name, "exist"]}
-                        label="Document physique"
+                        label="Version papier"
                         rules={[]}
                         valuePropName="checked"
                         style={{ marginTop: 8 }}
                       >
-                        <Switch />
+                        <Switch
+                          checkedChildren="✓ Présent"
+                          unCheckedChildren="✗ Absent"
+                        />
                       </Form.Item>
                       <Form.Item
                         {...restField}
@@ -1027,9 +1031,13 @@ export const ViewEditApplicationForm: React.FC<
                         label="Version électronique"
                         rules={[]}
                       >
-                        <Upload>
-                          <Button icon={<UploadOutlined />}>Téléverser</Button>
-                        </Upload>
+                        <AutoUploadFormItem
+                          // {...restField}
+                          name={["application_documents", name, "file_url"]}
+                          form={form}
+                          prefix={`students/documents`}
+                          accept="image/*,application/pdf"
+                        />
                       </Form.Item>
                       <Form.Item
                         {...restField}

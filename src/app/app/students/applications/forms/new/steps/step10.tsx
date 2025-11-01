@@ -181,8 +181,7 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           style={{ marginTop: 16 }}
         >
           <Checkbox>
-            Je certifie sur honneur que les renseignements fournis dans ce
-            formulaire sont exacts.
+            Je certifie que les renseignements ci-haut fournis sont exacts.
           </Checkbox>
         </Form.Item>
         <Flex justify="space-between" align="center">
