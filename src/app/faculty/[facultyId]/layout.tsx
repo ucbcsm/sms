@@ -10,7 +10,17 @@ import { getDepartmentsByFacultyId, getFaculty } from "@/lib/api";
 import { getPublicR2Url } from "@/lib/utils";
 import { MenuOutlined, SubnodeOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Divider, Form, Image, Layout, Menu, Skeleton, Space, theme, Typography } from "antd";
+import {
+  Divider,
+  Form,
+  Image,
+  Layout,
+  Menu,
+  Skeleton,
+  Space,
+  theme,
+  Typography,
+} from "antd";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -89,10 +99,18 @@ export default function FacultyLayout({
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
-          <Typography.Text type="secondary">Filière:</Typography.Text>
+          <Typography.Title
+            level={5}
+            type="secondary"
+            style={{ marginBottom: 0 }}
+          >
+            Filière:
+          </Typography.Title>
 
           {!isPending ? (
-            <Typography.Text>{faculty?.acronym}</Typography.Text>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {faculty?.acronym}
+            </Typography.Title>
           ) : (
             <Form>
               <Skeleton.Input active />

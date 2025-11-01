@@ -20,7 +20,6 @@ export type Session = {
   refreshToken: string | null;
   user: User | null;
   error: string | null;
-  faculty?: Faculty;
 } | null;
 
 export async function isAuthenticated(accessToken: string | undefined) {
@@ -87,25 +86,6 @@ export const getServerSession = async (): Promise<Session> => {
       throw error;
     }
 
-    let faculty: Faculty | undefined = undefined;
-    try {
-      const resFaculty = await api.get(`/account/faculty-from-user/`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      faculty = resFaculty.data as Faculty | undefined;
-    } catch (error: any) {
-      if (
-        error?.response?.status !== 404 &&
-        error?.response?.status !== 503 &&
-        error?.response?.status !== 400
-      ) {
-        throw error;
-      }
-      // If 404 or 400 or 503, faculty remains undefined
-    }
-
     // if (!user) {
     //   return null;
     // }
@@ -114,7 +94,6 @@ export const getServerSession = async (): Promise<Session> => {
       refreshToken,
       user,
       error: null,
-      faculty,
     };
   } catch (error: any) {
     throw new Error(`${error.message} Failed to get server session`);
@@ -314,3 +293,31 @@ export const resetPasswordConfirm = async (formData: {
     );
   }
 };
+
+
+export const getAsignedFaculty = async () => {
+  const session = await getServerSession();
+  if (!session?.accessToken) {
+    throw new Error("Not authenticated");
+  }
+  
+  try {
+      const res = await api.get(`/account/faculty-from-user/`, {
+        headers: {
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+      });
+       return res.data as Faculty;
+    } catch (error: any) {
+      if (
+        error?.response?.status === 404 ||
+        error?.response?.status === 503 ||
+        error?.response?.status === 400 ||
+        error?.response?.status === 401
+      ) {
+        return null;
+      }
+     throw error;
+    }
+ 
+}

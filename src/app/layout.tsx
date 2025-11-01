@@ -16,12 +16,6 @@ export const metadata: Metadata = {
   description: "Student Management System",
 };
 
-// const auth = await getServerSession();
-
-  //   if (auth?.user) {
-  //     redirect(auth.faculty ? `/faculty/${auth.faculty.id}` : "/app");
-  //   }
-
 export default async function RootLayout({
   children,
 }: Readonly<{
