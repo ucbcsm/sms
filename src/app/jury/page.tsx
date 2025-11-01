@@ -141,7 +141,13 @@ export default function Page() {
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
-          <Typography.Text type="secondary">Jury</Typography.Text>
+          <Typography.Title
+            level={5}
+            type="secondary"
+            style={{ marginBottom: 0 }}
+          >
+            Jury
+          </Typography.Title>
         </Space>
         <div className="flex-1" />
         <Space>

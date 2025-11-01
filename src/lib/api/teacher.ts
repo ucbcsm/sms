@@ -68,6 +68,7 @@ export async function createTeacher(
     surname: string;
     email: string;
     avatar: string | null;
+    pending_avatar: string | null;
   }
 ) {
   const res = await api.post(`/faculty/teachers/`, params);

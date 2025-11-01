@@ -69,7 +69,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
                   marginBottom: 16,
                 }}
               >
-                {`${data.user.first_name?.[0].toUpperCase() || ""}`}
+                {`${data.user.first_name?.charAt(0).toUpperCase()}`}
               </Avatar>
             )}
             <Typography.Title

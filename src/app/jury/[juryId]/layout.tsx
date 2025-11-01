@@ -43,7 +43,7 @@ import { SupportDrawer } from "@/components/support-drawer";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { useState } from "react";
 
-export default function FacultyLayout({
+export default function JuryLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -157,7 +157,9 @@ export default function FacultyLayout({
           </Link>
           <Divider type="vertical" />
           {!isPending ? (
-            <Typography.Text type="secondary">{jury?.name}</Typography.Text>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {jury?.name}
+            </Typography.Title>
           ) : (
             <Form>
               <Skeleton.Input size="small" active />
@@ -165,7 +167,13 @@ export default function FacultyLayout({
           )}
           {facultyId && <Divider type="vertical" />}
           {facultyId && (
-            <Typography.Text type="secondary">Filière:</Typography.Text>
+            <Typography.Title
+              type="secondary"
+              level={5}
+              style={{ marginBottom: 0 }}
+            >
+              Filière:
+            </Typography.Title>
           )}
 
           {facultyId &&

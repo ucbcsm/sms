@@ -1,7 +1,5 @@
 "use client";
 
-import { uploadFile } from "@/actions/uploadFile";
-import { AutoUpload } from "@/components/autoUpload";
 import { AutoUploadFormItem } from "@/components/autoUploadItem";
 import {
   formatAdmissionTestResultsForEdition,
@@ -30,8 +28,6 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
   const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-  const existElectronic = Form.useWatch("existElectronic", form);
-  // const [fileUrl, setFileUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateStudentInfo,
@@ -50,7 +46,6 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
   const onClose = () => {
     setOpen(false);
     form.resetFields();
-    // setFileUrl(null);
   };
 
   const onFinish = (values: {

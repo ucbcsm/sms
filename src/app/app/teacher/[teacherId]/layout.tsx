@@ -74,8 +74,8 @@ export default function TeacherLayout({
           <Space>
             {!isPending ? (
               <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                {teacher?.user.first_name} {teacher?.user.last_name}{" "}
-                {teacher?.user.surname} (enseignant)
+                {teacher?.user.surname} {teacher?.user.last_name}{" "}
+                {teacher?.user.first_name}
               </Typography.Title>
             ) : (
               <Form>
@@ -84,8 +84,7 @@ export default function TeacherLayout({
             )}
           </Space>
           <div className="flex-1" />
-          <Space>
-          </Space>
+          <Space></Space>
         </Layout.Header>
         <Card
           tabList={[

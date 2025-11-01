@@ -42,12 +42,11 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette />
+            
           </Space>
         </Layout.Header>
-        <Card>
-          <ListTeachers />
-        </Card>
+
+        <ListTeachers />
       </Layout.Content>
     </Layout>
   );

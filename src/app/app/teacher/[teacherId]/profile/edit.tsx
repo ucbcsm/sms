@@ -257,7 +257,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             <AutoUploadAvatar
               form={form}
               name="avatar"
-              prefix="students/avatars"
+              prefix={`teachers/${teacher?.user.id}/avatars`}
               initialValue={teacher?.user.avatar}
             />
           </Form.Item>
@@ -339,11 +339,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
           >
             <Input placeholder="Ville ou Térritoire" />
           </Form.Item>
-          <Form.Item
-            label="Adresse"
-            name="address"
-            rules={[{ required: true }]}
-          >
+          <Form.Item label="Adresse" name="address" rules={[]}>
             <Input.TextArea placeholder="Quartier ou Avenue et No" />
           </Form.Item>
           <Form.Item

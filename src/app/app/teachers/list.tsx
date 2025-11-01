@@ -70,6 +70,7 @@ export function ListTeachers() {
         page_size: pageSize !== 0 ? pageSize : undefined,
       }),
   });
+  console.log(data);
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -159,7 +160,7 @@ export function ListTeachers() {
               <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
                 Imprimer
               </Button>
-              <Dropdown
+              {/* <Dropdown
                 menu={{
                   items: [
                     {
@@ -182,7 +183,7 @@ export function ListTeachers() {
                   icon={<MoreOutlined />}
                   style={{ boxShadow: "none" }}
                 />
-              </Dropdown>
+              </Dropdown> */}
             </Space>
           </header>
         )}
@@ -207,18 +208,7 @@ export function ListTeachers() {
             width: 58,
             align: "center",
           },
-          {
-            title: "Matricule",
-            dataIndex: "matricule",
-            key: "matricule",
-            width: 92,
-            render: (_, record, __) => (
-              <Link href={`/app/teacher/${record.id}`}>
-                {record.user.matricule}
-              </Link>
-            ),
-            align: "center",
-          },
+
           {
             title: "Noms",
             dataIndex: "lastname",
@@ -230,6 +220,18 @@ export function ListTeachers() {
               </Link>
             ),
             ellipsis: true,
+          },
+          {
+            title: "Matricule",
+            dataIndex: "matricule",
+            key: "matricule",
+            width: 92,
+            render: (_, record, __) => (
+              <Link href={`/app/teacher/${record.id}`}>
+                {record.user.matricule}
+              </Link>
+            ),
+            align: "center",
           },
           {
             title: "Sexe",
@@ -336,6 +338,7 @@ export function ListTeachers() {
             setPageSize(pageSize);
           },
         }}
+        bordered
       />
       <NewTeacherForm
         open={openNewTeacherForm}

@@ -1,5 +1,4 @@
-import { uploadFile } from "@/actions/uploadFile";
-import { AutoUpload } from "@/components/autoUpload";
+
 import { AutoUploadFormItem } from "@/components/autoUploadItem";
 import { updateSingleApplicationDocument } from "@/lib/api";
 import { filterOption } from "@/lib/utils";

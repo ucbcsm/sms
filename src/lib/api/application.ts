@@ -185,10 +185,11 @@ export async function createApplication(
       surname: params.surname,
       last_name: params.last_name,
       first_name: params.first_name,
-      gender:params.gender,
+      gender: params.gender,
       email: params.email,
       status: "pending",
       avatar: params.avatar || null,
+      pending: params.pending_avatar || null,
       is_former_student: false,
       application_documents: params.application_documents,
     });
@@ -242,10 +243,11 @@ export async function createApplication(
       surname: params.surname,
       last_name: params.last_name,
       first_name: params.first_name,
-      gender:params.gender,
+      gender: params.gender,
       email: params.email,
       status: "validated",
       avatar: params.avatar || null,
+      pending_avatar: params.pending_avatar || null,
       is_former_student: true,
       application_documents: params.application_documents,
     });
@@ -283,6 +285,7 @@ export async function updateApplication({
     departement: params.department_id,
     class_year: params.class_id,
     avatar: params.avatar || null,
+    pending_avatar: params.pending_avatar || null,
     former_matricule: params.former_matricule || null,
     former_year_enrollment_id: params.former_year_enrollment_id || null,
     spoken_language: formatLanguages(params.spoken_languages),
@@ -305,6 +308,7 @@ export async function markApplicationAsPending(params: Application) {
     departement: params.departement.id,
     class_year: params.class_year.id,
     avatar: params.avatar || null,
+    pending_avatar: params.pending_avatar || null,
     application_documents: formatApplicationDocumentsForEdition(
       params.application_documents
     ),
@@ -329,6 +333,7 @@ export async function rejectApplication(params: Application) {
     departement: params.departement.id,
     class_year: params.class_year.id,
     avatar: params.avatar || null,
+    pending_avatar: params.pending_avatar || null,
     application_documents: formatApplicationDocumentsForEdition(
       params.application_documents
     ),
@@ -344,7 +349,6 @@ export async function rejectApplication(params: Application) {
 }
 
 export async function validateApplication(params: Application) {
-
   const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
     ...params,
     academic_year: params.academic_year.id,
@@ -375,6 +379,7 @@ export async function validateApplication(params: Application) {
     departement: params.departement.id,
     class_year: params.class_year.id,
     avatar: params.avatar || null,
+    pending_avatar: params.pending_avatar || null,
     application_documents: formatApplicationDocumentsForEdition(
       params.application_documents
     ),
@@ -397,7 +402,6 @@ export async function validateEditedApplication({
   oldParams: Application;
   newParams: ApplicationEditFormDataType;
 }) {
-  
   const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
     ...newParams,
     academic_year: newParams.year_id,
@@ -407,6 +411,7 @@ export async function validateEditedApplication({
     departement: newParams.department_id,
     class_year: newParams.class_id,
     avatar: newParams.avatar || null,
+    pending_avatar: newParams.pending_avatar || null,
     former_year_enrollment_id: newParams.former_year_enrollment_id || null,
     spoken_language: formatLanguages(newParams.spoken_languages),
     date_of_birth: dayjs(newParams.date_of_birth).format("YYYY-MM-DD"),
@@ -427,6 +432,7 @@ export async function validateEditedApplication({
     departement: newParams.department_id,
     class_year: newParams.class_id,
     avatar: newParams.avatar || null,
+    pending_avatar: newParams.pending_avatar || null,
     former_year_enrollment_id: newParams.former_year_enrollment_id || null,
     spoken_language: formatLanguages(newParams.spoken_languages),
     date_of_birth: dayjs(newParams.date_of_birth).format("YYYY-MM-DD"),
@@ -557,11 +563,13 @@ export function formatEnrollmentQuestionResponseForEdition(
 }
 
 export function formatAdmissionTestResultsForEdition(results?: TestResult[]) {
-  return results?.map((res) => ({
-    ...res,
-    result: res.result || null,
-    course_test: res.course_test?.id || null,
-  }))|| [];
+  return (
+    results?.map((res) => ({
+      ...res,
+      result: res.result || null,
+      course_test: res.course_test?.id || null,
+    })) || []
+  );
 }
 
 export async function createReapplication(params: {

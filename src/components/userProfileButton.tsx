@@ -10,11 +10,14 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Avatar, Dropdown, message, Spin, Typography } from "antd";
+import { parseAsBoolean, useQueryState } from "nuqs";
 import { useState } from "react";
+import { MyProfileModal } from "./myProfileModal";
 
 export const UserProfileButton = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
+  const [openMyProfile, setOpenMyProfile] = useQueryState("profile", parseAsBoolean.withDefault(false));
   const { removeYid } = useYid();
   const { user } = useSessionStore();
   return (
@@ -24,7 +27,7 @@ export const UserProfileButton = () => {
         menu={{
           items: [
             {
-              key: "/app/profile",
+              key: "profile",
               label: "Mon profile",
               icon: <UserOutlined />,
             },
@@ -52,6 +55,8 @@ export const UserProfileButton = () => {
                   );
                   setIsLoadingLogout(false);
                 });
+            } else if (key === "profile") {
+              setOpenMyProfile(true);
             }
           },
         }}
@@ -106,6 +111,7 @@ export const UserProfileButton = () => {
           </Typography.Title>
         </div>
       </div>
+      <MyProfileModal open={openMyProfile} setOpen={setOpenMyProfile} user={user} />
     </>
   );
 };

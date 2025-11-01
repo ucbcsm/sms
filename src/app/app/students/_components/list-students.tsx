@@ -225,6 +225,18 @@ export const ListStudents: FC = () => {
           width: 56,
         },
         {
+          title: "Noms",
+          dataIndex: "name",
+          key: "name",
+          render: (value, record) => (
+            <Link href={`/student/${record.id}`}>
+              {record.user.surname} {record.user.last_name}{" "}
+              {record.user.first_name}
+            </Link>
+          ),
+          ellipsis: true,
+        },
+        {
           title: "Matricule",
           dataIndex: "matricule",
           key: "matricule",
@@ -241,18 +253,6 @@ export const ListStudents: FC = () => {
           render: (_, record, __) => record.user.gender,
           width: 56,
           align: "center",
-        },
-        {
-          title: "Noms",
-          dataIndex: "name",
-          key: "name",
-          render: (value, record) => (
-            <Link href={`/student/${record.id}`}>
-              {record.user.surname} {record.user.last_name}{" "}
-              {record.user.first_name}
-            </Link>
-          ),
-          ellipsis: true,
         },
         {
           title: "Filière",
@@ -330,6 +330,7 @@ export const ListStudents: FC = () => {
       }}
       scroll={{ y: "calc(100vh - 360px)" }}
       size="small"
+      bordered
       loading={isPendingStudents}
       pagination={{
         defaultPageSize: 25,

@@ -99,6 +99,7 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           first_name: sdata.first_name,
           email: sdata.email,
           avatar: values.avatar || null,
+          pending_avatar: null,
           is_former_student: false,
           status: "pending",
           enrollment_fees: values.enrollment_fees,

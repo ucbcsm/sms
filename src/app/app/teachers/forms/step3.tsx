@@ -87,6 +87,7 @@ export const Step3: FC<Props> = ({ setStep, isFormer, setOpen }) => {
           religious_affiliation: sdata.religious_affiliation || "",
           physical_ability: sdata.physical_ability,
           avatar: values.avatar || null,
+          pending_avatar: null,
           place_of_birth: sdata.place_of_birth || "",
           date_of_birth: sdata.date_of_birth
             ? dayjs(sdata.date_of_birth).format("YYYY-MM-DD")
