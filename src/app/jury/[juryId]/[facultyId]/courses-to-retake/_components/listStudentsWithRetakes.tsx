@@ -5,22 +5,15 @@ import {
   getCurrentDepartmentsAsOptions,
   getDepartmentsByFacultyId,
 } from "@/lib/api";
-import { getRetakeCourses, getRetakeReasonText } from "@/lib/api/retake-course";
+import { getRetakeCourses } from "@/lib/api/retake-course";
 import { RetakeCourse } from "@/types";
 import {
-  BookOutlined,
-  CheckCircleOutlined,
   CloseOutlined,
-  DeleteOutlined,
-  MoreOutlined,
-  PlusOutlined,
-  UserAddOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
-  Dropdown,
   Empty,
   Flex,
   Input,
