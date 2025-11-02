@@ -22,6 +22,7 @@ import {
   Modal,
   Skeleton,
   Space,
+  Tag,
   theme,
   Typography,
 } from "antd";
@@ -154,7 +155,8 @@ export default function StudentLayout({
               level={5}
               style={{ marginBottom: 0, textTransform: "uppercase" }}
             >
-              {`${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`}
+              {`${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`}{" "}
+              <Tag bordered={false}>{enrolledStudent?.user.matricule}</Tag>
             </Typography.Title>
           ) : (
             <Form>

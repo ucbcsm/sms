@@ -3,6 +3,7 @@
 import { updateUser } from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
 import {
+  Alert,
   App,
   Button,
   Card,
@@ -11,7 +12,9 @@ import {
   Input,
   Modal,
   Space,
+  Tag,
   theme,
+  Typography,
 } from "antd";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
@@ -97,12 +100,15 @@ export const MyProfileModal: FC<MyProfileModalProps> = ({
 
   return (
     <Modal
-      title={`Profile ${user?.matricule}`}
+      title={
+        <Typography.Title level={5} style={{ marginBottom: 0 }}>
+          Profile <Tag bordered={false}>{user?.matricule}</Tag>
+        </Typography.Title>
+      }
       loading={!user}
       styles={{
         header: {
           paddingBottom: 8,
-          //   borderBottom: `1px solid ${colorBorderSecondary}`,
         },
         body: { paddingTop: 8 },
       }}
@@ -186,6 +192,13 @@ export const MyProfileModal: FC<MyProfileModalProps> = ({
         >
           <Input placeholder="Email" />
         </Form.Item>
+        <Alert
+          type="info"
+          showIcon
+          message="Information"
+          description="Si vous souhaitez modifier les autres informations de votre profil, veuillez contacter l'apparitorat central ou l'administrateur du système."
+          style={{ border: 0 }}
+        />
       </Card>
     </Modal>
   );
