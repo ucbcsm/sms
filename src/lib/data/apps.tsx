@@ -12,21 +12,21 @@ import {
 
 export const ALL_APPS: AppItem[] = [
   {
-    id: "student",
+    id: "is_student",
     name: "Espace étudiant",
     description: "Inscriptions, évaluations, résultats et gestion du profil.",
     href: "/s",
     color: "#6366F1",
-    roles: ["etudiant"],
+    roles: [],
     icon: <UserOutlined />,
   },
   {
-    id: "teacher",
+    id: "is_teacher",
     name: "Espace enseignant",
     description: "Suivi des cours, gestion des presences et évaluation.",
     href: "/t",
     color: "#10B981",
-    roles: ["enseignant", "faculte"],
+    roles: [],
     icon: <BulbOutlined />,
   },
   {
@@ -36,7 +36,11 @@ export const ALL_APPS: AppItem[] = [
       "Planification des cours, suivi, gestion des enseignants et étudiants.",
     href: "/faculty",
     color: "#EF4444",
-    roles: ["faculte"],
+    roles: [
+      "is_faculty_coordinator",
+      "is_faculty_secretary",
+      "is_faculty_personal",
+    ],
     icon: <PartitionOutlined />,
   },
   {
@@ -45,7 +49,14 @@ export const ALL_APPS: AppItem[] = [
     description: "Gestion des dossiers étudiants et assistance générale.",
     href: "/app",
     color: "#FACC15",
-    roles: ["apparitorat", "admin"],
+    roles: [
+      "is_apparitorat_personal",
+      "is_apparitor",
+      "is_academic_general_secretary",
+      "is_sgad_cabin_manager",
+      "is_sgad_secretary",
+      "is_sgad_personal",
+    ],
     icon: <FolderOutlined />,
   },
   {
@@ -55,7 +66,12 @@ export const ALL_APPS: AppItem[] = [
       "Organisation des examens, collecte des notes, délibérations et publication des résultats.",
     href: "/jury",
     color: "#3B82F6",
-    roles: ["jury", "enseignant"],
+    roles: [
+      "is_jury_member",
+      "is_jury_personal",
+      "is_jury_secretary",
+      "is_jury_president",
+    ],
     icon: <CheckCircleOutlined />,
   },
   {
@@ -64,17 +80,21 @@ export const ALL_APPS: AppItem[] = [
     description: "Frais à payer, paiements et factures étudiants.",
     href: "/finances",
     color: "#C026D3",
-    roles: ["finance", "admin"],
+    roles: [
+      "is_finance_accountant",
+      "is_finance_budget_administrator",
+      "is_finance_personal",
+    ],
     icon: <DollarOutlined />,
   },
   {
-    id: "admin",
+    id: "is_superuser",
     name: "Console d'administration",
     description:
       "Configurations globales, gestion des utilisateurs et permissions.",
     href: "/console",
     color: "#1e2939",
-    roles: ["admin"],
+    roles: [],
     icon: <SettingOutlined />,
   },
 ];

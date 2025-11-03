@@ -1,11 +1,11 @@
-import { Faculty, User } from "@/types";
+import { AppItem, Faculty, User } from "@/types";
 import { create } from "zustand";
 
 type SessionStoreType = {
   accessToken: string | null;
   refreshToken: string | null;
   user: User | null;
-  faculty?: Faculty;
+  apps:AppItem[];
   error: string | null;
   updateAccessToken: (token: string) => void;
   updateRefreshToken: (token: string) => void;
@@ -24,7 +24,7 @@ export const useSessionStore = create<SessionStoreType>()((set) => ({
   accessToken: null,
   refreshToken: null,
   user: null,
-  faculty:undefined,
+  apps: [],
   error: null,
   updateAccessToken: (token) => set({ accessToken: token }),
   updateRefreshToken: (token) => set({ refreshToken: token }),

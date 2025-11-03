@@ -1,11 +1,12 @@
 'use client';
 
-import { ALL_APPS } from "@/lib/data/apps";
+import { useSessionStore } from "@/store";
 import { RightOutlined } from "@ant-design/icons";
 import { Button, List, Popover, Typography } from "antd";
 import Link from "next/link";
 
 export const AppsButton = () => {
+  const session= useSessionStore();
     const appsIcon = (
       <svg
         width="24"
@@ -36,7 +37,7 @@ export const AppsButton = () => {
           <div className="w-58">
             <List
               size="small"
-              dataSource={ALL_APPS}
+              dataSource={session?.apps}
               renderItem={(app) => (
                 <Link href={app.href} key={app.id}>
                   <List.Item

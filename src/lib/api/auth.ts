@@ -1,9 +1,11 @@
 "use server";
 
 import api, { authApi } from "@/lib/fetcher";
-import { Faculty, User } from "@/types";
+import { Faculty, Role, User } from "@/types";
+import { get } from "lodash";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { ALL_APPS } from "../data/apps";
 
 /**
  * Represents a user session, which may include authentication tokens,
@@ -20,6 +22,7 @@ export type Session = {
   refreshToken: string | null;
   user: User | null;
   error: string | null;
+  apps:any[]
 } | null;
 
 export async function isAuthenticated(accessToken: string | undefined) {
@@ -71,6 +74,7 @@ export const getServerSession = async (): Promise<Session> => {
     }
 
     let user = null;
+    let apps: any[] = [];
     try {
       const userResponse = await authApi.get("/users/me/", {
         headers: {
@@ -78,6 +82,24 @@ export const getServerSession = async (): Promise<Session> => {
         },
       });
       user = userResponse.data;
+
+      const allRolesResponse = await api.get(`/account/roles/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const allRoles = allRolesResponse.data as Role[];
+
+      apps = await getUserApps({
+        userRoles: user.roles,
+        allRoles: allRoles,
+        is_staff: user.is_staff,
+        is_student: user.is_student,
+        is_superuser: user.is_superuser,
+        is_active: user.is_active,
+      });
+
+    
     } catch (error: any) {
       if (error?.response?.status === 401) {
         // Unauthorized, session is invalid
@@ -89,11 +111,13 @@ export const getServerSession = async (): Promise<Session> => {
     // if (!user) {
     //   return null;
     // }
+
     return {
       accessToken,
       refreshToken,
       user,
       error: null,
+      apps,
     };
   } catch (error: any) {
     throw new Error(`${error.message} Failed to get server session`);
@@ -294,30 +318,57 @@ export const resetPasswordConfirm = async (formData: {
   }
 };
 
-
 export const getAsignedFaculty = async () => {
   const session = await getServerSession();
   if (!session?.accessToken) {
     throw new Error("Not authenticated");
   }
-  
+
   try {
-      const res = await api.get(`/account/faculty-from-user/`, {
-        headers: {
-          Authorization: `Bearer ${session.accessToken}`,
-        },
-      });
-       return res.data as Faculty;
-    } catch (error: any) {
-      if (
-        error?.response?.status === 404 ||
-        error?.response?.status === 503 ||
-        error?.response?.status === 400 ||
-        error?.response?.status === 401
-      ) {
-        return null;
-      }
-     throw error;
+    const res = await api.get(`/account/faculty-from-user/`, {
+      headers: {
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+    });
+    return res.data as Faculty;
+  } catch (error: any) {
+    if (
+      error?.response?.status === 404 ||
+      error?.response?.status === 503 ||
+      error?.response?.status === 400
+    ) {
+      return null;
     }
- 
-}
+    throw error;
+  }
+};
+
+export const getUserApps = async (inputsData: {
+  userRoles: Role[];
+  allRoles: Role[];
+  is_staff?: boolean;
+  is_student?: boolean;
+  is_superuser?: boolean;
+  is_active: boolean;
+}) => {
+  return ALL_APPS.filter((app) => {
+    if (!inputsData.is_active) return false;
+
+    // Superuser has access to all apps
+    if (inputsData.is_superuser) return true;
+
+    // Check is_student for student app
+    if (app.id === "is_student" && inputsData.is_student) return true;
+
+    // Check is_staff for teacher app
+    if (app.id === "is_teacher" && inputsData.is_staff) return true;
+
+    // For other apps, check role-based access
+    const userRoleNames = inputsData.userRoles.map((role) => role.name);
+    const appRequiredRoleIds = app.roles || [];
+
+    return appRequiredRoleIds.some((roleName) =>
+      userRoleNames.includes(roleName)
+    );
+  });
+};

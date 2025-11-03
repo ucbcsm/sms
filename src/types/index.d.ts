@@ -8,7 +8,7 @@ export type AppItem = {
   description: string;
   href: string;
   color: string;
-  roles: string[];
+  roles: RolesType[];
   icon: React.ReactNode;
 };
 

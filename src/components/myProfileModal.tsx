@@ -59,6 +59,9 @@ export const MyProfileModal: FC<MyProfileModalProps> = ({
           ...user,
           avatar: values.avatar || null,
           email: values.email || user.email,
+          user_permissions: user.user_permissions.map((p) => p.id),
+          groups: user.groups.map((g) => g.id),
+          roles: user.roles.map((r) => r.id),
         },
       },
       {

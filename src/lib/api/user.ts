@@ -47,7 +47,11 @@ export async function updateUser({
   params,
 }: {
   id: number;
-  params: Partial<Omit<User, "id">>;
+  params: Omit<User, "id" | "user_permissions" | "groups" | "roles"> & {
+    user_permissions: number[];
+    groups: number[];
+    roles: number[];
+  };
 }) {
   const res = await api.put(`/account/users/${id}/`, {
     ...params,
