@@ -11,17 +11,14 @@ import { getPublicR2Url } from "@/lib/utils";
 import {
   BranchesOutlined,
   DashboardOutlined,
-  DollarOutlined,
   MenuOutlined,
   NotificationOutlined,
-  SettingOutlined,
   SubnodeOutlined,
   TeamOutlined,
   UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
-  Button,
   Divider,
   Image,
   Layout,
@@ -130,11 +127,6 @@ export default function AppLayout({
               disabled: isPendingFacalties,
               children: getFacultiesAsMenu(),
             },
-            // {
-            //   key: "/app/finances",
-            //   label: <Link href={`/finances`}>Finances</Link>,
-            //   icon: <DollarOutlined />,
-            // },
             {
               key: "/app/announcements",
               label: <Link href={`/app/announcements`}>Annonces</Link>,

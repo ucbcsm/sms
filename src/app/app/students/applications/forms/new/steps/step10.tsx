@@ -34,7 +34,7 @@ type FormSchemaType = z.infer<typeof formSchema>;
 export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
   const [form] = Form.useForm<FormSchemaType>();
   const [messageApi, contextHolder] = message.useMessage();
- 
+  const isCertified = Form.useWatch("certified", form);
   const { data: sdata, removeData } = useApplicationStepsData();
   const queryClient = useQueryClient();
 
@@ -203,6 +203,7 @@ export const Step10: FC<Props> = ({ setStep, isFormer, setOpen }) => {
                 type="primary"
                 htmlType="submit"
                 style={{ boxShadow: "none" }}
+                disabled={!isCertified}
               >
                 Soumettre
               </Button>
