@@ -286,8 +286,8 @@ export async function updateApplication({
     class_year: params.class_id,
     avatar: params.avatar || null,
     pending_avatar: params.pending_avatar || null,
-    former_matricule: params.former_matricule || null,
-    former_year_enrollment_id: params.former_year_enrollment_id || null,
+    former_matricule: params.former_matricule,
+    former_year_enrollment_id: params.former_year_enrollment_id,
     spoken_language: formatLanguages(params.spoken_languages),
     date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
     year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
@@ -298,23 +298,30 @@ export async function updateApplication({
   return res.data;
 }
 
-export async function markApplicationAsPending(params: Application) {
-  const res = await api.put(`/apparitorat/application/${params.id}/`, {
+export async function markAsPendingEditedApplication({
+  id,
+  params,
+}: {
+  id: number;
+  params: ApplicationEditFormDataType;
+}) {
+  const res = await api.put(`/apparitorat/application/${id}/`, {
     ...params,
-    academic_year: params.academic_year.id,
-    cycle: params.cycle.id,
-    faculty: params.faculty.id,
-    field: params.field.id,
-    departement: params.departement.id,
-    class_year: params.class_year.id,
+    academic_year: params.year_id,
+    cycle: params.cycle_id,
+    faculty: params.faculty_id,
+    field: params.field_id,
+    departement: params.department_id,
+    class_year: params.class_id,
     avatar: params.avatar || null,
     pending_avatar: params.pending_avatar || null,
-    application_documents: formatApplicationDocumentsForEdition(
-      params.application_documents
-    ),
-    enrollment_question_response: formatEnrollmentQuestionResponseForEdition(
-      params.enrollment_question_response
-    ),
+    date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
+    year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
+    former_matricule: params.former_matricule,
+    former_year_enrollment_id: params.former_year_enrollment_id,
+    type_of_enrollment: params.type_of_enrollment,
+    application_documents: params.application_documents,
+    enrollment_question_response: params.enrollment_question_response,
     admission_test_result: formatAdmissionTestResultsForEdition(
       params.admission_test_result
     ),
@@ -323,23 +330,30 @@ export async function markApplicationAsPending(params: Application) {
   return res.data;
 }
 
-export async function rejectApplication(params: Application) {
-  const res = await api.put(`/apparitorat/application/${params.id}/`, {
+export async function rejectEditedApplication({
+  id,
+  params,
+}: {
+  id: number;
+  params: ApplicationEditFormDataType;
+}) {
+  const res = await api.put(`/apparitorat/application/${id}/`, {
     ...params,
-    academic_year: params.academic_year.id,
-    cycle: params.cycle.id,
-    faculty: params.faculty.id,
-    field: params.field.id,
-    departement: params.departement.id,
-    class_year: params.class_year.id,
+    academic_year: params.year_id,
+    cycle: params.cycle_id,
+    faculty: params.faculty_id,
+    field: params.field_id,
+    departement: params.department_id,
+    class_year: params.class_id,
     avatar: params.avatar || null,
     pending_avatar: params.pending_avatar || null,
-    application_documents: formatApplicationDocumentsForEdition(
-      params.application_documents
-    ),
-    enrollment_question_response: formatEnrollmentQuestionResponseForEdition(
-      params.enrollment_question_response
-    ),
+    date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
+    year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
+    former_matricule: params.former_matricule,
+    former_year_enrollment_id: params.former_year_enrollment_id,
+    type_of_enrollment: params.type_of_enrollment,
+    application_documents: params.application_documents,
+    enrollment_question_response: params.enrollment_question_response,
     admission_test_result: formatAdmissionTestResultsForEdition(
       params.admission_test_result
     ),
@@ -396,50 +410,52 @@ export async function validateApplication(params: Application) {
 }
 
 export async function validateEditedApplication({
-  oldParams,
-  newParams,
+  id,
+  params,
 }: {
-  oldParams: Application;
-  newParams: ApplicationEditFormDataType;
+  id: number;
+  params: ApplicationEditFormDataType;
 }) {
   const resEnrollement = await api.post(`/apparitorat/year-enrollment/`, {
-    ...newParams,
-    academic_year: newParams.year_id,
-    cycle: newParams.cycle_id,
-    faculty: newParams.faculty_id,
-    field: newParams.field_id,
-    departement: newParams.department_id,
-    class_year: newParams.class_id,
-    avatar: newParams.avatar || null,
-    pending_avatar: newParams.pending_avatar || null,
-    former_year_enrollment_id: newParams.former_year_enrollment_id || null,
-    spoken_language: formatLanguages(newParams.spoken_languages),
-    date_of_birth: dayjs(newParams.date_of_birth).format("YYYY-MM-DD"),
-    year_of_diploma_obtained: dayjs(newParams.year_of_diploma_obtained).year(),
-    application_documents: newParams.application_documents,
-    enrollment_question_response: newParams.enrollment_question_response,
-    admission_test_result: newParams.admission_test_result,
-    type_of_enrollment: newParams.type_of_enrollment,
+    ...params,
+    academic_year: params.year_id,
+    cycle: params.cycle_id,
+    faculty: params.faculty_id,
+    field: params.field_id,
+    departement: params.department_id,
+    class_year: params.class_id,
+    avatar: params.avatar || null,
+    pending_avatar: params.pending_avatar || null,
+    former_matricule: params.former_matricule,
+    former_year_enrollment_id: params.former_year_enrollment_id,
+    type_of_enrollment: params.type_of_enrollment,
+    spoken_language: formatLanguages(params.spoken_languages),
+    date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
+    year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
+    application_documents: params.application_documents,
+    enrollment_question_response: params.enrollment_question_response,
+    admission_test_result: params.admission_test_result,
     status: "enabled",
   });
 
-  await api.put(`/apparitorat/application/${oldParams.id}/`, {
-    ...newParams,
-    academic_year: newParams.year_id,
-    cycle: newParams.cycle_id,
-    faculty: newParams.faculty_id,
-    field: newParams.field_id,
-    departement: newParams.department_id,
-    class_year: newParams.class_id,
-    avatar: newParams.avatar || null,
-    pending_avatar: newParams.pending_avatar || null,
-    former_year_enrollment_id: newParams.former_year_enrollment_id || null,
-    spoken_language: formatLanguages(newParams.spoken_languages),
-    date_of_birth: dayjs(newParams.date_of_birth).format("YYYY-MM-DD"),
-    year_of_diploma_obtained: dayjs(newParams.year_of_diploma_obtained).year(),
-    application_documents: newParams.application_documents,
-    enrollment_question_response: newParams.enrollment_question_response,
-    admission_test_result: newParams.admission_test_result,
+  await api.put(`/apparitorat/application/${id}/`, {
+    ...params,
+    academic_year: params.year_id,
+    cycle: params.cycle_id,
+    faculty: params.faculty_id,
+    field: params.field_id,
+    departement: params.department_id,
+    class_year: params.class_id,
+    avatar: params.avatar || null,
+    pending_avatar: params.pending_avatar || null,
+    former_year_enrollment_id: params.former_year_enrollment_id,
+    spoken_language: formatLanguages(params.spoken_languages),
+    date_of_birth: dayjs(params.date_of_birth).format("YYYY-MM-DD"),
+    year_of_diploma_obtained: dayjs(params.year_of_diploma_obtained).year(),
+    application_documents: params.application_documents,
+    enrollment_question_response: params.enrollment_question_response,
+    admission_test_result: params.admission_test_result,
+    type_of_enrollment:params.type_of_enrollment,
     status: "validated",
   });
 

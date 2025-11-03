@@ -39,6 +39,7 @@ import {
 } from "@ant-design/icons";
 import {
   Application,
+  ApplicationEditFormDataType,
   Class,
   Cycle,
   Department,
@@ -116,7 +117,8 @@ export const ViewEditApplicationForm: React.FC<
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
-  const [editedApplication, setEditedApplication] = useState<Application>();
+  const [editedApplication, setEditedApplication] =
+    useState<ApplicationEditFormDataType>();
 
   const queryClient = useQueryClient();
 
@@ -152,6 +154,8 @@ export const ViewEditApplicationForm: React.FC<
           params: {
             ...values,
             year_id: application.academic_year.id,
+            former_matricule: application.former_matricule,
+            former_year_enrollment_id: application.former_year_enrollment_id,
             type_of_enrollment: application.type_of_enrollment,
             application_documents: formatApplicationDocumentsForEdition(
               values.application_documents
@@ -182,7 +186,7 @@ export const ViewEditApplicationForm: React.FC<
                   "Une erreur est survenue lors de la mise à jour de la candidature."
               );
             }
-          }
+          },
         }
       );
     }
@@ -204,6 +208,26 @@ export const ViewEditApplicationForm: React.FC<
       course_test: item.course_test.id,
       result: item.result,
     }));
+  };
+
+  const handleSetEditedApplication = () => {
+    if (!application) return;
+    const values = form.getFieldsValue();
+
+    setEditedApplication({
+      id: application.id,
+      ...values,
+      year_id: application.academic_year.id,
+      former_matricule: application.former_matricule,
+      former_year_enrollment_id: application.former_year_enrollment_id,
+      type_of_enrollment: application.type_of_enrollment,
+      application_documents: formatApplicationDocumentsForEdition(
+        values.application_documents
+      ),
+      enrollment_question_response: formatEnrollmentQuestionResponseForEdition(
+        values.enrollment_question_response
+      ),
+    });
   };
 
   useEffect(() => {
@@ -270,7 +294,7 @@ export const ViewEditApplicationForm: React.FC<
     return (
       <div
         className="flex flex-col justify-center"
-        style={{ height: "calc(100vh - 64px)" }}
+        style={{ height: "calc(100vh - 110px)" }}
       >
         <Result
           icon={<Spin />}
@@ -341,24 +365,6 @@ export const ViewEditApplicationForm: React.FC<
           <Form
             form={form}
             name="form_in_drawer"
-            initialValues={
-              {
-                // ...application,
-                // date_of_birth: dayjs(application.date_of_birth),
-                // spoken_languages: parseLanguages(application.spoken_language),
-                // cycle_id: application.cycle.id,
-                // field_id: application.field.id,
-                // faculty_id: application.faculty.id,
-                // department_id: application.departement.id,
-                // class_id: application.class_year?.id,
-                // enrollment_question_response:
-                //   application.enrollment_question_response,
-                // year_of_diploma_obtained: dayjs(
-                //   `${application.year_of_diploma_obtained}`,
-                //   "YYYY"
-                // ),
-              }
-            }
             onFinish={onFinish}
             disabled={isPending || application?.status !== "pending"}
             style={{ maxWidth: 520, margin: "auto" }}
@@ -511,72 +517,6 @@ export const ViewEditApplicationForm: React.FC<
                 mode="multiple"
               />
             </Form.Item>
-            {/* <Form.List
-              name={["spoken_languages"]}
-              rules={[
-                {
-                  validator(_, value) {
-                    if (!value?.length) {
-                      return Promise.reject(
-                        new Error("Ajouter au moins une langue")
-                      );
-                    }
-                    return Promise.resolve();
-                  },
-                },
-              ]}
-            >
-              {(fields, { add, remove }, { errors }) => (
-                <div className="pt-2">
-                  {fields.map(({ key, name, ...restField }, index) => (
-                    <div className="" key={key}>
-                      <Flex gap={16}>
-                        <Form.Item
-                          {...restField}
-                          name={[name, "language"]}
-                          label={`Langue ${index + 1}`}
-                          rules={[
-                            {
-                              required: true,
-                            },
-                          ]}
-                          style={{ flex: 1 }}
-                        >
-                          <Input placeholder={`Langue parlée ${index + 1}`} />
-                        </Form.Item>
-
-                        <Button
-                          danger
-                          type="text"
-                          onClick={() => remove(name)}
-                          icon={<CloseOutlined />}
-                          style={{ boxShadow: "none" }}
-                        />
-                      </Flex>
-                    </div>
-                  ))}
-                  {errors.map((Error) => (
-                    <Typography.Text type="danger">{Error}</Typography.Text>
-                  ))}
-                  <Form.Item style={{}}>
-                    <Button
-                      type="link"
-                      onClick={() => add()}
-                      icon={<PlusCircleOutlined />}
-                      block
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      Ajouter une langue parlée
-                    </Button>
-                  </Form.Item>
-                </div>
-              )}
-            </Form.List> */}
-
             <Divider orientation="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Informations sur les parents
@@ -947,7 +887,6 @@ export const ViewEditApplicationForm: React.FC<
                 <div className="b-4">
                   {fields.map(({ key, name, ...restField }, index) => (
                     <div className="py-6" key={key}>
-                      {/* <Typography.Text>{application.enrollment_question_response[index].registered_enrollment_question?.question}</Typography.Text> */}
                       <Form.Item
                         {...restField}
                         name={[name, "response"]}
@@ -1245,20 +1184,7 @@ export const ViewEditApplicationForm: React.FC<
                 style={{ boxShadow: "none" }}
                 disabled={isPending}
                 onClick={() => {
-                  const values = form.getFieldsValue();
-                  setEditedApplication({
-                    id: application.id,
-                    ...values,
-                    year_id: application.academic_year.id,
-                    type_of_enrollment: application.type_of_enrollment,
-                    application_documents: formatApplicationDocumentsForEdition(
-                      values.application_documents
-                    ),
-                    enrollment_question_response:
-                      formatEnrollmentQuestionResponseForEdition(
-                        values.enrollment_question_response
-                      ),
-                  });
+                  handleSetEditedApplication()
                   setOpenValidate(true);
                 }}
                 icon={<CheckOutlined />}
@@ -1270,7 +1196,10 @@ export const ViewEditApplicationForm: React.FC<
                 danger
                 style={{ boxShadow: "none" }}
                 disabled={isPending}
-                onClick={() => setOpenReject(true)}
+                onClick={() => {
+                  handleSetEditedApplication();
+                  setOpenReject(true);
+                }}
                 icon={<CloseOutlined />}
               >
                 Rejeter
@@ -1327,12 +1256,15 @@ export const ViewEditApplicationForm: React.FC<
               ],
               onClick: ({ key }) => {
                 if (key === "pending") {
+                  handleSetEditedApplication();
                   setOpenMarkAsPending(true);
                 } else if (key === "delete") {
                   setOpenDelete(true);
                 } else if (key === "reject") {
+                  handleSetEditedApplication();
                   setOpenReject(true);
                 } else if (key === "validate") {
+                  handleSetEditedApplication();
                   setOpenValidate(true);
                 }
               },
@@ -1344,7 +1276,8 @@ export const ViewEditApplicationForm: React.FC<
       </Layout>
 
       <MarkAsPendingForm
-        application={editedApplication!}
+        applicationId={application?.id!}
+        editedApplication={editedApplication}
         open={openMarkAsPending}
         setOpen={setOpenMarkAsPending}
       />
@@ -1355,15 +1288,16 @@ export const ViewEditApplicationForm: React.FC<
         setView={setView}
       />
       <RejectApplicationForm
-        application={editedApplication!}
+        applicationId={application?.id!}
+        EditedApplication={editedApplication}
         open={openReject}
         setOpen={setOpenReject}
       />
       <ValidateApplicationForm
-        application={editedApplication!}
+        applicationId={application?.id!}
+        editedApplication={editedApplication}
         open={openValidate}
         setOpen={setOpenValidate}
-        editedApplication={null}
       />
     </>
   );

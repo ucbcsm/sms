@@ -151,12 +151,7 @@ export const AutoUploadAvatar: React.FC<AutoUploadAvatarProps> = ({
   };
 
   return (
-    <Form.Item
-      name={name}
-      label={label}
-      valuePropName="fileUrl"
-      layout="vertical"
-    >
+    <Form.Item name={name} label={label} layout="vertical">
       <div className="flex flex-col items-center gap-2">
         <Avatar
           size={size}

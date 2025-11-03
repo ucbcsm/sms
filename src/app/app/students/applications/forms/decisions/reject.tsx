@@ -1,22 +1,24 @@
 "use client";
 import React, { Dispatch, FC, SetStateAction } from "react";
-import { Alert, Form, Input, message, Modal, Checkbox } from "antd";
+import { Alert, Form, message, Modal, Checkbox } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { rejectApplication } from "@/lib/api";
-import { Application } from "@/types";
+import { rejectEditedApplication } from "@/lib/api";
+import { Application, ApplicationEditFormDataType } from "@/types";
 
 type FormDataType = {
   rejected: boolean;
 };
 
 type RejectApplicationFormProps = {
-  application: Application;
+  applicationId:number;
+  EditedApplication?: ApplicationEditFormDataType;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
-  application,
+  applicationId,
+  EditedApplication,
   open,
   setOpen,
 }) => {
@@ -24,17 +26,20 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: rejectApplication,
+    mutationFn: rejectEditedApplication,
   });
 
   const onFinish = (values: FormDataType) => {
+
+    if (!EditedApplication) return;
+
     if (!values.rejected) {
       messageApi.error("Vous devez confirmer le rejet de l'inscription.");
       return;
     }
    
       mutateAsync(
-        { ...application },
+        { id:applicationId,params:{...EditedApplication} },
         {
           onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["applications"] });
@@ -60,6 +65,8 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
         }
       );
   };
+
+  if (!EditedApplication) return null;
 
   return (
     <>
@@ -101,7 +108,7 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
       >
         <Alert
           message="Attention"
-          description={`Êtes-vous sûr de vouloir rejeter l'inscription "${application.name}" ? Cette action est irréversible.`}
+          description={`Êtes-vous sûr de vouloir rejeter l'inscription "${EditedApplication.name}" ? Cette action est irréversible.`}
           type="warning"
           showIcon
           style={{ border: 0 }}
