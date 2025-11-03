@@ -355,7 +355,7 @@ export const getUserApps = async (inputsData: {
     if (!inputsData.is_active) return false;
 
     // Superuser has access to all apps
-    if (inputsData.is_superuser) return true;
+    if (inputsData.is_superuser && app.id !== "is_student") return true;
 
     // Check is_student for student app
     if (app.id === "is_student" && inputsData.is_student) return true;
