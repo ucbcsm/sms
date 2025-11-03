@@ -116,6 +116,7 @@ export const ViewEditApplicationForm: React.FC<
   const [openDelete, setOpenDelete] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
+  const [editedApplication, setEditedApplication] = useState<Application>();
 
   const queryClient = useQueryClient();
 
@@ -1244,6 +1245,20 @@ export const ViewEditApplicationForm: React.FC<
                 style={{ boxShadow: "none" }}
                 disabled={isPending}
                 onClick={() => {
+                  const values = form.getFieldsValue();
+                  setEditedApplication({
+                    id: application.id,
+                    ...values,
+                    year_id: application.academic_year.id,
+                    type_of_enrollment: application.type_of_enrollment,
+                    application_documents: formatApplicationDocumentsForEdition(
+                      values.application_documents
+                    ),
+                    enrollment_question_response:
+                      formatEnrollmentQuestionResponseForEdition(
+                        values.enrollment_question_response
+                      ),
+                  });
                   setOpenValidate(true);
                 }}
                 icon={<CheckOutlined />}
@@ -1329,7 +1344,7 @@ export const ViewEditApplicationForm: React.FC<
       </Layout>
 
       <MarkAsPendingForm
-        application={application!}
+        application={editedApplication!}
         open={openMarkAsPending}
         setOpen={setOpenMarkAsPending}
       />
@@ -1340,12 +1355,12 @@ export const ViewEditApplicationForm: React.FC<
         setView={setView}
       />
       <RejectApplicationForm
-        application={application!}
+        application={editedApplication!}
         open={openReject}
         setOpen={setOpenReject}
       />
       <ValidateApplicationForm
-        application={application!}
+        application={editedApplication!}
         open={openValidate}
         setOpen={setOpenValidate}
         editedApplication={null}

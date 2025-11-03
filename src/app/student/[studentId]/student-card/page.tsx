@@ -2,8 +2,9 @@
 
 import { useInstitution } from "@/hooks/use-institution";
 import { getYearEnrollment } from "@/lib/api";
+import { getPublicR2Url } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Card, Typography, Row, Col, } from "antd";
+import { Card, Typography, Row, Col, Image, Flex, QRCode, } from "antd";
 import { useParams } from "next/navigation";
 
 export default function StudentCardPage() {
@@ -34,18 +35,79 @@ export default function StudentCardPage() {
               style={{
                 width: 350,
               }}
+              loading={isPending || isPendingInstitution}
             >
-              <Typography.Text type="secondary">Recto soon...</Typography.Text>
+              <Typography.Title
+                level={5}
+                style={{ textTransform: "uppercase", textAlign: "center" }}
+              >
+                {institution?.name}
+              </Typography.Title>
+              <Typography.Title
+                level={5}
+                className="text-center"
+                style={{ textTransform: "uppercase" }}
+              >
+                Carte d&apos;étudiant
+              </Typography.Title>
+              <Flex justify="space-between">
+                <div>
+                  <Typography.Text style={{ display: "block" }}>
+                    Matricule: {enrolledStudent?.user.matricule}
+                  </Typography.Text>
+                  <Typography.Text style={{ display: "block" }}>
+                    Nom:{" "}
+                    {`${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`}
+                  </Typography.Text>
+                  <Typography.Text style={{ display: "block" }}>
+                    Sexe: {enrolledStudent?.user.gender}
+                  </Typography.Text>
+                  <Typography.Text style={{ display: "block" }}>
+                    Date de naissance:{" "}
+                    {new Date(
+                      enrolledStudent?.common_enrollment_infos.date_of_birth ||
+                        ""
+                    ).toLocaleDateString()}
+                  </Typography.Text>
+                  <Typography.Text>
+                    Lieu de naissance:{" "}
+                    {enrolledStudent?.common_enrollment_infos.place_of_birth}
+                  </Typography.Text>
+                  <Typography.Text style={{ display: "block" }}>
+                    Filière: {enrolledStudent?.faculty.name}
+                  </Typography.Text>
+                  <Typography.Text style={{ display: "block" }}>
+                    Mention: {enrolledStudent?.departement.name}
+                  </Typography.Text>
+                  <QRCode value={`${enrolledStudent?.user.matricule}`} />
+                </div>
+                <div>
+                  <Image
+                    alt="Photo"
+                    src={
+                      getPublicR2Url(enrolledStudent?.user.avatar) || undefined
+                    }
+                    height="auto"
+                    width={96}
+                  />
+                </div>
+              </Flex>
             </Card>
           </Col>
           <Col>
             <Card
+              loading={isPending || isPendingInstitution}
               style={{
                 width: 350,
               }}
             >
               <div className="text-center">
-                <Typography.Title level={3}>Laisser passer</Typography.Title>
+                <Typography.Title
+                  level={5}
+                  style={{ textTransform: "uppercase" }}
+                >
+                  Laisser passer
+                </Typography.Title>
                 <Typography.Paragraph>
                   Cette carte est une propriété privée de l&apos;
                   {institution?.acronym || "l'institution"}, en cas de perte la
@@ -71,7 +133,6 @@ export default function StudentCardPage() {
                 >
                   République Démogratique du Congo
                 </Typography.Title>
-
                 <Typography.Text>{institution?.web_site}</Typography.Text>
               </div>
             </Card>
