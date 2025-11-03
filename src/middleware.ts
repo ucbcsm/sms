@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { isAuthenticated } from "./lib/api/auth";
 
 export default async function middleware(request: NextRequest) {
+ 
   const { pathname } = request.nextUrl;
   const isOnLoginPage = pathname.startsWith("/auth/login");
 

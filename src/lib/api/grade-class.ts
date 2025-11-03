@@ -4,7 +4,7 @@ import {
   NewGradeClass,
   TaughtCourse,
 } from "@/types";
-import ExcelJS from "exceljs";
+// import ExcelJS from "exceljs";
 import Papa from "papaparse";
 import api from "../fetcher";
 
@@ -204,6 +204,13 @@ export async function exportEmptyGradesToExcel(
     sheetName: "Notes",
   }
 ) {
+
+  if (typeof window === "undefined") {
+    throw new Error("importGradesFromExcel must be called from the browser");
+  }
+
+  const ExcelJS = (await import("exceljs")).default;
+
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet(options.sheetName, {
     headerFooter: { oddFooter: "Page &P / &N" },
@@ -450,6 +457,13 @@ export async function importGradesFromExcel(file: File): Promise<
     exam: number | null;
   }[]
 > {
+
+  if (typeof window === "undefined") {
+    throw new Error("importGradesFromExcel must be called from the browser");
+  }
+
+  const ExcelJS = (await import("exceljs")).default;
+
   const workbook = new ExcelJS.Workbook();
   const fileContent = await file.arrayBuffer();
   await workbook.xlsx.load(fileContent);
