@@ -46,11 +46,14 @@ export const Step8: FC<Props> = ({ setStep }) => {
 
   useEffect(() => {
     const savedData = localStorage.getItem("d8");
-    if (typeof savedData === "string") {
+    if (savedData) {
       const raw = decompressFromEncodedURIComponent(savedData);
-      const data = JSON.parse(raw) as Step8ApplicationFormDataType;
+      const data = JSON.parse(raw) as {
+        registered_enrollment_question: number;
+        response: string;
+      }[];
 
-      form.setFieldsValue(data);
+      form.setFieldsValue({ enrollment_q_a: data });
     } else {
       const initialValues = getEnrollementQAFromQuestions();
       form.setFieldsValue({ enrollment_q_a: initialValues });
@@ -66,7 +69,7 @@ export const Step8: FC<Props> = ({ setStep }) => {
       form={form}
       layout="vertical"
       onFinish={(values) => {
-        
+        console.log("QA:",values);
         const formattedValues = values.enrollment_q_a?.map((item: any) => ({
           ...item,
           response: item.response || "",
