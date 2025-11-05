@@ -79,71 +79,79 @@ export const HomeClient: FC<HomeClientProps> = ({ apps, user }) => {
             <UserProfileButton />
           </Space>
         </Layout.Header>
-        <Layout.Content style={{ background: colorBgContainer }}>
+        <Layout.Content
+          style={{
+            //  background: colorBgContainer,
+            overflowY: "auto",
+            minHeight: "calc(100vh - 64px)",
+          }}
+        >
           <div className="pt-6 pb-10 px-4 sm:px-6 lg:px-8">
             <header className="mb-8 ">
-              <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                Hi {user?.first_name || "User"} 👋
-              </Typography.Title>
+              <Card>
+                <Typography.Title level={3}>
+                  Hi {user?.first_name || "User"} 👋
+                </Typography.Title>
 
-              <Typography.Text
-                type="secondary"
-                className="mt-2 text-sm text-gray-600"
-              >
-                D&apos;après vos rôles, voici les applications auxquelles vous
-                avez accès.
-              </Typography.Text>
+                <Typography.Text
+                  type="secondary"
+                  className="mt-2 text-sm text-gray-600"
+                >
+                  D&apos;après vos rôles, voici les applications auxquelles vous
+                  avez accès.
+                </Typography.Text>
 
-              <div>
-                <Space wrap>
-                  <Typography.Text>Roles: </Typography.Text>
-                  {user?.is_superuser && (
-                    <Tag
-                      key="admin"
-                      bordered={false}
-                      style={{ borderRadius: 10 }}
-                      icon={<CrownOutlined />}
-                      color="red"
-                    >
-                      Super admin
-                    </Tag>
-                  )}
-                  {user?.is_staff && (
-                    <Tag
-                      key="staff"
-                      bordered={false}
-                      style={{ borderRadius: 10 }}
-                      icon={<UserOutlined />}
-                      color="blue"
-                    >
-                      Staff
-                    </Tag>
-                  )}
-                  {user?.is_student && (
-                    <Tag
-                      key="student"
-                      bordered={false}
-                      style={{ borderRadius: 10 }}
-                      icon={<CheckOutlined />}
-                      color="blue"
-                    >
-                      Étudiant
-                    </Tag>
-                  )}
+                <div>
+                  <Space wrap>
+                    <Typography.Text>Roles: </Typography.Text>
+                    {user?.is_superuser && (
+                      <Tag
+                        key="admin"
+                        bordered={false}
+                        style={{ borderRadius: 10 }}
+                        icon={<CrownOutlined />}
+                        color="red"
+                      >
+                        Super admin
+                      </Tag>
+                    )}
+                    {user?.is_staff && (
+                      <Tag
+                        key="staff"
+                        bordered={false}
+                        style={{ borderRadius: 10 }}
+                        icon={<UserOutlined />}
+                        color="blue"
+                      >
+                        Staff
+                      </Tag>
+                    )}
+                    {user?.is_student && (
+                      <Tag
+                        key="student"
+                        bordered={false}
+                        style={{ borderRadius: 10 }}
+                        icon={<CheckOutlined />}
+                        color="blue"
+                      >
+                        Étudiant
+                      </Tag>
+                    )}
 
-                  {user?.roles.map((r) => (
-                    <Tag
-                      key={r.id}
-                      bordered={false}
-                      style={{ borderRadius: 10 }}
-                      icon={<CheckOutlined />}
-                      color="success"
-                    >
-                      {getRoleName(r.name)}
-                    </Tag>
-                  ))}
-                </Space>
-              </div>
+                    {user?.roles.map((r) => (
+                      <Tag
+                        key={r.id}
+                        bordered={false}
+                        style={{ borderRadius: 10 }}
+                        icon={<CheckOutlined />}
+                        color="success"
+                      >
+                        {getRoleName(r.name)}
+                      </Tag>
+                    ))}
+                  </Space>
+                </div>
+              </Card>
             </header>
 
             <section aria-labelledby="apps-heading">

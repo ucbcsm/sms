@@ -62,7 +62,7 @@ export default function Page() {
       >
         <StudentProfileDetails data={enrolledStudent} isError={isError} />
       </Layout.Sider>
-      <Layout.Content style={{ background: colorBgContainer, padding:24 }}>
+      <Layout.Content style={{  padding:24 }}>
         <Row gutter={24}>
           <Col span={16}>
             <Row gutter={[24, 24]}>

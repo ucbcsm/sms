@@ -328,7 +328,7 @@ export const ListStudents: FC = () => {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 360px)" }}
+      scroll={{ y: "calc(100vh - 362px)" }}
       size="small"
       bordered
       loading={isPendingStudents}

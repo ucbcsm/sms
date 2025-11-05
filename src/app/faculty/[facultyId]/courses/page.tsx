@@ -148,7 +148,7 @@ export default function Page() {
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
-          background: colorBgContainer,
+          // background: colorBgContainer,
           overflowY: "auto",
           height: "calc(100vh - 110px)",
         }}
@@ -157,7 +157,7 @@ export default function Page() {
           style={{
             display: "flex",
             alignItems: "center",
-            background: colorBgContainer,
+            background: "#f5f5f5",
             padding: 0,
           }}
         >
@@ -170,7 +170,7 @@ export default function Page() {
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette />
+            {/* <Palette /> */}
           </Space>
         </Layout.Header>
 
@@ -269,8 +269,9 @@ export default function Page() {
           rowSelection={{
             type: "checkbox",
           }}
-          scroll={{ y: "calc(100vh - 329px)" }}
+          scroll={{ y: "calc(100vh - 331px)" }}
           size="small"
+          bordered
           loading={isPendngCourses}
           pagination={{
             defaultPageSize: 25,

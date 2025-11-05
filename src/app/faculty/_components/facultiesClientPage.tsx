@@ -71,20 +71,27 @@ export const FacultiesClientPage = () => {
       </Layout.Header>
       <Layout.Content
         style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           //  background: colorBgContainer,
           padding: 28,
           minHeight: "calc(100vh - 64px)",
         }}
       >
         <Card
-          title={
-            <Typography.Title level={4} style={{ marginBottom: 0 }}>
-              Filières organisées
-            </Typography.Title>
-          }
+          // title={
+          //   <Typography.Title level={4} style={{ marginBottom: 0 }}>
+          //     Filières organisées
+          //   </Typography.Title>
+          // }
           loading={isPending}
-          style={{ maxWidth: 520, margin: "auto" }}
+          style={{ width: 520, margin: "auto" }}
         >
+          <Typography.Title level={4} >
+              Filières
+            </Typography.Title>
           <List
             size="small"
             dataSource={data}

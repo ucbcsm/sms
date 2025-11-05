@@ -4,7 +4,7 @@ import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
 import { getYearEnrollmentsByDepatmentId } from "@/lib/api";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   AppstoreOutlined,
   DeleteOutlined,
@@ -51,6 +51,7 @@ export default function Page() {
   }
   return (
     <Table
+      bordered
       title={() => (
         <header className="flex pb-3">
           <Space>
@@ -94,18 +95,28 @@ export default function Page() {
           key: "avatar",
           render: (_, record) => (
             <Avatar
-              src={record.user.avatar || null}
+              src={getPublicR2Url(record.user.avatar)}
               style={{
                 backgroundColor: getHSLColor(
-                  `${record.user.first_name} ${record.user.last_name} ${record.user.surname}`
+                  `${record.user.surname} ${record.user.last_name} ${record.user.first_name}`
                 ),
               }}
             >
               {record?.user.first_name?.charAt(0).toUpperCase()}
-              {record?.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 56,
+        },
+        {
+          title: "Noms",
+          dataIndex: "name",
+          key: "name",
+          render: (_, record) => (
+            <Link href={`/student/${record.id}`}>
+              {record.user.surname} {record.user.last_name}{" "}
+              {record.user.first_name}
+            </Link>
+          ),
         },
         {
           title: "Matricule",
@@ -113,23 +124,13 @@ export default function Page() {
           key: "matricule",
           render: (_, record) => (
             <Link href={`/student/${record.id}`}>
-              {record.user.matricule.padStart(6, "0")}
+              {record.user.matricule}
             </Link>
           ),
           width: 80,
           align: "center",
         },
-        {
-          title: "Noms",
-          dataIndex: "name",
-          key: "name",
-          render: (value, record) => (
-            <Link href={`/student/${record.id}`}>
-              {record.user.first_name} {record.user.last_name}{" "}
-              {record.user.surname}
-            </Link>
-          ),
-        },
+
         {
           title: "Promotion",
           dataIndex: "promotion",
@@ -190,7 +191,7 @@ export default function Page() {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 348px)" }}
+      scroll={{ y: "calc(100vh - 393px)" }}
       size="small"
       pagination={{
         defaultPageSize: 25,

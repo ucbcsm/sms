@@ -48,6 +48,7 @@ export function StudentsStatistics() {
                   data?.year.start_date!,
                   data?.year.end_date!
                 )}
+                strokeColor="#1890ff"
                 style={{ position: "absolute", right: 16, width: 100 }}
               />
             ) : (
@@ -65,11 +66,11 @@ export function StudentsStatistics() {
           <Flex justify="space-between">
             <Statistic
               loading={isPending}
-              title="Etudiants"
+              title="Étudiants"
               value={data?.student_counter}
             />
             {!isPending ? (
-              <Progress type="dashboard" percent={100} size={58} />
+              <Progress type="dashboard" percent={100} size={58} strokeColor="#52c41a" />
             ) : (
               <Skeleton.Avatar size={58} active />
             )}
@@ -91,6 +92,7 @@ export function StudentsStatistics() {
                   (data?.male_count! / data?.student_counter!) * 100
                 )}
                 size={58}
+                strokeColor="#1890ff"
               />
             ) : (
               <Skeleton.Avatar size={58} active />
@@ -111,7 +113,7 @@ export function StudentsStatistics() {
                 type="dashboard"
                 percent={toFixedNumber((data?.female_count! / data?.student_counter!) * 100)}
                 size={58}
-                strokeColor="cyan"
+                strokeColor="#ff4d4f"
               />
             ) : (
               <Skeleton.Avatar size={58} active />
@@ -132,7 +134,7 @@ export function StudentsStatistics() {
                 type="dashboard"
                 percent={toFixedNumber((data?.actif_count! / data?.student_counter!) * 100)}
                 size={58}
-                strokeColor="cyan"
+                strokeColor="#52c41a"
               />
             ) : (
               <Skeleton.Avatar size={58} active />
@@ -153,7 +155,7 @@ export function StudentsStatistics() {
                 type="dashboard"
                 percent={toFixedNumber((data?.inactif_count! / data?.student_counter!) * 100)}
                 size={58}
-                strokeColor="cyan"
+                strokeColor="#faad14"
               />
             ) : (
               <Skeleton.Avatar size={58} active />

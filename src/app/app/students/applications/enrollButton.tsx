@@ -67,7 +67,7 @@ export const EnrollButton: FC<EnrollButtonProps> = ({
         icon={<UserAddOutlined />}
         color="primary"
         style={{ boxShadow: "none" }}
-        variant="dashed"
+        variant="solid"
       >
         Inscrire
       </Button>

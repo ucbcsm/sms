@@ -179,7 +179,7 @@ export default function StudentsLayout({
       </Layout.Sider>
       <Layout.Content
         style={{
-          background: colorBgContainer,
+          // background: colorBgContainer,
           padding: "0 28px",
         }}
       >

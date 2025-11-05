@@ -47,16 +47,16 @@ export default function DepartmentLayout({
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
-          background: colorBgContainer,
-          overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          // background: colorBgContainer,
+          // overflowY: "auto",
+          // height: "calc(100vh - 64px)",
         }}
       >
         <Layout.Header
           style={{
             display: "flex",
             alignItems: "center",
-            background: colorBgContainer,
+            background: "#f5f5f5",
             padding: 0,
           }}
         >
@@ -64,7 +64,7 @@ export default function DepartmentLayout({
             {/* <BackButton /> */}
             {!isPending ? (
               <Typography.Title level={3} style={{ marginBottom: 0 }}>
-                {department?.name} (Département)
+                {department?.name} (Mention)
               </Typography.Title>
             ) : (
               <Form>
@@ -74,7 +74,7 @@ export default function DepartmentLayout({
           </Space>
           <div className="flex-1" />
           <Space>
-            <Palette />
+            {/* <Palette /> */}
           </Space>
         </Layout.Header>
         <Menu
@@ -113,16 +113,16 @@ export default function DepartmentLayout({
                 </Link>
               ),
             },
-            {
-              key: `/faculty/${facultyId}/department/${departmentId}/taught-courses`,
-              label: (
-                <Link
-                  href={`/faculty/${facultyId}/department/${departmentId}/taught-courses`}
-                >
-                  Cours planifiés
-                </Link>
-              ),
-            },
+            // {
+            //   key: `/faculty/${facultyId}/department/${departmentId}/taught-courses`,
+            //   label: (
+            //     <Link
+            //       href={`/faculty/${facultyId}/department/${departmentId}/taught-courses`}
+            //     >
+            //       Cours planifiés
+            //     </Link>
+            //   ),
+            // },
             // {
             //   key: `/faculty/${facultyId}/department/${departmentId}/teachers`,
             //   label: "Enseignants",
@@ -131,8 +131,8 @@ export default function DepartmentLayout({
         />
         <div
           style={{
-            overflowY: "auto",
-            height: "calc(100vh - 174px)",
+            // overflowY: "auto",
+            // height: "calc(100vh - 174px)",
             paddingTop: 16,
           }}
         >

@@ -122,7 +122,7 @@ export default function Page() {
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
-          background: colorBgContainer,
+          // background: colorBgContainer,
           overflowY: "auto",
           height: "calc(100vh - 110px)",
         }}
@@ -131,7 +131,7 @@ export default function Page() {
           style={{
             display: "flex",
             alignItems: "center",
-            background: colorBgContainer,
+            background: "#f5f5f5",
             padding: 0,
           }}
         >
@@ -148,14 +148,12 @@ export default function Page() {
             )}
           </Space>
           <div className="flex-1" />
-          <Space>
-            
-          </Space>
+          <Space></Space>
         </Layout.Header>
 
         <Table
           loading={isPending}
-          // bordered
+          bordered
           title={() => (
             <header className="flex pb-3">
               <Space>
@@ -224,13 +222,7 @@ export default function Page() {
                 </Avatar>
               ),
               width: 56,
-            },
-            {
-              title: "Matricule",
-              dataIndex: "student",
-              key: "matricule",
-              render: (_, record, __) => record.student?.user.matricule,
-              width: 80,
+              align: "center",
             },
             {
               title: "Noms",
@@ -239,6 +231,14 @@ export default function Page() {
               render: (_, record, __) =>
                 `${record.student?.user.surname} ${record.student.user.last_name} ${record.student.user.first_name}`,
             },
+            {
+              title: "Matricule",
+              dataIndex: "student",
+              key: "matricule",
+              render: (_, record, __) => record.student?.user.matricule,
+              width: 80,
+            },
+
             {
               title: "Promotion",
               dataIndex: "class_year",

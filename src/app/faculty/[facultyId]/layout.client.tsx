@@ -8,7 +8,17 @@ import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
 import { getDepartmentsByFacultyId, getFaculty } from "@/lib/api";
 import { getPublicR2Url } from "@/lib/utils";
-import { MenuOutlined, SubnodeOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  BookOutlined,
+  BranchesOutlined,
+  CrownOutlined,
+  DashboardOutlined,
+  MenuOutlined,
+  RedoOutlined,
+  SubnodeOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Divider,
@@ -140,12 +150,14 @@ export function ClientFacultyLayout({
             {
               key: `/faculty/${facultyId}`,
               label: <Link href={`/faculty/${facultyId}`}>Aperçu</Link>,
+              icon: <DashboardOutlined />,
             },
             {
               key: `/faculty/${facultyId}/students`,
               label: (
                 <Link href={`/faculty/${facultyId}/students`}>Étudiants</Link>
               ),
+              icon: <TeamOutlined />,
             },
             {
               key: `/faculty/${facultyId}/taught-courses`,
@@ -154,6 +166,7 @@ export function ClientFacultyLayout({
                   Cours planifiés
                 </Link>
               ),
+              icon: <BookOutlined />,
             },
             {
               key: `/faculty/${facultyId}/courses`,
@@ -162,11 +175,12 @@ export function ClientFacultyLayout({
                   Catalogue & UE
                 </Link>
               ),
+              icon: <AppstoreOutlined />,
             },
             {
               key: `departments`,
               label: "Mentions",
-              //  icon: <BranchesOutlined />,
+              icon: <BranchesOutlined />,
               children: getDepartmentsAsMenu(),
             },
             {
@@ -176,6 +190,7 @@ export function ClientFacultyLayout({
                   Chefs de promotion
                 </Link>
               ),
+              icon: <CrownOutlined />,
             },
             {
               key: `/faculty/${facultyId}/courses-to-retake`,
@@ -184,6 +199,7 @@ export function ClientFacultyLayout({
                   Cours à reprendre
                 </Link>
               ),
+              icon: <RedoOutlined />,
             },
           ]}
           // style={{ flex: 1, minWidth: 0, borderBottom: 0 }}

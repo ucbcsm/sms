@@ -38,7 +38,7 @@ export function YearSelector() {
   const { yid, setYid } = useYid();
   const [percent, setPercent] = useState(-50);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
-  const faculty = useSessionStore((state) => state.faculty);
+  const session = useSessionStore();
   const {data:institution}=useInstitution()
 
   const {
@@ -120,7 +120,11 @@ export function YearSelector() {
                   Année
                 </Typography.Title>
               }
-              extra={!faculty ? <NewYearForm buttonType="link" /> : undefined}
+              extra={
+                session.user?.is_superuser ? (
+                  <NewYearForm buttonType="link" />
+                ) : undefined
+              }
             >
               <Form
                 disabled={isPending}
@@ -219,7 +223,7 @@ export function YearSelector() {
       {!isPending ? (
         <Select
           value={yid}
-          variant="filled"
+          variant="outlined"
           options={getYearsAsOptions(years)}
           style={{ width: 108 }}
           onSelect={(value) => {

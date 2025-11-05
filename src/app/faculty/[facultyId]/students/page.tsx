@@ -89,6 +89,7 @@ export default function Page() {
 
   return (
     <Table
+      bordered
       title={() => (
         <header className="flex pb-3">
           <Space>
@@ -181,6 +182,19 @@ export default function Page() {
             </Avatar>
           ),
           width: 56,
+          align: "center",
+        },
+         {
+          title: "Noms",
+          dataIndex: "name",
+          key: "name",
+          render: (_, record) => (
+            <Link href={`/student/${record.id}`}>
+              {record.user.surname} {record.user.last_name}{" "}
+              {record.user.first_name}
+            </Link>
+          ),
+          ellipsis: true,
         },
         {
           title: "Matricule",
@@ -199,18 +213,6 @@ export default function Page() {
           render: (_, record, __) => record.user.gender || "",
           width: 56,
           align: "center",
-        },
-        {
-          title: "Noms",
-          dataIndex: "name",
-          key: "name",
-          render: (value, record) => (
-            <Link href={`/student/${record.id}`}>
-              {record.user.surname} {record.user.last_name}{" "}
-              {record.user.first_name}
-            </Link>
-          ),
-          ellipsis: true,
         },
         {
           title: "Promotion",
@@ -279,7 +281,7 @@ export default function Page() {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 392px)" }}
+      scroll={{ y: "calc(100vh - 394px)" }}
       size="small"
       loading={isPendingEnrollememts}
       pagination={{

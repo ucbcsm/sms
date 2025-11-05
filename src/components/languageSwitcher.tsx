@@ -23,8 +23,9 @@ export function LanguageSwitcher() {
     >
       <Button
         icon={lang === "fr" ? <Flags.FrFlag className="w-4 h-4" /> : <Flags.GbFlag className="w-4 h-4" />}
-        type="text"
+        type="default"
         className=" uppercase"
+        style={{boxShadow:"none"}}
         // style={{paddingLeft:2, paddingRight:2}}
       />
     </Dropdown>

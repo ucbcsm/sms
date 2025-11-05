@@ -35,6 +35,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { EditFacultyForm } from "@/app/console/fields/faculties/forms/edit";
 import { Palette } from "@/components/palette";
+import Link from "next/link";
 
 export default function Page() {
   const {
@@ -97,7 +98,7 @@ export default function Page() {
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
-          background: colorBgContainer,
+          // background: colorBgContainer,
           overflowY: "auto",
           height: "calc(100vh - 110px)",
         }}
@@ -106,7 +107,7 @@ export default function Page() {
           style={{
             display: "flex",
             alignItems: "center",
-            background: colorBgContainer,
+            background: "#f5f5f5",
             padding: 0,
           }}
         >
@@ -223,45 +224,47 @@ export default function Page() {
                 </Card>
               </Col>
               <Col span={24}>
-                {/* <Card> */}
-                <Typography.Title level={5}>Mentions</Typography.Title>
-                <List
-                  dataSource={departments}
-                  renderItem={(item) => (
-                    <List.Item
-                      extra={
-                        <Space>
-                          <Button
-                            color="primary"
-                            variant="dashed"
-                            style={{ boxShadow: "none" }}
-                            onClick={() =>
-                              router.push(
-                                `/faculty/${facultyId}/department/${item.id}`
-                              )
+                <Card>
+                  <Typography.Title level={5}>Mentions</Typography.Title>
+                  <List
+                    size="small"
+                    dataSource={departments}
+                    renderItem={(item) => (
+                      <Link
+                        key={item.id}
+                        href={`/faculty/${facultyId}/department/${item.id}`}
+                      >
+                        <List.Item
+                          extra={
+                            <Space>
+                              <Button
+                                color="primary"
+                                variant="dashed"
+                                style={{ boxShadow: "none" }}
+                              >
+                                Gérer
+                              </Button>
+                            </Space>
+                          }
+                          className="hover:bg-[#f5f5f5] hover:rounded-md"
+                        >
+                          <List.Item.Meta
+                            title={`${item.name}`}
+                            description={
+                              <Space>
+                                Code:
+                                <Badge
+                                  count={item?.acronym}
+                                  color={getHSLColor(`${item?.name}`)}
+                                />
+                              </Space>
                             }
-                          >
-                            Gérer
-                          </Button>
-                        </Space>
-                      }
-                    >
-                      <List.Item.Meta
-                        title={`${item.name}`}
-                        description={
-                          <Space>
-                            Code:
-                            <Badge
-                              count={item?.acronym}
-                              color={getHSLColor(`${item?.name}`)}
-                            />
-                          </Space>
-                        }
-                      />
-                    </List.Item>
-                  )}
-                />
-                {/* </Card> */}
+                          />
+                        </List.Item>
+                      </Link>
+                    )}
+                  />
+                </Card>
               </Col>
             </Row>
           </Col>
@@ -312,22 +315,6 @@ export default function Page() {
             setOpen={setOpenEdit}
           />
         </Row>
-        {/* </Card> */}
-        <Layout.Footer
-          style={{
-            display: "flex",
-            background: colorBgContainer,
-            padding: "24px 0",
-          }}
-        >
-          <Typography.Text type="secondary">
-            © {new Date().getFullYear()} UCBC. Tous droits réservés.
-          </Typography.Text>
-          <div className="flex-1" />
-          <Space>
-            <Palette />
-          </Space>
-        </Layout.Footer>
       </Layout.Content>
     </Layout>
   );

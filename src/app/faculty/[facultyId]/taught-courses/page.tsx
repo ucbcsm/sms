@@ -282,7 +282,7 @@ export default function Page() {
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
-          background: colorBgContainer,
+          // background: colorBgContainer,
           overflowY: "auto",
           height: "calc(100vh - 110px)",
         }}
@@ -291,7 +291,7 @@ export default function Page() {
           style={{
             display: "flex",
             alignItems: "center",
-            background: colorBgContainer,
+            background: "#f5f5f5",
             padding: 0,
           }}
         >
@@ -307,6 +307,7 @@ export default function Page() {
           <Col span={18}> */}
         {/* <Card> */}
         <Table
+          bordered
           title={() => (
             <header className="flex pb-3">
               <Space>
@@ -553,7 +554,7 @@ export default function Page() {
           rowSelection={{
             type: "checkbox",
           }}
-          scroll={{ y: "calc(100vh - 329px)" }}
+          scroll={{ y: "calc(100vh - 331px)" }}
           size="small"
           pagination={{
             defaultPageSize: 25,

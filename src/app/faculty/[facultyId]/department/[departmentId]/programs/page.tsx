@@ -151,6 +151,7 @@ export default function Page() {
           </Space>
         </header>
       )}
+      bordered
       dataSource={data}
       columns={[
         {

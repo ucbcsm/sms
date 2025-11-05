@@ -165,11 +165,12 @@ export const ListCourseValidatedStudents: FC<
 
   return (
     <Table
+      bordered
       title={() => (
         <header className="flex pb-3">
           <Space>
             <Typography.Title level={3} style={{ marginBottom: 0 }}>
-              Validées
+              Inscriptions validées
             </Typography.Title>
           </Space>
           <div className="flex-1" />
@@ -342,7 +343,7 @@ export const ListCourseValidatedStudents: FC<
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 281px)" }}
+      scroll={{ y: "calc(100vh - 283px)" }}
       size="small"
       pagination={{
         defaultPageSize: 25,

@@ -9,7 +9,6 @@ import { UserProfileButton } from "@/components/userProfileButton";
 import { useInstitution } from "@/hooks/use-institution";
 import { useYid } from "@/hooks/use-yid";
 import { getUserIsJury, getYears } from "@/lib/api";
-import { logout } from "@/lib/api/auth";
 import { getPublicR2Url } from "@/lib/utils";
 import {
   CalendarOutlined,
@@ -165,10 +164,11 @@ export default function Page() {
           alignItems: "center",
           width: "100%",
           padding: 28,
-          background: colorBgContainer,
+          // background: colorBgContainer,
+          minHeight: `calc(100vh - 64px)`,
         }}
       >
-        <div style={{ width: 600, margin: "auto" }}>
+        <div style={{ width: 520, margin: "auto" }}>
           {isErrorJury &&
             ((error as any).status === 404 ||
               (error as any).status === 503) && (
@@ -189,8 +189,8 @@ export default function Page() {
             )}
           <Card
             loading={isPending}
-            variant="borderless"
-            style={{ boxShadow: "none" }}
+            // variant="borderless"
+            // style={{ boxShadow: "none" }}
           >
             <Typography.Title level={4}>Année</Typography.Title>
             <List
@@ -198,7 +198,7 @@ export default function Page() {
               renderItem={(item) => (
                 <List.Item
                   key={item.id}
-                  className=" hover:cursor-pointer"
+                  className=" hover:cursor-pointer hover:bg-[#f5f5f5]"
                   extra={
                     isLoading && item.id === yearId ? (
                       <LoadingOutlined />
@@ -221,16 +221,6 @@ export default function Page() {
               )}
             />
           </Card>
-          <Flex
-            justify="space-between"
-            align="center"
-            style={{ paddingTop: 16 }}
-          >
-            <Typography.Text type="secondary">
-              © {new Date().getFullYear()} UCBC. Tous droits réservés.
-            </Typography.Text>
-            <Palette />
-          </Flex>
         </div>
       </Layout.Content>
     </Layout>

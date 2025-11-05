@@ -107,7 +107,7 @@ export default function AppLayout({
           items={[
             {
               key: "/app",
-              label: <Link href={`/app`}>Tableau de bord</Link>,
+              label: <Link href={`/app`}>Aperçu</Link>,
               icon: <DashboardOutlined />,
             },
             {

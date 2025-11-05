@@ -13,7 +13,7 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, DatePicker, Dropdown, Layout, Space, Switch, Table } from "antd";
+import { Button, DatePicker, Dropdown, Layout, Space, Switch, Table, Typography } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 import { NewHourTrackingForm } from "./forms/new";
@@ -87,7 +87,20 @@ export default function Page() {
 
   return (
     <Layout.Content style={{ padding: "16px 16px 0 16px" }}>
+       <Layout.Header
+              style={{
+                background: "#f5f5f5",
+                padding: 0,
+              }}
+            >
+              <Space>
+                <Typography.Title level={3} style={{ marginBottom: 0 }}>
+                  Suivi des heures
+                </Typography.Title>
+              </Space>
+            </Layout.Header>
       <Table
+        bordered
         loading={isPending}
         title={() => (
           <header className="flex pb-3">

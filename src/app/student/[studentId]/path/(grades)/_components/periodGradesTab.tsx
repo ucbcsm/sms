@@ -229,7 +229,8 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
           ]}
           dataSource={data?.results}
           rowKey="id"
-          scroll={{ y: "calc(100vh - 380px)" }}
+          scroll={{ y: "calc(100vh - 477px)" }}
+          bordered
           pagination={{
             defaultPageSize: 25,
             pageSizeOptions: [25, 50, 75, 100],

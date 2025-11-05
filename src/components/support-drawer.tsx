@@ -21,12 +21,13 @@ export const SupportDrawer = () => {
   return (
     <>
       <Button
-        type="text"
+        type="default"
         icon={<QuestionCircleOutlined />}
         onClick={() => {
           setOpen(true);
         }}
         title="Assistance technique"
+        style={{boxShadow:"none"}}
       />
       <Drawer
         open={open}

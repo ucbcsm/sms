@@ -276,7 +276,12 @@ export const ListStudentsWithRetakes =()=> {
         </Layout.Content>
       </Splitter.Panel>
       {selectedRetake && (
-        <Splitter.Panel defaultSize={340} min={340} max="30%">
+        <Splitter.Panel
+          defaultSize={340}
+          min={340}
+          max="30%"
+          style={{ background: colorBgContainer }}
+        >
           <Flex justify="space-between" style={{ padding: "16px 16px 0 16px" }}>
             <Typography.Text
               type="secondary"

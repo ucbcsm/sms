@@ -23,7 +23,8 @@ export default function Page() {
         style={{
           display: "flex",
           alignItems: "center",
-          background: colorBgContainer,
+          // background: colorBgContainer,
+          background: "#f5f5f5",
           padding: 0,
         }}
       >
@@ -74,7 +75,9 @@ export default function Page() {
           {<StudentsStatsDashboard />}
         </Space>
       </Layout.Header>
-      <Layout.Content style={{ background: colorBgContainer }}>
+      <Layout.Content
+      //  style={{ background: colorBgContainer }}
+       >
         <ListStudents />
       </Layout.Content>
     </Layout>

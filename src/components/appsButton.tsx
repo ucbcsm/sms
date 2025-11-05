@@ -75,7 +75,7 @@ export const AppsButton = () => {
         trigger="click"
       >
         <Button
-          type="text"
+          type="default"
           title="Applications"
           style={{
             display: "flex",
@@ -83,6 +83,7 @@ export const AppsButton = () => {
             alignItems: "center",
             paddingLeft: 4,
             paddingRight: 4,
+            boxShadow: "none",
           }}
         >
           {appsIcon}

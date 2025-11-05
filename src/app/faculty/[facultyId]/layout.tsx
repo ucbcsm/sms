@@ -13,10 +13,12 @@ export default async function Layout({
   const session = await getServerSession();
   const faculty = await getAsignedFaculty();
 
-  if (!faculty || !session?.user?.is_superuser || facultyId !== faculty.id.toString()) {
+  const isSuperuser = session?.user?.is_superuser;
+  const isAssignedToFaculty = faculty && facultyId === faculty.id.toString();
+
+  if (!isSuperuser && !isAssignedToFaculty) {
     redirect("/");
   }
 
   return <ClientFacultyLayout>{children}</ClientFacultyLayout>;
 }
-

@@ -210,7 +210,8 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
           ]}
           dataSource={data?.results}
           rowKey="id"
-          scroll={{ y: "calc(100vh - 380px)" }}
+          bordered
+          scroll={{ y: "calc(100vh - 477px)" }}
           pagination={{
             defaultPageSize: 25,
             pageSizeOptions: [25, 50, 75, 100],

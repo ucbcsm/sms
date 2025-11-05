@@ -167,7 +167,7 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
-          <Typography.Text type="secondary">Cours:</Typography.Text>
+          <Typography.Title level={5} type="secondary" style={{marginBottom:0}}>Cours:</Typography.Title>
 
           {!isPending ? (
             <Typography.Title

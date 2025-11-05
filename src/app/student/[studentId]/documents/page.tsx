@@ -7,7 +7,7 @@ import {
   FileOutlined,
   FolderOutlined,
 } from "@ant-design/icons";
-import { Button, Space, Switch, Table, Tag, Typography } from "antd";
+import { Button, Layout, Space, Switch, Table, Tag, Typography } from "antd";
 import { ButtonAddNewDocument } from "./_components/addNewDocument";
 import { useParams } from "next/navigation";
 import { useYearEnrollment } from "@/hooks/useYearEnrollment";
@@ -25,8 +25,10 @@ export default function Page() {
   const { data: documents } = useAllRequiredDocuments();
 
   return (
-    <div className="p-6">
+    <Layout>
+      <Layout.Content style={{padding:28, minHeight:"calc(100vh - 110px)"}}>
       <Table
+        bordered
         loading={isPendingEnrollment}
         title={() => (
           <header className="flex pb-3">
@@ -156,6 +158,8 @@ export default function Page() {
           size: "small",
         }}
       />
-    </div>
+    
+     </Layout.Content>
+    </Layout>
   );
 }

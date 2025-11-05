@@ -1,6 +1,5 @@
 "use client";
 
-import { Palette } from "@/components/palette";
 import { Button, Card, Flex, Layout, Space, theme, Typography } from "antd";
 import { parseAsStringEnum, useQueryState } from "nuqs";
 import { StudentsStatistics } from "./statistics/students";
@@ -28,21 +27,12 @@ export default function Page() {
 
   return (
     <Layout>
-      <Layout.Content
-        style={{
-          minHeight: 280,
-          padding: "0 28px 0 28px",
-          background: colorBgContainer,
-          overflowY: "auto",
-          height: "calc(100vh - 112px)",
-        }}
-      >
-        {/* <Layout.Header
+       <Layout.Header
           style={{
-            background: colorBgContainer,
+            background: "#f5f5f5",
             display: "flex",
             alignItems: "center",
-            padding: 0,
+            padding: "0 28px",
           }}
         >
           <Space>
@@ -51,10 +41,19 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          
-        </Layout.Header> */}
+        </Layout.Header>
+      <Layout.Content
+        style={{
+          minHeight: 280,
+          padding: "0 28px 0 28px",
+          // background: colorBgContainer,
+          overflowY: "auto",
+          height: "calc(100vh - 174px)",
+        }}
+      >
+       
         <Flex vertical={true} gap={24}>
-          <Card
+          {/* <Card
             variant="borderless"
             title={
               <Typography.Title level={3} style={{ marginBottom: 0 }}>
@@ -71,15 +70,15 @@ export default function Page() {
             }}
             activeTabKey={statTab}
             style={{ boxShadow: "none" }}
-          >
-            {statTab === "teachers" ? (
+          > */}
+            {/* {statTab === "teachers" ? (
               <TeachersStatistics />
-            ) : (
+            ) : ( */}
               <StudentsStatistics />
-            )}
-          </Card>
+            {/* )} */}
+          {/* </Card> */}
         </Flex>
-        <Layout.Footer
+        {/* <Layout.Footer
           style={{
             display: "flex",
             background: colorBgContainer,
@@ -94,7 +93,7 @@ export default function Page() {
           <Space>
             <Palette />
           </Space>
-        </Layout.Footer>
+        </Layout.Footer> */}
       </Layout.Content>
       {/* <Layout.Sider
         width={280}

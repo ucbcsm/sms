@@ -166,7 +166,9 @@ export default function Page() {
           classrooms={classrooms}
         />
       </Layout.Sider>
-      <Layout.Content style={{ padding: "16px", background: colorBgContainer }}>
+      <Layout.Content style={{ padding: "24px",
+        //  background: colorBgContainer
+          }}>
         <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
           <Col span={16}>
             <Row gutter={[16, 16]}>

@@ -11,7 +11,7 @@ export default function StudentLayout({
  
   return (
     <Layout>
-      <Layout.Content style={{ background: colorBgContainer }}>
+      <Layout.Content style={{ padding: 24,  }}>
         {children}
       </Layout.Content>
     </Layout>
