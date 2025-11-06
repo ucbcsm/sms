@@ -1,5 +1,5 @@
 import api, { authApi } from "@/lib/fetcher";
-import { Faculty, User } from "@/types";
+import { Faculty, } from "@/types";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
