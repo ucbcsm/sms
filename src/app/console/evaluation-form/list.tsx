@@ -5,7 +5,6 @@ import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { Course, Faculty } from "@/types";
 import {
   getCourseTypeName,
-  getCouses,
   getCurrentFacultiesAsOptions,
   getFaculties,
 } from "@/lib/api";
@@ -81,27 +80,27 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
 
 export const ListCourses = () => {
   const { facultyId } = useParams();
-  const {
-    data: courses,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["courses"],
-    queryFn: getCouses,
-  });
+  // const {
+  //   data: courses,
+  //   isPending,
+  //   isError,
+  // } = useQuery({
+  //   queryKey: ["courses"],
+  //   queryFn: getCouses,
+  // });
   const router = useRouter();
   const { data: faculties } = useQuery({
     queryKey: ["faculties"],
     queryFn: getFaculties,
   });
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
+  // if (isPending) {
+  //   return <DataFetchPendingSkeleton variant="table" />;
+  // }
 
-  if (isError) {
-    return <DataFetchErrorResult />;
-  }
+  // if (isError) {
+  //   return <DataFetchErrorResult />;
+  // }
 
   return (
     <Table
@@ -165,19 +164,20 @@ export const ListCourses = () => {
           key: "faculties",
           dataIndex: "faculties",
           title: "Facultés",
-          render: (_, record, __) =>
-            record.faculties.map((fac) => (
-              <Tag key={fac.id} style={{ border: 0 }}>
-                {fac.acronym}
-              </Tag>
-            )),
+          render: (_, record, __) =>"",
+            // record.faculties.map((fac) => (
+            //   <Tag key={fac.id} style={{ border: 0 }}>
+            //     {fac.acronym}
+            //   </Tag>
+            // )),
           ellipsis: true,
         },
         {
           key: "course_type",
           dataIndex: "course_type",
           title: "Nature",
-          render: (_, record, __) => getCourseTypeName(record.course_type),
+          render: (_, record, __) => ""
+            // getCourseTypeName(record.course_type),
         },
         {
           key: "actions",
@@ -188,7 +188,7 @@ export const ListCourses = () => {
           width: 50,
         },
       ]}
-      dataSource={courses}
+      dataSource={[]}
       rowKey="id"
       rowClassName={`bg-[#f5f5f5] odd:bg-white`}
       rowSelection={{
