@@ -49,33 +49,33 @@ export const Step8: FC<Props> = ({ setStep }) => {
     if (savedData) {
       const raw = decompressFromEncodedURIComponent(savedData);
       const data = JSON.parse(raw) as {
-        registered_enrollment_question: number;
-        response: string;
-      }[];
-
-      form.setFieldsValue({ enrollment_q_a: data });
+        enrollment_q_a: {
+          registered_enrollment_question: number;
+          response: string;
+        }[];
+      };
+      form.setFieldsValue(data);
     } else {
       const initialValues = getEnrollementQAFromQuestions();
       form.setFieldsValue({ enrollment_q_a: initialValues });
     }
   }, [enrollment_questions]);
 
-  if(isPending){
-      return <Skeleton active/>
-    }
+  if (isPending) {
+    return <Skeleton active />;
+  }
 
   return (
     <Form
       form={form}
       layout="vertical"
       onFinish={(values) => {
-        console.log("QA:",values);
         const formattedValues = values.enrollment_q_a?.map((item: any) => ({
           ...item,
           response: item.response || "",
         }));
         const compressedData = compressToEncodedURIComponent(
-          JSON.stringify(formattedValues)
+          JSON.stringify({ enrollment_q_a: formattedValues })
         );
         localStorage.setItem("d8", compressedData);
         setStep(8);

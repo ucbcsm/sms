@@ -301,7 +301,6 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          
         </Layout.Header>
         {/* <Row gutter={[24, 24]}>
           <Col span={18}> */}
@@ -410,21 +409,22 @@ export default function Page() {
               render: (_, record, __) => record?.available_course?.code,
               width: 100,
             },
-            // {
-            //   title: "UE",
-            //   dataIndex: "teaching_unit",
-            //   key: "teaching_unit",
-            //   width: 50,
-            //   render: (_, record, __) => record?.teaching_unit?.code,
-            //   ellipsis: true,
-            // },
+            {
+              title: "UE",
+              dataIndex: "teaching_unit",
+              key: "teaching_unit",
+              render: (_, record, __) =>
+                `${record?.teaching_unit?.name} (${record?.teaching_unit?.code})`,
+              ellipsis: true,
+            },
             {
               title: "Crédits",
               dataIndex: "credits",
               key: "credits",
-              align: "center",
+              align: "right",
               width: 68,
               render: (_, record, __) => record.credit_count,
+              
             },
             {
               title: "Heures",
@@ -436,6 +436,7 @@ export default function Page() {
                   Number(record.practical_hours)
                 }`,
               width: 64,
+              align:"right"
             },
             // {
             //   title: "Heures théorique",
@@ -510,8 +511,19 @@ export default function Page() {
               key: "department",
               dataIndex: "departement",
               title: "Départements",
-              render: (_, record) =>
-                record.departements.map((dep) => dep.acronym).join(", "),
+              render: (_, record) => (
+                <Space wrap>
+                  {record.departements.map((dep) => (
+                    <Tag
+                      key={dep.id}
+                      bordered={false}
+                      style={{ borderRadius: 10 }}
+                    >
+                      {dep.acronym}
+                    </Tag>
+                  ))}
+                </Space>
+              ),
               ellipsis: true,
             },
             {

@@ -129,6 +129,8 @@ export const ViewEditApplicationForm: React.FC<
     mutationFn: updateApplication,
   });
 
+  console.log("testCourses", courses);
+
   const onFinish = (
     values: Omit<
       Application,
@@ -232,10 +234,11 @@ export const ViewEditApplicationForm: React.FC<
       ),
     });
   };
-
+console.log("testRes",application?.admission_test_result)
   useEffect(() => {
     if (application?.admission_test_result?.length === 0) {
       const admissionTestResult = getInitialAdmissionResultFromTestCourses();
+      console.log("init",admissionTestResult);
       form.setFieldsValue({
         admission_test_result: admissionTestResult,
       });
@@ -711,20 +714,6 @@ export const ViewEditApplicationForm: React.FC<
                   max={100}
                 />
               </Form.Item>
-              <Form.Item label="Fichier du diplôme" name="diploma_file">
-                <Upload>
-                  <Button icon={<UploadOutlined />}>
-                    Télécharger le fichier
-                  </Button>
-                </Upload>
-              </Form.Item>
-              <Form.Item label="Autres documents" name="other_documents">
-                <Upload>
-                  <Button icon={<UploadOutlined />}>
-                    Télécharger les documents
-                  </Button>
-                </Upload>
-              </Form.Item>
               <Divider orientation="left" orientationMargin={0}>
                 <Typography.Title level={3}>
                   Occupations après les humanités
@@ -1064,6 +1053,7 @@ export const ViewEditApplicationForm: React.FC<
                           layout="vertical"
                         >
                           <InputNumber
+                            style={{width:100}}
                             min={0}
                             max={
                               courses?.find(

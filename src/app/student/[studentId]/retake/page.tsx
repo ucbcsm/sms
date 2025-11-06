@@ -38,6 +38,8 @@ export default function Page() {
     enabled: !!student?.user?.matricule && !!studentId,
   });
 
+  console.log("RetakesData",retakes);
+
   const { data: courses } = useQuery({
     queryKey: ["courses", student?.faculty.id, "all"],
     queryFn: ({ queryKey }) =>
@@ -66,7 +68,7 @@ export default function Page() {
         }}
       >
         <Card
-          loading={isPendingStudent}
+          loading={isPendingStudent || isPendingRetakes}
           activeTabKey={tab}
           onTabChange={(key) => {
             setTab(key);

@@ -64,8 +64,8 @@ export const Step9: FC<Props> = ({ setStep }) => {
     }
   }, [required_documents]);
 
-  if(isPending){
-    return <Skeleton active/>
+  if (isPending) {
+    return <Skeleton active />;
   }
 
   return (
