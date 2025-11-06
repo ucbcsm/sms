@@ -35,7 +35,14 @@ type EditUserFormProps = {
   permissions?: Permission[];
 };
 
-type FormDataType = Omit<User, "id">;
+type FormDataType = Omit<
+  User,
+  "id" | "user_permissions" | "groups" | "roles"
+> & {
+  user_permissions: number[];
+  groups: number[];
+  roles: number[];
+};
 
 export const EditUserForm: FC<EditUserFormProps> = ({
   user,
@@ -59,7 +66,14 @@ export const EditUserForm: FC<EditUserFormProps> = ({
 
   const onFinish = (values: FormDataType) => {
     mutateAsync(
-      { id: user.id, params: {...values, is_permanent_teacher:user.is_permanent_teacher, avatar: user.avatar||null} },
+      {
+        id: user.id,
+        params: {
+          ...values,
+          is_permanent_teacher: user.is_permanent_teacher,
+          avatar: user.avatar || null,
+        },
+      },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["users"] });
@@ -84,7 +98,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
                 "Une erreur s'est produite lors de la mise à jour du compte utilisateur."
             );
           }
-        }
+        },
       }
     );
   };
