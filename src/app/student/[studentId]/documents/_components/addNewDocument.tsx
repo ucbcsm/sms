@@ -83,6 +83,15 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
               is_student: yearEnrollment?.user.is_student,
               is_superuser: yearEnrollment?.user.is_superuser,
               is_permanent_teacher: yearEnrollment?.user.is_permanent_teacher,
+              groups: yearEnrollment.user.groups.map((group) => group.id),
+              roles: yearEnrollment.user.roles.map((role) => role.id),
+              user_permissions: yearEnrollment.user.user_permissions.map(
+                (perm) => perm.id
+              ),
+              last_login: yearEnrollment?.user.last_login,
+              date_joined: yearEnrollment?.user.date_joined,
+              username: yearEnrollment?.user.username || "",
+              gender: yearEnrollment?.user.gender,
             },
             spoken_languages:
               yearEnrollment?.common_enrollment_infos.spoken_language.split(
