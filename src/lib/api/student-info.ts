@@ -54,6 +54,13 @@ export async function updateStudentInfo({
       is_student: boolean;
       is_superuser: boolean;
       is_permanent_teacher: boolean;
+      groups: number[];
+      roles: number[];
+      user_permissions: number[];
+      last_login: string;
+      date_joined: string;
+      username: string | "";
+      gender: "M" | "F";
     };
   };
 }) {
@@ -97,7 +104,10 @@ export async function updateStudentInfo({
     enrollment_question_response: params.enrollment_question_response,
     admission_test_result: params.admission_test_result,
   });
-  await updateUser({ id: params.user.id, params: { ...params.user } });
+  await updateUser({
+    id: params.user.id,
+    params: { ...params.user },
+  });
   return res.data;
 }
 

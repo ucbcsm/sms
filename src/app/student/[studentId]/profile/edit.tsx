@@ -80,12 +80,20 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
               gender: values.gender,
               matricule: values.matricule,
               pending_avatar: data?.user.pending_avatar,
-              avatar:values.avatar || null,
+              avatar: values.avatar || null,
               is_active: data.user.is_active,
               is_staff: data.user.is_staff,
               is_student: data.user.is_student,
               is_superuser: data.user.is_superuser,
               is_permanent_teacher: data.user.is_permanent_teacher,
+              last_login: data.user.last_login,
+              date_joined: data.user.date_joined,
+              username: data.user.username,
+              groups: data.user.groups.map((group) => group.id),
+              roles: data.user.roles.map((role) => role.id),
+              user_permissions: data.user.user_permissions.map(
+                (perm) => perm.id
+              ),
             },
             application_documents: formatApplicationDocumentsForEdition(
               data?.common_enrollment_infos.application_documents
@@ -127,7 +135,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
                   "Une erreur est survenue lors de la mise à jour du profil étudiant."
               );
             }
-          }
+          },
         }
       );
     }
