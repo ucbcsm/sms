@@ -96,6 +96,12 @@ export async function updateTeacher({
       is_staff: boolean;
       is_student: boolean;
       is_superuser: boolean;
+      groups: number[];
+      roles: number[];
+      user_permissions: number[];
+      last_login: string;
+      date_joined: string;
+      username: string | "";
     };
   };
 }) {
