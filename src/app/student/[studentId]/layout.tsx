@@ -230,6 +230,12 @@ export default function StudentLayout({
               ),
               icon: <ContactsOutlined />,
             },
+            {
+              key: `/student/${studentId}/danger-zone`,
+              label:<Link href={`/student/${studentId}/danger-zone`}>Supprimer</Link>,
+              icon: <CloseOutlined />,
+              danger: true,
+            }
           ]}
         />
       </div>

@@ -327,7 +327,6 @@ console.log("testRes",application?.admission_test_result)
           <Card
             styles={{
               body: {
-                paddingTop: 0,
                 height: `calc(100vh - 310px)`,
                 overflowY: "auto",
               },

@@ -78,14 +78,19 @@ export async function getYearEnrollmentsByDepatmentId(
   depatmentId: number
 ) {
   const res = await api.get(
-    `/apparitorat/year-enrollment/?academic_year__id=${yearId}&departement__id=${depatmentId}`
+    `/apparitorat/year-enrollment/?academic_year__id=${yearId}&departement__id=${depatmentId}/`
   );
   return res.data.results as Enrollment[];
 }
 
 export async function getYearEnrollment(id: number) {
-  const res = await api.get(`/apparitorat/year-enrollment/${id}`);
+  const res = await api.get(`/apparitorat/year-enrollment/${id}/`);
   return res.data as Enrollment;
+}
+
+export async function deleteYearEnrollment(id: number) {
+  const res = await api.delete(`/apparitorat/year-enrollment/${id}/`);
+  return res.data;
 }
 
 export async function getStudentDashboard(

@@ -31,7 +31,7 @@ export const ALL_APPS: AppItem[] = [
   },
   {
     id: "faculty",
-    name: "Filière & Mentions",
+    name: "Filières & Mentions",
     description:
       "Planification des cours, suivi, gestion des enseignants et étudiants.",
     href: "/faculty",
