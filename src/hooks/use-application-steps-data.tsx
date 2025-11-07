@@ -76,6 +76,7 @@ export const useApplicationStepsData = () => {
         ...data9,
       };
     }
+    return undefined;
   });
 
   const removeData = () => {
