@@ -133,18 +133,22 @@ export const PrintableListGrades: FC<PrintableListGradesProps> = ({
               >
                 Semestre
               </th>
-              {data?.HeaderData?.no_retaken?.period_list?.map((period) => (
-                <th
-                  colSpan={period.course_counter}
-                  className=" text-center font-semibold bg-white border-b  border border-gray-300"
-                >
-                  {period.period.acronym}
-                </th>
-              ))}
+              {data?.HeaderData?.no_retaken?.period_list?.map(
+                (period, index) => (
+                  <th
+                    key={index}
+                    colSpan={period.course_counter}
+                    className=" text-center font-semibold bg-white border-b  border border-gray-300"
+                  >
+                    {period.period.acronym}
+                  </th>
+                )
+              )}
               {data?.HeaderData?.retaken?.course_list &&
                 data?.HeaderData?.retaken.course_list.length > 0 &&
-                data?.HeaderData?.retaken?.header?.map((header) => (
+                data?.HeaderData?.retaken?.header?.map((header, index) => (
                   <th
+                    key={index}
                     colSpan={header.course_counter}
                     className=" text-center font-semibold bg-white border-b  border border-gray-300"
                   >
@@ -160,16 +164,17 @@ export const PrintableListGrades: FC<PrintableListGradesProps> = ({
               >
                 Unités d&apos;Enseignement
               </th>
-              {data?.HeaderData?.no_retaken?.teaching_unit_list?.map((list) =>
-                list.map((TU) => (
-                  <th
-                    key={TU.teaching_unit.code}
-                    colSpan={TU.course_counter}
-                    className=" uppercase bg-gray-100 text-xs font-semibold border-b border border-gray-300 text-center"
-                  >
-                    {TU.teaching_unit.code}
-                  </th>
-                ))
+              {data?.HeaderData?.no_retaken?.teaching_unit_list?.map(
+                (list, index_1) =>
+                  list.map((TU, index_2) => (
+                    <th
+                      key={`${index_1}-${index_2}-${TU.teaching_unit.code}`}
+                      colSpan={TU.course_counter}
+                      className=" uppercase bg-gray-100 text-xs font-semibold border-b border border-gray-300 text-center"
+                    >
+                      {TU.teaching_unit.code}
+                    </th>
+                  ))
               )}
               {data?.HeaderData?.retaken?.teaching_unit_list?.map((TU) => (
                 <th

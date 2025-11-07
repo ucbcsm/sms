@@ -320,7 +320,7 @@ export const ImportFileGradeSubmissionForm: FC<
                   <UploadOutlined style={{ fontSize: 32, color: "GrayText" }} />
                 </p>
                 <p className="ant-upload-text">
-                  Cliquez ou glissez-déposez un fichier XLSX ici pour l'importer
+                  Cliquez ou glissez-déposez un fichier XLSX ici pour l&apos;importer
                 </p>
                 <p className="ant-upload-hint">
                   Seuls les fichiers .xlsx sont acceptés.

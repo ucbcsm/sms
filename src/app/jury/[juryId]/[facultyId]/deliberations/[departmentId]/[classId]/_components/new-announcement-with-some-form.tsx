@@ -35,7 +35,7 @@ import {
 } from "antd";
 import { useParams } from "next/navigation";
 import { Options, useQueryState } from "nuqs";
-import { FC, useState } from "react";
+import { FC, SetStateAction, useState } from "react";
 
 type NewAnnoucementWithSomeFormProps = {
   department?: Department;
@@ -54,6 +54,40 @@ type FormDataType = {
   moment: "before_appeal" | "after_appeal";
   status: "locked" | "unlocked";
   period_id: number;
+};
+
+const SelectedPeriod = ({
+  variant,
+  periods,
+  setPeriodId,
+  periodId,
+  setSelectedRows,
+}: {
+  variant?: "filled" | "outlined" | "borderless";
+  periods?: Period[];
+  periodId: string | null;
+  setPeriodId: (
+    value: string | ((old: string | null) => string | null) | null,
+    options?: Options
+  ) => Promise<URLSearchParams>;
+  setSelectedRows: (value: SetStateAction<PeriodEnrollment[]>) => void;
+}) => {
+  return (
+    <Select
+      placeholder="Sélectionnner une période"
+      variant={variant || "filled"}
+      options={getCurrentPeriodsAsOptions(periods)}
+      onChange={(value) => {
+        setSelectedRows([]);
+        setPeriodId(value.toString());
+      }}
+      value={periodId !== null ? Number(periodId) : undefined}
+      allowClear
+      onClear={() => {
+        setPeriodId(null);
+      }}
+    />
+  );
 };
 
 export const NewAnnoucementWithSomeForm: FC<
@@ -148,29 +182,6 @@ export const NewAnnoucementWithSomeForm: FC<
     }
   };
 
-  const SelectedPeriod = ({
-    variant,
-  }: {
-    variant?: "filled" | "outlined" | "borderless";
-  }) => {
-    return (
-      <Select
-        placeholder="Sélectionnner une période"
-        variant={variant || "filled"}
-        options={getCurrentPeriodsAsOptions(periods)}
-        onChange={(value) => {
-          setSelectedRows([]);
-          setPeriodId(value.toString());
-        }}
-        value={periodId !== null ? Number(periodId) : undefined}
-        allowClear
-        onClear={() => {
-          setPeriodId(null);
-        }}
-      />
-    );
-  };
-
   return (
     <>
       {contextHolder}
@@ -241,7 +252,7 @@ export const NewAnnoucementWithSomeForm: FC<
                     <div>
                       Commencez par sélectionner la période pour charger les
                       étudiants, puis sélectionnez les étudiants concernés.
-                      Enfin, cliquez sur "Démarrer".
+                      Enfin, cliquez sur &quot;Démarrer&quot;.
                     </div>
                   </>
                 }
@@ -263,7 +274,12 @@ export const NewAnnoucementWithSomeForm: FC<
                       <div className="flex-1" />
                       <Space>
                         <Typography.Text>Période:</Typography.Text>
-                        <SelectedPeriod />
+                        <SelectedPeriod
+                          periods={periods}
+                          periodId={periodId}
+                          setPeriodId={setPeriodId}
+                          setSelectedRows={setSelectedRows}
+                        />
                       </Space>
                     </header>
                   )}
@@ -356,7 +372,13 @@ export const NewAnnoucementWithSomeForm: FC<
                     emptyText:
                       periodId === null ? (
                         <div className="px-7 py-20">
-                          <SelectedPeriod variant="filled" />
+                          <SelectedPeriod
+                            variant="filled"
+                            periods={periods}
+                            periodId={periodId}
+                            setPeriodId={setPeriodId}
+                            setSelectedRows={setSelectedRows}
+                          />
                         </div>
                       ) : isErrorPeriodEnrollments ? (
                         <div className="px-7 py-20">

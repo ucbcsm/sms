@@ -216,8 +216,9 @@ export const ListYearGrades: FC<ListYearGradesProps> = ({
               >
                 Semestre
               </th>
-              {data?.HeaderData?.no_retaken?.period_list?.map((period) => (
+              {data?.HeaderData?.no_retaken?.period_list?.map((period, index) => (
                 <th
+                  key={index}
                   colSpan={period.course_counter}
                   className=" text-center font-semibold bg-white border-b  border border-gray-300"
                 >
@@ -227,8 +228,9 @@ export const ListYearGrades: FC<ListYearGradesProps> = ({
 
               {data?.HeaderData?.retaken?.course_list &&
                 data?.HeaderData?.retaken.course_list.length > 0 &&
-                data?.HeaderData?.retaken?.header?.map((header) => (
+                data?.HeaderData?.retaken?.header?.map((header, index) => (
                   <th
+                    key={index}
                     colSpan={header.course_counter}
                     className=" text-center font-semibold bg-white border-b  border border-gray-300"
                   >

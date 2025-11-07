@@ -107,7 +107,7 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
           message="Attention"
           description={
             <>
-              Êtes-vous sûr de vouloir supprimer le suivi d'heures du{" "}
+              Êtes-vous sûr de vouloir supprimer le suivi d&apos;heures du{" "}
               <b>{`${hourTracking.date}`}</b> pour le cours{" "}
               <b>
                 {hourTracking.course?.available_course.name || ""}

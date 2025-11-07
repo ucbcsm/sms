@@ -32,7 +32,7 @@ export const SecretarySignaturePlaceholder:FC<SecretarySignaturePlaceholderProps
                   Plusieurs secrétaires généraux académique sont définis dans le
                   système (
                   {data?.map((teacher) => (
-                    <Typography.Text strong>
+                    <Typography.Text strong key={teacher.id}>
                       {teacher.user.surname} {teacher.user.last_name}
                     </Typography.Text>
                   ))}

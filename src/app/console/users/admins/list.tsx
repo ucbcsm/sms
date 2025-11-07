@@ -16,7 +16,7 @@ import { FC, useState } from "react";
 import { Group, Permission, Role, User } from "@/types";
 import { DeleteUserForm } from "../forms/delete";
 import { EditUserForm } from "../forms/edit";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 
 type ActionsBarProps = {
   record: User;
@@ -164,7 +164,7 @@ export const ListAdminUsers: FC<ListAdminUsersProps> = ({
           title: "Photo",
           render: (_, record) => (
             <Avatar
-              src={record.avatar}
+              src={getPublicR2Url(record.avatar)}
               alt={record?.first_name || ""}
               style={{
                 background: getHSLColor(
@@ -209,7 +209,9 @@ export const ListAdminUsers: FC<ListAdminUsersProps> = ({
           render: (_, record) => (
             <Space wrap>
               {record.roles.map((r) => (
-                <Tag bordered={false}>{getRoleName(r.name)}</Tag>
+                <Tag key={r.id} bordered={false}>
+                  {getRoleName(r.name)}
+                </Tag>
               ))}
             </Space>
           ),
@@ -222,7 +224,7 @@ export const ListAdminUsers: FC<ListAdminUsersProps> = ({
           render: (_, record) => (
             <Space wrap>
               {record.groups.map((g) => (
-                <Tag icon={<TeamOutlined />} bordered={false}>
+                <Tag key={g.id} icon={<TeamOutlined />} bordered={false}>
                   {g.name}
                 </Tag>
               ))}

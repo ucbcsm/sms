@@ -200,7 +200,9 @@ export const ListStudentsUsers: FC<ListStudentsUsersProps> = ({
           render: (_, record) => (
             <Space wrap>
               {record.roles.map((r) => (
-                <Tag bordered={false}>{getRoleName(r.name)}</Tag>
+                <Tag key={r.id} bordered={false}>
+                  {getRoleName(r.name)}
+                </Tag>
               ))}
             </Space>
           ),
@@ -213,7 +215,7 @@ export const ListStudentsUsers: FC<ListStudentsUsersProps> = ({
           render: (_, record) => (
             <Space wrap>
               {record.groups.map((g) => (
-                <Tag icon={<TeamOutlined />} bordered={false}>
+                <Tag key={g.id} icon={<TeamOutlined />} bordered={false}>
                   {g.name}
                 </Tag>
               ))}
@@ -265,7 +267,7 @@ export const ListStudentsUsers: FC<ListStudentsUsersProps> = ({
       // rowSelection={{
       //   type: "checkbox",
       // }}
-      scroll={{y:`calc(100vh - 410px)`}}
+      scroll={{ y: `calc(100vh - 410px)` }}
       size="small"
       pagination={{
         defaultPageSize: 10,

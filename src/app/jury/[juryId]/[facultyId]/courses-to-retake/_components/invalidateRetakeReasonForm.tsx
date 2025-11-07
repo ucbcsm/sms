@@ -112,16 +112,16 @@ export const InvalidateRetakeCourseForm: FC<
           message="Confirmation importante"
           description={
             <div>
-              Vous êtes sur le point d'invalider le cours{" "}
+              Vous êtes sur le point d&apos;invalider le cours{" "}
               <Typography.Text strong italic>
-                "{course.name}" ({course.code})
+                &quot;{course.name}&quot; ({course.code})
               </Typography.Text>{" "}
-              comme repris et acquis pour l'étudiant{" "}
+              comme repris et acquis pour l&apos;étudiant{" "}
               <Typography.Text strong italic>
                 {staticData.studentName}
               </Typography.Text>
-              . Veuillez vous assurer que l'étudiant n'a pas finalisé ce cours
-              ou qu'une erreur a été commise.
+              . Veuillez vous assurer que l&apos;étudiant n&apos;a pas finalisé ce cours
+              ou qu&apos;une erreur a été commise.
             </div>
           }
           type="warning"

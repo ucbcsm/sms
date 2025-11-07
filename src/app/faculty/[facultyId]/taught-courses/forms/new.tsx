@@ -191,8 +191,8 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   classe si nécessaire.
                 </li>
                 <li>
-                  ▪ Validez la planification en cliquant sur "Programmer le
-                  cours".
+                  ▪ Validez la planification en cliquant sur &quot;Programmer le
+                  cours&quot;.
                 </li>
               </ul>
             }

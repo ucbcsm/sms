@@ -73,7 +73,7 @@ export const ListPostponeReasons: FC<ListPostponeReasonsProps> = ({
         loading={isPending}
         title={
           <Typography.Title level={5} style={{ color: "white", margin: 0 }}>
-            Raisons d'ajournement
+            Raisons d&apos;ajournement
           </Typography.Title>
         }
         closable={false}

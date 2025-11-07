@@ -98,11 +98,13 @@ export default function Page() {
           key={item.id}
           actions={[
             <Button
+              key="edit"
               type="link"
               icon={<EditOutlined />}
               title="Modifier la promotion"
             />,
             <Button
+              key="delete"
               type="link"
               icon={<DeleteOutlined />}
               title="Retirer la promotion"

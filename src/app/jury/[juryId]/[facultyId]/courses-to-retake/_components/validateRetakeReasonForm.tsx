@@ -115,14 +115,14 @@ export const ValidateRetakeCourseForm: FC<ValidateRetakeCourseFormProps> = ({
             <div>
               Vous êtes sur le point de valider le cours{" "}
               <Typography.Text strong italic>
-                "{course.name}" ({course.code})
+                &quot;{course.name}&quot; ({course.code})
               </Typography.Text>{" "}
-              comme repris et acquis pour l'étudiant{" "}
+              comme repris et acquis pour l&apos;étudiant{" "}
               <Typography.Text strong italic>
                 {staticData.studentName}
               </Typography.Text>
-              . Veuillez vous assurer que l'étudiant a bien finalisé ce cours et
-              l'a acquis.`
+              . Veuillez vous assurer que l&apos;étudiant a bien finalisé ce cours et
+              l&apos;a acquis.
             </div>
           }
           type="warning"

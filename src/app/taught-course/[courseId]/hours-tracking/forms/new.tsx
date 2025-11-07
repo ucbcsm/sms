@@ -81,7 +81,7 @@ export const NewHourTrackingForm: React.FC = () => {
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
-        Nouveau suivi d'heures
+        Nouveau suivi d&apos;heures
       </Button>
       <Modal
         open={open}

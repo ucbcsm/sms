@@ -75,8 +75,6 @@ export default function StudentDangerZonePage() {
         }
       },
     });
-    setIsModalOpen(false);
-    setConfirmationText("");
   };
 
   return (
