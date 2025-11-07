@@ -6,7 +6,9 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    authInterrupts: true,
   },
+
   eslint: {
     ignoreDuringBuilds: true,
   },
