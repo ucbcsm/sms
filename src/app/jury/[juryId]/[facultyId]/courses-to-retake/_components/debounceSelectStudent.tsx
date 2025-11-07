@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import debounce from 'lodash/debounce';
 import { Enrollment } from '@/types';
 import { getYearEnrollments } from '@/lib/api';
-import { getHSLColor } from '@/lib/utils';
+import { getHSLColor, getPublicR2Url } from '@/lib/utils';
 
 interface EnrollmentOption {
   label: string;
@@ -59,7 +59,7 @@ export function DebounceEnrollmentSelect({
         <div style={{ display: "flex", alignItems: "center" }}>
           {option.data.avatar && (
             <Avatar
-              src={option.data.avatar}
+              src={getPublicR2Url(option.data.avatar)}
               style={{
                 marginRight: 8,
                 background: getHSLColor(`${option.data.data.user.first_name}`),

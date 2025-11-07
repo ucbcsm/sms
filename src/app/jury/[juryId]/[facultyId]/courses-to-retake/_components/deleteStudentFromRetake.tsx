@@ -1,19 +1,32 @@
 "use client";
 
-import {  FC, useState } from "react";
-import { Alert, Form, message, Modal, Input, Button, Descriptions, Typography } from "antd";
+import { FC, useState } from "react";
+import {
+  Alert,
+  Form,
+  message,
+  Modal,
+  Input,
+  Button,
+  Descriptions,
+  Typography,
+  Tooltip,
+} from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { RetakeCourse } from "@/types";
-import { deleteStudentFromRetake, getRetakeReasonText } from "@/lib/api/retake-course";
+import {
+  deleteStudentFromRetake,
+  getRetakeReasonText,
+} from "@/lib/api/retake-course";
 import { DeleteOutlined } from "@ant-design/icons";
 
 type DeleteStudentFromRetakeFormProps = {
-    studentWithRetake:RetakeCourse
+  studentWithRetake: RetakeCourse;
 };
 
-export const DeleteStudentFromRetakeForm: FC<DeleteStudentFromRetakeFormProps> = ({
-  studentWithRetake,
-}) => {
+export const DeleteStudentFromRetakeForm: FC<
+  DeleteStudentFromRetakeFormProps
+> = ({ studentWithRetake }) => {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [open, setOpen] = useState<boolean>(false);
@@ -61,12 +74,14 @@ export const DeleteStudentFromRetakeForm: FC<DeleteStudentFromRetakeFormProps> =
   return (
     <>
       {contextHolder}
-      <Button
-        icon={<DeleteOutlined />}
-        type="text"
-        danger
-        onClick={() => setOpen(true)}
-      />
+      <Tooltip title="Supprimer cet étudiant de la liste des étudiants ayant des cours à reprendre">
+        <Button
+          icon={<DeleteOutlined />}
+          type="text"
+          danger
+          onClick={() => setOpen(true)}
+        />
+      </Tooltip>
       <Modal
         open={open}
         title={`${studentWithRetake.user.surname} ${studentWithRetake.user.last_name} ${studentWithRetake.user.first_name}`}

@@ -2,16 +2,18 @@
 
 import { NewRetakeReasonForm } from "@/app/jury/[juryId]/[facultyId]/courses-to-retake/_components/newRetakeReasonForm";
 import { useClasses } from "@/hooks/useClasses";
-import { getAllCourses, getYearEnrollment } from "@/lib/api";
+import { getAllCourses, getYearEnrollment, getYearEnrollments } from "@/lib/api";
 import { getRetakeCourses, getRetakeReasonText } from "@/lib/api/retake-course";
 import { RetakeCourse } from "@/types";
 import { BookOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Badge, Card, Empty, Layout, Table, Typography } from "antd";
+import { Badge, Button, Card, Empty, Layout, Result, Table, Typography } from "antd";
 import { useParams } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { RetakeActionBar } from "./_components/retakeActionBar";
+import { StudentWithRetakeForm } from "./_components/studentWithRetakeForm";
+import { DeleteStudentFromRetakeForm } from "@/app/jury/[juryId]/[facultyId]/courses-to-retake/_components/deleteStudentFromRetake";
 
 export default function Page() {
   const { studentId } = useParams();
@@ -38,7 +40,6 @@ export default function Page() {
     enabled: !!student?.user?.matricule && !!studentId,
   });
 
-  console.log("RetakesData",retakes);
 
   const { data: courses } = useQuery({
     queryKey: ["courses", student?.faculty.id, "all"],
@@ -52,6 +53,20 @@ export default function Page() {
       isPending: isPendingClasses,
       isError: isErrorClasses,
     } = useClasses();
+
+    const { data: enrollments, isPending: isPendingEnrollments } = useQuery({
+      queryKey: [
+        "year-enrollments",
+        student?.faculty.id,
+        student?.user.matricule,
+      ],
+      queryFn: () =>
+        getYearEnrollments({
+          facultyId: Number(student?.faculty.id),
+          search: student?.user.matricule,
+        }),
+      enabled: !!student?.faculty?.id && !!studentId,
+    });
 
   useEffect(() => {
     if (retakes && retakes.results.length > 0) {
@@ -67,122 +82,60 @@ export default function Page() {
           minHeight: "calc(100vh - 110px)",
         }}
       >
-        <Card
-          loading={isPendingStudent || isPendingRetakes}
-          activeTabKey={tab}
-          onTabChange={(key) => {
-            setTab(key);
-          }}
-          title={
-            <Typography.Title level={3} style={{}}>
-              Retakes
-            </Typography.Title>
-          }
-          tabProps={{ size: "small" }}
-          tabList={[
-            {
-              key: "retake_course_list",
-              label: (
-                <>
-                  <Badge
-                    count={studentWithRetakes?.retake_course_list.length}
-                  />{" "}
-                  Cours à reprendre
-                </>
-              ),
-            },
-            {
-              key: "retake_course_done_list",
-              label: (
-                <>
-                  <Badge
-                    color="green"
-                    count={studentWithRetakes?.retake_course_done_list.length}
-                  />{" "}
-                  Cours repris et acquis
-                </>
-              ),
-            },
-          ]}
-        >
-          {tab === "retake_course_list" && (
-            <div className="">
-              <Table
-                title={() => (
-                  <header className="flex justify-between ">
-                    <NewRetakeReasonForm
-                      type="not_done"
-                      courses={courses}
-                      staticData={{
-                        userRetakeId: studentWithRetakes?.id!,
-                        userId: studentWithRetakes?.user.id!,
-                        matricule: studentWithRetakes?.user.matricule!,
-                        studentName: `${studentWithRetakes?.user.surname} ${studentWithRetakes?.user.last_name} ${studentWithRetakes?.user.first_name}`,
-                        facultyId: studentWithRetakes?.faculty.id!,
-                        departmentId: studentWithRetakes?.departement.id!,
-                      }}
-                      currentRetakeCourseReason={
-                        studentWithRetakes?.retake_course_list!
-                      }
-                      currentDoneRetakeCourseReason={
-                        studentWithRetakes?.retake_course_done_list!
-                      }
-                      classes={classes}
-                    />
-                  </header>
-                )}
-                dataSource={studentWithRetakes?.retake_course_list}
-                columns={[
-                  {
-                    key: "icon",
-                    title: "",
-                    render: () => <BookOutlined />,
-                    width: 28,
-                  },
-                  {
-                    title: "Cours",
-                    dataIndex: "course",
-                    key: "course",
-                    render: (_, record) => record.available_course?.name,
-                  },
-                  {
-                    title: "Motif de reprise",
-                    dataIndex: "reason_text",
-                    key: "reason_text",
-                    render: (_, record) => (
-                      <Typography.Text type="danger">
-                        {getRetakeReasonText(record.reason)}
-                      </Typography.Text>
-                    ),
-                    ellipsis: true,
-                  },
-                  {
-                    key: "year",
-                    title: "Année",
-                    render: (_, record) => (
-                      <Typography.Text>
-                        {record.academic_year?.name}
-                      </Typography.Text>
-                    ),
-                    width: 100,
-                  },
-                  {
-                    key: "classYear",
-                    title: "Classe",
-                    render: (_, record) => (
-                      <Typography.Text>
-                        {record.class_year?.acronym}
-                      </Typography.Text>
-                    ),
-                    width: 100,
-                  },
-                  {
-                    key: "actions",
-                    title: "",
-                    render: (_, record) => (
-                      <RetakeActionBar
-                        itemData={record}
+        {retakes && retakes?.results.length > 0 ? (
+          <Card
+            loading={isPendingStudent || isPendingRetakes}
+            activeTabKey={tab}
+            onTabChange={(key) => {
+              setTab(key);
+            }}
+            title={
+              <Typography.Title level={3} style={{}}>
+                Retakes
+              </Typography.Title>
+            }
+            extra={
+              studentWithRetakes && (
+                <DeleteStudentFromRetakeForm
+                  studentWithRetake={studentWithRetakes}
+                />
+              )
+            }
+            tabProps={{ size: "small" }}
+            tabList={[
+              {
+                key: "retake_course_list",
+                label: (
+                  <>
+                    <Badge
+                      count={studentWithRetakes?.retake_course_list.length}
+                    />{" "}
+                    Cours à reprendre
+                  </>
+                ),
+              },
+              {
+                key: "retake_course_done_list",
+                label: (
+                  <>
+                    <Badge
+                      color="green"
+                      count={studentWithRetakes?.retake_course_done_list.length}
+                    />{" "}
+                    Cours repris et acquis
+                  </>
+                ),
+              },
+            ]}
+          >
+            {tab === "retake_course_list" && (
+              <div className="">
+                <Table
+                  title={() => (
+                    <header className="flex justify-between ">
+                      <NewRetakeReasonForm
                         type="not_done"
+                        courses={courses}
                         staticData={{
                           userRetakeId: studentWithRetakes?.id!,
                           userId: studentWithRetakes?.user.id!,
@@ -191,144 +144,234 @@ export default function Page() {
                           facultyId: studentWithRetakes?.faculty.id!,
                           departmentId: studentWithRetakes?.departement.id!,
                         }}
-                        classes={classes}
-                        courses={courses}
                         currentRetakeCourseReason={
                           studentWithRetakes?.retake_course_list!
                         }
                         currentDoneRetakeCourseReason={
                           studentWithRetakes?.retake_course_done_list!
                         }
+                        classes={classes}
+                      />
+                    </header>
+                  )}
+                  dataSource={studentWithRetakes?.retake_course_list}
+                  columns={[
+                    {
+                      key: "icon",
+                      title: "",
+                      render: () => <BookOutlined />,
+                      width: 28,
+                    },
+                    {
+                      title: "Cours",
+                      dataIndex: "course",
+                      key: "course",
+                      render: (_, record) => record.available_course?.name,
+                    },
+                    {
+                      title: "Motif de reprise",
+                      dataIndex: "reason_text",
+                      key: "reason_text",
+                      render: (_, record) => (
+                        <Typography.Text type="danger">
+                          {getRetakeReasonText(record.reason)}
+                        </Typography.Text>
+                      ),
+                      ellipsis: true,
+                    },
+                    {
+                      key: "year",
+                      title: "Année",
+                      render: (_, record) => (
+                        <Typography.Text>
+                          {record.academic_year?.name}
+                        </Typography.Text>
+                      ),
+                      width: 100,
+                    },
+                    {
+                      key: "classYear",
+                      title: "Classe",
+                      render: (_, record) => (
+                        <Typography.Text>
+                          {record.class_year?.acronym}
+                        </Typography.Text>
+                      ),
+                      width: 100,
+                    },
+                    {
+                      key: "actions",
+                      title: "",
+                      render: (_, record) => (
+                        <RetakeActionBar
+                          itemData={record}
+                          type="not_done"
+                          staticData={{
+                            userRetakeId: studentWithRetakes?.id!,
+                            userId: studentWithRetakes?.user.id!,
+                            matricule: studentWithRetakes?.user.matricule!,
+                            studentName: `${studentWithRetakes?.user.surname} ${studentWithRetakes?.user.last_name} ${studentWithRetakes?.user.first_name}`,
+                            facultyId: studentWithRetakes?.faculty.id!,
+                            departmentId: studentWithRetakes?.departement.id!,
+                          }}
+                          classes={classes}
+                          courses={courses}
+                          currentRetakeCourseReason={
+                            studentWithRetakes?.retake_course_list!
+                          }
+                          currentDoneRetakeCourseReason={
+                            studentWithRetakes?.retake_course_done_list!
+                          }
+                        />
+                      ),
+                      width: 52,
+                    },
+                  ]}
+                  size="small"
+                  locale={{
+                    emptyText: (
+                      <Empty
+                        description="Aucun cours"
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
                       />
                     ),
-                    width: 52,
-                  },
-                ]}
-                size="small"
-                locale={{
-                  emptyText: (
-                    <Empty
-                      description="Aucun cours"
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    />
-                  ),
-                }}
-              />
-            </div>
-          )}
+                  }}
+                />
+              </div>
+            )}
 
-          {tab === "retake_course_done_list" && (
-            <div className="">
-              <Table
-                title={() => (
-                  <header className="flex justify-between ">
-                    <NewRetakeReasonForm
-                      type="done"
-                      courses={courses}
-                      staticData={{
-                        userRetakeId: studentWithRetakes?.id!,
-                        userId: studentWithRetakes?.user.id!,
-                        matricule: studentWithRetakes?.user.matricule!,
-                        studentName: `${studentWithRetakes?.user.surname} ${studentWithRetakes?.user.last_name} ${studentWithRetakes?.user.first_name}`,
-                        facultyId: studentWithRetakes?.faculty.id!,
-                        departmentId: studentWithRetakes?.departement.id!,
-                      }}
-                      currentRetakeCourseReason={
-                        studentWithRetakes?.retake_course_list!
-                      }
-                      currentDoneRetakeCourseReason={
-                        studentWithRetakes?.retake_course_done_list!
-                      }
-                      classes={classes}
-                    />
-                  </header>
-                )}
-                dataSource={studentWithRetakes?.retake_course_done_list}
-                columns={[
-                  {
-                    key: "icon",
-                    title: "",
-                    render: () => <BookOutlined />,
-                    width: 28,
-                  },
-                  {
-                    title: "Cours",
-                    dataIndex: "course",
-                    key: "course",
-                    render: (_, record) => record.available_course?.name,
-                  },
-                  {
-                    title: "Motif de reprise",
-                    dataIndex: "reason_text",
-                    key: "reason_text",
-                    render: (_, record) => (
-                      <Typography.Text type="warning">
-                        {getRetakeReasonText(record.reason)}
-                      </Typography.Text>
-                    ),
-                    ellipsis: true,
-                  },
-                  {
-                    key: "year",
-                    title: "Année",
-                    render: (_, record) => (
-                      <Typography.Text>
-                        {record.academic_year?.name}
-                      </Typography.Text>
-                    ),
-                    width: 100,
-                  },
-                  {
-                    key: "classYear",
-                    title: "Classe",
-                    render: (_, record) => (
-                      <Typography.Text>
-                        {record.class_year?.acronym}
-                      </Typography.Text>
-                    ),
-                    width: 100,
-                  },
-                  {
-                    key: "actions",
-                    title: "",
-                    render: (_, record) => (
-                      <RetakeActionBar
-                        itemData={record}
+            {tab === "retake_course_done_list" && (
+              <div className="">
+                <Table
+                  title={() => (
+                    <header className="flex justify-between ">
+                      <NewRetakeReasonForm
                         type="done"
+                        courses={courses}
                         staticData={{
                           userRetakeId: studentWithRetakes?.id!,
                           userId: studentWithRetakes?.user.id!,
                           matricule: studentWithRetakes?.user.matricule!,
                           studentName: `${studentWithRetakes?.user.surname} ${studentWithRetakes?.user.last_name} ${studentWithRetakes?.user.first_name}`,
-                          facultyId: student?.faculty.id!,
-                          departmentId: student?.departement.id!,
+                          facultyId: studentWithRetakes?.faculty.id!,
+                          departmentId: studentWithRetakes?.departement.id!,
                         }}
-                        classes={classes}
-                        courses={courses}
                         currentRetakeCourseReason={
                           studentWithRetakes?.retake_course_list!
                         }
                         currentDoneRetakeCourseReason={
                           studentWithRetakes?.retake_course_done_list!
                         }
+                        classes={classes}
+                      />
+                    </header>
+                  )}
+                  dataSource={studentWithRetakes?.retake_course_done_list}
+                  columns={[
+                    {
+                      key: "icon",
+                      title: "",
+                      render: () => <BookOutlined />,
+                      width: 28,
+                    },
+                    {
+                      title: "Cours",
+                      dataIndex: "course",
+                      key: "course",
+                      render: (_, record) => record.available_course?.name,
+                    },
+                    {
+                      title: "Motif de reprise",
+                      dataIndex: "reason_text",
+                      key: "reason_text",
+                      render: (_, record) => (
+                        <Typography.Text type="warning">
+                          {getRetakeReasonText(record.reason)}
+                        </Typography.Text>
+                      ),
+                      ellipsis: true,
+                    },
+                    {
+                      key: "year",
+                      title: "Année",
+                      render: (_, record) => (
+                        <Typography.Text>
+                          {record.academic_year?.name}
+                        </Typography.Text>
+                      ),
+                      width: 100,
+                    },
+                    {
+                      key: "classYear",
+                      title: "Classe",
+                      render: (_, record) => (
+                        <Typography.Text>
+                          {record.class_year?.acronym}
+                        </Typography.Text>
+                      ),
+                      width: 100,
+                    },
+                    {
+                      key: "actions",
+                      title: "",
+                      render: (_, record) => (
+                        <RetakeActionBar
+                          itemData={record}
+                          type="done"
+                          staticData={{
+                            userRetakeId: studentWithRetakes?.id!,
+                            userId: studentWithRetakes?.user.id!,
+                            matricule: studentWithRetakes?.user.matricule!,
+                            studentName: `${studentWithRetakes?.user.surname} ${studentWithRetakes?.user.last_name} ${studentWithRetakes?.user.first_name}`,
+                            facultyId: student?.faculty.id!,
+                            departmentId: student?.departement.id!,
+                          }}
+                          classes={classes}
+                          courses={courses}
+                          currentRetakeCourseReason={
+                            studentWithRetakes?.retake_course_list!
+                          }
+                          currentDoneRetakeCourseReason={
+                            studentWithRetakes?.retake_course_done_list!
+                          }
+                        />
+                      ),
+                      width: 52,
+                    },
+                  ]}
+                  size="small"
+                  locale={{
+                    emptyText: (
+                      <Empty
+                        description="Aucun cours"
+                        image={Empty.PRESENTED_IMAGE_SIMPLE}
                       />
                     ),
-                    width: 52,
-                  },
-                ]}
-                size="small"
-                locale={{
-                  emptyText: (
-                    <Empty
-                      description="Aucun cours"
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    />
-                  ),
-                }}
-              />
-            </div>
-          )}
-        </Card>
+                  }}
+                />
+              </div>
+            )}
+          </Card>
+        ) : (
+          <Card loading={isPendingStudent || isPendingRetakes}>
+            <Result
+              status="info"
+              title="Aucun cours à reprendre"
+              subTitle={`L'étudiant ${student?.user?.surname || ""} ${
+                student?.user.last_name || ""
+              } ${
+                student?.user?.first_name || ""
+              } n'existe pas dans le répertoire des étudiants ayant des cours à reprendre.`}
+              extra={
+                <StudentWithRetakeForm
+                  classes={classes}
+                  courses={courses}
+                  yearEnrollments={enrollments?.results}
+                />
+              }
+            />
+          </Card>
+        )}
       </Layout.Content>
     </Layout>
   );
