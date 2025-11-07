@@ -75,17 +75,14 @@ export default function Page() {
       </Layout.Header>
       <Layout.Content
         style={{
-          padding: "0 32px 0 32px",
-          background: colorBgContainer,
-          overflowY: "auto",
-          height: "calc(100vh - 64px)",
+          padding: "0 32px 24px 32px",
         }}
       >
         <Layout.Header
           style={{
             display: "flex",
             alignItems: "center",
-            background: colorBgContainer,
+            background: "#f5f5f5",
             padding: 0,
           }}
         >
@@ -100,16 +97,6 @@ export default function Page() {
           </Space>
         </Layout.Header>
         <Card
-          tabBarExtraContent={
-            <Radio.Group>
-              <Radio.Button value="grid">
-                <AppstoreOutlined />
-              </Radio.Button>
-              <Radio.Button value="list">
-                <UnorderedListOutlined />
-              </Radio.Button>
-            </Radio.Group>
-          }
           tabList={[
             {
               key: "all",

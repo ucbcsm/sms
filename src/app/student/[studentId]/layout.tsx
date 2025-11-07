@@ -35,6 +35,7 @@ import { AppsButton } from "@/components/appsButton";
 import { SupportDrawer } from "@/components/support-drawer";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { useState } from "react";
+import { usePrevPathname } from "@/hooks/usePrevPathname";
 
 export default function StudentLayout({
   children,
@@ -45,9 +46,11 @@ export default function StudentLayout({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { data: institution } = useInstitution();
   const router = useRouter();
+  
 
   const { studentId } = useParams();
   const pathname = usePathname();
+  const {prevPathname}=usePrevPathname()
 
   const {
     data: enrolledStudent,
@@ -89,12 +92,20 @@ export default function StudentLayout({
             centered
             open={isModalOpen}
             onOk={() => {
-              router.push(`/faculty/${enrolledStudent?.faculty.id}/students`);
+              // router.push(`/faculty/${enrolledStudent?.faculty.id}/students`);
               setIsModalOpen(false);
             }}
             onCancel={() => setIsModalOpen(false)}
             okButtonProps={{ style: { boxShadow: "none" } }}
             cancelButtonProps={{ style: { boxShadow: "none" } }}
+            footer={(_, { OkBtn, CancelBtn }) => (
+              <Space>
+                <CancelBtn />
+                <Link href={prevPathname}>
+                  <OkBtn />
+                </Link>
+              </Space>
+            )}
           >
             <Alert
               description={`Vous allez quitter le compte étudiant: ${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name} et retourner à la liste des étudiants.`}
@@ -232,10 +243,14 @@ export default function StudentLayout({
             },
             {
               key: `/student/${studentId}/danger-zone`,
-              label:<Link href={`/student/${studentId}/danger-zone`}>Supprimer</Link>,
+              label: (
+                <Link href={`/student/${studentId}/danger-zone`}>
+                  Supprimer
+                </Link>
+              ),
               icon: <CloseOutlined />,
               danger: true,
-            }
+            },
           ]}
         />
       </div>

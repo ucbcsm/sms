@@ -147,6 +147,7 @@ export function StaffList() {
         type: "checkbox",
       }}
       size="small"
+      scroll={{y:"calc(100vh - 412px)"}}
       pagination={{
         defaultPageSize: 25,
         pageSizeOptions: [25, 50, 75, 100],

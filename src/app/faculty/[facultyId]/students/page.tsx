@@ -1,9 +1,18 @@
 "use client";
 
+import { StudentMoreActionsDropdown } from "@/app/app/students/_components/moreActions";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
-import { getClasses, getClassesYearsAsOptions, getCurrentDepartmentsAsOptions, getDepartmentsByFacultyId, getYearEnrollments, getYearEnrollmentsByFacultyId } from "@/lib/api";
+import { usePrevPathname } from "@/hooks/usePrevPathname";
+import {
+  getClasses,
+  getClassesYearsAsOptions,
+  getCurrentDepartmentsAsOptions,
+  getDepartmentsByFacultyId,
+  getYearEnrollments,
+  getYearEnrollmentsByFacultyId,
+} from "@/lib/api";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   DownOutlined,
@@ -13,14 +22,25 @@ import {
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Button, Dropdown, Input, Select, Space, Table, Tag } from "antd";
+import {
+  Avatar,
+  Button,
+  Dropdown,
+  Input,
+  Select,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 export default function Page() {
   const router = useRouter();
   const { facultyId } = useParams();
+  const pathname = usePathname();
+  const { setPathname } = usePrevPathname();
   const { yid } = useYid();
   const [departmentId, setDepartmentId] = useQueryState(
     "dep",
@@ -65,16 +85,13 @@ export default function Page() {
     enabled: !!yid && !!facultyId,
   });
 
-    const { data: departments, isPending:isPendingDepartments } = useQuery({
-      queryKey: ["departments", facultyId],
-      queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
-      enabled: !!facultyId,
-    });
+  const { data: departments, isPending: isPendingDepartments } = useQuery({
+    queryKey: ["departments", facultyId],
+    queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
+    enabled: !!facultyId,
+  });
 
-     const {
-    data: classes,
-    isPending: isPendingClasses,
-  } = useQuery({
+  const { data: classes, isPending: isPendingClasses } = useQuery({
     queryKey: ["classes"],
     queryFn: getClasses,
   });
@@ -184,7 +201,7 @@ export default function Page() {
           width: 56,
           align: "center",
         },
-         {
+        {
           title: "Noms",
           dataIndex: "name",
           key: "name",
@@ -260,17 +277,7 @@ export default function Page() {
                   Gérer
                 </Button>
               </Link>
-              {/* <Dropdown
-                menu={{
-                  items: [
-                    { key: "1", label: "Action 1" },
-                    { key: "2", label: "Action 2" },
-                    { key: "3", label: "Action 3" },
-                  ],
-                }}
-              >
-                <Button type="text" icon={<MoreOutlined />} />
-              </Dropdown> */}
+              <StudentMoreActionsDropdown studentYearId={record.id} />
             </Space>
           ),
           width: 120,
@@ -296,6 +303,13 @@ export default function Page() {
           setPage(page);
           setPageSize(pageSize);
         },
+      }}
+      onRow={(row) => {
+        return {
+          onClick: () => {
+            setPathname(pathname);
+          },
+        };
       }}
     />
   );

@@ -1,6 +1,14 @@
 "use client";
 
-import { Button, Dropdown, Form, Layout, Skeleton, Space, theme, Typography } from "antd";
+import {
+  Button,
+  Dropdown,
+  Form,
+  Layout,
+  Skeleton,
+  Space,
+  Typography,
+} from "antd";
 import { ListStudents } from "./_components/list-students";
 import { UserAddOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -10,20 +18,18 @@ import { StudentsStatsDashboard } from "./_components/statsDashboard";
 
 export default function Page() {
   const router = useRouter();
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-    const { data: faculties, isPending: isPendingFaculties } = useQuery({
-      queryKey: ["faculties"],
-      queryFn: getFaculties,
-    });
+
+  const { data: faculties, isPending: isPendingFaculties } = useQuery({
+    queryKey: ["faculties"],
+    queryFn: getFaculties,
+  });
+
   return (
     <Layout>
       <Layout.Header
         style={{
           display: "flex",
           alignItems: "center",
-          // background: colorBgContainer,
           background: "#f5f5f5",
           padding: 0,
         }}
@@ -75,9 +81,7 @@ export default function Page() {
           {<StudentsStatsDashboard />}
         </Space>
       </Layout.Header>
-      <Layout.Content
-      //  style={{ background: colorBgContainer }}
-       >
+      <Layout.Content>
         <ListStudents />
       </Layout.Content>
     </Layout>

@@ -1,8 +1,10 @@
 "use client";
 
+import { StudentMoreActionsDropdown } from "@/app/app/students/_components/moreActions";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
+import { usePrevPathname } from "@/hooks/usePrevPathname";
 import { getYearEnrollmentsByDepatmentId } from "@/lib/api";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
@@ -28,12 +30,13 @@ import {
   Tag,
 } from "antd";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 export default function Page() {
-  const router = useRouter();
 
   const { departmentId } = useParams();
+  const pathname = usePathname();
+  const { setPathname } = usePrevPathname();
   const { yid } = useYid();
   const { data, isPending, isError } = useQuery({
     queryKey: ["year_enrollments", `${yid}`, departmentId],
@@ -123,9 +126,7 @@ export default function Page() {
           dataIndex: "matricule",
           key: "matricule",
           render: (_, record) => (
-            <Link href={`/student/${record.id}`}>
-              {record.user.matricule}
-            </Link>
+            <Link href={`/student/${record.id}`}>{record.user.matricule}</Link>
           ),
           width: 80,
           align: "center",
@@ -170,17 +171,7 @@ export default function Page() {
                   Gérer
                 </Button>
               </Link>
-              {/* <Dropdown
-                menu={{
-                  items: [
-                    { key: "1", label: "Action 1" },
-                    { key: "2", label: "Action 2" },
-                    { key: "3", label: "Action 3" },
-                  ],
-                }}
-              >
-                <Button type="text" icon={<MoreOutlined />} />
-              </Dropdown> */}
+              <StudentMoreActionsDropdown studentYearId={record.id} />
             </Space>
           ),
           width: 120,
@@ -197,6 +188,13 @@ export default function Page() {
         defaultPageSize: 25,
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
+      }}
+      onRow={(row) => {
+        return {
+          onClick: () => {
+            setPathname(pathname);
+          },
+        };
       }}
     />
   );

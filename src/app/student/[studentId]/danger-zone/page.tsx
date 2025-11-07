@@ -1,5 +1,6 @@
 "use client";
 
+import { usePrevPathname } from "@/hooks/usePrevPathname";
 import { deleteYearEnrollment, getYearEnrollment } from "@/lib/api";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
@@ -17,6 +18,7 @@ import { useState, useMemo } from "react";
 
 export default function StudentDangerZonePage() {
   const { studentId } = useParams();
+  const { prevPathname } = usePrevPathname();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [confirmationText, setConfirmationText] = useState("");
   const [messageApi, contextHolder] = message.useMessage();
@@ -54,7 +56,7 @@ export default function StudentDangerZonePage() {
         messageApi.success(
           "L'inscription de l'étudiant a été supprimée avec succès."
         );
-        redirect("/app/students");
+        redirect(prevPathname);
       },
       onError: (error) => {
         if ((error as any).status === 403) {
@@ -80,9 +82,9 @@ export default function StudentDangerZonePage() {
   return (
     <Layout>
       {contextHolder}
-      <Layout.Content style={{ padding: 28 }}>
+      <Layout.Content style={{ padding: 28, minHeight: `calc(100vh - 110px)` }}>
         <Card loading={isPending}>
-          <Typography.Title level={3}>
+          <Typography.Title level={3} type="danger">
             Zone de danger - Suppression de l&apos;inscription
           </Typography.Title>
 

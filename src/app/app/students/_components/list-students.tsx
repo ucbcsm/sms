@@ -33,10 +33,14 @@ import {
   MoreOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
+import { StudentMoreActionsDropdown } from "./moreActions";
+import { usePathname } from "next/navigation";
+import { usePrevPathname } from "@/hooks/usePrevPathname";
 
 export const ListStudents: FC = () => {
   const { yid } = useYid();
-
+  const pathname = usePathname();
+  const { setPathname } = usePrevPathname();
   const [facultyId, setFacultyId] = useQueryState(
     "fac",
     parseAsInteger.withDefault(0)
@@ -307,17 +311,7 @@ export const ListStudents: FC = () => {
                   Gérer
                 </Button>
               </Link>
-              {/* <Dropdown
-                menu={{
-                  items: [
-                    { key: "1", label: "Action 1" },
-                    { key: "2", label: "Action 2" },
-                    { key: "3", label: "Action 3" },
-                  ],
-                }}
-              >
-                <Button type="text" icon={<MoreOutlined />} />
-              </Dropdown> */}
+              <StudentMoreActionsDropdown studentYearId={record.id} />
             </Space>
           ),
           width: 120,
@@ -344,6 +338,13 @@ export const ListStudents: FC = () => {
           setPage(page);
           setPageSize(pageSize);
         },
+      }}
+      onRow={(row) => {
+        return {
+          onClick: () => {
+            setPathname(pathname);
+          },
+        };
       }}
     />
   );
