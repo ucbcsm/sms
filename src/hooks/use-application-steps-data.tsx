@@ -10,11 +10,11 @@ import {
   Step9ApplicationFormDataType,
 } from "@/types";
 import { decompressFromEncodedURIComponent } from "lz-string";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const useApplicationStepsData = () => {
   const [sdata, setSData] = useState<
-    Step1ApplicationFormDataType &
+   ( Step1ApplicationFormDataType &
       Step2ApplicationFormDataType &
       Step3ApplicationFormDataType &
       Step4ApplicationFormDataType &
@@ -22,22 +22,8 @@ export const useApplicationStepsData = () => {
       Step6ApplicationFormDataType &
       Step7ApplicationFormDataType &
       Step8ApplicationFormDataType &
-      Step9ApplicationFormDataType
-  >();
-
-  const removeData = () => {
-    localStorage.removeItem("d1");
-    localStorage.removeItem("d2");
-    localStorage.removeItem("d3");
-    localStorage.removeItem("d4");
-    localStorage.removeItem("d5");
-    localStorage.removeItem("d6");
-    localStorage.removeItem("d7");
-    localStorage.removeItem("d8");
-    localStorage.removeItem("d9");
-  };
-
-  useEffect(() => {
+      Step9ApplicationFormDataType)|undefined
+  >(()=>{
     const savedData1 = localStorage.getItem("d1");
     const savedData2 = localStorage.getItem("d2");
     const savedData3 = localStorage.getItem("d3");
@@ -78,7 +64,7 @@ export const useApplicationStepsData = () => {
       const data8 = JSON.parse(raw8) as Step8ApplicationFormDataType;
       const data9 = JSON.parse(raw9) as Step9ApplicationFormDataType;
 
-      setSData({
+      return {
         ...data1,
         ...data2,
         ...data3,
@@ -88,9 +74,22 @@ export const useApplicationStepsData = () => {
         ...data7,
         ...data8,
         ...data9,
-      });
+      };
     }
-  }, []);
+  });
+
+  const removeData = () => {
+    localStorage.removeItem("d1");
+    localStorage.removeItem("d2");
+    localStorage.removeItem("d3");
+    localStorage.removeItem("d4");
+    localStorage.removeItem("d5");
+    localStorage.removeItem("d6");
+    localStorage.removeItem("d7");
+    localStorage.removeItem("d8");
+    localStorage.removeItem("d9");
+  };
+
 
   return { data: sdata!, removeData };
 };
