@@ -5,6 +5,9 @@ import { isAuthenticated } from "./lib/api/auth";
 export default async function middleware(request: NextRequest) {
  
   const { pathname } = request.nextUrl;
+  if (pathname.startsWith("/_not-found") || pathname.startsWith("/404")) {
+    return NextResponse.next();
+  }
   const isOnLoginPage = pathname.startsWith("/auth/login");
 
   // 🔥 Ne pas rediriger vers /config si on est déjà dessus
@@ -39,5 +42,5 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   runtime: "nodejs",
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api|not-found|.*\\..*).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|api|.*\\..*|_not-found|404).*)"],
 };
