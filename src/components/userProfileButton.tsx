@@ -9,20 +9,22 @@ import {
   LogoutOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Avatar, Dropdown, message, Spin, Typography } from "antd";
+import { App, Avatar, Dropdown, Spin, Typography } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import { useState } from "react";
 import { MyProfileModal } from "./myProfileModal";
 
 export const UserProfileButton = () => {
-  const [messageApi, contextHolder] = message.useMessage();
+  const { message } = App.useApp();
   const [isLoadingLogout, setIsLoadingLogout] = useState<boolean>(false);
-  const [openMyProfile, setOpenMyProfile] = useQueryState("profile", parseAsBoolean.withDefault(false));
+  const [openMyProfile, setOpenMyProfile] = useQueryState(
+    "profile",
+    parseAsBoolean.withDefault(false)
+  );
   const { removeYid } = useYid();
   const { user } = useSessionStore();
   return (
     <>
-      {contextHolder}
       <Dropdown
         menu={{
           items: [
@@ -50,7 +52,7 @@ export const UserProfileButton = () => {
                 })
                 .catch((error) => {
                   console.log("Error", error.response?.status, error.message);
-                  messageApi.error(
+                  message.error(
                     "Ouf, une erreur est survenue, Veuillez réessayer!"
                   );
                   setIsLoadingLogout(false);
@@ -111,7 +113,11 @@ export const UserProfileButton = () => {
           </Typography.Title>
         </div>
       </div>
-      <MyProfileModal open={openMyProfile} setOpen={setOpenMyProfile} user={user} />
+      <MyProfileModal
+        open={openMyProfile}
+        setOpen={setOpenMyProfile}
+        user={user}
+      />
     </>
   );
 };

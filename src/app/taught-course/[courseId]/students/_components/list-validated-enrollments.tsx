@@ -1,5 +1,5 @@
 "use client";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   Class,
   CourseEnrollment,
@@ -10,6 +10,7 @@ import {
 import {
   CheckOutlined,
   CloseOutlined,
+  DeleteOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   HourglassOutlined,
@@ -37,6 +38,7 @@ import { ValidateSingleCourseEnrollmentForm } from "./forms/decisions/validate";
 import { getCourseEnrollmentsByStatus } from "@/lib/api";
 import { ExemptSingleCourseEnrollmentForm } from "./forms/decisions/exempt";
 import { useQueryState } from "nuqs";
+import { DeleteSingleCourseEnrollmentForm } from "./forms/decisions/delete";
 
 type ActionsBarProps = {
   item: CourseEnrollment;
@@ -49,6 +51,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
   const [openExempt, setOpenExempt] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <>
@@ -72,9 +75,15 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
         setOpen={setOpenExempt}
         enrollment={item}
       />
+      <DeleteSingleCourseEnrollmentForm
+        enrollment={item}
+        setOpen={setOpenDelete}
+        open={openDelete}
+      />
 
       <Space>
         <Dropdown
+          arrow
           menu={{
             items: [
               item.status === "pending" || item.status === "rejected"
@@ -120,6 +129,13 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                     danger: true,
                   }
                 : null,
+              { type: "divider" },
+              {
+                key: "delete",
+                label: "Supprimer",
+                icon: <DeleteOutlined />,
+                danger: true,
+              },
             ],
             onClick: ({ key }) => {
               if (key === "pending") {
@@ -130,6 +146,8 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                 setOpenValidate(true);
               } else if (key === "exempt") {
                 setOpenExempt(true);
+              } else if (key === "delete") {
+                setOpenDelete(true);
               }
             },
           }}
@@ -253,7 +271,7 @@ export const ListCourseValidatedStudents: FC<
           key: "avatar",
           render: (_, record, __) => (
             <Avatar
-              src={record.student.year_enrollment.user.avatar || null}
+              src={getPublicR2Url(record.student.year_enrollment.user.avatar)}
               style={{
                 backgroundColor: getHSLColor(
                   `${record.student.year_enrollment.user.surname} ${record.student.year_enrollment.user.last_name} ${record.student.year_enrollment.user.first_name}`

@@ -35,14 +35,16 @@ import { CourseEnrollment } from "@/types";
 import {
   CheckOutlined,
   CloseOutlined,
+  DeleteOutlined,
   HourglassOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { useYid } from "@/hooks/use-yid";
 import { PendingSingleCourseEnrollmentForm } from "./_components/forms/decisions/pending";
 import { ValidateSingleCourseEnrollmentForm } from "./_components/forms/decisions/validate";
 import { RejectSingleCourseEnrollmentForm } from "./_components/forms/decisions/reject";
+import { DeleteSingleCourseEnrollmentForm } from "./_components/forms/decisions/delete";
 
 type ListCourseEnrollmentItemProps = {
   item: CourseEnrollment;
@@ -57,6 +59,7 @@ const ListCourseEnrollmentItem: FC<ListCourseEnrollmentItemProps> = ({
   const [openPending, setOpenPending] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <>
@@ -75,10 +78,16 @@ const ListCourseEnrollmentItem: FC<ListCourseEnrollmentItemProps> = ({
         setOpen={setOpenReject}
         enrollment={item}
       />
+      <DeleteSingleCourseEnrollmentForm
+        open={openDelete}
+        setOpen={setOpenDelete}
+        enrollment={item}
+      />
 
       <List.Item
         extra={
           <Dropdown
+            arrow
             menu={{
               items: [
                 item.status === "pending" || item.status === "rejected"
@@ -109,6 +118,15 @@ const ListCourseEnrollmentItem: FC<ListCourseEnrollmentItemProps> = ({
                       danger: true,
                     }
                   : null,
+                {
+                  type: "divider",
+                },
+                {
+                  key: "delete",
+                  label: "Supprimer",
+                  icon: <DeleteOutlined />,
+                  danger: true,
+                },
               ],
               onClick: ({ key }) => {
                 if (key === "pending") {
@@ -117,6 +135,8 @@ const ListCourseEnrollmentItem: FC<ListCourseEnrollmentItemProps> = ({
                   setOpenReject(true);
                 } else if (key === "validate") {
                   setOpenValidate(true);
+                } else if (key === "delete") {
+                  setOpenDelete(true);
                 }
               },
             }}
@@ -128,7 +148,7 @@ const ListCourseEnrollmentItem: FC<ListCourseEnrollmentItemProps> = ({
         <List.Item.Meta
           avatar={
             <Avatar
-              src={item.student.year_enrollment.user.avatar || null}
+              src={getPublicR2Url(item.student.year_enrollment.user.avatar)}
               style={{
                 backgroundColor: getHSLColor(
                   `${item.student.year_enrollment.user.first_name} ${item.student.year_enrollment.user.last_name} ${item.student.year_enrollment.user.surname}`
@@ -196,8 +216,6 @@ export default function Page() {
     enabled: !!yid && !!courseId && !!course?.faculty.id,
   });
 
-  
-
   const { data: periodEnrollements } = useQuery({
     queryKey: [
       "period_enrollments",
@@ -235,7 +253,7 @@ export default function Page() {
 
   return (
     <Layout>
-      <Layout.Content style={{padding:`16px 16px 0 16px`}}>
+      <Layout.Content style={{ padding: `16px 16px 0 16px` }}>
         <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
           <Col span={16}>
             <ListCourseValidatedStudents

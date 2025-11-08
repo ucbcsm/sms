@@ -2,13 +2,12 @@
 
 import { Avatar, Space, Table, theme, Typography } from "antd";
 import { FC } from "react";
-import { AttendanceListItem } from "@/types";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { AttendanceController } from "./controller";
 import { AttendanceItemFromCourseEnrollment } from "@/lib/api";
 
 type ListAttendanceListItemProps = {
-  items?: AttendanceItemFromCourseEnrollment[]; //Omit<AttendanceListItem, "id" & { id?: number; exempted:boolean }>[]
+  items?: AttendanceItemFromCourseEnrollment[];
   editRecordStatus?: (
     status: "present" | "absent" | "justified",
     index: number
@@ -48,6 +47,7 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
           key: "avatar",
           render: (_, record, __) => (
             <Avatar
+              src={getPublicR2Url(record.student.user.avatar)}
               style={{
                 backgroundColor: record.exempted
                   ? colorTextDisabled
@@ -57,7 +57,6 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
               }}
             >
               {record.student.user.first_name?.charAt(0).toUpperCase()}
-              {record.student.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 58,

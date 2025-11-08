@@ -14,6 +14,7 @@ import { CloseOutlined, EditOutlined, LockOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Alert,
+  App,
   Button,
   Checkbox,
   DatePicker,
@@ -41,8 +42,8 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   const {
     token: { colorPrimary },
   } = theme.useToken();
+  const {message}=App.useApp()
   const [open, setOpen] = useState<boolean>(false);
-  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const is_permanent_teacher = Form.useWatch("is_permanent_teacher", form);
   const [editMatricule, setEditMatricule] = useState<boolean>(false);
@@ -53,7 +54,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
 
   const onFinish = (values: any) => {
     if (!teacher) {
-      messageApi.error("Aucune donnée disponible pour la mise à jour.");
+      message.error("Aucune donnée disponible pour la mise à jour.");
     } else {
       mutateAsync(
         {
@@ -94,21 +95,21 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             queryClient.invalidateQueries({
               queryKey: ["teacher", `${teacher.id}`],
             });
-            messageApi.success("Profil enseignant mise à jour avec succès.");
+            message.success("Profil enseignant mise à jour avec succès.");
             setEditMatricule(false);
             setOpen(false);
           },
           onError: (error) => {
             if ((error as any).status === 403) {
-              messageApi.error(
+              message.error(
                 `Vous n'avez pas la permission d'effectuer cette action`
               );
             } else if ((error as any).status === 401) {
-              messageApi.error(
+              message.error(
                 "Vous devez être connecté pour effectuer cette action."
               );
             } else {
-              messageApi.error(
+              message.error(
                 (error as any)?.response?.data?.message ||
                   "Une erreur est survenue lors de la mise à jour du profil enseignant."
               );
@@ -121,7 +122,6 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
 
   return (
     <>
-      {contextHolder}
       <Button
         type="link"
         icon={<EditOutlined />}
@@ -191,7 +191,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
       >
         <Form
           form={form}
-          name="form_in_drawer"
+          name="form_in_drawer-edit"
           initialValues={{
             ...teacher,
             ...teacher?.user,
