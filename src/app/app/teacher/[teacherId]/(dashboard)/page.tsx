@@ -78,7 +78,7 @@ export default function Page() {
               </Flex>
             </Card>
           </Col>
-          <Col span={8}>
+          {/* <Col span={8}>
             <Card>
               <Statistic
                 loading={isPendingDashboard}
@@ -86,7 +86,7 @@ export default function Page() {
                 value={teacherDashboard?.taught_course_count}
               />
             </Card>
-          </Col>
+          </Col> */}
           <Col span={8}>
             <Card>
               <Statistic
@@ -101,7 +101,7 @@ export default function Page() {
         </Row>
       </Col>
       <Col span={6}>
-        <Card loading={isPending}>
+        {/* <Card loading={isPending}> */}
           <Descriptions
             title="Informations professionnelles"
             column={1}
@@ -152,7 +152,7 @@ export default function Page() {
               },
             ]}
           />
-        </Card>
+        {/* </Card> */}
       </Col>
     </Row>
   );

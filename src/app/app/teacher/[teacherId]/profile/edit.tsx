@@ -53,6 +53,8 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   });
 
   const onFinish = (values: any) => {
+    console.log("Values:", values)
+    console.log("Teacher", teacher)
     if (!teacher) {
       message.error("Aucune donnée disponible pour la mise à jour.");
     } else {
@@ -79,9 +81,9 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               is_staff: teacher.user.is_staff,
               is_student: teacher.user.is_student,
               is_superuser: teacher.user.is_superuser,
-              groups: teacher.user.groups.map((group) => group.id),
-              roles: teacher.user.roles.map((role) => role.id),
-              user_permissions: teacher.user.user_permissions.map(perm=> perm.id),
+              groups: teacher.user.groups?.map((group) => group.id),
+              roles: teacher.user.roles?.map((role) => role.id),
+              user_permissions: teacher.user.user_permissions?.map(perm=> perm.id),
               last_login: teacher.user.last_login,
               date_joined: teacher.user.date_joined,
               username: teacher.user.username || "",

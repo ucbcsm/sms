@@ -1,6 +1,6 @@
 "use client";
 import React, { Dispatch, FC, SetStateAction } from "react";
-import { Alert, message, Modal } from "antd";
+import { Alert, App, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PeriodEnrollment } from "@/types";
 import { deleteSinglePeriodEnrollment } from "@/lib/api";
@@ -14,7 +14,7 @@ type DeleteSinglePeriodEnrollmentFormProps = {
 export const DeleteSinglePeriodEnrollmentForm: FC<
   DeleteSinglePeriodEnrollmentFormProps
 > = ({ enrollment, open, setOpen }) => {
-  const [messageApi, contextHolder] = message.useMessage();
+  const {message}=App.useApp()
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: deleteSinglePeriodEnrollment,
@@ -30,20 +30,20 @@ export const DeleteSinglePeriodEnrollmentForm: FC<
             queryClient.invalidateQueries({
               queryKey: ["period_enrollments"],
             });
-            messageApi.success("Inscription supprimée avec succès !");
+            message.success("Inscription supprimée avec succès !");
             setOpen(false);
           },
           onError: (error) => {
             if ((error as any).status === 403) {
-              messageApi.error(
+              message.error(
                 `Vous n'avez pas la permission d'effectuer cette action`
               );
             } else if ((error as any).status === 401) {
-              messageApi.error(
+              message.error(
                 "Vous devez être connecté pour effectuer cette action."
               );
             } else {
-              messageApi.error(
+              message.error(
                 (error as any)?.response?.data?.message ||
                   "Une erreur s'est produite lors de la suppression de l'inscription."
               );
@@ -55,8 +55,7 @@ export const DeleteSinglePeriodEnrollmentForm: FC<
   };
 
   return (
-    <>
-      {contextHolder}
+    
       <Modal
         open={open}
         title="Supprimer l'inscription"
@@ -100,6 +99,5 @@ export const DeleteSinglePeriodEnrollmentForm: FC<
           showIcon
         />
       </Modal>
-    </>
   );
 };

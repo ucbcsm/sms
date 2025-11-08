@@ -113,6 +113,11 @@ export async function updateTeacher({
   return res.data;
 }
 
+export async function deleteTeacher(id: number) {
+  const res = await api.delete(`/faculty/teachers/${id}/`);
+  return res.data;
+}
+
 export function getTeachersAsOptions(teachers?: Teacher[]) {
   return teachers?.map((teacher) => {
     return {

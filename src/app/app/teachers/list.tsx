@@ -1,5 +1,6 @@
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
+  DashboardOutlined,
   DeleteOutlined,
   EditOutlined,
   FileExcelOutlined,
@@ -26,33 +27,38 @@ import { useQuery } from "@tanstack/react-query";
 import { getTeachers } from "@/lib/api";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
-import {  parseAsBoolean, parseAsInteger, parseAsStringEnum, useQueryState } from "nuqs";
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsStringEnum,
+  useQueryState,
+} from "nuqs";
 
 export function ListTeachers() {
-
   const [gender, setGender] = useQueryState(
     "gender",
     parseAsStringEnum(["all", "M", "F"]).withDefault("all")
   );
-  const [search, setSearch]=useQueryState("search")
+  const [search, setSearch] = useQueryState("search");
   const [category, setCategory] = useQueryState(
     "permanent",
     parseAsStringEnum(["all", "permanent", "visitor"]).withDefault("all")
   );
 
-  const [page, setPage]=useQueryState("page", parseAsInteger.withDefault(0))
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
   const [pageSize, setPageSize] = useQueryState(
     "page_size",
     parseAsInteger.withDefault(0)
   );
 
   const [openNewTeacherForm, setOpenNewTeacherForm] = useQueryState(
-      "new",
-      parseAsBoolean.withDefault(false)
-    );
-    const [openNewFormerTeacherForm, setOpenNewFormerTeacherForm] =
-      useQueryState("new-former", parseAsBoolean.withDefault(false));
-
+    "new",
+    parseAsBoolean.withDefault(false)
+  );
+  const [openNewFormerTeacherForm, setOpenNewFormerTeacherForm] = useQueryState(
+    "new-former",
+    parseAsBoolean.withDefault(false)
+  );
 
   const { data, isPending, isError } = useQuery({
     queryKey: ["teachers", gender, category, page, pageSize, search],
@@ -234,7 +240,7 @@ export function ListTeachers() {
             align: "center",
           },
           {
-            title: "Sexe",
+            title: "Genre",
             dataIndex: "gender",
             key: "gender",
             width: 58,
@@ -299,12 +305,21 @@ export function ListTeachers() {
                     items: [
                       {
                         key: "edit",
-                        label: "Modifier",
-                        icon: <EditOutlined />,
+                        label: (
+                          <Link href={`/app/teacher/${record.id}`}>Aperçu</Link>
+                        ),
+                        icon: <DashboardOutlined />,
+                      },
+                      {
+                        type: "divider",
                       },
                       {
                         key: "delete",
-                        label: "Supprimer",
+                        label: (
+                          <Link href={`/app/teacher/${record.id}/danger-zone`}>
+                            Supprimer
+                          </Link>
+                        ),
                         danger: true,
                         icon: <DeleteOutlined />,
                       },

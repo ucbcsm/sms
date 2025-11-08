@@ -22,7 +22,7 @@ import {
   HourglassOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   getApplicationStatusName,
   getApplicationStatusTypographyType,
@@ -100,14 +100,13 @@ export const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
                       danger: true,
                     }
                   : null,
-                item.status === "rejected"
-                  ? {
-                      key: "delete",
-                      label: "Supprimer",
-                      icon: <DeleteOutlined />,
-                      danger: true,
-                    }
-                  : null,
+
+                {
+                  key: "delete",
+                  label: "Supprimer",
+                  icon: <DeleteOutlined />,
+                  danger: true,
+                },
               ].filter(Boolean) as any[],
               onClick: ({ key }) => {
                 if (key === "pending") {
@@ -129,7 +128,7 @@ export const ListPeriodEnrollmentItem: FC<ListPeriodEnrollmentItemProps> = ({
         <List.Item.Meta
           avatar={
             <Avatar
-              src={item.year_enrollment.user.avatar || null}
+              src={getPublicR2Url(item.year_enrollment.user.avatar)}
               style={{
                 backgroundColor: getHSLColor(
                   `${item.year_enrollment.user.surname} ${item.year_enrollment.user.last_name} ${item.year_enrollment.user.first_name}`

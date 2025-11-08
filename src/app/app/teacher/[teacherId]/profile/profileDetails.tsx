@@ -11,6 +11,7 @@ import {
   Descriptions,
   Flex,
   Image,
+  Skeleton,
   Space,
   Typography,
 } from "antd";
@@ -210,9 +211,11 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
       </>
     );
   }
-  return (
-    <div className="p-6">
-      <DataFetchPendingSkeleton />
-    </div>
-  );
+ 
+     return (
+       <div className="p-6">
+         <Skeleton active />
+       </div>
+     );
+
 };

@@ -2,7 +2,7 @@
 
 import { getYearById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useYid = () => {
   const [yid, setYidValue] = useState<number | undefined>(() => {
@@ -35,6 +35,10 @@ export const useYid = () => {
     setYidValue(undefined);
     localStorage.removeItem("yid");
   };
+
+  useEffect(() => {
+    if (yid) localStorage.setItem("yid", `${yid}`);
+  }, [yid]);
 
   return {
     yid,

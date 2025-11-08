@@ -4,9 +4,6 @@ import { PeriodEnrollment } from "@/types";
 import {
   CheckOutlined,
   CloseOutlined,
-  DownOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
   HourglassOutlined,
   MoreOutlined,
   PrinterOutlined,
@@ -39,6 +36,7 @@ import {
   getPeriodEnrollments,
 } from "@/lib/api";
 import { useYid } from "@/hooks/use-yid";
+import { DeleteSinglePeriodEnrollmentForm } from "./forms/decisions/delete";
 
 type ActionsBarProps = {
   item: PeriodEnrollment;
@@ -50,6 +48,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
   const [openPending, setOpenPending] = useState<boolean>(false);
   const [openReject, setOpenReject] = useState<boolean>(false);
   const [openValidate, setOpenValidate] = useState<boolean>(false);
+  const [openDelete, setOpenDelete] = useState<boolean>(false);
 
   return (
     <>
@@ -66,6 +65,11 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
       <RejectSinglePeriodEnrollmentForm
         open={openReject}
         setOpen={setOpenReject}
+        enrollment={item}
+      />
+      <DeleteSinglePeriodEnrollmentForm
+        open={openDelete}
+        setOpen={setOpenDelete}
         enrollment={item}
       />
 
@@ -110,6 +114,12 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                     danger: true,
                   }
                 : null,
+              {
+                key: "delete",
+                label: "Supprimer",
+                icon: <CloseOutlined />,
+                danger: true,
+              },
             ],
             onClick: ({ key }) => {
               if (key === "pending") {
@@ -118,6 +128,8 @@ const ActionsBar: FC<ActionsBarProps> = ({ item }) => {
                 setOpenReject(true);
               } else if (key === "validate") {
                 setOpenValidate(true);
+              } else if (key === "delete") {
+                setOpenDelete(true);
               }
             },
           }}
