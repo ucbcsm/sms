@@ -11,7 +11,7 @@ import {
 import { Palette } from "@/components/palette";
 import BackButton from "@/components/backButton";
 import { usePathname, useRouter } from "next/navigation";
-import { ListCycles } from "./(cycles)/list";
+import { ListCycles } from "./cycles/list";
 import { use } from "react";
 import { useInstitution } from "@/hooks/use-institution";
 
