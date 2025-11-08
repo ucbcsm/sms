@@ -243,14 +243,14 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
                 </Link>
               ),
             },
-            {
-              key: `/taught-course/${courseId}/course-evaluations`,
-              label: (
-                <Link href={`/taught-course/${courseId}/course-evaluations`}>
-                  Évaluations du cours
-                </Link>
-              ),
-            },
+            // {
+            //   key: `/taught-course/${courseId}/course-evaluations`,
+            //   label: (
+            //     <Link href={`/taught-course/${courseId}/course-evaluations`}>
+            //       Évaluations du cours
+            //     </Link>
+            //   ),
+            // },
           ]}
         />
       </div>
