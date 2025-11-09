@@ -1,22 +1,18 @@
 "use client";
 
 import { Button, Card, Flex, Layout, Space, theme, Typography } from "antd";
-import { parseAsStringEnum, useQueryState } from "nuqs";
+// import { parseAsStringEnum, useQueryState } from "nuqs";
 import { StudentsStatistics } from "./statistics/students";
-import { TeachersStatistics } from "./statistics/teachers";
-import { DepartmentsStatistics } from "./statistics/departments";
-import { useInstitution } from "@/hooks/use-institution";
+// import { useInstitution } from "@/hooks/use-institution";
 
 export default function Page() {
-  const {
-    token: { colorBgContainer, colorBorderSecondary },
-  } = theme.useToken();
 
-  const [statTab, setStatTab] = useQueryState(
-    "tab",
-    parseAsStringEnum(["students", "teachers"]).withDefault("students")
-  );
-  const { data: institution } = useInstitution();
+
+  // const [statTab, setStatTab] = useQueryState(
+  //   "tab",
+  //   parseAsStringEnum(["students", "teachers"]).withDefault("students")
+  // );
+  // const { data: institution } = useInstitution();
 
   // const [dashTab, setDashTab] = useQueryState(
   //   "dash_tab",
