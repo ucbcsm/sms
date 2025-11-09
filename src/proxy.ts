@@ -43,5 +43,8 @@ export const config = {
   // matcher: [
   //   "/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|_not-found|_error|.*\\..*).*)",
   // ],
-  matcher: ["/app/:path*"],
+  matcher: [
+    // match all except: _next/*, any path starting with _, favicon, api/*, files with extensions, and some auth paths
+    "/((?!_next/|_error|_not-found|_next/static|_next/image|favicon.ico|api/|auth/reset-password|auth/reset-password-confirmation|.*\\..*).*)",
+  ],
 };
