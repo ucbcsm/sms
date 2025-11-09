@@ -89,9 +89,7 @@ export const FacultiesClientPage = () => {
           loading={isPending}
           style={{ width: 520, margin: "auto" }}
         >
-          <Typography.Title level={4} >
-              Filières
-            </Typography.Title>
+          <Typography.Title level={4}>Filières</Typography.Title>
           <List
             size="small"
             dataSource={data}
@@ -102,7 +100,10 @@ export const FacultiesClientPage = () => {
                   className=" hover:bg-[#f5f5f5] rounded-md"
                   extra={<RightOutlined />}
                 >
-                  <List.Item.Meta title={fac.acronym} description={fac.name} />
+                  <List.Item.Meta
+                    title={`${fac.acronym} (${fac.field.cycle?.name})`}
+                    description={fac.name}
+                  />
                 </List.Item>
               </Link>
             )}

@@ -186,16 +186,6 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
         <div className="flex-1" />
         <Space>
-          {/* <Typography.Text type="secondary">
-            {enrolledStudent?.academic_year.name}
-          </Typography.Text> */}
-          {/* <Link href={`/faculty/${course?.faculty.id}/taught-courses`}>
-            <Button
-              type="text"
-              icon={<CloseOutlined />}
-              title="Quitter le cours"
-            />
-          </Link> */}
           <LanguageSwitcher />
           <SupportDrawer />
           <AppsButton />
@@ -243,14 +233,6 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
                 </Link>
               ),
             },
-            // {
-            //   key: `/taught-course/${courseId}/course-evaluations`,
-            //   label: (
-            //     <Link href={`/taught-course/${courseId}/course-evaluations`}>
-            //       Évaluations du cours
-            //     </Link>
-            //   ),
-            // },
           ]}
         />
       </div>

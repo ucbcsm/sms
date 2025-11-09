@@ -35,7 +35,7 @@ import { NewRetakeReasonForm } from "./newRetakeReasonForm";
 import { useClasses } from "@/hooks/useClasses";
 import { DeleteStudentFromRetakeForm } from "./deleteStudentFromRetake";
 import { NewStudentWithRetakeForm } from "./newStudentWithRetake";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 
 export const ListStudentsWithRetakes =()=> {
   const {
@@ -171,7 +171,7 @@ export const ListStudentsWithRetakes =()=> {
                 dataIndex: "user",
                 render: (_, record) => (
                   <Avatar
-                    src={record.user.avatar}
+                    src={getPublicR2Url(record.user.avatar)}
                     style={{
                       backgroundColor: getHSLColor(
                         `${record.user.surname} ${record.user.last_name} ${record.user.first_name}`
