@@ -111,9 +111,7 @@ export const ViewEditApplicationForm: React.FC<
   classes,
   setView,
 }) => {
-  const {
-    token: { colorBgContainer, colorBorderSecondary },
-  } = theme.useToken();
+ 
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const [openMarkAsPending, setOpenMarkAsPending] = useState<boolean>(false);
@@ -398,6 +396,7 @@ console.log("testRes",application?.admission_test_result)
                 label="Photo de profil"
                 name="avatar"
                 layout="vertical"
+                initialValue={application?.avatar}
               >
                 <AutoUploadAvatar
                   form={form}
@@ -913,7 +912,7 @@ console.log("testRes",application?.admission_test_result)
                               />
                               {
                                 application?.enrollment_question_response[index]
-                                  .registered_enrollment_question?.question
+                                  ?.registered_enrollment_question?.question
                               }
                             </>
                           }
@@ -1052,7 +1051,7 @@ console.log("testRes",application?.admission_test_result)
                           layout="vertical"
                         >
                           <InputNumber
-                            style={{width:100}}
+                            style={{ width: 100 }}
                             min={0}
                             max={
                               courses?.find(

@@ -6,6 +6,7 @@ import { getApplicationStatusName, getApplicationTagColor } from "@/lib/api";
 import { Avatar, Flex, List, Tag, theme, Typography } from "antd";
 import { FC } from "react";
 import { parseAsInteger, useQueryState } from "nuqs";
+import Link from "next/link";
 
 type ListItemApplicationProps = {
   item: Application;
@@ -19,13 +20,13 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
   const [view, setView] = useQueryState("view", parseAsInteger.withDefault(0));
 
   return (
+    
     <List.Item
       style={{
         background: item.id === view ? colorBgTextHover : "",
         cursor: "pointer",
       }}
       onClick={() => {
-        // toggleEdit();
         setView(item.id);
       }}
       className=" hover:bg-gray-50 rounded-md"
