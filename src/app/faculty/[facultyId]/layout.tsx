@@ -1,6 +1,6 @@
 import { getAsignedFaculty, getServerSession } from "@/lib/api/auth";
 import { redirect } from "next/navigation";
-import { ClientFacultyLayout } from "./layout.client";
+import { ClientFacultyLayout } from "./facultyclientLayout";
 
 export default async function Layout({
   children,
