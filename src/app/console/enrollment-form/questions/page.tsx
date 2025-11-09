@@ -1,8 +1,7 @@
-'use client'
+"use client";
 
-import { ListEnrollmentQuestions } from "./list"
+import { ListEnrollmentQuestions } from "./list";
 
-export default function Page(){
-    return <ListEnrollmentQuestions/>
-    
+export default function Page() {
+  return <ListEnrollmentQuestions />;
 }
