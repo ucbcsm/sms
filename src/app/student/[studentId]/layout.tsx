@@ -129,8 +129,8 @@ export default function StudentLayout({
               <Image
                 src={getPublicR2Url(institution?.logo) || undefined}
                 alt="Logo"
-                width={36}
-                height="auto"
+                width="auto"
+                height={36}
                 preview={false}
               />
             </div>

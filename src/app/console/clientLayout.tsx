@@ -100,7 +100,8 @@ export function ClientConsoleLayout({
           <Image
             src={getPublicR2Url(institution?.logo) || undefined}
             alt="Logo"
-            width={36}
+            width="auto"
+            height={36}
             preview={false}
             style={{}}
           />
@@ -205,8 +206,6 @@ export function ClientConsoleLayout({
                 },
               ]}
             />
-
-           
           </Layout>
         </Layout.Sider>
         <Layout.Content>
