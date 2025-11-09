@@ -6,6 +6,11 @@ import { match } from "assert";
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // ---- EARLY RETURN pour routes internes / pages systèmes ----
+  if (pathname.startsWith("/_") || pathname === "/favicon.ico") {
+    return NextResponse.next();
+  }
+
   const isOnLoginPage = pathname.startsWith("/auth/login");
 
   // Ne pas rediriger vers /config si on est déjà dessus
