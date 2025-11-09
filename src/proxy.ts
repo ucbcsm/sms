@@ -2,8 +2,7 @@ import { checkInstitutionExistence } from "@/lib/api";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAuthenticated } from "./lib/api/auth";
 
-export default async function middleware(request: NextRequest) {
- 
+export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const isOnLoginPage = pathname.startsWith("/auth/login");
@@ -39,6 +38,5 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  runtime: "nodejs",
   matcher: ["/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|.*\\..*).*)"],
 };
