@@ -5,6 +5,8 @@ import ClientProvider from "@/components/clientProvider";
 import { getServerSession } from "@/lib/api/auth";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
