@@ -38,5 +38,8 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|.*\\..*).*)"],
+  // matcher: ["/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|.*\\..*).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|_not-found|_error|.*\\..*).*)",
+  ],
 };
