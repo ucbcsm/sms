@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { getYearById } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 
 export const useYid = () => {
   const [yid, setYidValue] = useState<number | undefined>(() => {
+    if (typeof window === "undefined") return undefined;
+
     const storedYid = localStorage.getItem("yid");
 
     if (storedYid) return parseInt(storedYid);
@@ -28,16 +30,22 @@ export const useYid = () => {
 
   const setYid = (value: number) => {
     setYidValue(value);
-    localStorage.setItem("yid", `${value}`);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("yid", `${value}`);
+    }
   };
 
   const removeYid = () => {
     setYidValue(undefined);
-    localStorage.removeItem("yid");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("yid");
+    }
   };
 
   useEffect(() => {
-    if (yid) localStorage.setItem("yid", `${yid}`);
+    if (yid && typeof window !== "undefined") {
+      localStorage.setItem("yid", `${yid}`);
+    }
   }, [yid]);
 
   return {
