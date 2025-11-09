@@ -26,9 +26,9 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        {/* <Suspense> */}
+        <Suspense>
           <ClientProvider session={session}>{children}</ClientProvider>
-        {/* </Suspense> */}
+        </Suspense>
       </body>
     </html>
   );
