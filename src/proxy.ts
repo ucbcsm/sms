@@ -1,6 +1,7 @@
 import { checkInstitutionExistence } from "@/lib/api";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAuthenticated } from "./lib/api/auth";
+import { match } from "assert";
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -39,7 +40,8 @@ export default async function proxy(request: NextRequest) {
 
 export const config = {
   // matcher: ["/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|.*\\..*).*)"],
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|_not-found|_error|.*\\..*).*)",
-  ],
+  // matcher: [
+  //   "/((?!_next/static|_next/image|favicon.ico|api|auth/reset-password|auth/reset-password-confirmation|_not-found|_error|.*\\..*).*)",
+  // ],
+  matcher: ["/app/:path*"],
 };
