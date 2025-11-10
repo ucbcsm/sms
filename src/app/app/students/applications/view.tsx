@@ -109,6 +109,8 @@ export const ViewEditApplicationForm: React.FC<
 }) => {
   const { message } = App.useApp();
   const [form] = Form.useForm();
+  const admissionTestResult = Form.useWatch("admission_test_result", form);
+  console.log("testWatch", admissionTestResult);
   const cycleId = Form.useWatch("cycle_id", form);
   const fieldId = Form.useWatch("field_id", form);
   const facultyId = Form.useWatch("faculty_id", form);
@@ -210,7 +212,9 @@ export const ViewEditApplicationForm: React.FC<
     }
   };
 
-  const getInitialAdmissionResultFromTestCourses = () => {
+  const getInitialAdmissionResultFromTestCourses = ():
+    | { course_test: number; result: number | null }[]
+    | undefined => {
     const testCourses = courses?.filter(
       (course) => course.faculty.id === application?.faculty.id
     );
@@ -252,17 +256,14 @@ export const ViewEditApplicationForm: React.FC<
     if (application?.admission_test_result?.length === 0) {
       const admissionTestResult = getInitialAdmissionResultFromTestCourses();
       console.log("init", admissionTestResult);
-      form.setFieldsValue({
-        admission_test_result: admissionTestResult,
-      });
+      form.setFieldValue("admission_test_result", admissionTestResult);
     } else if (
       typeof application !== "undefined" &&
       application.admission_test_result.length > 0
     ) {
       const admissionTestResult = formatAdmissionResultFromApplication();
-      form.setFieldsValue({
-        admission_test_result: admissionTestResult,
-      });
+      console.log("formated", admissionTestResult);
+      form.setFieldValue("admission_test_result", admissionTestResult);
     }
   }, [application, courses]);
 
@@ -307,7 +308,7 @@ export const ViewEditApplicationForm: React.FC<
         ),
       });
     }
-  }, [application, form]);
+  }, [application]);
 
   if (isPendingApplication) {
     return (
@@ -953,7 +954,7 @@ export const ViewEditApplicationForm: React.FC<
                             {application?.application_documents &&
                             application?.application_documents?.length > 0
                               ? application?.application_documents?.[index]
-                                  .required_document?.title
+                                  ?.required_document?.title
                               : documents?.[index].title}
                           </Typography.Title>
                         </Space>
@@ -1017,7 +1018,7 @@ export const ViewEditApplicationForm: React.FC<
             <Form.List name={"admission_test_result"}>
               {(fields, { add, remove }) => (
                 <>
-                  {fields.map(({ key, name, ...restField }) => (
+                  {fields.map(({ key, name, ...restField }, index) => (
                     <Flex
                       align="end"
                       key={key}
@@ -1031,6 +1032,7 @@ export const ViewEditApplicationForm: React.FC<
                         rules={[{ required: true }]}
                         style={{ flex: 1 }}
                         layout="vertical"
+                        // noStyle
                       >
                         <Select
                           placeholder="Matière"
@@ -1038,9 +1040,9 @@ export const ViewEditApplicationForm: React.FC<
                             Number(application?.faculty.id),
                             courses
                           )}
-                          disabled
-                          variant="borderless"
-                          suffixIcon=""
+                          // disabled
+                          // variant="borderless"
+                          // suffixIcon=""
                         />
                       </Form.Item>
                       <Form.Item

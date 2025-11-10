@@ -38,7 +38,7 @@ export default function StudentsLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBorderSecondary },
   } = theme.useToken();
   const { yid } = useYid();
   const [reapply, setReapply] = useQueryState(
@@ -125,7 +125,6 @@ export default function StudentsLayout({
           }}
         >
           <Typography.Title
-            // type="secondary"
             level={3}
             className=""
             style={{ marginBottom: 0 }}

@@ -1,3 +1,4 @@
+'use client'
 import { Step1TeacherFormDataType, Step2TeacherFormDataType } from "@/types";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import { useState } from "react";

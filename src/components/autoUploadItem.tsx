@@ -160,7 +160,7 @@ const watchedValue = Form.useWatch(name, form);
           bordered={false}
           style={{ borderRadius: 10 }}
         >
-          Fichier téléversé avec succès
+          Fichier uploadé
         </Tag>
       )}
 

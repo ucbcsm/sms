@@ -1,18 +1,16 @@
 "use client";
 
 import { AppsButton } from "@/components/appsButton";
-import { DataFetchErrorResult } from "@/components/errorResult";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { SupportDrawer } from "@/components/support-drawer";
 import { UserProfileButton } from "@/components/userProfileButton";
 import { YearSelector } from "@/components/yearSelector";
 import { useInstitution } from "@/hooks/use-institution";
 import { useYid } from "@/hooks/use-yid";
-import { getJurysForUser, getYears } from "@/lib/api";
+import { getJurysForUser } from "@/lib/api";
 import { getPublicR2Url } from "@/lib/utils";
 import {
   CalendarOutlined,
-  LoadingOutlined,
   RightOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
@@ -23,66 +21,31 @@ import {
   Image,
   Layout,
   List,
-  message,
   Space,
   Tag,
   theme,
   Typography,
 } from "antd";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
 
 export default function Page() {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
-  // const [yearId, setYearId] = useState<number | undefined>();
-  // const [messageApi, contextHolder] = message.useMessage();
-  const { yid, removeYid } = useYid();
+  const { yid } = useYid();
 
   const { data: institution } = useInstitution();
 
-  // const {
-  //   data: years,
-  //   isPending,
-  //   isError,
-  // } = useQuery({
-  //   queryKey: ["years"],
-  //   queryFn: getYears,
-  // });
-
   const {
     data: jurys,
-    isPending: isPendingJurys,
-    isError: isErrorJurys,
+    isPending,
+    isError,
     error,
   } = useQuery({
     queryKey: ["get", yid],
     queryFn: ({ queryKey }) => getJurysForUser(Number(queryKey[1])),
     enabled: !!yid,
   });
-
-  // if (jury && yearId) {
-  //   setYid(yearId);
-  //   redirect(`/jury/${jury.id}`);
-  // }
-
-
-  // useEffect(() => {
-  //   if (
-  //     isErrorJury &&
-  //     typeof error === "object" &&
-  //     error !== null &&
-  //     "status" in error &&
-  //     ((error as any).status === 404 || (error as any).status === 503)
-  //   ) {
-  //     messageApi.error("Vous n'êtes pas associé(e) à ce jury!");
-  //   } else if (isErrorJury) {
-  //     messageApi.error("Erreur inconnue. Merci de réessayer.");
-  //     setYearId(undefined);
-  //   }
-  // }, [error]);
 
   return (
     <Layout>
@@ -139,12 +102,11 @@ export default function Page() {
           alignItems: "center",
           width: "100%",
           padding: 28,
-          // background: colorBgContainer,
           minHeight: `calc(100vh - 64px)`,
         }}
       >
         <div style={{ width: 520, margin: "auto" }}>
-          <Card loading={isPendingJurys}>
+          <Card loading={isPending}>
             <Typography.Title level={4}>Jurys d&apos;évaluation</Typography.Title>
             <List
               dataSource={jurys}

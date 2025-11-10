@@ -52,9 +52,9 @@ return coures?.map((course) => {
   });
 }
 
-export const getTestCoursesByFacAsOptions = (faculty_id: number, courses?: TestCourse[]) => { 
+export const getTestCoursesByFacAsOptions = (facultyId: number, courses?: TestCourse[]) => { 
   return courses
-    ?.filter((course) => course.faculty.id === faculty_id)
+    ?.filter((course) => course.faculty.id === facultyId)
     .map((course) => {
       return { value: course.id, label: course.name };
     });

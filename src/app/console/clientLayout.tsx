@@ -76,12 +76,21 @@ export function ClientConsoleLayout({
             centered
             open={isModalOpen}
             onOk={() => {
-              router.push("/");
               setIsModalOpen(false);
             }}
             onCancel={() => setIsModalOpen(false)}
             okButtonProps={{ style: { boxShadow: "none" } }}
             cancelButtonProps={{ style: { boxShadow: "none" } }}
+            footer={(_, { OkBtn, CancelBtn }) => (
+              <>
+                <Space>
+                  <CancelBtn />
+                  <Link href="/">
+                    <OkBtn />
+                  </Link>
+                </Space>
+              </>
+            )}
           >
             <Alert
               description="Assurez-vous d'avoir enregistré toutes vos modifications, car toute modification non sauvegardée sera perdue. Voulez-vous vraiment continuer ?"
