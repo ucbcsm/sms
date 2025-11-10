@@ -104,3 +104,13 @@ export function getPublicR2Url(url?: string | null): string | null {
 
   return pubUrl;
 }
+
+
+/**
+ * Retourne "Bonjour" ou "Bonsoir" selon l'heure locale de l'utilisateur.
+ * Bonsoir après 18h00, Bonjour le reste du temps.
+ */
+export function getGreeting(): string {
+  const hour = new Date().getHours();
+  return hour >= 18 ? "Bonsoir" : "Bonjour";
+}

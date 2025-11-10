@@ -27,7 +27,7 @@ export default function DeliberationsLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBorder },
+    token: { colorBorder, colorBgContainer },
   } = theme.useToken();
   const { juryId, facultyId, departmentId } = useParams();
 
@@ -42,6 +42,10 @@ export default function DeliberationsLayout({
     isPending: isPendingClasses,
     isError: isErrorClasses,
   } = useClasses();
+
+  const getFilteredClasses=()=>{
+    return classes?.filter((c) => c.cycle?.id);
+  }
 
   const getDepartmentsAsCollapseItems = () => {
     const items = departments?.map((dep) => ({
@@ -68,7 +72,7 @@ export default function DeliberationsLayout({
 
   return (
     <Splitter style={{ height: `calc(100vh - 110px)` }}>
-      <Splitter.Panel defaultSize={320} min={320} max="25%">
+      <Splitter.Panel defaultSize={320} min={320} max="25%" style={{background:colorBgContainer}}>
         <Flex
           style={{
             paddingLeft: 16,

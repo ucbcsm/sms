@@ -1,6 +1,7 @@
 "use client";
 
 import { useInstitution } from "@/hooks/use-institution";
+import { getPublicR2Url } from "@/lib/utils";
 import { Image, Typography } from "antd";
 import { FC } from "react";
 
@@ -10,7 +11,7 @@ export const DocHeader: FC = () => {
     <div className="flex gap-20 justify-between items-center pb-8 border-b-2 border-[#008367] mb-8 ">
       <div className="flex flex-1 gap-7 items-center">
         <Image
-          src={data?.logo || "/ucbc-logo.png"}
+          src={getPublicR2Url(data?.logo) || undefined}
           alt="logo"
           height={128}
           width="auto"

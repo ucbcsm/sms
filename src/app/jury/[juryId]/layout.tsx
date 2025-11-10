@@ -117,15 +117,24 @@ export default function JuryLayout({
             centered
             open={isModalOpen}
             onOk={() => {
-              router.push(`/jury`);
               setIsModalOpen(false);
             }}
             onCancel={() => setIsModalOpen(false)}
             okButtonProps={{ style: { boxShadow: "none" } }}
             cancelButtonProps={{ style: { boxShadow: "none" } }}
+            footer={(_, { OkBtn, CancelBtn }) => (
+              <>
+                <Space>
+                  <CancelBtn />
+                  <Link href={"/jury"}>
+                    <OkBtn />
+                  </Link>
+                </Space>
+              </>
+            )}
           >
             <Alert
-              description={`Vous allez quitter le jury: ${jury?.name} et retourner à la liste des jurys par année.`}
+              description={`Vous allez quitter le jury: ${jury?.name} et retourner à la liste des jurys de l'année sélectionnée.`}
               message={`Information`}
               type="info"
               showIcon
@@ -231,7 +240,7 @@ export default function JuryLayout({
         <Layout.Content>
           <div
             style={{
-              background: colorBgContainer,
+              // background: colorBgContainer,
               minHeight: 280,
               borderRadius: borderRadiusLG,
             }}

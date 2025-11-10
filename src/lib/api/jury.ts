@@ -76,9 +76,9 @@ export async function getJury(juryId: number) {
   return res.data as Jury;
 }
 
-export async function getUserIsJury(yearId: number) {
+export async function getJurysForUser(yearId: number) {
   const res = await api.get(
     `/account/jury-from-user?academic_year__id=${yearId}`
   );
-  return res.data as Jury;
+  return res.data as Jury[];
 }

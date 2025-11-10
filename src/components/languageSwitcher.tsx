@@ -5,7 +5,7 @@ import { Flags } from "./flags";
 type LangType = "en" | "fr";
 
 export function LanguageSwitcher() {
-  const [lang, setLang] = useState<LangType>("en");
+  const [lang, setLang] = useState<LangType>("fr");
   return (
     <Dropdown
       menu={{
@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
           { key: "en", label: "English", icon:<Flags.GbFlag className="w-4 h-4" /> },
         ],
         selectable: true,
-        defaultSelectedKeys: ["en"],
+        defaultSelectedKeys: [lang],
         onClick: ({ key }) => {
           const lang = key as LangType;
           setLang(lang);

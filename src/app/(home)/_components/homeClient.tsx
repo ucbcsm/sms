@@ -22,7 +22,7 @@ import { LanguageSwitcher } from "@/components/languageSwitcher";
 import { UserProfileButton } from "@/components/userProfileButton";
 import { AppsButton } from "@/components/appsButton";
 import { Palette } from "@/components/palette";
-import { getPublicR2Url } from "@/lib/utils";
+import { getGreeting, getPublicR2Url } from "@/lib/utils";
 import { getRoleName } from "@/lib/api";
 import { CheckOutlined, CrownOutlined, UserOutlined } from "@ant-design/icons";
 
@@ -90,7 +90,7 @@ export const HomeClient: FC<HomeClientProps> = ({ apps, user }) => {
             <header className="mb-8 ">
               <Card>
                 <Typography.Title level={3}>
-                  Hi {user?.first_name || "User"} 👋
+                  {getGreeting()} {user?.first_name || "User"} 👋
                 </Typography.Title>
 
                 <Typography.Text

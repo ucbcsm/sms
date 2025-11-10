@@ -21,14 +21,17 @@ import {
   Space,
   Radio,
   Flex,
+  Skeleton,
+  Alert,
 } from "antd";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { Options } from "nuqs";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Palette } from "@/components/palette";
+import { BulbOutlined } from "@ant-design/icons";
 
 type Props = {
   setStep: (
@@ -40,32 +43,70 @@ type Props = {
 export const Step7: FC<Props> = ({ setStep }) => {
   const [form] = Form.useForm<Step7ApplicationFormDataType>();
   const { yid } = useYid();
+  const cycleId = Form.useWatch("cycle_id", form);
+  const fieldId = Form.useWatch("field_id", form);
+  const facultyId = Form.useWatch("faculty_id", form);
 
-  const { data: cycles } = useQuery({
+  const {
+    data: cycles,
+    isPending: isPendingCycles,
+    isError: isErrorCycles,
+  } = useQuery({
     queryKey: ["cycles"],
     queryFn: getCycles,
   });
 
-  const { data: faculties } = useQuery({
+  const {
+    data: faculties,
+    isPending: isPendingFaculties,
+    isError: isErrorFaculties,
+  } = useQuery({
     queryKey: ["faculties"],
     queryFn: getFaculties,
   });
 
-  const { data: fields } = useQuery({
+  const {
+    data: fields,
+    isPending: isPendingFields,
+    isError: isErrorFields,
+  } = useQuery({
     queryKey: ["fields"],
     queryFn: getFields,
   });
 
-  const { data: departments } = useQuery({
+  const {
+    data: departments,
+    isPending: isePendingDepartments,
+    isError: isErrorDepartments,
+  } = useQuery({
     queryKey: ["departments"],
     queryFn: getDepartments,
   });
 
-  const { data: classes } = useQuery({
+  const {
+    data: classes,
+    isPending: isPendingClasses,
+    isError: isErrorClasses,
+  } = useQuery({
     queryKey: ["classes"],
     queryFn: getClasses,
   });
 
+  const filteredFields = useMemo(() => {
+    return fields?.filter((f) => f.cycle?.id === cycleId);
+  }, [cycleId]);
+
+  const filteredFaculties = useMemo(() => {
+    return faculties?.filter((fac) => fac.field.id === fieldId);
+  }, [fieldId]);
+
+  const filteredDepartments = useMemo(() => {
+    return departments?.filter((dep) => dep.faculty.id === facultyId);
+  }, [facultyId]);
+
+  const filteredClasses = useMemo(() => {
+    return classes?.filter((c) => c.cycle?.id === cycleId);
+  }, [cycleId]);
 
   useEffect(() => {
     const savedData = localStorage.getItem("d7");
@@ -75,6 +116,45 @@ export const Step7: FC<Props> = ({ setStep }) => {
       form.setFieldsValue({ ...data });
     }
   }, [yid]);
+
+  if (
+    isPendingCycles ||
+    isPendingFields ||
+    isPendingFaculties ||
+    isePendingDepartments ||
+    isPendingClasses
+  ) {
+    return <Skeleton active />;
+  }
+
+  if (
+    isErrorCycles ||
+    isErrorFields ||
+    isErrorFaculties ||
+    isErrorDepartments ||
+    isErrorClasses
+  ) {
+    return (
+      <Alert
+        type="error"
+        showIcon
+        description="Erreur lors du chargement de resources necessaire pour ce formulaire. Veuillez Actualiser"
+        action={
+          <Button
+            type="link"
+            onClick={() => {
+              window.location.reload();
+            }}
+            style={{ boxShadow: "none" }}
+            size="small"
+          >
+            Actualiser
+          </Button>
+        }
+      />
+    );
+  }
+
   return (
     <Form
       form={form}
@@ -86,6 +166,13 @@ export const Step7: FC<Props> = ({ setStep }) => {
         setStep(7);
       }}
     >
+      <Alert
+        showIcon
+        icon={<BulbOutlined />}
+        description="Respecter l'ordre de remplissage pour une bonne cohérence des données"
+        closable
+        style={{ marginBottom: 16 }}
+      />
       <Form.Item
         label="Cycle"
         name="cycle_id"
@@ -94,13 +181,33 @@ export const Step7: FC<Props> = ({ setStep }) => {
         <Radio.Group options={getCurrentCyclesAsOptions(cycles)} />
       </Form.Item>
       <Form.Item
+        label="Domaine"
+        name="field_id"
+        rules={[{ required: true, message: "Ce champ est requis" }]}
+      >
+        <Select
+          options={getCurrentFieldsAsOptions(filteredFields)}
+          showSearch
+        />
+      </Form.Item>
+      <Form.Item
+        label="Filière"
+        name="faculty_id"
+        rules={[{ required: true, message: "Ce champ est requis" }]}
+      >
+        <Select
+          options={getCurrentFacultiesAsOptions(filteredFaculties)}
+          showSearch
+        />
+      </Form.Item>
+      <Form.Item
         label="Département"
         name="department_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Select
           placeholder="Département"
-          options={getCurrentDepartmentsAsOptions(departments)}
+          options={getCurrentDepartmentsAsOptions(filteredDepartments)}
           onSelect={(value) => {
             const selectedDep = departments?.find((dep) => dep.id === value);
             const facId = selectedDep?.faculty.id;
@@ -113,30 +220,6 @@ export const Step7: FC<Props> = ({ setStep }) => {
           showSearch
         />
       </Form.Item>
-      <Form.Item
-        label="Domaine"
-        name="field_id"
-        rules={[{ required: true, message: "Ce champ est requis" }]}
-      >
-        <Select
-          options={getCurrentFieldsAsOptions(fields)}
-          disabled
-          showSearch
-          variant="borderless"
-        />
-      </Form.Item>
-      <Form.Item
-        label="Filière"
-        name="faculty_id"
-        rules={[{ required: true, message: "Ce champ est requis" }]}
-      >
-        <Select
-          options={getCurrentFacultiesAsOptions(faculties)}
-          disabled
-          showSearch
-          variant="borderless"
-        />
-      </Form.Item>
 
       <Form.Item
         label="Promotion"
@@ -145,7 +228,7 @@ export const Step7: FC<Props> = ({ setStep }) => {
       >
         <Select
           placeholder="Promotion ou classe"
-          options={getCurrentClassesAsOptions(classes)}
+          options={getCurrentClassesAsOptions(filteredClasses)}
           showSearch
         />
       </Form.Item>

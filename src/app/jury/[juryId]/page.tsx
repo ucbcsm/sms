@@ -34,8 +34,15 @@ export default function Page() {
     );
   }
   return (
-    <div className=" max-w-6xl mx-auto pt-7 px-2">
-      <Card style={{ marginBottom: 32 }} variant="borderless">
+    <div className=" max-w-6xl mx-auto pt-7 px-2 min-h-[calc(100vh-110px)]">
+      
+      <Row gutter={[32, 32]}>
+        <Col xs={24} sm={24} md={16}>
+          {/* <Space style={{ marginBottom: 16 }}> */}
+          {/* <Badge count={jury?.faculties.length} /> */}
+
+          {/* </Space> */}
+          <Card style={{ marginBottom: 32 }} >
         <Flex justify="space-between" align="center">
           <Statistic
             title="Jury d'évaluation"
@@ -51,16 +58,13 @@ export default function Page() {
           </Typography.Title>
         </Flex>
       </Card>
-      <Row gutter={[32, 32]}>
-        <Col xs={24} sm={24} md={16}>
-          <Space style={{ marginBottom: 16 }}>
-            {/* <Badge count={jury?.faculties.length} /> */}
-            <Typography.Title level={5} style={{ marginBottom: 0 }}>
-              Filières
-            </Typography.Title>
-          </Space>
           <Card loading={isPending}>
             <List
+              header={
+                <Typography.Title level={5} style={{ marginBottom: 0 }}>
+                  Filières
+                </Typography.Title>
+              }
               dataSource={jury?.faculties}
               renderItem={(item) => (
                 <Link
