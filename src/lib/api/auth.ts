@@ -2,7 +2,6 @@
 
 import api, { authApi } from "@/lib/fetcher";
 import { Faculty, Role, User } from "@/types";
-import { get } from "lodash";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ALL_APPS } from "../data/apps";
