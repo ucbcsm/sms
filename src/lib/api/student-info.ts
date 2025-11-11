@@ -37,7 +37,8 @@ export async function updateStudentInfo({
     > & {
       registered_enrollment_question: number | null;
     })[];
-    admission_test_result: (Omit<TestResult, "course_test"> & {
+    admission_test_result: (Omit<TestResult, "id"|"course_test"> & {
+      id: number | null;
       course_test: number | null;
     })[];
     user: {
