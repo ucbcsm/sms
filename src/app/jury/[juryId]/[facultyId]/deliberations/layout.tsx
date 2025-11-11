@@ -54,7 +54,12 @@ export default function DeliberationsLayout({
       icon: <SubnodeOutlined />,
       children: (
         <div className="pl-8">
-          <TreeClasses classes={classes} department={dep} />
+          <TreeClasses
+            classes={classes?.filter(
+              (c) => c.cycle?.id === dep.faculty.field.cycle?.id
+            )}
+            department={dep}
+          />
           {/* <ListClasses classes={classes} department={dep}/> */}
         </div>
       ),
