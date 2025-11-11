@@ -21,6 +21,7 @@ import { useParams } from "next/navigation";
 import { DepartmentMembersList } from "./_components/members/list";
 import { useState } from "react";
 import { EditDepartmentForm } from "@/app/console/fields/departments/forms/edit";
+import { toFixedNumber } from "@/lib/utils";
 
 export default function Page() {
   const { departmentId } = useParams();
@@ -69,7 +70,7 @@ export default function Page() {
   }
 
   return (
-    <Row gutter={[16, 16]} style={{marginRight:0}}>
+    <Row gutter={[16, 16]} style={{ marginRight: 0 }}>
       <Col xs={24} sm={24} md={16}>
         <Row gutter={[16, 16]}>
           <Col xs={24} sm={12} md={8}>
@@ -99,11 +100,11 @@ export default function Page() {
                 {!isPendingDashboard ? (
                   <Progress
                     type="dashboard"
-                    percent={
+                    percent={toFixedNumber(
                       (departmentDashboard.male_count /
                         departmentDashboard.student_counter) *
-                      100
-                    }
+                        100
+                    )}
                     size={58}
                   />
                 ) : (
@@ -123,11 +124,11 @@ export default function Page() {
                 {!isPendingDashboard ? (
                   <Progress
                     type="dashboard"
-                    percent={
+                    percent={toFixedNumber(
                       (departmentDashboard.female_count /
                         departmentDashboard.student_counter) *
-                      100
-                    }
+                        100
+                    )}
                     size={58}
                     strokeColor="cyan"
                   />

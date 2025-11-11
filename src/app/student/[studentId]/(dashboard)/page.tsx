@@ -15,10 +15,10 @@ import {
   Skeleton,
   Statistic,
   theme,
-  Typography,
 } from "antd";
 import { useParams } from "next/navigation";
 import { StudentProfileDetails } from "../profile/profileDetails";
+import { getEnrollmentFeesStatusName } from "@/lib/utils";
 
 export default function Page() {
    const {
@@ -62,7 +62,7 @@ export default function Page() {
       >
         <StudentProfileDetails data={enrolledStudent} isError={isError} />
       </Layout.Sider>
-      <Layout.Content style={{  padding:24 }}>
+      <Layout.Content style={{ padding: 24 }}>
         <Row gutter={24}>
           <Col span={16}>
             <Row gutter={[24, 24]}>
@@ -111,11 +111,9 @@ export default function Page() {
                     <Statistic
                       loading={isPendingDashboard}
                       title="Frais d'inscription"
-                      value={
-                        enrolledStudent?.enrollment_fees === "paid"
-                          ? "Payé"
-                          : "Non payé"
-                      }
+                      value={getEnrollmentFeesStatusName(
+                        `${enrolledStudent?.enrollment_fees}`
+                      )}
                     />
                     {!isPendingDashboard ? (
                       <Progress

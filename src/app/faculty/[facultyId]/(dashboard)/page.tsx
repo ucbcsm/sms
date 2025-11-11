@@ -17,7 +17,6 @@ import {
   Col,
   Descriptions,
   Flex,
-  Form,
   Layout,
   List,
   Progress,
@@ -25,26 +24,20 @@ import {
   Skeleton,
   Space,
   Statistic,
-  theme,
   Typography,
 } from "antd";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useYid } from "@/hooks/use-yid";
 import { FacultyMembersList } from "./_components/members/list";
 import { EditOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { EditFacultyForm } from "@/app/console/fields/faculties/forms/edit";
-import { Palette } from "@/components/palette";
 import Link from "next/link";
 
 export default function Page() {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const { facultyId } = useParams();
   const { yid } = useYid();
-  const router = useRouter();
 
   const {
     data: faculty,

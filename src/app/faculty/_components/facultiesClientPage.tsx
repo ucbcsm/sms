@@ -81,11 +81,6 @@ export const FacultiesClientPage = () => {
         }}
       >
         <Card
-          // title={
-          //   <Typography.Title level={4} style={{ marginBottom: 0 }}>
-          //     Filières organisées
-          //   </Typography.Title>
-          // }
           loading={isPending}
           style={{ width: 520, margin: "auto" }}
         >

@@ -2,8 +2,8 @@
 
 import { StudentMoreActionsDropdown } from "@/app/app/students/_components/moreActions";
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
+import { useClasses } from "@/hooks/useClasses";
 import { usePrevPathname } from "@/hooks/usePrevPathname";
 import {
   getClasses,
@@ -11,11 +11,9 @@ import {
   getCurrentDepartmentsAsOptions,
   getDepartmentsByFacultyId,
   getYearEnrollments,
-  getYearEnrollmentsByFacultyId,
 } from "@/lib/api";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
-  DownOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
@@ -33,11 +31,10 @@ import {
   Tag,
 } from "antd";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
 
 export default function Page() {
-  const router = useRouter();
   const { facultyId } = useParams();
   const pathname = usePathname();
   const { setPathname } = usePrevPathname();
@@ -91,14 +88,7 @@ export default function Page() {
     enabled: !!facultyId,
   });
 
-  const { data: classes, isPending: isPendingClasses } = useQuery({
-    queryKey: ["classes"],
-    queryFn: getClasses,
-  });
-
-  // if (isPending) {
-  //   return <DataFetchPendingSkeleton variant="table" />;
-  // }
+  const { data: classes, isPending: isPendingClasses } = useClasses();
 
   if (isError) {
     return <DataFetchErrorResult />;

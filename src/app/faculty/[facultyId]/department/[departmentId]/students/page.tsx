@@ -2,35 +2,28 @@
 
 import { StudentMoreActionsDropdown } from "@/app/app/students/_components/moreActions";
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { useYid } from "@/hooks/use-yid";
+import { useClasses } from "@/hooks/useClasses";
 import { usePrevPathname } from "@/hooks/usePrevPathname";
-import { getYearEnrollmentsByDepatmentId } from "@/lib/api";
+import { getClassesYearsAsOptions, getYearEnrollments } from "@/lib/api";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
-  AppstoreOutlined,
-  DeleteOutlined,
-  DownOutlined,
-  EditOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
-  MoreOutlined,
   PrinterOutlined,
-  UnorderedListOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
-  Dropdown,
   Input,
-  Radio,
+  Select,
   Space,
   Table,
   Tag,
+  Typography,
 } from "antd";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 export default function Page() {
 
@@ -38,59 +31,86 @@ export default function Page() {
   const pathname = usePathname();
   const { setPathname } = usePrevPathname();
   const { yid } = useYid();
+  const [classId, setClassId] = useQueryState(
+    "class",
+    parseAsInteger.withDefault(0)
+  );
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
+  const [pageSize, setPageSize] = useQueryState(
+    "size",
+    parseAsInteger.withDefault(0)
+  );
+  const [search, setSearch] = useQueryState("search");
+
   const { data, isPending, isError } = useQuery({
-    queryKey: ["year_enrollments", `${yid}`, departmentId],
+    queryKey: [
+      "year_enrollments",
+      `${yid}`,
+      departmentId,
+      classId,
+      page,
+      pageSize,
+      search,
+    ],
     queryFn: ({ queryKey }) =>
-      getYearEnrollmentsByDepatmentId(Number(queryKey[1]), Number(queryKey[2])),
+      getYearEnrollments({
+        yearId: Number(queryKey[1]),
+        departmentId: Number(queryKey[2]),
+        classId: classId !== 0 ? classId : undefined,
+        page: page !== 0 ? page : undefined,
+        pageSize: pageSize !== 0 ? pageSize : undefined,
+        search: search !== null && search.trim() !== "" ? search : undefined,
+      }),
     enabled: !!yid && !!departmentId,
   });
 
-  if (isPending) {
-    return <DataFetchPendingSkeleton variant="table" />;
-  }
+   const { data: classes, isPending: isPendingClasses } = useClasses();
 
   if (isError) {
     return <DataFetchErrorResult />;
   }
+
   return (
     <Table
+      loading={isPending}
       bordered
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Input.Search placeholder="Rechercher un étudiant ..." />
+            <Input.Search
+              placeholder="Rechercher un étudiant ..."
+              onChange={(e) => {
+                setPage(0);
+                setSearch(e.target.value);
+              }}
+              allowClear
+              variant="filled"
+            />
           </Space>
           <div className="flex-1" />
           <Space>
+            <Typography.Text type="secondary">Promotion</Typography.Text>
+            <Select
+              value={classId}
+              variant="filled"
+              onChange={(value) => {
+                setPage(0);
+                setClassId(value);
+              }}
+              options={[
+                { value: 0, label: "Toutes les promotions" },
+                ...(getClassesYearsAsOptions({ classes }) || []),
+              ]}
+              loading={isPendingClasses}
+              style={{ minWidth: 120, maxWidth: 160 }}
+            />
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
-            <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "pdf",
-                    label: "PDF",
-                    icon: <FilePdfOutlined />,
-                    title: "Exporter en pdf",
-                  },
-                  {
-                    key: "excel",
-                    label: "EXCEL",
-                    icon: <FileExcelOutlined />,
-                    title: "Exporter vers Excel",
-                  },
-                ],
-              }}
-            >
-              <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
-                Exporter
-              </Button>
-            </Dropdown>
           </Space>
         </header>
       )}
-      dataSource={data}
+      dataSource={data?.results}
       columns={[
         {
           title: "Photo",
@@ -109,6 +129,7 @@ export default function Page() {
             </Avatar>
           ),
           width: 56,
+          align: "center",
         },
         {
           title: "Noms",
@@ -131,13 +152,20 @@ export default function Page() {
           width: 80,
           align: "center",
         },
-
+        {
+          title: "Genre",
+          dataIndex: "gender",
+          key: "gender",
+          render: (_, record, __) => record.user.gender || "",
+          width: 56,
+          align: "center",
+        },
         {
           title: "Promotion",
           dataIndex: "promotion",
           render: (_, record, __) => `${record.class_year.acronym}`,
           key: "class",
-          width: 86,
+          // width: 86,
           ellipsis: true,
         },
         {
@@ -165,7 +193,6 @@ export default function Page() {
                 <Button
                   color="primary"
                   variant="dashed"
-                  // onClick={() => router.push(`/student/${record.id}`)}
                   style={{ boxShadow: "none" }}
                 >
                   Gérer
@@ -188,6 +215,14 @@ export default function Page() {
         defaultPageSize: 25,
         pageSizeOptions: [25, 50, 75, 100],
         size: "small",
+        showSizeChanger: true,
+        total: data?.count,
+        current: page !== 0 ? page : 1,
+        pageSize: pageSize !== 0 ? pageSize : 25,
+        onChange: (page, pageSize) => {
+          setPage(page);
+          setPageSize(pageSize);
+        },
       }}
       onRow={(row) => {
         return {

@@ -1,14 +1,15 @@
 "use client";
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { Alert, Form, message, Modal, Checkbox } from "antd";
+import { Dispatch, FC, SetStateAction } from "react";
+import { Alert, Form, message, Modal, Checkbox, Descriptions, Typography } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  validateApplication,
   validateEditedApplication,
 } from "@/lib/api";
 import {
   ApplicationEditFormDataType,
 } from "@/types";
+import { getEnrollmentFeesStatusName } from "@/lib/utils";
+import { BulbOutlined } from "@ant-design/icons";
 
 type FormDataType = {
   confirmation: string;
@@ -101,7 +102,6 @@ export const ValidateApplicationForm: FC<
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        // destroyOnClose
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
         modalRender={(dom) => (
@@ -116,14 +116,58 @@ export const ValidateApplicationForm: FC<
             {dom}
           </Form>
         )}
+        styles={{ body: { paddingTop: 16 } }}
       >
         <Alert
-          message="Confirmation requise"
-          description={`Êtes-vous sûr de vouloir valider l'inscription de "${editedApplication.surname} ${editedApplication.last_name} ${editedApplication.first_name}" ?`}
+          description="Rassurez vous avoir vérifié attentivement toutes les informations de la candidature avant de procéder à sa validation."
           type="info"
           showIcon
-          style={{ border: 0 }}
+          icon={<BulbOutlined />}
+          style={{ border: 0, marginBottom: 16 }}
         />
+        <Descriptions
+          title="Synthèse"
+          bordered
+          size="small"
+          column={1}
+          items={[
+            {
+              key: "test",
+              label: "Resultat de test d'admission",
+              children: [],
+            },
+            {
+              key: "fees",
+              label: "Frais d'inscription",
+              children: getEnrollmentFeesStatusName(
+                editedApplication.enrollment_fees || ""
+              ),
+            },
+            {
+              key: "diploma",
+              label: "% examen d'état",
+              children: `${editedApplication.diploma_percentage}%`,
+            },
+          ]}
+          style={{ marginBottom: 20 }}
+        />
+        <Alert
+          description={
+            <div>
+              Êtes-vous sûr de vouloir valider l&apos;inscription de{" "}
+              <Typography.Text strong>
+                {editedApplication.surname} {editedApplication.last_name}{" "}
+                {editedApplication.first_name}
+              </Typography.Text>{" "}
+              tenant compte des informations qu&apos;il a fourni et de votre
+              devoir de vérification?
+            </div>
+          }
+          type="warning"
+          showIcon
+          style={{ border: 0, marginBottom: 24 }}
+        />
+
         <Form.Item
           name="validated"
           valuePropName="checked"

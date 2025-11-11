@@ -46,6 +46,21 @@ export const getMaritalStatusName = (
   }
 };
 
+export const getEnrollmentFeesStatusName = (
+  status: "paid" | "partially_paid" | "unpaid" | string
+) => {
+  switch (status) {
+    case "paid":
+      return "Payé";
+    case "partially_paid":
+      return "Partiellement payé";
+    case "unpaid":
+      return "Non payé";
+    default:
+      return "";
+  }
+};
+
 export const filterOption = (
   input: string,
   option:
