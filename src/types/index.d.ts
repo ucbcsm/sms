@@ -744,6 +744,7 @@ export type ApplicationEditFormDataType = Omit<
   | "spoken_language"
   | "application_documents"
   | "enrollment_question_response"
+  | "admission_test_result"
 > & {
   year_id: number;
   cycle_id: number;
@@ -761,6 +762,12 @@ export type ApplicationEditFormDataType = Omit<
   enrollment_question_response: Array<
     Omit<EnrollmentQA, "registered_enrollment_question"> & {
       registered_enrollment_question: number | null;
+    }
+  >;
+  admission_test_result: Array<
+    Omit<TestResult, "id" | "course_test"> & {
+      id: number | null;
+      course_test: number | null;
     }
   >;
 };

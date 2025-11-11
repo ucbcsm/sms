@@ -323,9 +323,7 @@ export async function markAsPendingEditedApplication({
     type_of_enrollment: params.type_of_enrollment,
     application_documents: params.application_documents,
     enrollment_question_response: params.enrollment_question_response,
-    admission_test_result: formatAdmissionTestResultsForEdition(
-      params.admission_test_result
-    ),
+    admission_test_result: params.admission_test_result,
     status: "pending",
   });
   return res.data;
@@ -356,9 +354,8 @@ export async function rejectEditedApplication({
     type_of_enrollment: params.type_of_enrollment,
     application_documents: params.application_documents,
     enrollment_question_response: params.enrollment_question_response,
-    admission_test_result: formatAdmissionTestResultsForEdition(
-      params.admission_test_result
-    ),
+    admission_test_result: params.admission_test_result
+    ,
     status: "rejected",
   });
   return res.data;
@@ -580,7 +577,9 @@ export function formatEnrollmentQuestionResponseForEdition(
   );
 }
 
-export function formatAdmissionTestResultsForEdition(results?: TestResult[]) {
+export function formatAdmissionTestResultsForEdition(
+  results?: (Omit<TestResult, "id"> & { id: number | null })[]
+) {
   return (
     results?.map((res) => ({
       ...res,

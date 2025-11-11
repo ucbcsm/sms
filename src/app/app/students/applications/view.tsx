@@ -23,6 +23,7 @@ import {
   Spin,
   Tag,
   App,
+  Table,
 } from "antd";
 import {
   BulbOutlined,
@@ -44,10 +45,12 @@ import {
   Field,
   RequiredDocument,
   TestCourse,
+  TestResult,
 } from "@/types";
 import { Palette } from "@/components/palette";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  formatAdmissionTestResultsForEdition,
   formatApplicationDocumentsForEdition,
   formatEnrollmentQuestionResponseForEdition,
   getApplicationStatusAlertType,
@@ -74,6 +77,7 @@ import { spokenLanguagesAsOptions } from "@/lib/data/languages";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { AutoUploadAvatar } from "@/components/autoUploadAvatar";
 import { AutoUploadFormItem } from "@/components/autoUploadItem";
+import { InputResultTest } from "./inputResultTest";
 
 type ViewEditApplicationFormProps = {
   application?: Application;
@@ -109,8 +113,10 @@ export const ViewEditApplicationForm: React.FC<
 }) => {
   const { message } = App.useApp();
   const [form] = Form.useForm();
-  const admissionTestResult = Form.useWatch("admission_test_result", form);
-  console.log("testWatch", admissionTestResult);
+  const [admissionTestResult, setAdmissionTestResult] = useState<
+    (Omit<TestResult, "id"> & { id: number | null })[] | undefined
+  >([]);
+
   const cycleId = Form.useWatch("cycle_id", form);
   const fieldId = Form.useWatch("field_id", form);
   const facultyId = Form.useWatch("faculty_id", form);
@@ -143,8 +149,6 @@ export const ViewEditApplicationForm: React.FC<
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateApplication,
   });
-
-  console.log("testCourses", courses);
 
   const onFinish = (
     values: Omit<
@@ -184,6 +188,7 @@ export const ViewEditApplicationForm: React.FC<
               formatEnrollmentQuestionResponseForEdition(
                 values.enrollment_question_response
               ),
+            admission_test_result: formatAdmissionTestResultsForEdition(admissionTestResult),
           },
         },
         {
@@ -212,14 +217,13 @@ export const ViewEditApplicationForm: React.FC<
     }
   };
 
-  const getInitialAdmissionResultFromTestCourses = ():
-    | { course_test: number; result: number | null }[]
-    | undefined => {
+  const getInitialAdmissionResultFromTestCourses = () => {
     const testCourses = courses?.filter(
       (course) => course.faculty.id === application?.faculty.id
     );
     return testCourses?.map((item) => ({
-      course_test: item.id,
+      id: null,
+      course_test: item,
       result: null,
     }));
   };
@@ -227,7 +231,7 @@ export const ViewEditApplicationForm: React.FC<
   const formatAdmissionResultFromApplication = () => {
     return application?.admission_test_result.map((item) => ({
       id: item.id,
-      course_test: item.course_test.id,
+      course_test: item.course_test,
       result: item.result,
     }));
   };
@@ -249,21 +253,21 @@ export const ViewEditApplicationForm: React.FC<
       enrollment_question_response: formatEnrollmentQuestionResponseForEdition(
         values.enrollment_question_response
       ),
+      admission_test_result:
+        formatAdmissionTestResultsForEdition(admissionTestResult),
     });
   };
-  console.log("testRes", application?.admission_test_result);
+
   useEffect(() => {
     if (application?.admission_test_result?.length === 0) {
       const admissionTestResult = getInitialAdmissionResultFromTestCourses();
-      console.log("init", admissionTestResult);
-      form.setFieldValue("admission_test_result", admissionTestResult);
+      setAdmissionTestResult(admissionTestResult);
     } else if (
       typeof application !== "undefined" &&
       application.admission_test_result.length > 0
     ) {
       const admissionTestResult = formatAdmissionResultFromApplication();
-      console.log("formated", admissionTestResult);
-      form.setFieldValue("admission_test_result", admissionTestResult);
+      setAdmissionTestResult(admissionTestResult);
     }
   }, [application, courses]);
 
@@ -1014,100 +1018,41 @@ export const ViewEditApplicationForm: React.FC<
                 Resultats aux tests de sélection
               </Typography.Title>
             </Divider>
+            <Table
+              size="small"
+              pagination={false}
+              dataSource={admissionTestResult}
+              columns={[
+                {
+                  key: "course",
+                  dataIndex: "course",
+                  title: "Matière",
+                  render: (_, record) => record.course_test.name,
+                },
+                {
+                  key: "result",
+                  dataIndex: "result",
+                  title: "Resultat",
+                  render: (_, record, index) => (
+                    <InputResultTest
+                      value={record.result}
+                      disabled={isPending || application?.status !== "pending"}
+                      max={record.course_test.max_value}
+                      onChange={(value) => {
+                        const updatedItems = [...(admissionTestResult ?? [])];
 
-            <Form.List name={"admission_test_result"}>
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }, index) => (
-                    <Flex
-                      align="end"
-                      key={key}
-                      gap={16}
-                      style={{ marginBottom: 20 }}
-                    >
-                      <Form.Item
-                        {...restField}
-                        name={[name, "course_test"]}
-                        // label="Matière"
-                        rules={[{ required: true }]}
-                        style={{ flex: 1 }}
-                        layout="vertical"
-                        // noStyle
-                      >
-                        <Select
-                          placeholder="Matière"
-                          options={getTestCoursesByFacAsOptions(
-                            Number(application?.faculty.id),
-                            courses
-                          )}
-                          // disabled
-                          // variant="borderless"
-                          // suffixIcon=""
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "result"]}
-                        // label="Resultat"
-                        rules={[]}
-                        layout="vertical"
-                      >
-                        <InputNumber
-                          style={{ width: 100 }}
-                          min={0}
-                          max={
-                            courses?.find(
-                              (course) =>
-                                course.id ===
-                                form.getFieldValue([
-                                  "admission_test_result",
-                                  name,
-                                  "course_test",
-                                ])
-                            )?.max_value
-                          }
-                          step={0.01}
-                          placeholder="Resultat"
-                          suffix={
-                            <Typography.Text>
-                              /
-                              {
-                                courses?.find(
-                                  (course) =>
-                                    course.id ===
-                                    form.getFieldValue([
-                                      "admission_test_result",
-                                      name,
-                                      "course_test",
-                                    ])
-                                )?.max_value
-                              }
-                            </Typography.Text>
-                          }
-                        />
-                      </Form.Item>
-                      {/* <Button
-                      danger
-                      type="text"
-                      onClick={() => remove(name)}
-                      icon={<CloseOutlined />}
-                      style={{ boxShadow: "none", marginBottom: 0 }}
-                    /> */}
-                    </Flex>
-                  ))}
-                  {/* <Form.Item style={{ marginTop: 24 }}>
-                  <Button
-                    type="link"
-                    onClick={() => add()}
-                    icon={<PlusCircleOutlined />}
-                    block
-                  >
-                    Ajouter un resultat de test
-                  </Button>
-                </Form.Item> */}
-                </>
-              )}
-            </Form.List>
+                        updatedItems[index] = {
+                          ...updatedItems[index],
+                          result: value,
+                        };
+                        setAdmissionTestResult(updatedItems);
+                      }}
+                    />
+                  ),
+                  width: 120,
+                },
+              ]}
+            />
 
             <Alert
               showIcon
