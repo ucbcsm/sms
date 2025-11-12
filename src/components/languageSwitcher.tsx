@@ -10,8 +10,17 @@ export function LanguageSwitcher() {
     <Dropdown
       menu={{
         items: [
-          { key: "fr", label: "Fançais", icon:<Flags.FrFlag className="w-4 h-4" /> },
-          { key: "en", label: "English", icon:<Flags.GbFlag className="w-4 h-4" /> },
+          {
+            key: "fr",
+            label: "Fançais",
+            icon: <Flags.FrFlag className="w-4 h-4" />,
+          },
+          {
+            key: "en",
+            label: "English",
+            icon: <Flags.GbFlag className="w-4 h-4" />,
+            disabled: true,
+          },
         ],
         selectable: true,
         defaultSelectedKeys: [lang],
@@ -22,10 +31,16 @@ export function LanguageSwitcher() {
       }}
     >
       <Button
-        icon={lang === "fr" ? <Flags.FrFlag className="w-4 h-4" /> : <Flags.GbFlag className="w-4 h-4" />}
+        icon={
+          lang === "fr" ? (
+            <Flags.FrFlag className="w-4 h-4" />
+          ) : (
+            <Flags.GbFlag className="w-4 h-4" />
+          )
+        }
         type="default"
         className=" uppercase"
-        style={{boxShadow:"none"}}
+        style={{ boxShadow: "none" }}
         // style={{paddingLeft:2, paddingRight:2}}
       />
     </Dropdown>
