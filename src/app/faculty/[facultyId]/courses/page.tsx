@@ -201,7 +201,7 @@ export default function Page() {
                 >
                   Imprimer
                 </Button>
-                <Dropdown
+                {/* <Dropdown
                   menu={{
                     items: [
                       {
@@ -222,7 +222,7 @@ export default function Page() {
                   <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
                     Exporter
                   </Button>
-                </Dropdown>
+                </Dropdown> */}
               </Space>
             </header>
           )}

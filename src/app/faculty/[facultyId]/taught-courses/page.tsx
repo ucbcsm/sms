@@ -365,7 +365,7 @@ export default function Page() {
                 >
                   Imprimer
                 </Button>
-                <Dropdown
+                {/* <Dropdown
                   menu={{
                     items: [
                       {
@@ -388,7 +388,7 @@ export default function Page() {
                     icon={<MoreOutlined />}
                     style={{ boxShadow: "none" }}
                   />
-                </Dropdown>
+                </Dropdown> */}
               </Space>
             </header>
           )}
