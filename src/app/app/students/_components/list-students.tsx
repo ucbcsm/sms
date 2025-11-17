@@ -181,7 +181,7 @@ export const ListStudents: FC = () => {
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
-            <Dropdown
+            {/* <Dropdown
               menu={{
                 items: [
                   {
@@ -204,7 +204,7 @@ export const ListStudents: FC = () => {
                 icon={<MoreOutlined />}
                 style={{ boxShadow: "none" }}
               />
-            </Dropdown>
+            </Dropdown> */}
           </Space>
         </header>
       )}
