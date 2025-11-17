@@ -243,7 +243,9 @@ export default function Page() {
             dataIndex: "operator",
             key: "operator",
             render: (_, record, __) =>
-              `${record.verified_by.first_name} ${record.verified_by.last_name} ${record.verified_by.surname}`,
+              `${record.verified_by.surname || ""} ${
+                record.verified_by.last_name || ""
+              } ${record.verified_by.first_name || ""}`,
             // <Space>
             //   {record.verified_by && (
             //     <Avatar
