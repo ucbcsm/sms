@@ -13,7 +13,7 @@ import BackButton from "@/components/backButton";
 
 export default function Page() {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBgContainer, colorBorderSecondary, colorBgLayout },
   } = theme.useToken();
   return (
     <Layout>
@@ -30,7 +30,7 @@ export default function Page() {
           style={{
             display: "flex",
             alignItems: "center",
-            background: colorBgContainer,
+            background: colorBgLayout,
             padding: 0,
           }}
         >
@@ -41,9 +41,7 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space>
-            
-          </Space>
+          <Space></Space>
         </Layout.Header>
 
         <ListTeachers />
