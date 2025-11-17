@@ -117,30 +117,6 @@ export default function Page() {
               <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
                 Imprimer
               </Button>
-              <Dropdown
-                menu={{
-                  items: [
-                    {
-                      key: "pdf",
-                      label: "Exporter .pdf",
-                      icon: <FilePdfOutlined />,
-                      title: "Exporter en PDF",
-                    },
-                    {
-                      key: "excel",
-                      label: "Exporter .xlsx",
-                      icon: <FileExcelOutlined />,
-                      title: "Exporter vers Excel",
-                    },
-                  ],
-                }}
-              >
-                <Button
-                  type="text"
-                  icon={<MoreOutlined />}
-                  style={{ boxShadow: "none" }}
-                />
-              </Dropdown>
             </Space>
           </header>
         )}
