@@ -219,3 +219,8 @@ export function getTaughtCoursAsOptions(courses?: TaughtCourse[]) {
     };
   });
 }
+
+export async function getTeacherTaughtCourses(yearId: number) {
+  const res = await api.get(`/teacher/courses/?academic_year__id=${yearId}`);
+  return res.data.results as TaughtCourse[];
+}

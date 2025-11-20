@@ -34,67 +34,68 @@ export default function TeacherLayout({
   const pathname = usePathname();
 
   return (
-      <Layout>
-        <Layout.Header
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: colorBgContainer,
-            borderBottom: `1px solid ${colorBorderSecondary}`,
-            paddingLeft: 32,
-            paddingRight: 32,
-          }}
-        >
-          <Space>
-            <Link href="/t-space" style={{ display: "flex", alignItems: "center" }}>
-              <div className="flex items-center pr-3">
-                <Image
-                  src={getPublicR2Url(institution?.logo) || undefined}
-                  alt="Logo"
-                  height={36}
-                  width="auto"
-                  preview={false}
-                />
-              </div>
-              <Typography.Title level={5} style={{ marginBottom: 0 }}>
-                {institution?.acronym}
-              </Typography.Title>
-            </Link>
-          </Space>
-          <Menu
-            mode="horizontal"
-            theme="light"
-            defaultSelectedKeys={[pathname]}
-            selectedKeys={[pathname]}
-            overflowedIndicator={<MenuOutlined />}
-            items={[
-              {
-                key: `/t-space`,
-                label: <Link href={`/t-space`}>Aperçu</Link>,
-                icon: <DashboardOutlined />,
-              },
-              {
-                key: `/t-space/courses/`,
-                label: <Link href={`/t-space/courses/`}>Cours</Link>,
-                icon: <ReadOutlined />,
-                disabled:true
-              },
-            ]}
-            style={{ flex: 1, minWidth: 0, borderBottom: 0 }}
-          />
-          <Space>
-            <YearSelector />
-            <LanguageSwitcher />
-            <SupportDrawer />
-            <AppsButton />
-            <UserProfileButton />
-          </Space>
-        </Layout.Header>
-        <Layout.Content
-         
-        >
-          {children}
-        </Layout.Content>
-      </Layout>
+    <Layout>
+      <Layout.Header
+        style={{
+          display: "flex",
+          alignItems: "center",
+          background: colorBgContainer,
+          borderBottom: `1px solid ${colorBorderSecondary}`,
+          paddingLeft: 28,
+          paddingRight: 28,
+        }}
+      >
+        <Space>
+          <Link
+            href="/t-space"
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            <div className="flex items-center pr-3">
+              <Image
+                src={getPublicR2Url(institution?.logo) || undefined}
+                alt="Logo"
+                height={36}
+                width="auto"
+                preview={false}
+              />
+            </div>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
+              {institution?.acronym}
+            </Typography.Title>
+          </Link>
+        </Space>
+        <div className="flex-1" />
+        <Space>
+          <YearSelector variant="teacher" />
+          <LanguageSwitcher />
+          <SupportDrawer />
+          <AppsButton />
+          <UserProfileButton />
+        </Space>
+      </Layout.Header>
+      <div>
+        <Menu
+          mode="horizontal"
+          theme="light"
+          defaultSelectedKeys={[pathname]}
+          selectedKeys={[pathname]}
+          overflowedIndicator={<MenuOutlined />}
+          items={[
+            {
+              key: `/t-space`,
+              label: <Link href={`/t-space`}>Aperçu</Link>,
+              icon: <DashboardOutlined />,
+            },
+            {
+              key: `/t-space/courses/`,
+              label: <Link href={`/t-space/courses/`}>Cours</Link>,
+              icon: <ReadOutlined />,
+            },
+          ]}
+          style={{ flex: 1, minWidth: 0}}
+        />
+      </div>
+      <Layout.Content>{children}</Layout.Content>
+    </Layout>
   );
 }

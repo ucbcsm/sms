@@ -3,6 +3,7 @@
 import { NewYearForm } from "@/app/console/years/forms/new";
 import { useYid } from "@/hooks/use-yid";
 import {
+  getTeacherYears,
   getYears,
   getYearsAsOptions,
   getYearStatusColor,
@@ -28,27 +29,62 @@ import { Palette } from "./palette";
 import { DataFetchErrorResult } from "./errorResult";
 import { useSessionStore } from "@/store";
 import { useInstitution } from "@/hooks/use-institution";
+import { Year } from "@/types";
+import { getPublicR2Url } from "@/lib/utils";
+
+const getRadioOptions = (years?: Year[]) => {
+  return years?.map((year) => ({
+    value: year.id,
+    label: (
+      <Space>
+        <Typography.Title level={5} style={{ marginBottom: 0 }}>
+          {year.name}
+        </Typography.Title>
+        <Tag color={getYearStatusColor(year.status)} style={{ border: 0 }}>
+          {getYearStatusName(year.status)}
+        </Tag>
+      </Space>
+    ),
+  }));
+};
 
 type FormDataType = {
   yid: number;
 };
 
-export function YearSelector() {
+type YearSelectorProps = {
+  variant?: "default" | "student" | "teacher";
+};
+
+export function YearSelector({ variant = "default" }: YearSelectorProps) {
   const [form] = Form.useForm();
   const { yid, setYid } = useYid();
   const [percent, setPercent] = useState(-50);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
   const session = useSessionStore();
-  const {data:institution}=useInstitution()
+  const { data: institution } = useInstitution();
 
   const {
     data: years,
-    isPending,
+    isLoading:isPending,
     isError,
   } = useQuery({
     queryKey: ["years"],
     queryFn: getYears,
+    enabled: !!(variant === "default"),
   });
+
+  const {
+    data: teacherYears,
+    isLoading: isPendingTeacherYears,
+    isError: isErrorTeacherYears,
+  } = useQuery({
+    queryKey: ["years", "teacher"],
+    queryFn: getTeacherYears,
+    enabled: !!(variant === "teacher"),
+  });
+
+
 
   const onFinish = (values: FormDataType) => {
     setYid(values.yid);
@@ -56,7 +92,13 @@ export function YearSelector() {
   };
 
   const checkYidInYears = () => {
-    const exists = years?.some((y) => y.id === yid);
+    let exists: boolean | undefined = undefined;
+    if(variant==="default"){
+      exists = years?.some((y) => y.id === yid);
+    }
+    if(variant==="teacher"){
+      exists = teacherYears?.some((y) => y.id === yid);
+    }
     return typeof exists === "boolean" ? !exists : false;
   };
 
@@ -99,9 +141,12 @@ export function YearSelector() {
       <div
         className=""
         style={{
-          display: isPending || typeof yid === "undefined" ? "flex" : "none",
+          display:
+            isPending || isPendingTeacherYears || typeof yid === "undefined"
+              ? "flex"
+              : "none",
           flexDirection: "column",
-          background: "#fff",
+          background: "#f5f5f5",
           position: "fixed",
           top: 0,
           bottom: 0,
@@ -114,20 +159,15 @@ export function YearSelector() {
       >
         {checkYidInYears() ? (
           <div style={{ width: 440, margin: "auto" }}>
-            <Card
-              title={
-                <Typography.Title level={2} style={{ marginBottom: 0 }}>
-                  Année
-                </Typography.Title>
-              }
-              extra={
-                session.user?.is_superuser ? (
+            <Card>
+              <Flex justify="space-between">
+                <Typography.Title level={4}>Année</Typography.Title>
+                {session.user?.is_superuser ? (
                   <NewYearForm buttonType="link" />
-                ) : undefined
-              }
-            >
+                ) : undefined}
+              </Flex>
               <Form
-                disabled={isPending}
+                disabled={isPending || isPendingTeacherYears}
                 key="select_year_id_as_yid"
                 layout="vertical"
                 form={form}
@@ -146,25 +186,9 @@ export function YearSelector() {
                 >
                   <Radio.Group
                     style={{ display: "flex", flexDirection: "column" }}
-                    options={years?.map((year) => ({
-                      value: year.id,
-                      label: (
-                        <Space>
-                          <Typography.Title
-                            level={5}
-                            style={{ marginBottom: 0 }}
-                          >
-                            {year.name}
-                          </Typography.Title>
-                          <Tag
-                            color={getYearStatusColor(year.status)}
-                            style={{ border: 0 }}
-                          >
-                            {getYearStatusName(year.status)}
-                          </Tag>
-                        </Space>
-                      ),
-                    }))}
+                    options={getRadioOptions(
+                      variant === "teacher" ? teacherYears : years
+                    )}
                   />
                 </Form.Item>
                 <Flex justify="space-between" align="center">
@@ -174,7 +198,7 @@ export function YearSelector() {
                       type="primary"
                       htmlType="submit"
                       style={{ boxShadow: "none" }}
-                      loading={isPending}
+                      loading={isPending || isPendingTeacherYears}
                     >
                       OK
                     </Button>
@@ -198,7 +222,7 @@ export function YearSelector() {
             }}
           >
             <Image
-              src={institution?.logo || "/ucbc-logo.png"}
+              src={getPublicR2Url(institution?.logo) || undefined}
               alt="logo"
               height="auto"
               width={180}
@@ -220,11 +244,13 @@ export function YearSelector() {
         )}
       </div>
 
-      {!isPending ? (
+      {!isPending || !isPendingTeacherYears ? (
         <Select
           value={yid}
           variant="outlined"
-          options={getYearsAsOptions(years)}
+          options={getYearsAsOptions(
+            variant === "teacher" ? teacherYears : years
+          )}
           style={{ width: 108 }}
           onSelect={(value) => {
             setYid(value);
@@ -233,7 +259,7 @@ export function YearSelector() {
         />
       ) : (
         <Form>
-          <Skeleton.Input size="default" block />
+          <Skeleton.Input size="default" block active />
         </Form>
       )}
     </>

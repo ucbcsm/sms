@@ -61,9 +61,9 @@ export const ALL_APPS: AppItem[] = [
   },
   {
     id: "jury",
-    name: "Jury",
+    name: "Jurys",
     description:
-      "Organisation des examens, collecte des notes, délibérations et publication des résultats.",
+      "Collecte des notes, délibérations et publication des résultats.",
     href: "/jury",
     color: "#3B82F6",
     roles: [

@@ -132,3 +132,9 @@ export function getYearProgressPercent(startDate: string, endDate: string): numb
   const percent = (daysPassed / totalDays) * 100
   return Math.round(percent) // Arrondi à l'entier le plus proche
 }
+
+
+export async function getTeacherYears() {
+  const res = await api.get(`/teacher/academic-year/`);
+  return res.data as Year[];
+}

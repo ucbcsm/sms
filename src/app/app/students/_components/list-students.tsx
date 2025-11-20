@@ -227,6 +227,7 @@ export const ListStudents: FC = () => {
             </Avatar>
           ),
           width: 56,
+          
         },
         {
           title: "Noms",
