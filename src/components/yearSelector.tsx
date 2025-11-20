@@ -33,6 +33,7 @@ import { useInstitution } from "@/hooks/use-institution";
 import { Year } from "@/types";
 import { getPublicR2Url } from "@/lib/utils";
 import Link from "next/link";
+import { StopOutlined } from "@ant-design/icons";
 
 const getRadioOptions = (years?: Year[]) => {
   return years?.map((year) => ({
@@ -267,13 +268,11 @@ export function YearSelector({ variant = "default" }: YearSelectorProps) {
           <Card loading={isPendingTeacherYears}>
             <Result
               title="Aucune année académique"
-              subTitle="Bien que vous êtes enseignant, aucun cours ne vous est associé
-                dans les années académiques du système."
+              subTitle="Bien que vous êtes staff, aucun cours ne vous est associé
+                dans les années académiques du système comme enseignant."
               extra={
                 <Link href={"/"}>
                   <Button
-                    // variant="dashed"
-                    // color="primary"
                     type="primary"
                     style={{ boxShadow: "none" }}
                   >
@@ -281,6 +280,7 @@ export function YearSelector({ variant = "default" }: YearSelectorProps) {
                   </Button>
                 </Link>
               }
+              icon={<StopOutlined style={{color:"GrayText"}}/>}
             />
           </Card>
           <Typography.Text

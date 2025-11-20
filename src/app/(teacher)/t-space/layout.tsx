@@ -4,6 +4,7 @@ import {
   DashboardOutlined,
   MenuOutlined,
   ReadOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import {
   Image,
@@ -88,11 +89,16 @@ export default function TeacherLayout({
             },
             {
               key: `/t-space/courses/`,
-              label: <Link href={`/t-space/courses/`}>Cours</Link>,
+              label: <Link href={`/t-space/courses/`}>Mes cours</Link>,
               icon: <ReadOutlined />,
             },
+            {
+              key: `/t-space/profile/`,
+              label: <Link href={`/t-space/profile/`}>Mon identité</Link>,
+              icon: <UserOutlined />,
+            },
           ]}
-          style={{ flex: 1, minWidth: 0}}
+          style={{ flex: 1, minWidth: 0 }}
         />
       </div>
       <Layout.Content>{children}</Layout.Content>
