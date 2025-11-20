@@ -18,6 +18,7 @@ import {
   Image,
   Progress,
   Radio,
+  Result,
   Select,
   Skeleton,
   Space,
@@ -31,6 +32,7 @@ import { useSessionStore } from "@/store";
 import { useInstitution } from "@/hooks/use-institution";
 import { Year } from "@/types";
 import { getPublicR2Url } from "@/lib/utils";
+import Link from "next/link";
 
 const getRadioOptions = (years?: Year[]) => {
   return years?.map((year) => ({
@@ -242,6 +244,53 @@ export function YearSelector({ variant = "default" }: YearSelectorProps) {
             </Typography.Text>
           </Flex>
         )}
+      </div>
+
+      <div
+        className=""
+        style={{
+          display: teacherYears && teacherYears.length === 0 ? "flex" : "none",
+          flexDirection: "column",
+          background: "#f5f5f5",
+          position: "fixed",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 99,
+          height: "100vh",
+          width: "100%",
+          padding: 28,
+        }}
+      >
+        <div style={{ maxWidth: 780, margin: "auto" }}>
+          <Card loading={isPendingTeacherYears}>
+            <Result
+              title="Aucune année académique"
+              subTitle="Bien que vous êtes enseignant, aucun cours ne vous est associé
+                dans les années académiques du système."
+              extra={
+                <Link href={"/"}>
+                  <Button
+                    // variant="dashed"
+                    // color="primary"
+                    type="primary"
+                    style={{ boxShadow: "none" }}
+                  >
+                    Consulter tes applications
+                  </Button>
+                </Link>
+              }
+            />
+          </Card>
+          <Typography.Text
+            type="secondary"
+            style={{ textAlign: "center", display: "block", marginTop: 28 }}
+          >
+            © {new Date().getFullYear()} {institution?.acronym}. Tous droits
+            réservés.
+          </Typography.Text>
+        </div>
       </div>
 
       {!isPending || !isPendingTeacherYears ? (
