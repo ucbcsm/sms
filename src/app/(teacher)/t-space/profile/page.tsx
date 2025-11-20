@@ -3,7 +3,7 @@
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { Palette } from "@/components/palette";
 import { getLoggedTeacher, getTeacher } from "@/lib/api";
-import { getHSLColor, getMaritalStatusName } from "@/lib/utils";
+import { getHSLColor, getMaritalStatusName, getPublicR2Url } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
   Alert,
@@ -91,19 +91,20 @@ export default function Page() {
                 size={100}
                 style={{
                   background: getHSLColor(
-                    `${teacher?.user.first_name} ${teacher?.user.last_name} ${teacher?.user.surname}`
+                    `${teacher?.user.surname} ${teacher?.user.last_name} ${teacher?.user.first_name}`
                   ),
                   marginBottom: 16,
                 }}
+                src={getPublicR2Url(teacher?.user.avatar)}
               >
-                {`${teacher?.user.first_name?.[0]}${teacher?.user.last_name?.[0]}`}
+                {`${teacher?.user.first_name?.[0]}`}
               </Avatar>
             )}
             <Typography.Title
               level={4}
-            >{`${teacher?.user.first_name} ${teacher?.user.last_name} ${teacher?.user.surname}`}</Typography.Title>
+            >{`${teacher?.user.surname} ${teacher?.user.last_name} ${teacher?.user.first_name}`}</Typography.Title>
             <Typography.Text type="secondary">
-              Matr. {teacher?.user.matricule.padStart(6, "0")}
+              Matr. {teacher?.user.matricule}
             </Typography.Text>
           </div>
         ) : (
@@ -117,7 +118,7 @@ export default function Page() {
         <Card loading={isPending}>
           <Space direction="vertical" size="large">
             <Descriptions
-              extra={<EditTeacherProfileForm teacher={teacher} />}
+              // extra={<EditTeacherProfileForm teacher={teacher} />}
               title="Identité"
               column={{ xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
               items={[
@@ -242,10 +243,7 @@ export default function Page() {
               description="Mot de passes forts recommandés pour protéger vos informations personnelles."
               action={
                 <Link href={`/auth/reset-password`}>
-                  <Button
-                    color="danger"
-                    variant="solid"
-                  >
+                  <Button color="danger" variant="solid">
                     Changer mot de passe
                   </Button>
                 </Link>
