@@ -35,10 +35,20 @@ export const DeleteAttendanceListForm: FC<DeleteAttendanceListFormProps> = ({
           messageApi.success("Liste de présence supprimée avec succès !");
           setOpen(false);
         },
-        onError: () => {
-          messageApi.error(
-            "Une erreur s'est produite lors de la suppression de la liste de présence."
-          );
+        onError: (error) => {
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              "Une erreur s'est produite lors de la suppression de la liste de présence."
+            );
+          }
         },
       });
     } else {

@@ -23,8 +23,6 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   CloseOutlined,
-  ExclamationCircleOutlined,
-  PlusOutlined,
 } from "@ant-design/icons";
 import { AttendanceListItem, CourseEnrollment, TaughtCourse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -108,12 +106,25 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           messageApi.success("Liste de présence créée avec succès !");
           setNewAttendance(false);
           form.resetFields();
-          setAttendanceItems(getAttendanceItemsFromCourseEnrollments(courseEnrollements!));
-        },
-        onError: () => {
-          messageApi.error(
-            "Erreur lors de la création de la liste de présence."
+          setAttendanceItems(
+            getAttendanceItemsFromCourseEnrollments(courseEnrollements!)
           );
+        },
+        onError: (error) => {
+          if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            messageApi.error(
+              (error as any).response.data.message ||
+                "Erreur lors de la création de la liste de présence."
+            );
+          }
         },
       }
     );
@@ -228,19 +239,18 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                     />
                   </Form.Item>
                 </Col>
-                
               </Row>
               <Form.Item>
-                    <Button
-                      type="primary"
-                      htmlType="submit"
-                      loading={isPending}
-                      style={{ boxShadow: "none" }}
-                      block
-                    >
-                      Sauvegarder
-                    </Button>
-                  </Form.Item>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  loading={isPending}
+                  style={{ boxShadow: "none" }}
+                  block
+                >
+                  Sauvegarder
+                </Button>
+              </Form.Item>
             </Form>
           </Flex>
         }
@@ -269,7 +279,6 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                     icon={<CloseCircleOutlined />}
                     bordered={false}
                   />
-                 
                 </div>
                 <div>- Puis sauvegarder</div>
               </>

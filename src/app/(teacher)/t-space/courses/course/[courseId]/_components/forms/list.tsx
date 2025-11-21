@@ -3,7 +3,7 @@
 import { Avatar, Flex, List, Space, Table, Typography } from "antd";
 import { FC } from "react";
 import { AttendanceListItem } from "@/types";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { AttendanceController } from "./controller";
 
 type ListItemProps = {
@@ -16,18 +16,30 @@ type ListItemProps = {
 };
 const ListItem: FC<ListItemProps> = ({ item, index, editRecordStatus }) => {
   return (
-    <List.Item style={{ paddingLeft: 0, paddingRight: 0 }}>
+    <List.Item>
       <List.Item.Meta
+        avatar={
+          <Avatar
+            style={{
+              backgroundColor: getHSLColor(
+                `${item.student.user.surname} ${item.student.user.last_name} ${item.student.user.first_name}`
+              ),
+            }}
+            src={getPublicR2Url(item.student.user.avatar)}
+          >
+            {item.student.user.first_name?.charAt(0).toUpperCase()}
+          </Avatar>
+        }
         title={
           <Typography.Text>
-            {item.student.user.first_name} {item.student.user.last_name}{" "}
-            {item.student.user.surname}
+            {item.student.user.surname} {item.student.user.last_name}{" "}
+            {item.student.user.first_name}
           </Typography.Text>
         }
         description={
           <Flex justify="space-between" align="center">
             <Typography.Text type="secondary">
-              {item.student.user.matricule.padStart(6, "0")}
+              Matr. {item.student.user.matricule}
             </Typography.Text>
             <AttendanceController
               record={item}
@@ -129,7 +141,7 @@ export const ListAttendance: FC<ListAttendanceProps> = ({
       // ]}
       // rowKey="id"
       // rowClassName={`bg-[#f5f5f5] odd:bg-white`}
-      size="small"
+      // size="small"
       pagination={false}
     />
   );

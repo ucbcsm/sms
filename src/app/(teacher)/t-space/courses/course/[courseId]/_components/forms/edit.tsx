@@ -22,7 +22,7 @@ import {
   CloseCircleOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { AttendanceList, AttendanceListItem, TaughtCourse } from "@/types";
+import { AttendanceList, AttendanceListItem } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getAttendanceAbsentCount,
@@ -105,10 +105,19 @@ export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
           form.resetFields();
           setAttendanceItems([]);
         },
-        onError: () => {
+        onError: (error) => {
+           if ((error as any).status === 403) {
+            messageApi.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            messageApi.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
           messageApi.error(
-            "Erreur lors de la création de la liste de présence."
-          );
+            "Erreur lors de la modification de la liste de présence."
+          );}
         },
       }
     );

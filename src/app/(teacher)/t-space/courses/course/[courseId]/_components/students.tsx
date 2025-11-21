@@ -12,6 +12,7 @@ export const TeacherStudentsList:FC<TeacherStudentsListProps>=({students})=>{
     console.log("Students: ",students)
     return (
       <List
+        
         dataSource={students}
         renderItem={(student) => (
           <List.Item key={student.id}>
@@ -32,7 +33,7 @@ export const TeacherStudentsList:FC<TeacherStudentsListProps>=({students})=>{
                     .toUpperCase()}
                 </Avatar>
               }
-              title={`${student.student.year_enrollment.user.surname} ${student.student.year_enrollment.user.last_name} ${student.student.year_enrollment.user.first_name}`}
+              title={`${student.student.year_enrollment.user.surname} ${student.student.year_enrollment.user.last_name} ${student.student.year_enrollment.user.first_name} (${student.student.year_enrollment.user.matricule})`}
               description={`${student.student.year_enrollment.class_year.acronym} ${student.student.year_enrollment.departement.name}`}
             />
           </List.Item>

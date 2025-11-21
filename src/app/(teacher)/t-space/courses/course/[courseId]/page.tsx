@@ -3,6 +3,7 @@
 import { getCourseEnrollments,  getCumulativeHours,  getHoursTrackings,  getTaughtCours } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Button,
   Card,
   Form,
   Layout,
@@ -19,6 +20,8 @@ import { CourseAttendancesList} from "./_components/attendances";
 import { CourseOverview } from "./_components/overview";
 import { CourseHoursTrackingList } from "./_components/hours-tracking";
 import { TeacherStudentsList } from "./_components/students";
+import Link from "next/link";
+import { CloseOutlined } from "@ant-design/icons";
 
 export default function Page() {
   const {
@@ -56,7 +59,7 @@ export default function Page() {
     queryFn: ({ queryKey }) =>
       getCourseEnrollments({
         courseId: Number(courseId),
-        // status: "validated",
+        status: "validated",
       }),
     enabled: !!courseId,
   });
@@ -97,7 +100,11 @@ export default function Page() {
             )}
           </Space>
           <div className="flex-1" />
-          <Space>{/* <Palette /> */}</Space>
+          <Space>
+            <Link href={`/t-space/courses`}>
+              <Button type="text" icon={<CloseOutlined />} title="Fermer" />
+            </Link>
+          </Space>
         </Layout.Header>
         <Card loading={isPending || isPendingCourseEnrollements}>
           <Tabs
