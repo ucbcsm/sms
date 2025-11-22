@@ -1275,3 +1275,18 @@ export const GradeReportResponse = z.object({
 });
 
 export type GradeReportResponse = z.infer<typeof GradeReportResponse>;
+
+
+export const BulkStudentItem = z.object({
+  id: z.number(),
+  first_name: z.string(),
+  last_name: z.string(),
+  surname: z.string(),
+  gender: z.enum(["M", "F"]),
+  matricule: z.string(),
+  email: z.string().email(),
+  date_of_birth: z.string().date(),
+  place_of_birth: z.string(),
+});
+
+export type BulkStudentItem = z.infer<typeof BulkStudentItem>;

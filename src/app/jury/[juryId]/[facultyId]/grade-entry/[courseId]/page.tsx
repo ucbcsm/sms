@@ -286,7 +286,7 @@ export default function Page() {
             variant="dashed"
             icon={<UploadOutlined />}
             style={{ boxShadow: "none" }}
-            title="Importer un fichier CSV"
+            title="Importer un fichier .xlsx"
             onClick={() => setOpenFileSubmission(true)}
             disabled={
               isPendingCourse ||
