@@ -3,6 +3,7 @@
 import {
   getClasses,
   getClassesYearsAsOptions,
+  getCurrentCyclesAsOptions,
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
   getDepartmentsByFacultyId,
@@ -48,6 +49,10 @@ export const ListStudents: FC = () => {
   const [openExportTemplate, setOpenExportTemplate] = useState<boolean>(false);
   const [openImportData, setOpenImportData]= useQueryState("import", parseAsBoolean.withDefault(false))
 
+  const [cycleId, setCycleId] = useQueryState(
+    "cycle",
+    parseAsInteger.withDefault(0)
+  );
   const [facultyId, setFacultyId] = useQueryState(
     "fac",
     parseAsInteger.withDefault(0)
@@ -74,6 +79,7 @@ export const ListStudents: FC = () => {
     queryKey: [
       "year_enrollments",
       `${yid}`,
+      cycleId,
       facultyId,
       departmentId,
       classId,
@@ -84,6 +90,7 @@ export const ListStudents: FC = () => {
     queryFn: ({ queryKey }) =>
       getYearEnrollments({
         yearId: Number(queryKey[1]),
+        cycleId: cycleId !== 0 ? cycleId : undefined,
         facultyId: facultyId !== 0 ? facultyId : undefined,
         departmentId: departmentId !== 0 ? departmentId : undefined,
         classId: classId !== 0 ? classId : undefined,
@@ -102,15 +109,16 @@ export const ListStudents: FC = () => {
   });
 
   const { data: departments, isPending: isPendingDepartments } = useQuery({
-    queryKey: ["departments", facultyId],
+    queryKey: ["departments"],
     queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
-    enabled: facultyId !== 0,
   });
 
   const { data: classes, isPending: isPendingClasses } = useQuery({
     queryKey: ["classes"],
     queryFn: getClasses,
   });
+
+  console.log("Dep:",departments)
 
   if (isErrorStudents) {
     return <DataFetchErrorResult />;
@@ -122,6 +130,23 @@ export const ListStudents: FC = () => {
         title={() => (
           <header className="flex flex-col md:flex-row md:items-end  pb-3 gap-2">
             <Space wrap>
+              <div className="flex flex-row md:flex-col gap-2">
+                <Typography.Text type="secondary">Cycle</Typography.Text>
+                <Select
+                  value={cycleId}
+                  variant="filled"
+                  onChange={(value) => {
+                    setPage(0);
+                    setCycleId(value);
+                  }}
+                  options={[
+                    { value: 0, label: "Tous les cycles" },
+                    ...(getCurrentCyclesAsOptions(cycles) || []),
+                  ]}
+                  style={{ minWidth: 150 }}
+                  loading={isPendingFaculties}
+                />
+              </div>
               <div className="flex flex-row md:flex-col gap-2">
                 <Typography.Text type="secondary">Filière</Typography.Text>
                 <Select
@@ -178,11 +203,15 @@ export const ListStudents: FC = () => {
             <Space wrap>
               <Input.Search
                 placeholder="Rechercher un étudiant ..."
-                onChange={(e) => {
-                  // if(search && e.target.value.trim()!==""){
+                // onChange={(e) => {
+                //   // if(search && e.target.value.trim()!==""){
+                //   setPage(0);
+                //   setSearch(e.target.value);
+                //   // }
+                // }}
+                onSearch={(value) => {
                   setPage(0);
-                  setSearch(e.target.value);
-                  // }
+                  setSearch(value);
                 }}
                 allowClear
                 variant="filled"
@@ -381,6 +410,11 @@ export const ListStudents: FC = () => {
       <ImportStudentsDataDrawer
         open={openImportData}
         setOpen={setOpenImportData}
+        yearId={Number(yid)}
+        cycles={cycles}
+        faculties={faculties}
+        departments={departments}
+        classes={classes}
       />
     </>
   );

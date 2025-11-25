@@ -9,6 +9,7 @@ import {
   getCurrentFacultiesAsOptions,
 } from "@/lib/api";
 import { Cycle, Faculty, Department, Class } from "@/types";
+import { filterOption } from "@/lib/utils";
 
 type FormDataType = {
   cycle_id: number;
@@ -39,6 +40,7 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
   const cycleId = Form.useWatch("cycle_id", form);
   const fieldId = Form.useWatch("field_id", form);
   const facultyId = Form.useWatch("faculty_id", form);
+  console.log(`departments`, departments);
 
   const filteredFaculties = useMemo(() => {
     return faculties?.filter((fac) => fac.field.id === fieldId);
@@ -131,6 +133,7 @@ console.log("Departments", departments)
         <Select
           options={getCurrentFacultiesAsOptions(faculties)}
           showSearch
+          filterOption={filterOption}
         />
       </Form.Item>
       <Form.Item

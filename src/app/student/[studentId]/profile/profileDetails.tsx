@@ -64,7 +64,7 @@ export const StudentProfileDetails: FC<ProfileDetailsProps> = ({ data, isError }
                 size={100}
                 style={{
                   background: getHSLColor(
-                    `${data.user.first_name} ${data.user.last_name} ${data.user.surname}`
+                    `${data.user.surname} ${data.user.last_name} ${data.user.first_name}`
                   ),
                   marginBottom: 16,
                 }}

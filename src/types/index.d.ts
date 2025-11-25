@@ -999,11 +999,10 @@ export const Announcement = z.object({
   date_created: z.string(),
   date_updated: z.string(),
   status: z.enum(["locked", "unlocked"]),
-  mode:z.enum(["ALL-STUDENTS", "SOME-STUDENTS"])
+  mode: z.enum(["ALL-STUDENTS", "SOME-STUDENTS"]),
 });
 
 export type Announcement = z.infer<typeof Announcement>;
-
 
 export const RetakeCourseReason = z.object({
   id: z.number(),
@@ -1130,7 +1129,6 @@ export const ResultGrid = z.object({
 
 export type ResultGrid = z.infer<typeof ResultGrid>;
 
-
 export const Appeal = z.object({
   id: z.number(),
   student: Enrollment,
@@ -1153,23 +1151,22 @@ export const Appeal = z.object({
 
 export type Appeal = z.infer<typeof Appeal>;
 
-
-export type PeriodResultPresentionItem={
-    decision: "passed" | "postponed";
-    expected_total_credit: number;
-    first_name: string;
-    gender: "M" | "F";
-    grade: string;
-    id: number;
-    id_user_obj: number;
-    last_name: string;
-    matricule: string;
-    percentage: number;
-    surname: string;
-    unvalidated_credit_sum: number;
-    validated_credit_sum: number;
-    weighted_average: number;
-  }
+export type PeriodResultPresentionItem = {
+  decision: "passed" | "postponed";
+  expected_total_credit: number;
+  first_name: string;
+  gender: "M" | "F";
+  grade: string;
+  id: number;
+  id_user_obj: number;
+  last_name: string;
+  matricule: string;
+  percentage: number;
+  surname: string;
+  unvalidated_credit_sum: number;
+  validated_credit_sum: number;
+  weighted_average: number;
+};
 
 export type YearResultPresentationItem = {
   decision: "passed" | "postponed";
@@ -1276,9 +1273,7 @@ export const GradeReportResponse = z.object({
 
 export type GradeReportResponse = z.infer<typeof GradeReportResponse>;
 
-
 export const BulkStudentItem = z.object({
-  id: z.number(),
   first_name: z.string(),
   last_name: z.string(),
   surname: z.string(),
@@ -1287,6 +1282,35 @@ export const BulkStudentItem = z.object({
   email: z.string().email(),
   date_of_birth: z.string().date(),
   place_of_birth: z.string(),
+  nationality: z.string(),
+  marital_status: z
+    .enum(["single", "married", "divorced", "widowed"])
+    .nullable(),
+  religious_affiliation: z.string(),
+  phone_number_1: z.string(),
+  phone_number_2: z.string().nullable(),
+  name_of_secondary_school: z.string(),
+  country_of_secondary_school: z.string(),
+  province_of_secondary_school: z.string(),
+  territory_or_municipality_of_school: z.string(),
+  section_followed: z.string(),
+  father_name: z.string(),
+  father_phone_number: z.string().nullable(),
+  mother_name: z.string(),
+  mother_phone_number: z.string().nullable(),
+  current_city: z.string(),
+  current_municipality: z.string(),
+  current_neighborhood: z.string(),
+  country_of_origin: z.string(),
+  province_of_origin: z.string(),
+  territory_or_municipality_of_origin: z.string(),
+  physical_ability: z.enum(["normal", "disabled"]).nullable(),
+  professional_activity: z.string(),
+  spoken_language: z.string(),
+  year_of_diploma_obtained: z.string(),
+  diploma_number: z.string(),
+  diploma_percentage: z.number(),
+  is_foreign_registration: z.boolean().nullable(),
 });
 
 export type BulkStudentItem = z.infer<typeof BulkStudentItem>;

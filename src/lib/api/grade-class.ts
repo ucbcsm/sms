@@ -315,7 +315,7 @@ export async function exportEmptyGradesToExcel(
   // Appliquer l'autofit
   autoFitColumns(worksheet);
 
-  // 3. Déverrouiller TOUTES les cellules par défaut
+  // Déverrouiller TOUTES les cellules par défaut
   worksheet.eachRow((row) => {
     row.eachCell((cell) => {
       cell.protection = { locked: false }; // Par défaut : modifiable
