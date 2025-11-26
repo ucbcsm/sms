@@ -22,7 +22,7 @@ import {
   Tag,
   Typography,
 } from "antd";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useYid } from "@/hooks/use-yid";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { DataFetchErrorResult } from "@/components/errorResult";
@@ -40,6 +40,10 @@ import { usePrevPathname } from "@/hooks/usePrevPathname";
 import { ExportTemplateFormModal } from "./exportTemplateFormModal";
 import { useCycles } from "@/hooks/useCycles";
 import { ImportStudentsDataDrawer } from "./importStudentsDataDrawer";
+import { useClasses } from "@/hooks/useClasses";
+import { useDepartments } from "@/hooks/useDepartments";
+import { useFaculties } from "@/hooks/useFaculties";
+import { useFields } from "@/hooks/useFields";
 
 export const ListStudents: FC = () => {
   const { yid } = useYid();
@@ -51,6 +55,10 @@ export const ListStudents: FC = () => {
 
   const [cycleId, setCycleId] = useQueryState(
     "cycle",
+    parseAsInteger.withDefault(0)
+  );
+  const [fieldId, setFieldId] = useQueryState(
+    "field",
     parseAsInteger.withDefault(0)
   );
   const [facultyId, setFacultyId] = useQueryState(
@@ -102,23 +110,30 @@ export const ListStudents: FC = () => {
   });
 
   const {data:cycles}=useCycles()
+  const {data:fields}= useFields()
+  const { data: faculties, isPending: isPendingFaculties } = useFaculties();
+  const { data: departments, isPending: isPendingDepartments } =
+    useDepartments();
+  const { data: classes, isPending: isPendingClasses } = useClasses();
 
-  const { data: faculties, isPending: isPendingFaculties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
+  const filteredFaculties = useMemo(() => {
+      return faculties?.filter((fac) => fac.field.id === fieldId);
+    }, [fieldId]);
+  
+    const filteredFields = useMemo(() => {
+      return fields?.filter((f) => f.cycle?.id === cycleId);
+    }, [cycleId]);
+  
+    const filteredDepartments = useMemo(() => {
+      return departments?.filter((dep) => dep.faculty.id === facultyId);
+    }, [facultyId]);
 
-  const { data: departments, isPending: isPendingDepartments } = useQuery({
-    queryKey: ["departments"],
-    queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
-  });
+    const filteredClasses = useMemo(() => {
+      return classes?.filter((c) => c.cycle?.id === cycleId);
+    }, [cycleId]);
 
-  const { data: classes, isPending: isPendingClasses } = useQuery({
-    queryKey: ["classes"],
-    queryFn: getClasses,
-  });
 
-  console.log("Dep:",departments)
+
 
   if (isErrorStudents) {
     return <DataFetchErrorResult />;
@@ -158,7 +173,9 @@ export const ListStudents: FC = () => {
                   }}
                   options={[
                     { value: 0, label: "Toutes les filières" },
-                    ...(getCurrentFacultiesAsOptions(faculties) || []),
+                    ...(getCurrentFacultiesAsOptions(
+                      filteredFaculties || faculties
+                    ) || []),
                   ]}
                   style={{ minWidth: 150 }}
                   loading={isPendingFaculties}
@@ -175,7 +192,9 @@ export const ListStudents: FC = () => {
                   }}
                   options={[
                     { value: 0, label: "Toutes les promotions" },
-                    ...(getClassesYearsAsOptions({ classes }) || []),
+                    ...(getClassesYearsAsOptions({
+                      classes: filteredClasses || classes,
+                    }) || []),
                   ]}
                   loading={isPendingClasses}
                   style={{ minWidth: 92, maxWidth: 160 }}
@@ -192,7 +211,9 @@ export const ListStudents: FC = () => {
                   }}
                   options={[
                     { value: 0, label: "Toutes les mentions" },
-                    ...(getCurrentDepartmentsAsOptions(departments) || []),
+                    ...(getCurrentDepartmentsAsOptions(
+                      filteredDepartments || departments
+                    ) || []),
                   ]}
                   style={{ minWidth: 150 }}
                   loading={facultyId !== 0 && isPendingDepartments}
@@ -403,6 +424,7 @@ export const ListStudents: FC = () => {
         open={openExportTemplate}
         setOpen={setOpenExportTemplate}
         cycles={cycles}
+        fields={fields}
         faculties={faculties}
         departments={departments}
         classes={classes}

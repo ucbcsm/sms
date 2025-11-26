@@ -449,6 +449,18 @@ export function getMaritalStatus(value?: string) {
   }
 }
 
+export function getPhysicalAbility(value?:string){
+  if(!value) return null
+  switch (value) {
+    case "Normale":
+      return "normal";
+    case "Handicapé":
+      return "disabled"
+    default:
+      return null;
+  }
+}
+
 export async function importStudentsFromExcel(file: File): Promise<
   {
     sheetName: string;
@@ -557,9 +569,7 @@ export async function importStudentsFromExcel(file: File): Promise<
           province_of_origin: province_of_origin?.toString() || "",
           territory_or_municipality_of_origin:
             territory_or_municipality_of_origin?.toString() || "",
-          physical_ability: physical_ability?.toString() as
-            | "normal"
-            | "disabled",
+          physical_ability: getPhysicalAbility(physical_ability?.toString()),
           professional_activity: professional_activity?.toString() || "",
           spoken_language: spoken_language?.toString() || "",
           year_of_diploma_obtained: year_of_diploma_obtained?.toString() || "",

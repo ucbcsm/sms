@@ -34,7 +34,7 @@ import {
   importStudentsFromExcel,
 } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { filterOption } from "@/lib/utils";
+import { filterOption, getMaritalStatusName } from "@/lib/utils";
 
 type ImportStudentsDataDrawerProps = {
   open: boolean;
@@ -451,6 +451,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                           dataIndex: "marital_status",
                           title: "État civil",
                           ellipsis: true,
+                          render: (value) => getMaritalStatusName(value),
                           width: 100,
                         },
                         {
@@ -458,6 +459,15 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                           dataIndex: "physical_ability",
                           title: "Aptitude physique",
                           ellipsis: true,
+                          render: (value) => {
+                            if (value === "normal") {
+                              return "Normal";
+                            } else if (value === "disabled") {
+                              return "Handicapé";
+                            } else {
+                              return "";
+                            }
+                          },
                           width: 120,
                         },
                         {
@@ -620,6 +630,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                           key: "diploma_percentage",
                           dataIndex: "diploma_percentage",
                           title: "Pourcentage diplôme",
+                          render: (value) => (value !== 0 ? value : ""),
                           //   width: 140,
                         },
                         {

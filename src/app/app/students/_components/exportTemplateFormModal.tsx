@@ -7,18 +7,21 @@ import {
   getCurrentCyclesAsOptions,
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
+  getCurrentFieldsAsOptions,
 } from "@/lib/api";
-import { Cycle, Faculty, Department, Class } from "@/types";
+import { Cycle, Faculty, Department, Class, Field } from "@/types";
 import { filterOption } from "@/lib/utils";
 
 type FormDataType = {
   cycle_id: number;
+  field_id: number;
   faculty_id: number;
   department_id: number;
 };
 
 type ExportTemplateFormModalProps = {
   cycles?: Cycle[];
+  fields?:Field[]
   faculties?: Faculty[];
   departments?: Department[];
   classes?: Class[];
@@ -28,6 +31,7 @@ type ExportTemplateFormModalProps = {
 
 export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
   cycles,
+  fields,
   faculties,
   departments,
   classes,
@@ -40,11 +44,14 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
   const cycleId = Form.useWatch("cycle_id", form);
   const fieldId = Form.useWatch("field_id", form);
   const facultyId = Form.useWatch("faculty_id", form);
-  console.log(`departments`, departments);
 
   const filteredFaculties = useMemo(() => {
     return faculties?.filter((fac) => fac.field.id === fieldId);
   }, [fieldId]);
+
+  const filteredFields = useMemo(() => {
+    return fields?.filter((f) => f.cycle?.id === cycleId);
+  }, [cycleId]);
 
   const filteredDepartments = useMemo(() => {
     return departments?.filter((dep) => dep.faculty.id === facultyId);
@@ -55,12 +62,14 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
     setOpen(false);
     form.resetFields();
   };
-console.log("Departments", departments)
+
   const onFinish = async (values: FormDataType) => {
     const faculty = faculties?.find((fac) => fac.id === values.faculty_id);
     const cycle = cycles?.find((c) => c.id === values.cycle_id);
     const department = departments?.find((d) => d.id === values.department_id);
-    const filteredClasses= classes?.filter(cls=> values.cycle_id === cls.cycle?.id);
+    const filteredClasses = classes?.filter(
+      (cls) => values.cycle_id === cls.cycle?.id
+    );
 
     if (cycle && faculty && department && filteredClasses) {
       await downloadStudentImportTemplate({
@@ -126,12 +135,24 @@ console.log("Departments", departments)
         <Radio.Group options={getCurrentCyclesAsOptions(cycles)} />
       </Form.Item>
       <Form.Item
+        label="Domaine"
+        name="field_id"
+        rules={[{ required: true, message: "Ce champ est requis" }]}
+        hidden
+      >
+        <Select
+          options={getCurrentFieldsAsOptions(filteredFields || fields)}
+          showSearch
+          filterOption={filterOption}
+        />
+      </Form.Item>
+      <Form.Item
         label="Filière"
         name="faculty_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Select
-          options={getCurrentFacultiesAsOptions(faculties)}
+          options={getCurrentFacultiesAsOptions(filteredFaculties || faculties)}
           showSearch
           filterOption={filterOption}
         />
@@ -143,7 +164,9 @@ console.log("Departments", departments)
       >
         <Select
           placeholder="Département"
-          options={getCurrentDepartmentsAsOptions(departments)}
+          options={getCurrentDepartmentsAsOptions(
+            filteredDepartments || departments
+          )}
           onSelect={(value) => {
             const selectedDep = departments?.find((dep) => dep.id === value);
             const facId = selectedDep?.faculty.id;
