@@ -386,7 +386,7 @@ export async function downloadStudentImportTemplate({
     for (let rowIndex = 1; rowIndex <= 10; rowIndex++) {
       const row = worksheet.getRow(rowIndex);
       row.eachCell({ includeEmpty: true }, (cell) => {
-        cell.protection = { locked: true };
+        cell.protection = { locked: false };
       });
     }
 

@@ -116,24 +116,33 @@ export const ListStudents: FC = () => {
     useDepartments();
   const { data: classes, isPending: isPendingClasses } = useClasses();
 
+  const filteredFields = useMemo(() => {
+    const flds = fields?.filter((f) => f.cycle?.id === cycleId);
+    if (flds) {
+      return flds;
+    }
+  }, [cycleId]);
+
   const filteredFaculties = useMemo(() => {
-      return faculties?.filter((fac) => fac.field.id === fieldId);
-    }, [fieldId]);
-  
-    const filteredFields = useMemo(() => {
-      return fields?.filter((f) => f.cycle?.id === cycleId);
-    }, [cycleId]);
-  
-    const filteredDepartments = useMemo(() => {
-      return departments?.filter((dep) => dep.faculty.id === facultyId);
-    }, [facultyId]);
+    const facs = faculties?.filter((fac) => fac.field.id === fieldId);
+    if (facs && facs.length > 0) {
+      return facs;
+    }
+  }, [fieldId]);
 
-    const filteredClasses = useMemo(() => {
-      return classes?.filter((c) => c.cycle?.id === cycleId);
-    }, [cycleId]);
+  const filteredDepartments = useMemo(() => {
+    const depts = departments?.filter((dep) => dep.faculty.id === facultyId);
+    if (depts && depts.length > 0) {
+      return depts;
+    }
+  }, [facultyId]);
 
-
-
+  const filteredClasses = useMemo(() => {
+    const clas = classes?.filter((c) => c.cycle?.id === cycleId);
+    if (clas && clas.length > 0) {
+      return clas;
+    }
+  }, [cycleId]);
 
   if (isErrorStudents) {
     return <DataFetchErrorResult />;
@@ -187,8 +196,10 @@ export const ListStudents: FC = () => {
                   value={classId}
                   variant="filled"
                   onChange={(value) => {
+                    const selectedClass = classes?.find((c) => c.id === value);
                     setPage(0);
                     setClassId(value);
+                    setCycleId(selectedClass?.cycle?.id || 0);
                   }}
                   options={[
                     { value: 0, label: "Toutes les promotions" },
@@ -206,6 +217,8 @@ export const ListStudents: FC = () => {
                   value={departmentId}
                   variant="filled"
                   onChange={(value) => {
+                    const selectedDep= departments?.find(d=>d.id===value)
+                    const selectedFacId=selectedDep?.faculty
                     setPage(0);
                     setDepartmentId(value);
                   }}
