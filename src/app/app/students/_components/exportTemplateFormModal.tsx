@@ -96,7 +96,7 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
   return (
     <Modal
       open={open}
-      title="Télécharger le modèle d'import des étudiant"
+      title="Télécharger le modèle d'import des étudiants"
       centered
       okText="Télécharger"
       cancelText="Annuler"
