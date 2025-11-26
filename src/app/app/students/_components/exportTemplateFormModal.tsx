@@ -45,16 +45,25 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
   const fieldId = Form.useWatch("field_id", form);
   const facultyId = Form.useWatch("faculty_id", form);
 
-  const filteredFaculties = useMemo(() => {
-    return faculties?.filter((fac) => fac.field.id === fieldId);
-  }, [fieldId]);
-
   const filteredFields = useMemo(() => {
-    return fields?.filter((f) => f.cycle?.id === cycleId);
+    const flds = fields?.filter((f) => f.cycle?.id === cycleId);
+    if (flds && flds.length > 0) {
+      return flds;
+    }
   }, [cycleId]);
 
+  const filteredFaculties = useMemo(() => {
+    const facs = faculties?.filter((fac) => fac.field.id === fieldId);
+    if (facs && facs.length > 0) {
+      return facs;
+    }
+  }, [fieldId]);
+
   const filteredDepartments = useMemo(() => {
-    return departments?.filter((dep) => dep.faculty.id === facultyId);
+    const depts = departments?.filter((dep) => dep.faculty.id === facultyId);
+    if (depts && depts.length > 0) {
+      return depts;
+    }
   }, [facultyId]);
 
   const onClose = () => {
@@ -126,6 +135,7 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
           {dom}
         </Form>
       )}
+      forceRender
     >
       <Form.Item
         label="Cycle"
@@ -138,12 +148,20 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
         label="Domaine"
         name="field_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
-        hidden
+        // hidden
       >
         <Select
           options={getCurrentFieldsAsOptions(filteredFields || fields)}
           showSearch
           filterOption={filterOption}
+          onSelect={(value)=>{
+            const selectedField= fields?.find(f=>f.id===value)
+             form.setFieldsValue({
+               cycle_id: selectedField?.cycle?.id,
+               faculty_id: undefined,
+               department_id: undefined,
+             });
+          }}
         />
       </Form.Item>
       <Form.Item
@@ -155,6 +173,14 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
           options={getCurrentFacultiesAsOptions(filteredFaculties || faculties)}
           showSearch
           filterOption={filterOption}
+          onSelect={(value) =>{
+            const selectedFac = faculties?.find((fac) => fac.id === value);
+             form.setFieldsValue({
+               cycle_id: selectedFac?.field.cycle?.id,
+               field_id: selectedFac?.field.id,
+               department_id: undefined,
+             });
+          }}
         />
       </Form.Item>
       <Form.Item
@@ -172,6 +198,7 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
             const facId = selectedDep?.faculty.id;
             const selectedFac = faculties?.find((fac) => fac.id === facId);
             form.setFieldsValue({
+              cycle_id: selectedFac?.field.cycle?.id,
               faculty_id: facId,
               field_id: selectedFac?.field.id,
             });
