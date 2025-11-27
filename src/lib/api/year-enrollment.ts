@@ -294,7 +294,7 @@ export async function downloadStudentImportTemplate({
 
     autoFitColumns(worksheet);
 
-    for (let row = 11; row <= 500; row++) {
+    for (let row = 11; row <= 1500; row++) {
       // Colonne 5 = Genre (M/F)
       worksheet.getCell(`E${row}`).dataValidation = {
         type: "list",
@@ -514,7 +514,7 @@ export async function importStudentsFromExcel(file: File): Promise<
         ? row.values.slice(1) // Supprimer la première valeur vide
         : [];
       const [
-        matricule,
+        former_matricule,
         surname,
         last_name,
         first_name,
@@ -551,13 +551,13 @@ export async function importStudentsFromExcel(file: File): Promise<
         professional_activity,
       ] = rowValues;
 
-      if (matricule) {
+      if (secretDataRow) {
         parsedStudents.push({
           first_name: first_name?.toString() || "",
           last_name: last_name?.toString() || "",
           surname: surname?.toString() || "",
           gender: (gender?.toString() as "M" | "F") || null,
-          matricule: matricule?.toString() || "",
+          former_matricule: former_matricule?.toString() || "",
           email:
             typeof email === "object"
               ? (email as { hyperlink: string; text: string })?.text || ""

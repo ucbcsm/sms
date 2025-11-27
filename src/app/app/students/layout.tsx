@@ -12,13 +12,7 @@ import {
   getFields,
 } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Flex,
-  Layout,
-  Tag,
-  theme,
-  Typography,
-} from "antd";
+import { Flex, Layout, Splitter, Tag, theme, Typography } from "antd";
 import { EnrollButton } from "./applications/enrollButton";
 import { NewApplicationForm } from "./applications/forms/new/new";
 import { ListNewApplications } from "./applications/lists/new_applications";
@@ -38,7 +32,7 @@ export default function StudentsLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBorderSecondary },
+    token: { colorBorderSecondary, colorBgLayout },
   } = theme.useToken();
   const { yid } = useYid();
   const [reapply, setReapply] = useQueryState(
@@ -108,12 +102,8 @@ export default function StudentsLayout({
   });
 
   return (
-    <Layout>
-      <Layout.Sider
-        width={360}
-        theme="light"
-        style={{ borderRight: `1px solid ${colorBorderSecondary}` }}
-      >
+    <Splitter>
+      <Splitter.Panel min={360} max={400}>
         <Flex
           justify="space-between"
           align="center"
@@ -124,11 +114,7 @@ export default function StudentsLayout({
             marginBottom: 16,
           }}
         >
-          <Typography.Title
-            level={3}
-            className=""
-            style={{ marginBottom: 0 }}
-          >
+          <Typography.Title level={3} className="" style={{ marginBottom: 0 }}>
             Inscriptions
           </Typography.Title>
           <EnrollButton
@@ -175,13 +161,9 @@ export default function StudentsLayout({
           setOpen={SetNewFormer}
           isFormer={true}
         />
-      </Layout.Sider>
-      <Layout.Content
-        style={{
-          // background: colorBgContainer,
-          padding: "0 28px",
-        }}
-      >
+      </Splitter.Panel>
+
+      <Splitter.Panel style={{ padding: "0 28px", background: colorBgLayout }}>
         {view > 0 && (
           <ViewEditApplicationForm
             application={application}
@@ -198,7 +180,7 @@ export default function StudentsLayout({
           />
         )}
         {view === 0 && children}
-      </Layout.Content>
-    </Layout>
+      </Splitter.Panel>
+    </Splitter>
   );
 }

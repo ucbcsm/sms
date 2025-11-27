@@ -266,37 +266,41 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
           layout="vertical"
           initialValues={{}}
         >
-          <Form.Item style={{ marginBottom: newStudentItems ? 16 : 0 }}>
-            <Upload.Dragger
-              accept=".xlsx"
-              beforeUpload={handleFileUpload}
-              showUploadList={false}
-              maxCount={1}
-              style={{ padding: 12 }}
-            >
-              <div
-                style={{
-                  minHeight: 100,
-                  height: newStudentItems ? "auto" : `calc(100vh - 244px)`,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
+          {!newStudentItems && (
+            <Form.Item style={{ marginBottom: newStudentItems ? 16 : 0 }}>
+              <Upload.Dragger
+                accept=".xlsx"
+                beforeUpload={handleFileUpload}
+                showUploadList={false}
+                maxCount={1}
+                style={{ padding: 12 }}
               >
-                <p className="ant-upload-drag-icon">
-                  <UploadOutlined style={{ fontSize: 32, color: "GrayText" }} />
-                </p>
-                <p className="ant-upload-text">
-                  Cliquez ou glissez-déposez un fichier XLSX ici pour
-                  l&apos;importer
-                </p>
-                <p className="ant-upload-hint">
-                  Seuls les fichiers .xlsx sont acceptés. Le fichier doit
-                  contenir les étudiants d&apos;une même filière et mention.
-                </p>
-              </div>
-            </Upload.Dragger>
-          </Form.Item>
+                <div
+                  style={{
+                    minHeight: 100,
+                    height: newStudentItems ? "auto" : `calc(100vh - 244px)`,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <p className="ant-upload-drag-icon">
+                    <UploadOutlined
+                      style={{ fontSize: 32, color: "GrayText" }}
+                    />
+                  </p>
+                  <p className="ant-upload-text">
+                    Cliquez ou glissez-déposez un fichier XLSX ici pour
+                    l&apos;importer
+                  </p>
+                  <p className="ant-upload-hint">
+                    Seuls les fichiers .xlsx sont acceptés. Le fichier doit
+                    contenir les étudiants d&apos;une même filière et mention.
+                  </p>
+                </div>
+              </Upload.Dragger>
+            </Form.Item>
+          )}
 
           {newStudentItems && (
             <>
@@ -423,8 +427,8 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                           fixed: "left",
                         },
                         {
-                          key: "matricule",
-                          dataIndex: "matricule",
+                          key: "former_matricule",
+                          dataIndex: "former_matricule",
                           title: "Matricule",
                           width: 96,
                           align: "right",
@@ -653,7 +657,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                       ]}
                       size="small"
                       pagination={false}
-                      scroll={{ x: "max-content", y: "calc(100vh - 498px)" }}
+                      scroll={{ x: "max-content", y: "calc(100vh - 324px)" }}
                       rowKey="matricule"
                     />
                   ),

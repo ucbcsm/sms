@@ -12,13 +12,11 @@ import {
 import { ListStudents } from "./_components/list-students";
 import { UserAddOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { getFaculties, getFacultiesAsDropdownMenu } from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { getFaculties } from "@/lib/api";
 import { StudentsStatsDashboard } from "./_components/statsDashboard";
+import Link from "next/link";
 
 export default function Page() {
-  const router = useRouter();
-
   const { data: faculties, isPending: isPendingFaculties } = useQuery({
     queryKey: ["faculties"],
     queryFn: getFaculties,
@@ -52,16 +50,19 @@ export default function Page() {
                 items: [
                   {
                     key: "",
-                    type: "group",
+                    type: "submenu",
                     label: "Filières",
-                    children: [
-                      ...(getFacultiesAsDropdownMenu(faculties) || []),
-                    ],
+                    children:
+                      faculties?.map((fac) => ({
+                        key: fac.id,
+                        label: (
+                          <Link href={`/faculty/${fac.id}/students`}>
+                            {fac.name}
+                          </Link>
+                        ),
+                      })) || [],
                   },
                 ],
-                onClick: ({ key }) => {
-                  router.push(`/faculty/${key}/students`);
-                },
               }}
             >
               <Button

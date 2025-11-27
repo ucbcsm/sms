@@ -232,7 +232,7 @@ export const ListStudents: FC = () => {
       </div>
       <Table
         title={() => (
-          <header className="flex flex-col md:flex-row md:items-end  pb-3 gap-2">
+          <header className="flex flex-col md:flex-row md:items-end gap-2">
             <Space wrap>
               <div>
                 <Space>
@@ -461,7 +461,7 @@ export const ListStudents: FC = () => {
         rowSelection={{
           type: "checkbox",
         }}
-        scroll={{ y: "calc(100vh - 380px)" }}
+        scroll={{ y: "calc(100vh - 367px)" }}
         size="small"
         bordered
         loading={isPendingStudents}
