@@ -461,6 +461,21 @@ export function getPhysicalAbility(value?:string){
   }
 }
 
+export function ddMMyyyyToIsoDate(dateStr: string): string | null {
+  const parts = dateStr.split("/");
+  if (parts.length !== 3) return null;
+
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1; // Les mois sont indexés à partir de 0
+  const year = parseInt(parts[2], 10);
+  const date = new Date(year, month, day);
+
+  if (isNaN(date.getTime())) {
+    return null; // Date invalide
+  }
+  return date.toISOString().split("T")[0]; // Retourne au format YYYY-MM-DD
+}
+
 export async function importStudentsFromExcel(file: File): Promise<
   {
     sheetName: string;
@@ -543,7 +558,8 @@ export async function importStudentsFromExcel(file: File): Promise<
           gender: (gender?.toString() as "M" | "F") || null,
           matricule: matricule?.toString() || "",
           email: email?.toString() || "",
-          date_of_birth: date_of_birth?.toString() || "",
+          date_of_birth:
+            ddMMyyyyToIsoDate(date_of_birth?.toString() || "") || "",
           place_of_birth: place_of_birth?.toString() || "",
           nationality: nationality?.toString() || "",
           marital_status: getMaritalStatus(marital_status?.toString()),

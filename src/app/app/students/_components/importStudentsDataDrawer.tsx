@@ -437,6 +437,11 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                           key: "date_of_birth",
                           dataIndex: "date_of_birth",
                           title: "Date de naissance",
+                          render: (value) => {
+                            if (!value) return "";
+                            const date = new Date(value);
+                            return date.toLocaleDateString("fr-FR");
+                          }
                           //   width: 130,
                         },
                         {
