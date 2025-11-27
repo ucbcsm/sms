@@ -383,12 +383,12 @@ export async function downloadStudentImportTemplate({
     });
 
     // Verrouiller uniquement les lignes 1 à 10 (en-têtes)
-    // for (let rowIndex = 1; rowIndex <= 10; rowIndex++) {
-    //   const row = worksheet.getRow(rowIndex);
-    //   row.eachCell({ includeEmpty: true }, (cell) => {
-    //     cell.protection = { locked: true };
-    //   });
-    // }
+    for (let rowIndex = 1; rowIndex <= 10; rowIndex++) {
+      const row = worksheet.getRow(rowIndex);
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        cell.protection = { locked: true };
+      });
+    }
 
     // Activer la protection du worksheet
     worksheet.protect("", {
