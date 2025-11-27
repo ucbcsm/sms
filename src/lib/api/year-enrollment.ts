@@ -450,13 +450,13 @@ export function getMaritalStatus(value?: string) {
   }
 }
 
-export function getPhysicalAbility(value?:string){
-  if(!value) return null
+export function getPhysicalAbility(value?: string) {
+  if (!value) return null;
   switch (value) {
     case "Normale":
       return "normal";
     case "Handicapé":
-      return "disabled"
+      return "disabled";
     default:
       return null;
   }
@@ -507,7 +507,13 @@ export async function importStudentsFromExcel(file: File): Promise<
   }[] = [];
   forEach(worksheets, (sheet) => {
     let parsedStudents: BulkStudentItem[] = [];
-    const secretDataRow = sheet.getRow(8); // La ligne 8 contient les données secrètes (IDs)
+    const secretRow = sheet.getRow(8); // La ligne 8 contient les données secrètes (IDs)
+    const secretRowValues = Array.isArray(secretRow.values)
+      ? secretRow.values.slice(1) // Supprimer la première valeur vide
+      : [];
+
+    const [cycleId, fieldId, facultyId, departmentId, classYearId] =
+      secretRowValues;
     sheet.eachRow((row, rowNumber) => {
       if (rowNumber <= HEADER_ROW_INDEX) return; // Ignorer les lignes d'en-tête
       const rowValues = Array.isArray(row.values)
@@ -551,7 +557,7 @@ export async function importStudentsFromExcel(file: File): Promise<
         professional_activity,
       ] = rowValues;
 
-      if (secretDataRow) {
+      if (cycleId && fieldId && facultyId && departmentId && classYearId) {
         parsedStudents.push({
           first_name: first_name?.toString() || "",
           last_name: last_name?.toString() || "",
@@ -566,7 +572,6 @@ export async function importStudentsFromExcel(file: File): Promise<
             typeof date_of_birth === "object"
               ? (date_of_birth as Date).toISOString().split("T")[0]
               : date_of_birth?.toString() || "",
-          // ddMMyyyyToIsoDate(date_of_birth?.toString() || "") || "",
           place_of_birth: place_of_birth?.toString() || "",
           nationality: nationality?.toString() || "",
           marital_status: getMaritalStatus(marital_status?.toString()),
@@ -600,17 +605,19 @@ export async function importStudentsFromExcel(file: File): Promise<
           diploma_percentage: Number(diploma_percentage?.toString() || ""),
           is_foreign_registration:
             is_foreign_registration?.toString() === "Oui" ? true : false,
+            avatar:null,
+            pending_avatar:null
         });
       }
     });
     parsedSheets.push({
       sheetName: sheet.name,
       departmentAcronym: sheet.name.split("-")[1],
-      cycleId: Number(secretDataRow.getCell(1).value),
-      fieldId: Number(secretDataRow.getCell(2).value),
-      facultyId: Number(secretDataRow.getCell(3).value),
-      departmentId: Number(secretDataRow.getCell(4).value),
-      classYearId: Number(secretDataRow.getCell(5).value),
+      cycleId: Number(secretRow.getCell(1).value),
+      fieldId: Number(secretRow.getCell(2).value),
+      facultyId: Number(secretRow.getCell(3).value),
+      departmentId: Number(secretRow.getCell(4).value),
+      classYearId: Number(secretRow.getCell(5).value),
       students: parsedStudents,
     });
   });

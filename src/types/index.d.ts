@@ -1311,6 +1311,8 @@ export const BulkStudentItem = z.object({
   diploma_number: z.string(),
   diploma_percentage: z.number(),
   is_foreign_registration: z.boolean().nullable(),
+  avatar: z.string().nullable(),
+  pending_avatar: z.string().nullable(),
 });
 
 export type BulkStudentItem = z.infer<typeof BulkStudentItem>;
