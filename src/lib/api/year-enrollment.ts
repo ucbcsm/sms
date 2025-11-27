@@ -376,26 +376,26 @@ export async function downloadStudentImportTemplate({
       };
     }
     //Déverrouiller toutes les cellules
-    worksheet.eachRow({ includeEmpty: true }, (row) => {
-      row.eachCell({ includeEmpty: true }, (cell) => {
-        cell.protection = { locked: false }; // toutes déverrouillées
-      });
-    });
+    // worksheet.eachRow({ includeEmpty: true }, (row) => {
+    //   row.eachCell({ includeEmpty: true }, (cell) => {
+    //     cell.protection = { locked: false }; // toutes déverrouillées
+    //   });
+    // });
 
     // Verrouiller uniquement les lignes 1 à 10 (en-têtes)
-    for (let rowIndex = 1; rowIndex <= 10; rowIndex++) {
-      const row = worksheet.getRow(rowIndex);
-      row.eachCell({ includeEmpty: true }, (cell) => {
-        cell.protection = { locked: true };
-      });
-    }
+    // for (let rowIndex = 1; rowIndex <= 10; rowIndex++) {
+    //   const row = worksheet.getRow(rowIndex);
+    //   row.eachCell({ includeEmpty: true }, (cell) => {
+    //     cell.protection = { locked: true };
+    //   });
+    // }
 
     // Activer la protection du worksheet
-    worksheet.protect("", {
-      selectLockedCells: true, // permet de sélectionner les cellules verrouillées
-      selectUnlockedCells: true, // permet de sélectionner les cellules déverrouillées
-      formatCells: false, // empêche la modification du format des cellules
-    });
+    // worksheet.protect("", {
+    //   selectLockedCells: true, // permet de sélectionner les cellules verrouillées
+    //   selectUnlockedCells: true, // permet de sélectionner les cellules déverrouillées
+    //   formatCells: false, // empêche la modification du format des cellules
+    // });
   };
 
   forEach(inputs.classes, (cls) => {
