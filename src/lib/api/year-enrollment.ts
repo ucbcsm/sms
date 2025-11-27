@@ -9,6 +9,7 @@ import {
 } from "@/types";
 import ExcelJS from "exceljs";
 import { forEach } from "lodash";
+import { object } from "zod";
 
 export async function getYearEnrollments(searchParams: {
   yearId?: number;
@@ -557,9 +558,15 @@ export async function importStudentsFromExcel(file: File): Promise<
           surname: surname?.toString() || "",
           gender: (gender?.toString() as "M" | "F") || null,
           matricule: matricule?.toString() || "",
-          email: email?.toString() || "",
+          email:
+            typeof email === "object"
+              ? (email as { hyperlink: string; text: string })?.text || ""
+              : email?.toString() || "",
           date_of_birth:
-            ddMMyyyyToIsoDate(date_of_birth?.toString() || "") || "",
+            typeof date_of_birth === "object"
+              ? (date_of_birth as Date).toISOString().split("T")[0]
+              : date_of_birth?.toString() || "",
+          // ddMMyyyyToIsoDate(date_of_birth?.toString() || "") || "",
           place_of_birth: place_of_birth?.toString() || "",
           nationality: nationality?.toString() || "",
           marital_status: getMaritalStatus(marital_status?.toString()),
@@ -617,6 +624,10 @@ export async function createBulkStudents(data: {
   field: number;
   faculty: number;
   departement: number;
+  type_of_enrollment:
+    | "new_application"
+    | "reapplication"
+    | "former_application";
   data: { class_year: number; students: BulkStudentItem[] }[];
 }) {
   const res = await api.post(

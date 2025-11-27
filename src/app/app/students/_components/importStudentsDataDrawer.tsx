@@ -51,6 +51,10 @@ type FormDataType = {
   field_id: number;
   faculty_id: number;
   departement_id: number;
+  type_of_enrollment:
+    | "new_application"
+    | "reapplication"
+    | "former_application";
 };
 
 export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
@@ -120,6 +124,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
         }));
         mutateAsync(
           {
+            type_of_enrollment: values.type_of_enrollment,
             academic_year: yearId,
             cycle: values.cycle_id,
             field: values.field_id,
@@ -305,11 +310,40 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                       textTransform: "uppercase",
                     }}
                   >
-                    Aperçu des données à importer
+                    Aperçu des données
                   </Typography.Title>
                 </Space>
                 <div className="flex-1" />
+
                 <Space>
+                  <Form.Item
+                    label="Type d'inscription"
+                    name="type_of_enrollment"
+                    layout="horizontal"
+                    style={{ marginBottom: 0 }}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Veuillez sélectionner un type d'inscription",
+                      },
+                    ]}
+                  >
+                    <Select
+                      options={[
+                        {
+                          value: "new_application",
+                          label: "Nouvelle candidature",
+                        },
+                        { value: "reapplication", label: "Réinscription" },
+                        {
+                          value: "former_application",
+                          label: "Ancienne candidature",
+                        },
+                      ]}
+                      placeholder="Sélectionner le type d'inscription"
+                    />
+                  </Form.Item>
+                  <Divider type="vertical" />
                   <Form.Item
                     label="Cycle"
                     name="cycle_id"
@@ -400,24 +434,21 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                           key: "surname",
                           dataIndex: "surname",
                           title: "Surnom",
-                          ellipsis: true,
-                          width: 120,
+
                           fixed: "left",
                         },
                         {
                           key: "last_name",
                           dataIndex: "last_name",
                           title: "Nom",
-                          ellipsis: true,
-                          width: 120,
+
                           fixed: "left",
                         },
                         {
                           key: "first_name",
                           dataIndex: "first_name",
                           title: "Prénom",
-                          ellipsis: true,
-                          width: 120,
+
                           fixed: "left",
                         },
                         {
@@ -430,7 +461,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                           key: "place_of_birth",
                           dataIndex: "place_of_birth",
                           title: "Lieu de naissance",
-                          ellipsis: true,
+
                           width: 140,
                         },
                         {
@@ -441,29 +472,26 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                             if (!value) return "";
                             const date = new Date(value);
                             return date.toLocaleDateString("fr-FR");
-                          }
+                          },
                           //   width: 130,
                         },
                         {
                           key: "nationality",
                           dataIndex: "nationality",
                           title: "Nationalité",
-                          ellipsis: true,
-                          width: 100,
                         },
                         {
                           key: "marital_status",
                           dataIndex: "marital_status",
                           title: "État civil",
-                          ellipsis: true,
+
                           render: (value) => getMaritalStatusName(value),
-                          width: 100,
                         },
                         {
                           key: "physical_ability",
                           dataIndex: "physical_ability",
                           title: "Aptitude physique",
-                          ellipsis: true,
+
                           render: (value) => {
                             if (value === "normal") {
                               return "Normal";
@@ -473,177 +501,135 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                               return "";
                             }
                           },
-                          width: 120,
                         },
                         {
                           key: "religious_affiliation",
                           dataIndex: "religious_affiliation",
                           title: "Affiliation religieuse",
-                          ellipsis: true,
-                          width: 150,
                         },
                         {
                           key: "spoken_language",
                           dataIndex: "spoken_language",
                           title: "Langue parlée",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "email",
                           dataIndex: "email",
                           title: "Email",
-                          ellipsis: true,
-                          width: 200,
                         },
                         {
                           key: "phone_number_1",
                           dataIndex: "phone_number_1",
                           title: "Téléphone 1",
-                          width: 120,
                         },
                         {
                           key: "phone_number_2",
                           dataIndex: "phone_number_2",
                           title: "Téléphone 2",
-                          width: 120,
                         },
                         {
                           key: "father_name",
                           dataIndex: "father_name",
                           title: "Nom du père",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "father_phone_number",
                           dataIndex: "father_phone_number",
                           title: "Tél. père",
-                          width: 100,
                         },
                         {
                           key: "mother_name",
                           dataIndex: "mother_name",
                           title: "Nom de la mère",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "mother_phone_number",
                           dataIndex: "mother_phone_number",
                           title: "Tél. mère",
-                          width: 100,
                         },
                         {
                           key: "country_of_origin",
                           dataIndex: "country_of_origin",
                           title: "Pays d'origine",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "province_of_origin",
                           dataIndex: "province_of_origin",
                           title: "Province d'origine",
-                          ellipsis: true,
-                          width: 140,
                         },
                         {
                           key: "territory_or_municipality_of_origin",
                           dataIndex: "territory_or_municipality_of_origin",
                           title: "Ville ou Territoire d'origine",
-                          ellipsis: true,
-                          width: 180,
                         },
                         {
                           key: "is_foreign_registration",
                           dataIndex: "is_foreign_registration",
                           title: "Est il étranger",
-                          //   width: 140,
+
                           render: (value) => (value ? "Oui" : "Non"),
                         },
                         {
                           key: "current_city",
                           dataIndex: "current_city",
                           title: "Ville actuelle",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "current_municipality",
                           dataIndex: "current_municipality",
                           title: "Commune actuelle",
-                          ellipsis: true,
-                          width: 140,
                         },
                         {
                           key: "current_neighborhood",
                           dataIndex: "current_neighborhood",
                           title: "Adresse actuelle",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "name_of_secondary_school",
                           dataIndex: "name_of_secondary_school",
                           title: "École secondaire",
-                          ellipsis: true,
-                          width: 140,
                         },
                         {
                           key: "country_of_secondary_school",
                           dataIndex: "country_of_secondary_school",
                           title: "Pays de l'école",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "province_of_secondary_school",
                           dataIndex: "province_of_secondary_school",
                           title: "Province de l'école",
-                          ellipsis: true,
-                          width: 140,
                         },
                         {
                           key: "territory_or_municipality_of_school",
                           dataIndex: "territory_or_municipality_of_school",
                           title: "Territoire/Municipalité",
-                          ellipsis: true,
-                          width: 160,
                         },
                         {
                           key: "section_followed",
                           dataIndex: "section_followed",
                           title: "Section suivie",
-                          ellipsis: true,
-                          width: 120,
                         },
                         {
                           key: "year_of_diploma_obtained",
                           dataIndex: "year_of_diploma_obtained",
                           title: "Année du diplôme",
-                          //   width: 120,
+                          //
                         },
                         {
                           key: "diploma_number",
                           dataIndex: "diploma_number",
                           title: "Numéro du diplôme",
-                          ellipsis: true,
-                          width: 140,
                         },
                         {
                           key: "diploma_percentage",
                           dataIndex: "diploma_percentage",
                           title: "Pourcentage diplôme",
                           render: (value) => (value !== 0 ? value : ""),
-                          //   width: 140,
                         },
                         {
                           key: "professional_activity",
                           dataIndex: "professional_activity",
                           title: "Activité professionnelle",
-                          ellipsis: true,
-                          width: 160,
                         },
                         {
                           key: "actions",

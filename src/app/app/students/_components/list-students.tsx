@@ -6,6 +6,7 @@ import {
   getCurrentCyclesAsOptions,
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
+  getCurrentFieldsAsOptions,
   getDepartmentsByFacultyId,
   getFaculties,
   getYearEnrollments,
@@ -16,15 +17,17 @@ import {
   Button,
   Dropdown,
   Input,
+  Radio,
   Select,
   Space,
   Table,
   Tag,
+  Tooltip,
   Typography,
 } from "antd";
 import { FC, useMemo, useState } from "react";
 import { useYid } from "@/hooks/use-yid";
-import { getHSLColor, getPublicR2Url } from "@/lib/utils";
+import { filterOption, getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import Link from "next/link";
 import { parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
@@ -44,6 +47,7 @@ import { useClasses } from "@/hooks/useClasses";
 import { useDepartments } from "@/hooks/useDepartments";
 import { useFaculties } from "@/hooks/useFaculties";
 import { useFields } from "@/hooks/useFields";
+import { set } from "lodash";
 
 export const ListStudents: FC = () => {
   const { yid } = useYid();
@@ -118,17 +122,19 @@ export const ListStudents: FC = () => {
 
   const filteredFields = useMemo(() => {
     const flds = fields?.filter((f) => f.cycle?.id === cycleId);
-    if (flds) {
+    if (flds && flds.length > 0) {
       return flds;
     }
   }, [cycleId]);
 
   const filteredFaculties = useMemo(() => {
-    const facs = faculties?.filter((fac) => fac.field.id === fieldId);
+    const facs = faculties?.filter(
+      (fac) => fac.field.id === fieldId || fac.field.cycle?.id === cycleId
+    );
     if (facs && facs.length > 0) {
       return facs;
     }
-  }, [fieldId]);
+  }, [fieldId, cycleId]);
 
   const filteredDepartments = useMemo(() => {
     const depts = departments?.filter((dep) => dep.faculty.id === facultyId);
@@ -150,52 +156,177 @@ export const ListStudents: FC = () => {
 
   return (
     <>
+      <div className="flex justify-between mb-4">
+        <Radio.Group
+          options={[
+            { value: 0, label: "Tous les cycles" },
+            ...(getCurrentCyclesAsOptions(cycles) || []),
+          ]}
+          value={cycleId}
+          optionType="button"
+          onChange={(e) => {
+            setPage(0);
+            setCycleId(e.target.value);
+          }}
+        />
+        <Space wrap>
+          <Input.Search
+            placeholder="Matr., nom, prénom..."
+            // onChange={(e) => {
+            //   // if(search && e.target.value.trim()!==""){
+            //   setPage(0);
+            //   setSearch(e.target.value);
+            //   // }
+            // }}
+            onSearch={(value) => {
+              setPage(0);
+              setSearch(value);
+            }}
+            allowClear
+            value={search?.trim() || undefined}
+            enterButton={
+              <Button color="primary" variant="solid">
+                Rechercher
+              </Button>
+            }
+          />
+          <Tooltip title="Imprimer">
+            <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }} />
+          </Tooltip>
+          <Dropdown
+            arrow
+            menu={{
+              items: [
+                {
+                  key: "import",
+                  label: "Importer les données des étudiants",
+                  icon: <UploadOutlined />,
+                  title: "Importer les données des étudiants",
+                },
+                {
+                  type: "divider",
+                },
+                {
+                  key: "export",
+                  label: "Télécharger le modèle d'import .xlsx",
+                  icon: <DownloadOutlined />,
+                  title: "Modèle d'import Excel",
+                },
+              ],
+              onClick: ({ key }) => {
+                if (key === "export") {
+                  setOpenExportTemplate(true);
+                } else if (key === "import") {
+                  setOpenImportData(true);
+                }
+              },
+            }}
+          >
+            <Button
+              // type="text"
+              icon={<MoreOutlined />}
+              style={{ boxShadow: "none" }}
+            />
+          </Dropdown>
+        </Space>
+      </div>
       <Table
         title={() => (
           <header className="flex flex-col md:flex-row md:items-end  pb-3 gap-2">
             <Space wrap>
-              <div className="flex flex-row md:flex-col gap-2">
-                <Typography.Text type="secondary">Cycle</Typography.Text>
-                <Select
-                  value={cycleId}
-                  variant="filled"
-                  onChange={(value) => {
-                    setPage(0);
-                    setCycleId(value);
-                  }}
-                  options={[
-                    { value: 0, label: "Tous les cycles" },
-                    ...(getCurrentCyclesAsOptions(cycles) || []),
-                  ]}
-                  style={{ minWidth: 150 }}
-                  loading={isPendingFaculties}
-                />
+              <div>
+                <Space>
+                  <Typography.Text type="secondary">Domaine</Typography.Text>
+                  <Select
+                    value={fieldId}
+                    options={[
+                      { value: 0, label: "Tous les domaine" },
+                      ...(getCurrentFieldsAsOptions(filteredFields || fields) ||
+                        []),
+                    ]}
+                    showSearch
+                    filterOption={filterOption}
+                    variant="filled"
+                    onSelect={(value) => {
+                      const selectedField = fields?.find((f) => f.id === value);
+                      setCycleId(selectedField?.cycle?.id || 0);
+                      setFacultyId(0);
+                      setDepartmentId(0);
+                      setPage(0);
+                      setFieldId(value);
+                    }}
+                    style={{ minWidth: 150 }}
+                  />
+                </Space>
               </div>
-              <div className="flex flex-row md:flex-col gap-2">
-                <Typography.Text type="secondary">Filière</Typography.Text>
-                <Select
-                  value={facultyId}
-                  variant="filled"
-                  onChange={(value) => {
-                    setPage(0);
-                    setFacultyId(value);
-                  }}
-                  options={[
-                    { value: 0, label: "Toutes les filières" },
-                    ...(getCurrentFacultiesAsOptions(
-                      filteredFaculties || faculties
-                    ) || []),
-                  ]}
-                  style={{ minWidth: 150 }}
-                  loading={isPendingFaculties}
-                />
+              <div className="flex flex-row gap-2">
+                <Space>
+                  <Typography.Text type="secondary">Filière</Typography.Text>
+                  <Select
+                    value={facultyId}
+                    variant="filled"
+                    onSelect={(value) => {
+                      const fac = faculties?.find((fac) => fac.id === value);
+                      setCycleId(fac?.field.cycle?.id || 0);
+                      setFieldId(fac?.field.id || 0);
+                      setDepartmentId(0);
+                      setPage(0);
+                      setFacultyId(value);
+                    }}
+                    options={[
+                      { value: 0, label: "Toutes les filières" },
+                      ...(getCurrentFacultiesAsOptions(
+                        filteredFaculties || faculties
+                      ) || []),
+                    ]}
+                    filterOption={filterOption}
+                    style={{ minWidth: 150 }}
+                    loading={isPendingFaculties}
+                  />
+                </Space>
               </div>
-              <div className="flex flex-row md:flex-col gap-2">
+
+              <div className="flex flex-row gap-2">
+                <Space>
+                  <Typography.Text type="secondary">Mention</Typography.Text>
+                  <Select
+                    value={departmentId}
+                    variant="filled"
+                    onChange={(value) => {
+                      const selectedDep = departments?.find(
+                        (dep) => dep.id === value
+                      );
+                      const facId = selectedDep?.faculty.id;
+                      const selectedFac = faculties?.find(
+                        (fac) => fac.id === facId
+                      );
+                      setPage(0);
+                      setDepartmentId(value);
+                      setCycleId(selectedFac?.field.cycle?.id || 0);
+                      setFacultyId(facId || 0);
+                      setFieldId(selectedFac?.field.id || 0);
+                    }}
+                    options={[
+                      { value: 0, label: "Toutes les mentions" },
+                      ...(getCurrentDepartmentsAsOptions(
+                        filteredDepartments || departments
+                      ) || []),
+                    ]}
+                    style={{ minWidth: 150 }}
+                    loading={facultyId !== 0 && isPendingDepartments}
+                    filterOption={filterOption}
+                  />
+                </Space>
+              </div>
+            </Space>
+            <div className="flex-1" />
+            <div className="flex flex-row gap-2">
+              <Space>
                 <Typography.Text type="secondary">Promotion</Typography.Text>
                 <Select
                   value={classId}
                   variant="filled"
-                  onChange={(value) => {
+                  onSelect={(value) => {
                     const selectedClass = classes?.find((c) => c.id === value);
                     setPage(0);
                     setClassId(value);
@@ -210,86 +341,8 @@ export const ListStudents: FC = () => {
                   loading={isPendingClasses}
                   style={{ minWidth: 92, maxWidth: 160 }}
                 />
-              </div>
-              <div className="flex flex-row md:flex-col gap-2">
-                <Typography.Text type="secondary">Mention</Typography.Text>
-                <Select
-                  value={departmentId}
-                  variant="filled"
-                  onChange={(value) => {
-                    const selectedDep= departments?.find(d=>d.id===value)
-                    const selectedFacId=selectedDep?.faculty
-                    setPage(0);
-                    setDepartmentId(value);
-                  }}
-                  options={[
-                    { value: 0, label: "Toutes les mentions" },
-                    ...(getCurrentDepartmentsAsOptions(
-                      filteredDepartments || departments
-                    ) || []),
-                  ]}
-                  style={{ minWidth: 150 }}
-                  loading={facultyId !== 0 && isPendingDepartments}
-                />
-              </div>
-            </Space>
-            <div className="flex-1" />
-            <Space wrap>
-              <Input.Search
-                placeholder="Rechercher un étudiant ..."
-                // onChange={(e) => {
-                //   // if(search && e.target.value.trim()!==""){
-                //   setPage(0);
-                //   setSearch(e.target.value);
-                //   // }
-                // }}
-                onSearch={(value) => {
-                  setPage(0);
-                  setSearch(value);
-                }}
-                allowClear
-                variant="filled"
-                value={search?.trim() || undefined}
-              />
-              <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
-                Imprimer
-              </Button>
-              <Dropdown
-                arrow
-                menu={{
-                  items: [
-                    {
-                      key: "import",
-                      label: "Importer les données des étudiants",
-                      icon: <UploadOutlined />,
-                      title: "Importer les données des étudiants",
-                    },
-                    {
-                      type: "divider",
-                    },
-                    {
-                      key: "export",
-                      label: "Télécharger le modèle d'import .xlsx",
-                      icon: <DownloadOutlined />,
-                      title: "Modèle d'import Excel",
-                    },
-                  ],
-                  onClick: ({ key }) => {
-                    if (key === "export") {
-                      setOpenExportTemplate(true);
-                    } else if (key === "import") {
-                      setOpenImportData(true);
-                    }
-                  },
-                }}
-              >
-                <Button
-                  type="text"
-                  icon={<MoreOutlined />}
-                  style={{ boxShadow: "none" }}
-                />
-              </Dropdown>
-            </Space>
+              </Space>
+            </div>
           </header>
         )}
         dataSource={data?.results}
@@ -408,7 +461,7 @@ export const ListStudents: FC = () => {
         rowSelection={{
           type: "checkbox",
         }}
-        scroll={{ y: "calc(100vh - 362px)" }}
+        scroll={{ y: "calc(100vh - 380px)" }}
         size="small"
         bordered
         loading={isPendingStudents}
