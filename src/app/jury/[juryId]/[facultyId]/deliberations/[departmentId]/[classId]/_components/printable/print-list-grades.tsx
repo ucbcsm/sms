@@ -8,7 +8,7 @@ import {
   getShortGradeValidationText,
 } from "@/lib/api";
 import { Announcement, Class, Department, ResultGrid, Year } from "@/types";
-import { Card, Descriptions, Watermark } from "antd";
+import { Card, Descriptions } from "antd";
 import React, { FC, RefObject } from "react";
 
 type PrintableListGradesProps = {
@@ -22,12 +22,14 @@ type PrintableListGradesProps = {
     session: "main_session" | "retake_session";
     moment: "before_appeal" | "after_appeal";
   };
+  printWithStudentName?: boolean;
 };
 export const PrintableListGrades: FC<PrintableListGradesProps> = ({
   ref,
   annoucement,
   data,
-  forYearResult
+  forYearResult,
+  printWithStudentName = true,
 }) => {
   return (
     <div className="hidden">
@@ -442,7 +444,11 @@ export const PrintableListGrades: FC<PrintableListGradesProps> = ({
                   <td
                     rowSpan={2}
                     className=" text-left align-top text-xs font-semibold border border-gray-300 "
-                  >{`${record.first_name} ${record.last_name} ${record.surname}`}</td>
+                  >
+                    {printWithStudentName
+                      ? `${record.first_name} ${record.last_name} ${record.surname}`
+                      : ""}
+                  </td>
                   <td
                     rowSpan={2}
                     className=" text-right align-top text-xs font-semibold border border-gray-300 "

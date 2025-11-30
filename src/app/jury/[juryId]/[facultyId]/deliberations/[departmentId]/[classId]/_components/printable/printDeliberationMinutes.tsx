@@ -90,46 +90,46 @@ export const PrintableDeliberationMinutes: FC<PrintableDeliberationMinutesProps>
           </Card>
         )}
         {forYearResult && (
-                  <Card style={{ marginBottom: 28 }}>
-                    <Descriptions
-                      title="Procès-verbal de délibération annuel"
-                      column={2}
-                      bordered
-                      items={[
-                        {
-                          key: "year",
-                          label: "Année académique",
-                          children: `${forYearResult?.year?.name || ""}`,
-                        },
-                        {
-                          key: "faculty",
-                          label: "Filière",
-                          children: forYearResult.department?.faculty.name || "",
-                        },
-                        {
-                          key: "department",
-                          label: "Mention",
-                          children: forYearResult?.department?.name || "",
-                        },
-                        {
-                          key: "class",
-                          label: "Promotion",
-                          children: `${forYearResult.classYear?.acronym} (${forYearResult?.classYear?.name})`,
-                        },
-                        {
-                          key: "session",
-                          label: "Session",
-                          children: getSessionText(forYearResult.session),
-                        },
-                        {
-                          key: "moment",
-                          label: "Moment",
-                          children: getMomentText(forYearResult.moment),
-                        },
-                      ]}
-                    />
-                  </Card>
-                )}
+          <Card style={{ marginBottom: 28 }}>
+            <Descriptions
+              title="Procès-verbal de délibération annuel"
+              column={2}
+              bordered
+              items={[
+                {
+                  key: "year",
+                  label: "Année académique",
+                  children: `${forYearResult?.year?.name || ""}`,
+                },
+                {
+                  key: "faculty",
+                  label: "Filière",
+                  children: forYearResult.department?.faculty.name || "",
+                },
+                {
+                  key: "department",
+                  label: "Mention",
+                  children: forYearResult?.department?.name || "",
+                },
+                {
+                  key: "class",
+                  label: "Promotion",
+                  children: `${forYearResult.classYear?.acronym} (${forYearResult?.classYear?.name})`,
+                },
+                {
+                  key: "session",
+                  label: "Session",
+                  children: getSessionText(forYearResult.session),
+                },
+                {
+                  key: "moment",
+                  label: "Moment",
+                  children: getMomentText(forYearResult.moment),
+                },
+              ]}
+            />
+          </Card>
+        )}
         <Divider />
         {data && (
           <div className=" max-w-3xl mx-auto">

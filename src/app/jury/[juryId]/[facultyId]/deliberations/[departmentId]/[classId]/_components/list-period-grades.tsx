@@ -10,11 +10,20 @@ import {
 import { Announcement } from "@/types";
 import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Divider, Drawer, Result, Space, Typography } from "antd";
+import {
+  Badge,
+  Button,
+  Divider,
+  Drawer,
+  Dropdown,
+  Result,
+  Space,
+  Typography,
+} from "antd";
 import { useParams } from "next/navigation";
 import { Options } from "nuqs";
 
-import React, { FC, useRef } from "react";
+import React, { FC, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { PrintableListGrades } from "./printable/print-list-grades";
 import { ButtonDeleteGradeFromGrid } from "./delete-grade-item";
@@ -36,7 +45,8 @@ export const ListPeriodGrades: FC<ListPeriodGradesProps> = ({
   setAnnoucementId,
 }) => {
   const { facultyId, departmentId, classId } = useParams();
-
+  const [printWithStudentName, setPrintWithStudentName] =
+    useState<boolean>(true);
   const refToPrint = useRef<HTMLDivElement | null>(null);
   const printListGrades = useReactToPrint({
     contentRef: refToPrint,
@@ -129,19 +139,60 @@ export const ListPeriodGrades: FC<ListPeriodGradesProps> = ({
             {getMomentText(annoucement.moment)}
           </Typography.Text>
           <Divider type="vertical" />
-          <Button
-            style={{
-              boxShadow: "none",
-            }}
-            icon={<PrinterOutlined />}
-            color="primary"
-            variant="dashed"
-            onClick={printListGrades}
-            disabled={isPending || data?.BodyDataList?.length === 0}
-          >
-            Imprimer
-          </Button>
+          <Dropdown
+            arrow
+            trigger={["click"]}
+            menu={{
+              items: [
+                {
+                  key: "print_with_student_name",
+                  label: "Imprimer",
+                  icon: <PrinterOutlined />,
+                  extra: (
+                    <Badge color="red" count="Avec les noms des étudiants" />
+                  ),
+                },
+                {
+                  type: "divider",
+                },
+                {
+                  key: "print_without_student_name",
+                  label: "Imprimer ",
+                  icon: <PrinterOutlined />,
+                  extra: (
+                    <Badge color="green" count="Sans les noms des étudiants" />
+                  ),
+                },
+              ],
+              onClick: ({ key }) => {
+                if (key === "print_with_student_name") {
+                  setPrintWithStudentName(true);
+                  setTimeout(() => {
+                    printListGrades();
+                  }, 300);
 
+                  printListGrades();
+                } else if (key === "print_without_student_name") {
+                  setPrintWithStudentName(false);
+                  setTimeout(() => {
+                    printListGrades();
+                  }, 300);
+                }
+              },
+            }}
+          >
+            <Button
+              style={{
+                boxShadow: "none",
+              }}
+              icon={<PrinterOutlined />}
+              color="primary"
+              variant="dashed"
+              disabled={isPending || data?.BodyDataList?.length === 0}
+            >
+              Imprimer
+            </Button>
+          </Dropdown>
           <Button
             type="text"
             icon={<CloseOutlined />}
@@ -865,6 +916,7 @@ export const ListPeriodGrades: FC<ListPeriodGradesProps> = ({
         ref={refToPrint}
         annoucement={annoucement}
         data={data}
+        printWithStudentName={printWithStudentName}
       />
     </Drawer>
   );

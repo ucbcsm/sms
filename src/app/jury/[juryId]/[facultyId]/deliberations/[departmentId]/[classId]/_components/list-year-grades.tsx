@@ -15,9 +15,11 @@ import {
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Badge,
   Button,
   Divider,
   Drawer,
+  Dropdown,
   Empty,
   Result,
   Select,
@@ -27,7 +29,7 @@ import {
 import { useParams } from "next/navigation";
 import { parseAsBoolean, parseAsStringEnum, useQueryState } from "nuqs";
 
-import React, { FC, useRef } from "react";
+import React, { FC, useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
 import { PrintableListGrades } from "./printable/print-list-grades";
 import { ButtonDeleteGradeFromGrid } from "./delete-grade-item";
@@ -66,6 +68,7 @@ export const ListYearGrades: FC<ListYearGradesProps> = ({
     )
   );
 
+  const [printWithStudentName, setPrintWithStudentName] = useState<boolean>(true);
   const refToPrint = useRef<HTMLDivElement | null>(null);
   const printListGrades = useReactToPrint({
     contentRef: refToPrint,
@@ -180,18 +183,63 @@ export const ListYearGrades: FC<ListYearGradesProps> = ({
                 setMoment(value as "before_appeal" | "after_appeal");
               }}
             />
-            <Button
-              style={{
-                boxShadow: "none",
+            <Dropdown
+              arrow
+              trigger={["click"]}
+              menu={{
+                items: [
+                  {
+                    key: "print_with_student_name",
+                    label: "Imprimer",
+                    icon: <PrinterOutlined />,
+                    extra: (
+                      <Badge color="red" count="Avec les noms des étudiants" />
+                    ),
+                  },
+                  {
+                    type: "divider",
+                  },
+                  {
+                    key: "print_without_student_name",
+                    label: "Imprimer ",
+                    icon: <PrinterOutlined />,
+                    extra: (
+                      <Badge
+                        color="green"
+                        count="Sans les noms des étudiants"
+                      />
+                    ),
+                  },
+                ],
+                onClick: ({ key }) => {
+                  if (key === "print_with_student_name") {
+                    setPrintWithStudentName(true);
+                    setTimeout(() => {
+                      printListGrades();
+                    }, 300);
+
+                    printListGrades();
+                  } else if (key === "print_without_student_name") {
+                    setPrintWithStudentName(false);
+                    setTimeout(() => {
+                      printListGrades();
+                    }, 300);
+                  }
+                },
               }}
-              icon={<PrinterOutlined />}
-              color="primary"
-              variant="dashed"
-              onClick={printListGrades}
-              disabled={isPending || data?.BodyDataList?.length === 0}
             >
-              Imprimer
-            </Button>
+              <Button
+                style={{
+                  boxShadow: "none",
+                }}
+                icon={<PrinterOutlined />}
+                color="primary"
+                variant="dashed"
+                disabled={isPending || data?.BodyDataList?.length === 0}
+              >
+                Imprimer
+              </Button>
+            </Dropdown>
 
             <Button
               type="text"
@@ -216,15 +264,17 @@ export const ListYearGrades: FC<ListYearGradesProps> = ({
               >
                 Semestre
               </th>
-              {data?.HeaderData?.no_retaken?.period_list?.map((period, index) => (
-                <th
-                  key={index}
-                  colSpan={period.course_counter}
-                  className=" text-center font-semibold bg-white border-b  border border-gray-300"
-                >
-                  {period.period.acronym}
-                </th>
-              ))}
+              {data?.HeaderData?.no_retaken?.period_list?.map(
+                (period, index) => (
+                  <th
+                    key={index}
+                    colSpan={period.course_counter}
+                    className=" text-center font-semibold bg-white border-b  border border-gray-300"
+                  >
+                    {period.period.acronym}
+                  </th>
+                )
+              )}
 
               {data?.HeaderData?.retaken?.course_list &&
                 data?.HeaderData?.retaken.course_list.length > 0 &&
@@ -942,6 +992,7 @@ export const ListYearGrades: FC<ListYearGradesProps> = ({
             session,
             moment,
           }}
+          printWithStudentName={printWithStudentName}
         />
       </Drawer>
     </>
