@@ -15,7 +15,7 @@ import {
   Year,
 } from "@/types";
 import { Card, Descriptions, Divider, Empty, Space, Table, Tag, Typography } from "antd";
-import React, { FC, RefObject } from "react";
+import { FC, RefObject } from "react";
 
 type PrintableDeliberationMinutesProps = {
   ref: RefObject<HTMLDivElement | null>;
@@ -205,6 +205,7 @@ export const PrintableDeliberationMinutes: FC<PrintableDeliberationMinutesProps>
                   dataSource={data.body[keyTyped].student_list}
                   bordered
                   size="small"
+                  showHeader={data.body[keyTyped].student_list.length > 0}
                   pagination={false}
                   style={{ marginTop: 28 }}
                   rowKey="id"
@@ -271,12 +272,7 @@ export const PrintableDeliberationMinutes: FC<PrintableDeliberationMinutesProps>
                     },
                   ]}
                   locale={{
-                    emptyText: (
-                      <Empty
-                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        description={`Aucun étudiant`}
-                      />
-                    ),
+                    emptyText: false,
                   }}
                 />
               );
