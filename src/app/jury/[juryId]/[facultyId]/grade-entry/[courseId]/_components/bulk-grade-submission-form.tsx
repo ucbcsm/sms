@@ -340,10 +340,7 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
                 dataIndex: "matricule",
                 title: "Matricule",
                 render: (_, record) =>
-                  `${record.student?.year_enrollment.user.matricule.padStart(
-                    6,
-                    "0"
-                  )}`,
+                  `${record.student?.year_enrollment.user.matricule}`,
                 width: 96,
                 align: "center",
               },

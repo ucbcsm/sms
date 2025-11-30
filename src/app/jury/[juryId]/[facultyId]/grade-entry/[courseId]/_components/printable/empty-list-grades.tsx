@@ -78,12 +78,16 @@ export const EmptyListGradesToPrint: FC<EmptyListGradesToPrintProps> = ({
                   dataIndex: "matricule",
                   title: "Matricule",
                   render: (_, record) =>
-                    `${record.student?.year_enrollment.user.matricule.padStart(
-                      6,
-                      "0"
-                    )}`,
+                    `${record.student?.year_enrollment.user.matricule}`,
                   width: 96,
                   align: "center",
+                },
+                {
+                  key: "student",
+                  dataIndex: "student",
+                  title: "Noms",
+                  render: (_, record) =>
+                    `${record.student?.year_enrollment.user.surname} ${record.student?.year_enrollment.user.last_name} ${record.student?.year_enrollment.user.first_name}`,
                 },
                 {
                   key: "class",
@@ -92,13 +96,6 @@ export const EmptyListGradesToPrint: FC<EmptyListGradesToPrintProps> = ({
                   render: (_, record) =>
                     `${record.student.year_enrollment.class_year.acronym} - ${record.student.year_enrollment.departement.acronym}`,
                   width: 84,
-                },
-                {
-                  key: "student",
-                  dataIndex: "student",
-                  title: "Noms",
-                  render: (_, record) =>
-                    `${record.student?.year_enrollment.user.surname} ${record.student?.year_enrollment.user.last_name} ${record.student?.year_enrollment.user.first_name}`,
                 },
                 {
                   key: "continuous_assessment",

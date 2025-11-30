@@ -1,15 +1,13 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getDepartmentsByFacultyId, getTaughtCoursesByFacultyPediodAndDepartement } from "@/lib/api";
 import { Period, TaughtCourse } from "@/types";
 import { BookOutlined, SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Alert, Flex, Input, List, Space, Tag, theme, Tree, Typography } from "antd";
+import { Alert, Flex, Input, Skeleton, Tag, Tree, Typography } from "antd";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { title } from "process";
+import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 
 type TreeCoursesProps = {
@@ -20,7 +18,6 @@ export const TreeCourses: FC<TreeCoursesProps> = ({ period }) => {
 
 
   const { juryId, facultyId, courseId } = useParams();
-  const router = useRouter();
   const [departmentId, setDepartmentId] = useState<string | number>("all");
   const [searchResult, setSearchResult] = useState<
     TaughtCourse[] | undefined
@@ -70,7 +67,7 @@ export const TreeCourses: FC<TreeCoursesProps> = ({ period }) => {
   };
 
   if (isPendingCourses) {
-    return <DataFetchPendingSkeleton />;
+    return <Skeleton active />;
   }
 
   if (isErrorCourses) {

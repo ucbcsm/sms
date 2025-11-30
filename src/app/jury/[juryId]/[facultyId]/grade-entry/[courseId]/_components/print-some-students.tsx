@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, SetStateAction, useState } from "react";
 import {
   Button,
   Drawer,
@@ -41,7 +41,7 @@ export const PrintSomeStudentsForm: FC<PrintSomeStudentsFormProps> = ({
   const {
     token: { colorPrimary },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
+
   const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
 
   const onClose = () => {
@@ -50,8 +50,6 @@ export const PrintSomeStudentsForm: FC<PrintSomeStudentsFormProps> = ({
   };
 
   return (
-    <>
-      {contextHolder}
       <Drawer
         open={open}
         title={
@@ -179,10 +177,7 @@ export const PrintSomeStudentsForm: FC<PrintSomeStudentsFormProps> = ({
               dataIndex: "matricule",
               title: "Matricule",
               render: (_, record) =>
-                `${record.student?.year_enrollment.user.matricule.padStart(
-                  6,
-                  "0"
-                )}`,
+                `${record.student?.year_enrollment.user.matricule}`,
               width: 96,
               align: "center",
             },
@@ -229,6 +224,5 @@ export const PrintSomeStudentsForm: FC<PrintSomeStudentsFormProps> = ({
           rowKey="id"
         />
       </Drawer>
-    </>
   );
 };
