@@ -42,7 +42,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
   course,
 }) => {
   const {
-    token: { colorPrimary },
+    token: { colorPrimary, colorBgLayout },
   } = theme.useToken();
   const { courseId } = useParams();
   const [open, setOpen] = useQueryState(
@@ -98,12 +98,11 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
         closable={false}
         width="100%"
         styles={{
-          header: { background: colorPrimary, color: "#fff" },
-          body: {},
+          body: { background: colorBgLayout },
         }}
         title={
           <Space>
-            <Typography.Title level={5} style={{ color: "#fff" }}>
+            <Typography.Title level={5} style={{ marginBottom: 0 }}>
               Rapport de présences
             </Typography.Title>
           </Space>
@@ -120,105 +119,98 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
         >
           <Row gutter={[24, 24]}>
             <Col xs={24} sm={24} md={24} lg={6}>
-              <Card
-                style={{ borderRadius: 0, boxShadow: "none" }}
-                variant="borderless"
-              >
-                <Descriptions
-                  title="Détails du cours"
-                  column={1}
-                  items={[
-                    {
-                      key: "",
-                      label: "Code",
-                      children: course?.available_course.code || "",
-                    },
-                    {
-                      key: "",
-                      label: "Intitulé",
-                      children: course?.available_course.name || "",
-                    },
-                    {
-                      key: "category",
-                      label: "Catégorie",
-                      children: course
-                        ? getCourseTypeName(
-                            course?.available_course.course_type
-                          )
-                        : "",
-                    },
-                    {
-                      key: "credits",
-                      label: "Crédits",
-                      children: course?.credit_count || "",
-                    },
-                    {
-                      key: "max",
-                      label: "Note maximale",
-                      children: course?.max_value || "",
-                    },
-                    {
-                      key: "hours",
-                      label: "Heures",
-                      children:
-                        course?.theoretical_hours! + course?.practical_hours! ||
-                        "",
-                    },
-                    {
-                      key: "theoretical_hours",
-                      label: "Heures théoriques",
-                      children: course?.theoretical_hours || "",
-                    },
-                    {
-                      key: "practical_hours",
-                      label: "Heures pratiques",
-                      children: course?.practical_hours || "",
-                    },
-                    {
-                      key: "teaching_unit",
-                      label: "UE",
-                      children: `${course?.teaching_unit?.name} ${
-                        course?.teaching_unit?.code &&
-                        `(${course.teaching_unit?.code})`
-                      }`,
-                    },
-                    {
-                      key: "teaching_unit_category",
-                      label: "Catgorie UE",
-                      children: getTeachingUnitCategoryName(
-                        course?.teaching_unit?.category!
-                      ),
-                    },
-                    {
-                      key: "start_date",
-                      label: "Date de début",
-                      children: course?.start_date
-                        ? new Intl.DateTimeFormat("fr", {
-                            dateStyle: "long",
-                          }).format(new Date(`${course.start_date}`))
-                        : "",
-                    },
-                    {
-                      key: "end_date",
-                      label: "Date de fin",
-                      children: course?.end_date
-                        ? new Intl.DateTimeFormat("fr", {
-                            dateStyle: "long",
-                          }).format(new Date(`${course?.end_date}`))
-                        : "",
-                    },
-                    {
-                      key: "status",
-                      label: "Statut",
-                      children: (
-                        <Tag bordered={false}>
-                          {getYearStatusName(course?.status!)}
-                        </Tag>
-                      ),
-                    },
-                  ]}
-                />
-              </Card>
+              <Descriptions
+                title="Détails du cours"
+                column={1}
+                items={[
+                  {
+                    key: "",
+                    label: "Code",
+                    children: course?.available_course.code || "",
+                  },
+                  {
+                    key: "",
+                    label: "Intitulé",
+                    children: course?.available_course.name || "",
+                  },
+                  {
+                    key: "category",
+                    label: "Catégorie",
+                    children: course
+                      ? getCourseTypeName(course?.available_course.course_type)
+                      : "",
+                  },
+                  {
+                    key: "credits",
+                    label: "Crédits",
+                    children: course?.credit_count || "",
+                  },
+                  {
+                    key: "max",
+                    label: "Note maximale",
+                    children: course?.max_value || "",
+                  },
+                  {
+                    key: "hours",
+                    label: "Heures",
+                    children:
+                      course?.theoretical_hours! + course?.practical_hours! ||
+                      "",
+                  },
+                  {
+                    key: "theoretical_hours",
+                    label: "Heures théoriques",
+                    children: course?.theoretical_hours || "",
+                  },
+                  {
+                    key: "practical_hours",
+                    label: "Heures pratiques",
+                    children: course?.practical_hours || "",
+                  },
+                  {
+                    key: "teaching_unit",
+                    label: "UE",
+                    children: `${course?.teaching_unit?.name} ${
+                      course?.teaching_unit?.code &&
+                      `(${course.teaching_unit?.code})`
+                    }`,
+                  },
+                  {
+                    key: "teaching_unit_category",
+                    label: "Catgorie UE",
+                    children: getTeachingUnitCategoryName(
+                      course?.teaching_unit?.category!
+                    ),
+                  },
+                  {
+                    key: "start_date",
+                    label: "Date de début",
+                    children: course?.start_date
+                      ? new Intl.DateTimeFormat("fr", {
+                          dateStyle: "long",
+                        }).format(new Date(`${course.start_date}`))
+                      : "",
+                  },
+                  {
+                    key: "end_date",
+                    label: "Date de fin",
+                    children: course?.end_date
+                      ? new Intl.DateTimeFormat("fr", {
+                          dateStyle: "long",
+                        }).format(new Date(`${course?.end_date}`))
+                      : "",
+                  },
+                  {
+                    key: "status",
+                    label: "Statut",
+                    children: (
+                      <Tag bordered={false}>
+                        {getYearStatusName(course?.status!)}
+                      </Tag>
+                    ),
+                  },
+                ]}
+              />
             </Col>
             <Col xs={24} sm={24} md={24} lg={18}>
               <Card style={{}} styles={{ body: {} }}>
@@ -233,7 +225,6 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                       <div className="flex-1" />
                       <Space>
                         <Select
-                          variant="filled"
                           value={reached}
                           options={[
                             { value: "all", label: "Tous" },
@@ -247,8 +238,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                         />
                         <Button
                           icon={<PrinterOutlined />}
-                          color="primary"
-                          variant="dashed"
+                          type="primary"
                           disabled={isPending || !data || data.length === 0}
                           style={{ boxShadow: "none" }}
                           onClick={printList}
@@ -300,7 +290,11 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                               : "error"
                           }
                           bordered={false}
-                          style={{ marginRight: 0, width: "100%", textAlign: "center" }}
+                          style={{
+                            marginRight: 0,
+                            width: "100%",
+                            textAlign: "center",
+                          }}
                         >
                           {record.required_attendance_reached ? "OUI" : "NON"}
                         </Tag>
@@ -309,7 +303,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                     },
                   ]}
                   rowKey="id"
-                  rowClassName={`bg-[#f5f5f5] odd:bg-white`}
+                  rowClassName={`bg-white odd:bg-[#f5f5f5]`}
                   scroll={{ y: "calc(100vh - 262px)" }}
                   loading={isPending}
                   size="small"

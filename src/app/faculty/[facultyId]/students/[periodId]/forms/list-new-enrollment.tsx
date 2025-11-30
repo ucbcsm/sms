@@ -3,11 +3,12 @@
 import { Avatar, Select, Space, Table, theme, Typography } from "antd";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Class, Department, Enrollment, PeriodEnrollment } from "@/types";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   getCurrentClassesAsOptions,
   getCurrentDepartmentsAsOptions,
 } from "@/lib/api";
+import { get } from "lodash";
 
 type ListNewPeriodEnrollmentsProps = {
   yearEnrollments?: Enrollment[];
@@ -102,19 +103,21 @@ export const ListNewPeriodEnrollments: FC<ListNewPeriodEnrollmentsProps> = ({
           </Space>
           <div className="flex-1" />
           <Space>
+            <Typography.Text type="secondary">Mention</Typography.Text>
             <Select
-              placeholder="Département"
+              placeholder="Mention"
               showSearch
               defaultValue={departmentFilterValueId}
               value={departmentFilterValueId}
               options={[
-                { value: 0, label: "Tous les départements" },
+                { value: 0, label: "Tous les mentions" },
                 ...getCurrentDepartmentsAsOptions(departments)!,
               ]}
               onChange={(value) => {
                 filterStudentsByDepartment(value);
               }}
             />
+            <Typography.Text type="secondary">Promotion</Typography.Text>
             <Select
               placeholder="Promotion"
               showSearch
@@ -139,7 +142,7 @@ export const ListNewPeriodEnrollments: FC<ListNewPeriodEnrollmentsProps> = ({
           key: "avatar",
           render: (_, record, __) => (
             <Avatar
-              src={record.user.avatar || null}
+              src={getPublicR2Url(record.user.avatar)}
               style={{
                 backgroundColor: existsInPeriodEnrollments(record.id)
                   ? colorTextDisabled

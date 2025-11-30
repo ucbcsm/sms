@@ -3,7 +3,7 @@
 import { Avatar, Select, Space, Table, theme, Typography } from "antd";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Class, CourseEnrollment, Department, PeriodEnrollment } from "@/types";
-import { getHSLColor } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   getCurrentClassesAsOptions,
   getCurrentDepartmentsAsOptions,
@@ -110,19 +110,21 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
           </Space>
           <div className="flex-1" />
           <Space>
+            <Typography.Text type="secondary">Mention:</Typography.Text>
             <Select
               placeholder="Département"
               showSearch
               defaultValue={departmentFilterValueId}
               value={departmentFilterValueId}
               options={[
-                { value: 0, label: "Tous les départements" },
+                { value: 0, label: "Tous les mentions" },
                 ...getCurrentDepartmentsAsOptions(departments)!,
               ]}
               onChange={(value) => {
                 filterStudentsByDepartment(value);
               }}
             />
+            <Typography.Text type="secondary">Promotion:</Typography.Text>
             <Select
               placeholder="Promotion"
               showSearch
@@ -147,17 +149,16 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
           key: "avatar",
           render: (_, record, __) => (
             <Avatar
-              src={record.year_enrollment.user.avatar || null}
+              src={getPublicR2Url(record.year_enrollment.user.avatar)}
               style={{
                 backgroundColor: existsInCourseEnrollments(record.period.id)
                   ? colorTextDisabled
                   : getHSLColor(
-                      `${record.year_enrollment.user.first_name} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.surname}`
+                      `${record.year_enrollment.user.surname} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.first_name}`
                     ),
               }}
             >
               {record.year_enrollment.user.first_name?.charAt(0).toUpperCase()}
-              {record.year_enrollment.user.last_name?.charAt(0).toUpperCase()}
             </Avatar>
           ),
           width: 58,
@@ -176,7 +177,7 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
                   : "",
               }}
             >
-              {record.year_enrollment.user.matricule.padStart(6, "0")}
+              {record.year_enrollment.user.matricule}
             </Typography.Text>
           ),
           align: "center",
@@ -193,9 +194,9 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
                   : "",
               }}
             >
-              {record.year_enrollment.user.first_name}{" "}
+              {record.year_enrollment.user.surname}{" "}
               {record.year_enrollment.user.last_name}{" "}
-              {record.year_enrollment.user.surname}
+              {record.year_enrollment.user.first_name}
             </Typography.Text>
           ),
         },

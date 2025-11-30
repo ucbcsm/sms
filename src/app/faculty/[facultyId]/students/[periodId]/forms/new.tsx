@@ -18,10 +18,10 @@ import {
   Card,
   Statistic,
   Dropdown,
+  App,
 } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import {
-  BulbOutlined,
   CloseOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
@@ -57,10 +57,11 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
   classes,
 }) => {
   const {
-    token: { colorPrimary },
+    token: { colorBgLayout },
   } = theme.useToken();
+  const {message}=App.useApp();
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
+  
   const { facultyId, periodId } = useParams();
   const router = useRouter();
   const [openNewEnrollments, setOpenNewEnrollments] = useQueryState(
@@ -101,7 +102,7 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
           queryClient.invalidateQueries({
             queryKey: ["period_enrollments"],
           });
-          messageApi.success("Étudiants inscrits à la période avec succès !");
+          message.success("Étudiants inscrits à la période avec succès !");
           setSelectedRowKeys([]);
           setClassFilterValueId(0);
           setDepartmentFilterValueId(0);
@@ -110,15 +111,15 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
         },
         onError: (error) => {
           if ((error as any).status === 403) {
-            messageApi.error(
+            message.error(
               `Vous n'avez pas la permission d'effectuer cette action`
             );
           } else if ((error as any).status === 401) {
-            messageApi.error(
+            message.error(
               "Vous devez être connecté pour effectuer cette action."
             );
           } else {
-            messageApi.error(
+            message.error(
               (error as any)?.response?.data?.message ||
                 "Erreur lors de l'inscription à la période. Veuillez réessayer."
             );
@@ -130,7 +131,6 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
 
   return (
     <>
-      {contextHolder}
       <Dropdown
         menu={{
           items: [...(periodsAsMenu || [])],
@@ -152,7 +152,9 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
       </Dropdown>
 
       <Drawer
-        styles={{ header: { background: colorPrimary, color: "#fff" } }}
+        styles={{
+          body: { background: colorBgLayout },
+        }}
         width={`100%`}
         title={
           <Space>
@@ -173,7 +175,7 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
         extra={
           <Space>
             <Button
-              style={{ boxShadow: "none", color: "#fff" }}
+              style={{ boxShadow: "none" }}
               onClick={() => setCancel(true)}
               icon={<CloseOutlined />}
               type="text"
@@ -206,27 +208,6 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
         }
       >
         <div style={{ maxWidth: 1400, margin: "auto" }}>
-          {/* <Alert
-            type="info"
-            icon={<BulbOutlined />}
-            message="Instructions d'inscription"
-            description={
-              <>
-                <div>
-                  Sélectionnez un ou plusieurs étudiants à inscrire à cette
-                  période pédagogique.
-                </div>
-                <div style={{ marginTop: 8 }}>
-                  Précisez également le <b>statut de l'inscription</b> pour
-                  l&apos;ensemble de la sélection : <i>En attente</i>,{" "}
-                  <i>Validé</i> ou <i>Réjeté</i>.
-                </div>
-              </>
-            }
-            showIcon
-            closable
-            style={{ marginBottom: 24 }}
-          /> */}
           <Row gutter={[24, 24]}>
             <Col span={16}>
               <Card>
@@ -243,20 +224,6 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
                   setClassFilterValueId={setClassFilterValueId}
                 />
               </Card>
-              {/* <div
-                style={{
-                  display: "flex",
-                  padding: "24px 0",
-                }}
-              >
-                <Typography.Text type="secondary">
-                  © {new Date().getFullYear()} UCBC. Tous droits réservés.
-                </Typography.Text>
-                <div className="flex-1" />
-                <Space>
-                  <Palette />
-                </Space>
-              </div> */}
             </Col>
             <Col span={8}>
               <Flex vertical gap={16}>

@@ -7,6 +7,7 @@ import {
   HourglassOutlined,
   MoreOutlined,
   PrinterOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import {
   Avatar,
@@ -21,7 +22,7 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 import { PendingSinglePeriodEnrollmentForm } from "./forms/decisions/pending";
 import { ValidateSignlePeriodEnllmentForm } from "./forms/decisions/validate";
@@ -221,17 +222,16 @@ export const ListPeriodValidatedStudents: FC<
           <Space>
             <Input.Search
               placeholder="Rechercher ..."
-              onChange={(e) => {
+              onSearch={(value) => {
                 setPage(0);
-                setSearch(e.target.value);
+                setSearch(value);
               }}
               allowClear
-              variant="filled"
-              style={{ maxWidth: 180 }}
+              prefix={<SearchOutlined />}
+              enterButton={<Button type="primary">Rechercher</Button>}
             />
             <Select
               value={classId}
-              variant="filled"
               onChange={(value) => {
                 setPage(0);
                 setClassId(value);
@@ -245,7 +245,6 @@ export const ListPeriodValidatedStudents: FC<
             />
             <Select
               value={departmentId}
-              variant="filled"
               onChange={(value) => {
                 setPage(0);
                 setDepartmentId(value);
@@ -260,30 +259,6 @@ export const ListPeriodValidatedStudents: FC<
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
-            {/* <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "pdf",
-                    label: "Exporter PDF",
-                    icon: <FilePdfOutlined />,
-                    title: "Exporter en pdf",
-                  },
-                  {
-                    key: "excel",
-                    label: "Exporter EXCEL",
-                    icon: <FileExcelOutlined />,
-                    title: "Exporter vers Excel",
-                  },
-                ],
-              }}
-            >
-              <Button
-                type="text"
-                icon={<MoreOutlined />}
-                style={{ boxShadow: "none" }}
-              />
-            </Dropdown> */}
           </Space>
         </header>
       )}
@@ -308,18 +283,6 @@ export const ListPeriodValidatedStudents: FC<
           width: 56,
         },
         {
-          title: "Matricule",
-          dataIndex: "matricule",
-          key: "matricule",
-          render: (_, record) => (
-            <Link href={`/student/${record.year_enrollment.id}`}>
-              {record.year_enrollment.user.matricule}
-            </Link>
-          ),
-          width: 80,
-          align: "center",
-        },
-        {
           title: "Noms",
           dataIndex: "name",
           key: "name",
@@ -332,6 +295,19 @@ export const ListPeriodValidatedStudents: FC<
           ),
           ellipsis: true,
         },
+        {
+          title: "Matricule",
+          dataIndex: "matricule",
+          key: "matricule",
+          render: (_, record) => (
+            <Link href={`/student/${record.year_enrollment.id}`}>
+              {record.year_enrollment.user.matricule}
+            </Link>
+          ),
+          width: 80,
+          align: "center",
+        },
+
         {
           title: "Promotion",
           dataIndex: "promotion",

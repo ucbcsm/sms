@@ -127,13 +127,17 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
             title={`Quitter`}
             centered
             open={isModalOpen}
-            onOk={() => {
-              router.push(`/faculty/${course?.faculty.id}/taught-courses`);
-              setIsModalOpen(false);
-            }}
             onCancel={() => setIsModalOpen(false)}
             okButtonProps={{ style: { boxShadow: "none" } }}
             cancelButtonProps={{ style: { boxShadow: "none" } }}
+            footer={(_, { OkBtn, CancelBtn }) => (
+              <Space>
+                <CancelBtn />
+                <Link href={`/faculty/${course?.faculty.id}/taught-courses`}>
+                  <OkBtn />
+                </Link>
+              </Space>
+            )}
           >
             <Alert
               description={`Vous allez quitter le cours: ${course?.available_course.name} et retourner à la liste des cours.`}
@@ -167,7 +171,13 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
             </Typography.Title>
           </Link>
           <Divider type="vertical" />
-          <Typography.Title level={5} type="secondary" style={{marginBottom:0}}>Cours:</Typography.Title>
+          <Typography.Title
+            level={5}
+            type="secondary"
+            style={{ marginBottom: 0 }}
+          >
+            Cours:
+          </Typography.Title>
 
           {!isPending ? (
             <Typography.Title
@@ -229,7 +239,7 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
               key: `/taught-course/${courseId}/assessments`,
               label: (
                 <Link href={`/taught-course/${courseId}/assessments`}>
-                  Notes (TD/TP & Examens)
+                  Notes (CC & Examens)
                 </Link>
               ),
             },

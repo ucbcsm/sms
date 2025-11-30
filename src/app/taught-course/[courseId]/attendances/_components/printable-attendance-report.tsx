@@ -3,7 +3,7 @@
 import { DocHeader } from "@/components/doc-header";
 import { TaughtCourse } from "@/types";
 import { Card, Descriptions, Table, Tag } from "antd";
-import React, { FC, RefObject } from "react";
+import { FC, RefObject } from "react";
 
 type PrintableAttendanceReportProps = {
   ref: RefObject<HTMLDivElement | null>;

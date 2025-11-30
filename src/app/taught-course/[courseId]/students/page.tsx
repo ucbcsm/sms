@@ -253,7 +253,7 @@ export default function Page() {
 
   return (
     <Layout>
-      <Layout.Content style={{ padding: `16px 16px 0 16px` }}>
+      <Layout.Content style={{ padding: `16px 16px 0 16px`, minHeight:`calc(100vh  - 110px)` }}>
         <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
           <Col span={16}>
             <ListCourseValidatedStudents
