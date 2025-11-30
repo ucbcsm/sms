@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  Button,
-  Card,
   Form,
   Layout,
   Menu,
@@ -11,10 +9,7 @@ import {
   theme,
   Typography,
 } from "antd";
-
-import { Palette } from "@/components/palette";
-import BackButton from "@/components/backButton";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getDepartment } from "@/lib/api";
 import Link from "next/link";
@@ -25,11 +20,10 @@ export default function DepartmentLayout({
   children: React.ReactNode;
 }) {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBgLayout },
   } = theme.useToken();
   const { facultyId, departmentId } = useParams();
   const pathname = usePathname();
-  const router = useRouter();
 
   const {
     data: department,
@@ -134,6 +128,7 @@ export default function DepartmentLayout({
             // overflowY: "auto",
             // height: "calc(100vh - 174px)",
             paddingTop: 16,
+            background:colorBgLayout
           }}
         >
           {children}

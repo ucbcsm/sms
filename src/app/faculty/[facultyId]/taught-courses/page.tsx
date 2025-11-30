@@ -36,6 +36,7 @@ import {
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
+  SearchOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -318,6 +319,7 @@ export default function Page() {
                   }}
                   allowClear
                   // variant="filled"
+                  prefix={<SearchOutlined />}
                   enterButton={<Button type="primary">Rechercher</Button>}
                 />
               </Space>

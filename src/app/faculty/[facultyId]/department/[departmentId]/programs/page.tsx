@@ -16,6 +16,7 @@ import {
   MoreOutlined,
   PlusOutlined,
   PrinterOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Dropdown, Input, Space, Table } from "antd";
@@ -118,7 +119,13 @@ export default function Page() {
       title={() => (
         <header className="flex pb-3">
           <Space>
-            <Input.Search placeholder="Rechercher un programme ..." />
+            <Input.Search
+              placeholder="Rechercher un programme ..."
+              enterButton={<Button type="primary">Rechecher</Button>}
+              prefix={<SearchOutlined />}
+              onSearch={(value)=>{
+              }}
+            />
           </Space>
           <div className="flex-1" />
           <Space>
@@ -126,7 +133,7 @@ export default function Page() {
             <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
             </Button>
-            <Dropdown
+            {/* <Dropdown
               menu={{
                 items: [
                   {
@@ -147,7 +154,7 @@ export default function Page() {
               <Button icon={<DownOutlined />} style={{ boxShadow: "none" }}>
                 Exporter
               </Button>
-            </Dropdown>
+            </Dropdown> */}
           </Space>
         </header>
       )}

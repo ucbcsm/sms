@@ -9,6 +9,7 @@ import { getClassesYearsAsOptions, getYearEnrollments } from "@/lib/api";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   PrinterOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -75,16 +76,17 @@ export default function Page() {
       loading={isPending}
       bordered
       title={() => (
-        <header className="flex pb-3">
+        <header className="flex">
           <Space>
             <Input.Search
               placeholder="Rechercher un étudiant ..."
-              onChange={(e) => {
+              onSearch={(value) => {
                 setPage(0);
-                setSearch(e.target.value);
+                setSearch(value);
               }}
               allowClear
-              variant="filled"
+              prefix={<SearchOutlined />}
+              enterButton={<Button type="primary">Rechercher</Button>}
             />
           </Space>
           <div className="flex-1" />
@@ -209,7 +211,7 @@ export default function Page() {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 393px)" }}
+      scroll={{ y: "calc(100vh - 382px)" }}
       size="small"
       pagination={{
         defaultPageSize: 25,

@@ -18,6 +18,7 @@ import {
   FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -98,16 +99,17 @@ export default function Page() {
     <Table
       bordered
       title={() => (
-        <header className="flex pb-3">
+        <header className="flex">
           <Space>
             <Input.Search
               placeholder="Rechercher un étudiant ..."
-              onChange={(e) => {
+              onSearch={(value) => {
                 setPage(0);
-                setSearch(e.target.value);
+                setSearch(value);
               }}
               allowClear
-              variant="filled"
+              prefix={<SearchOutlined />}
+              enterButton={<Button type="primary">Rechercher</Button>}
             />
           </Space>
           <div className="flex-1" />
@@ -278,7 +280,7 @@ export default function Page() {
       rowSelection={{
         type: "checkbox",
       }}
-      scroll={{ y: "calc(100vh - 394px)" }}
+      scroll={{ y: "calc(100vh - 382px)" }}
       size="small"
       loading={isPendingEnrollememts}
       pagination={{
