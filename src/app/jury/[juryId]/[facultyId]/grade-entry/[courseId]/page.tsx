@@ -31,13 +31,14 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Alert,
+  App,
   Button,
   Checkbox,
   Dropdown,
   Form,
   Layout,
-  message,
   Popover,
+  Result,
   Select,
   Skeleton,
   Space,
@@ -64,12 +65,13 @@ import { ButtonDeleteSingleGrade } from "./_components/delete-single-grade";
 import { useYid } from "@/hooks/use-yid";
 import { ExportSomeStudentsToExcelForm } from "./_components/export-some-students-to-excel";
 import { PrintSomeStudentsForm } from "./_components/print-some-students";
+import { NotGradeEntry } from "./_components/not-grade-entry";
 
 export default function Page() {
   const {
     token: { colorBgContainer, colorSuccess, colorWarning },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
+  const {message} = App.useApp();
   const [openIndividualEntry, setOpenIndividualEntry] =
     useState<boolean>(false);
   const [openBulkSubmission, setOpenBulkSubmission] = useState<boolean>(false);
@@ -182,11 +184,11 @@ export default function Page() {
         queryClient.invalidateQueries({
           queryKey: ["grade_classes", courseId, session, moment],
         });
-        messageApi.success("Notes mise à jour avec succès !");
+        message.success("Notes mise à jour avec succès !");
         setOpenMultiUpdateConfirm(false);
       },
       onError: (error) => {
-        messageApi.error(
+        message.error(
           (error as any)?.response?.data?.message ||
             "Une erreur s'est produite lors de la mise à jour des notes"
         );
@@ -206,9 +208,13 @@ export default function Page() {
     editedGradeClassItems
   );
 
+  if (course && course.status !== "finished") {
+    return <NotGradeEntry course={course} />;
+  }
+
+
   return (
     <Layout>
-      {contextHolder}
       <Layout.Header
         style={{
           display: "flex",
@@ -359,11 +365,11 @@ export default function Page() {
                       fileName: `${course?.available_course.name}-notes-${course.available_course.code}.xlsx`,
                     });
 
-                    messageApi.success(
+                    message.success(
                       "Fichier Excel des notes vides exporté avec succès !"
                     );
                   } else {
-                    messageApi.error(
+                    message.error(
                       "Aucun étudiant trouvé pour exporter les notes vides."
                     );
                   }
@@ -377,7 +383,7 @@ export default function Page() {
                   ) {
                     printAllEmptyGradeList();
                   } else {
-                    messageApi.info(
+                    message.info(
                       "Aucun étudiant trouvé pour imprimer les notes vides."
                     );
                   }

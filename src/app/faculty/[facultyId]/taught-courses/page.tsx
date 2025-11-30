@@ -308,15 +308,17 @@ export default function Page() {
         <Table
           bordered
           title={() => (
-            <header className="flex pb-3">
+            <header className="flex">
               <Space>
                 <Input.Search
-                  placeholder="Rechercher un cours dans le catalogue ..."
-                  onChange={(e) => {
-                    setSearch(e.target.value);
+                  placeholder="Rechercher un cours ..."
+                  onSearch={(value) => {
+                    setPage(0);
+                    setSearch(value);
                   }}
                   allowClear
-                  variant="filled"
+                  // variant="filled"
+                  enterButton={<Button type="primary">Rechercher</Button>}
                 />
               </Space>
               <div className="flex-1" />
@@ -424,7 +426,6 @@ export default function Page() {
               align: "right",
               width: 68,
               render: (_, record, __) => record.credit_count,
-              
             },
             {
               title: "Heures",
@@ -436,7 +437,7 @@ export default function Page() {
                   Number(record.practical_hours)
                 }`,
               width: 64,
-              align:"right"
+              align: "right",
             },
             // {
             //   title: "Heures théorique",
@@ -566,7 +567,7 @@ export default function Page() {
           rowSelection={{
             type: "checkbox",
           }}
-          scroll={{ y: "calc(100vh - 331px)" }}
+          scroll={{ y: "calc(100vh - 320px)" }}
           size="small"
           pagination={{
             defaultPageSize: 25,
