@@ -6,6 +6,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createCourse,
+  getCoursesAsOptions,
   getCourseTypesAsOptions,
   getCurrentFacultiesAsOptions,
 } from "@/lib/api";
@@ -13,14 +14,20 @@ import { Course, Faculty } from "@/types";
 import { filterOption } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
-type FormDataType = Omit<Course, "id" | "faculties"> & {
+type FormDataType = Omit<
+  Course,
+  "id" | "faculties" | "prerequisite_courses"
+> & {
   faculties: number[];
+  prerequisite_courses: number[];
 };
 
 type NewCourseFormProps = {
+
   faculties?: Faculty[];
+  courses?: Course[];
 };
-export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
+export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties, courses }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const {facultyId} = useParams()
@@ -40,6 +47,7 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
     mutateAsync(values, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["courses"] });
+        queryClient.invalidateQueries({ queryKey: ["all-courses"] });
         messageApi.success("Cours créé avec succès !");
         onclose();
       },
@@ -148,7 +156,22 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
         >
           <Select options={getCourseTypesAsOptions} />
         </Form.Item>
-        <Form.Item name="faculties" label="Pour facultés" rules={[{required:true}]} initialValue={[Number(facultyId)]}>
+        <Form.Item name="prerequisite_courses" label="Prérequis du cours">
+          <Select
+            placeholder="Sélectionnez les cours prérequis"
+            showSearch
+            options={getCoursesAsOptions(courses)}
+            mode="multiple"
+            filterOption={filterOption}
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item
+          name="faculties"
+          label="Pour facultés"
+          rules={[{ required: true }]}
+          initialValue={[Number(facultyId)]}
+        >
           <Select
             placeholder="Sélectionnez une faculté"
             showSearch

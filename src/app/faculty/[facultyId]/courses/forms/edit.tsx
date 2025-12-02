@@ -7,17 +7,23 @@ import {
   updateCourse,
   getCourseTypesAsOptions,
   getCurrentFacultiesAsOptions,
+  getCoursesAsOptions,
 } from "@/lib/api";
 import { Course, Faculty } from "@/types";
 import { filterOption } from "@/lib/utils";
 
-type FormDataType = Omit<Course, "id" | "faculties"> & {
+type FormDataType = Omit<
+  Course,
+  "id" | "faculties" | "prerequisite_courses"
+> & {
   faculties: number[];
+  prerequisite_courses: number[];
 };
 
 type EditCourseFormProps = {
   course: Course;
   faculties?: Faculty[];
+  courses?: Course[];
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
@@ -25,6 +31,7 @@ type EditCourseFormProps = {
 export const EditCourseForm: React.FC<EditCourseFormProps> = ({
   course,
   faculties,
+  courses,
   open,
   setOpen,
 }) => {
@@ -37,13 +44,13 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(
       { id: course.id, params: values },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["courses"] });
+          queryClient.invalidateQueries({ queryKey: ["all-courses"] });
           messageApi.success("Cours modifié avec succès !");
           setOpen(false);
         },
@@ -97,8 +104,9 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
             name="edit_course"
             initialValues={{
               ...course,
-              faculties: course.faculties.map(
-                (fac) => fac.id
+              faculties: course.faculties.map((fac) => fac.id),
+              prerequisite_courses: course.prerequisite_courses.map(
+                (c) => c.id
               ),
             }}
             onFinish={onFinish}
@@ -149,7 +157,21 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
         >
           <Select options={getCourseTypesAsOptions} />
         </Form.Item>
-        <Form.Item name="faculties" label="Pour facultés" rules={[{required:true}]}>
+        <Form.Item name="prerequisite_courses" label="Prérequis du cours">
+          <Select
+            placeholder="Sélectionnez les cours prérequis"
+            showSearch
+            options={getCoursesAsOptions(courses)}
+            mode="multiple"
+            filterOption={filterOption}
+            allowClear
+          />
+        </Form.Item>
+        <Form.Item
+          name="faculties"
+          label="Pour facultés"
+          rules={[{ required: true }]}
+        >
           <Select
             placeholder="Sélectionnez une faculté"
             showSearch

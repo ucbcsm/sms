@@ -4,6 +4,7 @@ import { DeleteCourseForm } from "@/app/faculty/[facultyId]/courses/forms/delete
 import { EditCourseForm } from "@/app/faculty/[facultyId]/courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import {
+  getAllCourses,
   getCourses,
   getCourseTypeName,
   getCycles,
@@ -26,7 +27,9 @@ import {
   Space,
   Splitter,
   Table,
+  Tag,
   theme,
+  Tooltip,
   Typography,
 } from "antd";
 import { useParams } from "next/navigation";
@@ -38,9 +41,10 @@ import { parseAsInteger, useQueryState, } from "nuqs";
 type ActionsBarProps = {
   record: Course;
   faculties?: Faculty[];
+  courses?: Course[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, faculties,courses }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -49,6 +53,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties }) => {
       <EditCourseForm
         course={record}
         faculties={faculties}
+        courses={courses}
         open={openEdit}
         setOpen={setOpenEdit}
       />
@@ -114,7 +119,12 @@ export default function Page() {
     enabled: !!facultyId,
   });
 
-  console.log(data?.results)
+    const { data: allCourses } = useQuery({
+      queryKey: ["all-courses", facultyId, "all"],
+      queryFn: ({ queryKey }) =>
+        getAllCourses({ facultyId: Number(queryKey[1]) }),
+      enabled: !!facultyId,
+    });
 
   const { data: faculties } = useQuery({
     queryKey: ["faculties"],
@@ -129,7 +139,7 @@ export default function Page() {
   // if (isPending) {
   //   return <DataFetchPendingSkeleton variant="table" />;
   // }
-
+console.log(data);
   if (isError) {
     return <DataFetchErrorResult />;
   }
@@ -184,6 +194,7 @@ export default function Page() {
                   faculties={faculties?.filter(
                     (fac) => fac.id === Number(facultyId)
                   )}
+                  courses={allCourses}
                 />
                 <Button
                   icon={<PrinterOutlined />}
@@ -239,6 +250,21 @@ export default function Page() {
               ellipsis: true,
             },
             {
+              title: "Prérequis",
+              dataIndex: "prerequisite_courses",
+              key: "prerequisite_courses",
+              render: (_, record, __) => (
+                <Space wrap>
+                  {record.prerequisite_courses.map((c) => (
+                    <Tooltip title={c.name} key={c.id}>
+                      <Tag style={{ marginRight: 0 }}>{c.code}</Tag>
+                    </Tooltip>
+                  ))}
+                </Space>
+              ),
+              ellipsis: true,
+            },
+            {
               title: "",
               key: "actions",
               render: (_, record, __) => {
@@ -248,6 +274,7 @@ export default function Page() {
                     faculties={faculties?.filter(
                       (fac) => fac.id === Number(facultyId)
                     )}
+                    courses={allCourses}
                   />
                 );
               },

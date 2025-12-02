@@ -32,6 +32,9 @@ export const DeleteCourseForm: FC<DeleteCourseFormProps> = ({
             mutateAsync(course.id, {
                 onSuccess: () => {
                     queryClient.invalidateQueries({ queryKey: ["courses"] });
+                    queryClient.invalidateQueries({
+                      queryKey: ["all-courses"],
+                    });
                     messageApi.success("Cours supprimé avec succès !");
                     setOpen(false);
                 },

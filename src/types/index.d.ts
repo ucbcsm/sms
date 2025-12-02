@@ -316,6 +316,7 @@ export const Course = z.object({
     "practical",
     "theoretical_and_practical",
   ]),
+  prerequisite_courses: z.array(z.lazy(() => Course)).default([]),
 });
 
 export type Course = z.infer<typeof Course>;
