@@ -235,7 +235,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name="max_value" label="Max">
+                  <Form.Item name="max_value" label="Max" hidden>
                     <InputNumber type="number" min={0} placeholder="" />
                   </Form.Item>
                 </Col>

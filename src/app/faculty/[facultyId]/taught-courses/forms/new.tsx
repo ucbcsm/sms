@@ -76,6 +76,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
   const queryClient = useQueryClient();
 
   const onClose = () => {
+    form.resetFields();
     setNewTaughtCourse(false);
   };
 
@@ -90,8 +91,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["taught_courses"] });
           messageApi.success("Cours programmé avec succès !");
-          setNewTaughtCourse(false);
-          form.resetFields();
+          onClose();
         },
         onError: (error) => {
           if ((error as any).status === 403) {
@@ -183,7 +183,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   enseignants, etc.) sont exactes.
                 </li>
                 <li>
-                  ▪ Ajoutez les départements et la période concernés par ce
+                  ▪ Ajoutez les mentions et la période concernés par ce
                   cours.
                 </li>
                 <li>
@@ -252,7 +252,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   </Form.Item>
                 </Col>
                 <Col span={12}>
-                  <Form.Item name="max_value" label="Max">
+                  <Form.Item name="max_value" label="Max" hidden>
                     <InputNumber type="number" min={0} placeholder="" />
                   </Form.Item>
                 </Col>
@@ -283,7 +283,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               <Form.Item
                 name="attendance_threshold"
                 label="Seuil de présence (%)"
-                rules={[{required: true}]}
+                rules={[{ required: true }]}
                 initialValue={75}
               >
                 <InputNumber
