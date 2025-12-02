@@ -1,15 +1,17 @@
 import {
-  Badge,
   Button,
   Card,
   Dropdown,
+  Input,
   List,
   Skeleton,
   Space,
   Tag,
+  theme,
+  Typography,
 } from "antd";
-import { DeleteOutlined, EditOutlined, MoreOutlined } from "@ant-design/icons";
-import { Cycle, Department, TeachingUnit } from "@/types";
+import { DeleteOutlined, EditOutlined, MoreOutlined, SearchOutlined } from "@ant-design/icons";
+import { Cycle, TeachingUnit } from "@/types";
 import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -19,8 +21,8 @@ import {
 import { NewTeachingUnitForm } from "./forms/new";
 import { useParams } from "next/navigation";
 import { DeleteTeachingUnitForm } from "./forms/delete";
-import { getHSLColor } from "@/lib/utils";
 import { EditTeachingUnitForm } from "./forms/edit";
+import Search from "antd/es/transfer/search";
 
 type ListItemProps = {
   item: TeachingUnit;
@@ -93,36 +95,78 @@ const ListItem: FC<ListItemProps> = ({ item, cycles }) => {
 
 type ListTeachingUnitsProps = {
   cycles?: Cycle[];
-  // departments?: Department[];
 };
 export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
   cycles,
-  // departments,
 }) => {
+  const {token:{colorBgLayout, colorBgContainer}}=theme.useToken();
+
   const { facultyId } = useParams();
+  const [searchResults, setSearchResults] = useState<
+    TeachingUnit[] | undefined
+  >();
   const { data: teaching_units, isPending } = useQuery({
     queryKey: ["teaching-units", facultyId],
     queryFn: ({ queryKey }) => getTeachingUnitsByfaculty(Number(queryKey[1])),
     enabled: !!facultyId,
   });
+
+
+
   return (
     <Card
       variant="borderless"
       loading={isPending}
       title={
         !isPending ? (
-          "Unités d'enseignements"
+          <Typography.Title level={3} style={{ marginBottom: 0 }}>
+            Unités d&apos;enseignements
+          </Typography.Title>
         ) : (
           <Skeleton.Input size="small" active />
         )
       }
-      style={{ boxShadow: "none", borderRadius: 0 }}
+      style={{ boxShadow: "none", borderRadius: 0, background: colorBgLayout }}
       extra={teaching_units && <NewTeachingUnitForm cycles={cycles} />}
-      styles={{ body: { height: `calc(100vh - 165px)`, overflow: "auto" } }}
+      styles={{
+        header: {
+          background: colorBgLayout,
+          borderBottom: 0,
+        },
+        body: {
+          height: `calc(100vh - 165px)`,
+          overflow: "auto",
+          // background: colorBgLayout,
+          paddingTop: 12,
+        },
+      }}
     >
       <div>
         <List
-          dataSource={teaching_units}
+          header={
+            <div>
+              <Input.Search
+                placeholder="Rechercher une unité d'enseignement ..."
+                onChange={(e) => {
+                  const filtered = teaching_units?.filter(
+                    (tu) =>
+                      tu.name
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase()) ||
+                      tu.code
+                        .toLowerCase()
+                        .includes(e.target.value.toLowerCase())
+                  );
+                  setSearchResults(filtered);
+                }}
+                style={{ width: "100%" }}
+                allowClear
+              />
+            </div>
+          }
+          dataSource={searchResults || teaching_units}
+          size="small"
+          bordered
           renderItem={(item) => (
             <ListItem
               key={item.id}
@@ -131,6 +175,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
               // departments={departments}
             />
           )}
+          style={{ background: colorBgContainer }}
         />
       </div>
     </Card>

@@ -26,20 +26,22 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
   const {facultyId} = useParams()
   const [open, setOpen] = useState(false);
 
-
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createCourse,
   });
 
-  const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
+  const onclose = () => {
+    form.resetFields();
+    setOpen(false);
+  }
 
+  const onFinish = (values: FormDataType) => {
     mutateAsync(values, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["courses"] });
         messageApi.success("Cours créé avec succès !");
-        setOpen(false);
+        onclose();
       },
       onError: (error) => {
         if ((error as any).status === 403) {
@@ -56,7 +58,7 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
               "Une erreur s'est produite lors de la création du cours."
           );
         }
-      }
+      },
     });
   };
 
@@ -87,7 +89,7 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties }) => {
         cancelButtonProps={{
           style: { boxShadow: "none" },
         }}
-        onCancel={() => setOpen(false)}
+        onCancel={onclose}
         destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (

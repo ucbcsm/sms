@@ -3,10 +3,8 @@
 import { DeleteCourseForm } from "@/app/faculty/[facultyId]/courses/forms/delete";
 import { EditCourseForm } from "@/app/faculty/[facultyId]/courses/forms/edit";
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import {
   getCourses,
-  getCoursesByFacultyId,
   getCourseTypeName,
   getCycles,
   getFaculties,
@@ -14,25 +12,19 @@ import {
 import { Course, Faculty } from "@/types";
 import {
   DeleteOutlined,
-  DownOutlined,
   EditOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
-  Card,
-  Col,
   Dropdown,
-  Form,
   Input,
   Layout,
-  Row,
-  Skeleton,
   Space,
+  Splitter,
   Table,
   theme,
   Typography,
@@ -40,7 +32,6 @@ import {
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 import { NewCourseForm } from "@/app/faculty/[facultyId]/courses/forms/new";
-import { Palette } from "@/components/palette";
 import { ListTeachingUnits } from "./teaching-units/list";
 import { parseAsInteger, useQueryState, } from "nuqs";
 
@@ -143,8 +134,8 @@ export default function Page() {
     return <DataFetchErrorResult />;
   }
   return (
-    <Layout>
-      <Layout.Content
+    <Splitter>
+      <Splitter.Panel
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
@@ -169,23 +160,22 @@ export default function Page() {
             </Typography.Title>
           </Space>
           <div className="flex-1" />
-          <Space>
-            {/* <Palette /> */}
-          </Space>
+          <Space>{/* <Palette /> */}</Space>
         </Layout.Header>
 
         <Table
           title={() => (
-            <header className="flex pb-3">
+            <header className="flex">
               <Space>
                 <Input.Search
-                  placeholder="Rechercher un cours dans le catalogue ..."
-                  onChange={(e) => {
+                  placeholder="Titre, code ..."
+                  onSearch={(value) => {
                     setPage(0);
-                    setSearch(e.target.value);
+                    setSearch(value);
                   }}
                   allowClear
-                  variant="filled"
+                  prefix={<SearchOutlined />}
+                  enterButton={<Button type="primary">Rechercher</Button>}
                 />
               </Space>
               <div className="flex-1" />
@@ -269,7 +259,7 @@ export default function Page() {
           rowSelection={{
             type: "checkbox",
           }}
-          scroll={{ y: "calc(100vh - 331px)" }}
+          scroll={{ y: "calc(100vh - 319px)" }}
           size="small"
           bordered
           loading={isPendngCourses}
@@ -287,17 +277,10 @@ export default function Page() {
             },
           }}
         />
-      </Layout.Content>
-      <Layout.Sider
-        width={300}
-        style={{
-          borderLeft: `1px solid ${colorBorderSecondary}`,
-          // paddingTop: 20,
-          background: colorBgContainer,
-        }}
-      >
+      </Splitter.Panel>
+      <Splitter.Panel min={400} max={512}>
         <ListTeachingUnits cycles={cycles} />
-      </Layout.Sider>
-    </Layout>
+      </Splitter.Panel>
+    </Splitter>
   );
 }

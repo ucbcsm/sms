@@ -6,11 +6,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   createTeachingUnit,
   getCurrentCyclesAsOptions,
-  getCurrentDepartmentsAsOptions,
 } from "@/lib/api";
 import { Cycle, Department, TeachingUnit } from "@/types";
 import { filterOption } from "@/lib/utils";
 import { useParams } from "next/navigation";
+import { on } from "events";
 
 type FormDataType = Omit<TeachingUnit, "id" | "departement" | "cycle"> & {
   department_id: number;
@@ -35,12 +35,17 @@ export const NewTeachingUnitForm: React.FC<NewTeachingUnitFormProps> = ({
     mutationFn: createTeachingUnit,
   });
 
+  const onClose = () => {
+    form.resetFields();
+    setOpen(false);
+  }
+
   const onFinish = (values: FormDataType) => {
     mutateAsync({...values, faculty_id:Number(facultyId)}, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["teaching-units"] });
         messageApi.success("Unité d'enseignement créée avec succès !");
-        setOpen(false);
+        onClose();
       },
       onError: (error) => {
         if ((error as any).status === 403) {
@@ -89,7 +94,7 @@ export const NewTeachingUnitForm: React.FC<NewTeachingUnitFormProps> = ({
           style: { boxShadow: "none" },
           disabled: isPending,
         }}
-        onCancel={() => setOpen(false)}
+        onCancel={onClose}
         destroyOnHidden
         modalRender={(dom) => (
           <Form
