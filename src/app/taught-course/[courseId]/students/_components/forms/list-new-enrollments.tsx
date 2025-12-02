@@ -1,15 +1,16 @@
 "use client";
 
-import { Avatar, Select, Space, Table, theme, Typography } from "antd";
+import { Avatar, Select, Space, Table, Tag, theme, Typography } from "antd";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
-import { Class, CourseEnrollment, Department, PeriodEnrollment } from "@/types";
+import { Class, CourseEnrollment, Department, PeriodEnrollment, TaughtCourse } from "@/types";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
   getCurrentClassesAsOptions,
-  getCurrentDepartmentsAsOptions,
 } from "@/lib/api";
+import { CheckCircleFilled, CloseCircleOutlined } from "@ant-design/icons";
 
 type ListNewCourseEnrollmentsProps = {
+  course?:TaughtCourse;
   periodEnrollments?: PeriodEnrollment[];
   courseEnrollements?: CourseEnrollment[];
   selectedRowKeys: React.Key[];
@@ -23,6 +24,7 @@ type ListNewCourseEnrollmentsProps = {
 };
 
 export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
+course,
   periodEnrollments,
   courseEnrollements,
   selectedRowKeys,
@@ -41,15 +43,18 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
   const [filteredStudents, setFilteredStudents] = useState<PeriodEnrollment[]>(
     []
   );
-console.log("courseEnrollements", courseEnrollements);
+
   const existsInCourseEnrollments = (periodEnrollmentId: number) => {
-    const exists = courseEnrollements?.some((enrollment) => {
-      return enrollment.student.id === periodEnrollmentId;
-    });
+    const exists = courseEnrollements?.some(
+      (enrollment) => enrollment.student.id === periodEnrollmentId
+    );
 
-    return exists;
+    return exists || false;
   };
-
+const isPartOfDepartment = (departmentId: number) => {
+  const exist = course?.departements.some((dep) => dep.id === departmentId);
+  return exist || false;
+};
 
   const filterStudentsByDepartment = (departmentId: number) => {
     let newfilteredStudents: PeriodEnrollment[] | undefined = [];
@@ -93,6 +98,14 @@ console.log("courseEnrollements", courseEnrollements);
     setClassFilterValueId(classId);
   };
 
+  const getDepartmentsAsOptions = (departments?: Department[]) => {
+    return departments?.map((dep) => ({
+      value: dep.id,
+      label: dep.name,
+      disabled: course?.departements.some((courseDep) => courseDep.id === dep.id) ? false : true,
+    }));
+  }
+
   useEffect(() => {
     setFilteredStudents(periodEnrollments!);
   }, [periodEnrollments]);
@@ -110,13 +123,13 @@ console.log("courseEnrollements", courseEnrollements);
           <Space>
             <Typography.Text type="secondary">Mention:</Typography.Text>
             <Select
-              placeholder="Département"
+              placeholder="Sélectionnez une mention"
               showSearch
               defaultValue={departmentFilterValueId}
               value={departmentFilterValueId}
               options={[
-                { value: 0, label: "Tous les mentions" },
-                ...getCurrentDepartmentsAsOptions(departments)!,
+                { value: 0, label: "Toutes les mentions" },
+                ...(getDepartmentsAsOptions(departments) || []),
               ]}
               onChange={(value) => {
                 filterStudentsByDepartment(value);
@@ -124,7 +137,7 @@ console.log("courseEnrollements", courseEnrollements);
             />
             <Typography.Text type="secondary">Promotion:</Typography.Text>
             <Select
-              placeholder="Promotion"
+              placeholder="Sélectionnez une promotion"
               showSearch
               defaultValue={classFilterValueId}
               value={classFilterValueId}
@@ -149,11 +162,13 @@ console.log("courseEnrollements", courseEnrollements);
             <Avatar
               src={getPublicR2Url(record.year_enrollment.user.avatar)}
               style={{
-                backgroundColor: existsInCourseEnrollments(record.id)
-                  ? colorTextDisabled
-                  : getHSLColor(
-                      `${record.year_enrollment.user.surname} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.first_name}`
-                    ),
+                backgroundColor:
+                  existsInCourseEnrollments(record.id) ||
+                  !isPartOfDepartment(record.year_enrollment.departement.id)
+                    ? colorTextDisabled
+                    : getHSLColor(
+                        `${record.year_enrollment.user.surname} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.first_name}`
+                      ),
               }}
             >
               {record.year_enrollment.user.first_name?.charAt(0).toUpperCase()}
@@ -170,9 +185,11 @@ console.log("courseEnrollements", courseEnrollements);
           render: (_, record, __) => (
             <Typography.Text
               style={{
-                color: existsInCourseEnrollments(record.id)
-                  ? colorTextDisabled
-                  : "",
+                color:
+                  existsInCourseEnrollments(record.id) ||
+                  !isPartOfDepartment(record.year_enrollment.departement.id)
+                    ? colorTextDisabled
+                    : "",
               }}
             >
               {record.year_enrollment.user.matricule}
@@ -187,9 +204,11 @@ console.log("courseEnrollements", courseEnrollements);
           render: (_, record) => (
             <Typography.Text
               style={{
-                color: existsInCourseEnrollments(record.id)
-                  ? colorTextDisabled
-                  : "",
+                color:
+                  existsInCourseEnrollments(record.id) ||
+                  !isPartOfDepartment(record.year_enrollment.departement.id)
+                    ? colorTextDisabled
+                    : "",
               }}
             >
               {record.year_enrollment.user.surname}{" "}
@@ -205,15 +224,44 @@ console.log("courseEnrollements", courseEnrollements);
           render: (_, record, __) => (
             <Typography.Text
               style={{
-                color: existsInCourseEnrollments(record.id)
-                  ? colorTextDisabled
-                  : "",
+                color:
+                  existsInCourseEnrollments(record.id) ||
+                  !isPartOfDepartment(record.year_enrollment.departement.id)
+                    ? colorTextDisabled
+                    : "",
               }}
             >
               {record.year_enrollment.class_year.acronym}{" "}
               {record.year_enrollment.departement.name}
             </Typography.Text>
           ),
+        },
+        {
+          key: "check",
+          title: "",
+          render: (_, record) =>
+            !isPartOfDepartment(record.year_enrollment.departement.id) ? (
+              <Tag
+                color="error"
+                style={{ marginRight: 0, width: "100%" }}
+                bordered={false}
+                icon={<CloseCircleOutlined/>}
+              >
+                Pas concerné(e)
+              </Tag>
+            ) : existsInCourseEnrollments(record.id) ? (
+              <Tag
+                color="success"
+                style={{ marginRight: 0, width: "100%" }}
+                bordered={false}
+                icon={<CheckCircleFilled />}
+              >
+                Déjà inscrit
+              </Tag>
+            ) : (
+              ""
+            ),
+          width: 132,
         },
       ]}
       rowSelection={{
@@ -223,8 +271,12 @@ console.log("courseEnrollements", courseEnrollements);
           setSelectedRowKeys(newSelectedRowKeys);
         },
         getCheckboxProps: (record) => ({
-          disabled: existsInCourseEnrollments(record.id),
-          checked: existsInCourseEnrollments(record.id),
+          disabled:
+            existsInCourseEnrollments(record.id) ||
+            !isPartOfDepartment(record.year_enrollment.departement.id),
+          checked:
+            existsInCourseEnrollments(record.id) ||
+            !isPartOfDepartment(record.year_enrollment.departement.id),
         }),
       }}
       rowKey="id"
@@ -234,7 +286,10 @@ console.log("courseEnrollements", courseEnrollements);
       pagination={false}
       onRow={(record) => ({
         onClick: () => {
-          if (!existsInCourseEnrollments(record.id)) {
+          if (
+            !existsInCourseEnrollments(record.id) &&
+            isPartOfDepartment(record.year_enrollment.departement.id)
+          ) {
             const exist = selectedRowKeys.includes(record.id);
             if (exist) {
               setSelectedRowKeys((prev) => prev.filter((i) => i !== record.id));

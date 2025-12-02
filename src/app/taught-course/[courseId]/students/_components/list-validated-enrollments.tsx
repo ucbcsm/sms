@@ -229,9 +229,9 @@ export const ListCourseValidatedStudents: FC<
               departments={departments}
               classes={classes}
             />
-            <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
+            {/* <Button icon={<PrinterOutlined />} style={{ boxShadow: "none" }}>
               Imprimer
-            </Button>
+            </Button> */}
             {/* <Dropdown
               menu={{
                 items: [

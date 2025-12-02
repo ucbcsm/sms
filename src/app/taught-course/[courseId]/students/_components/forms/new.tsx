@@ -18,6 +18,8 @@ import {
   Statistic,
   Switch,
   App,
+  Divider,
+  Tag,
 } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import {
@@ -151,6 +153,19 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
         destroyOnHidden
         extra={
           <Space>
+            <Typography.Text type="secondary">
+              Mention (s) concernée (s) :
+            </Typography.Text>
+            {course?.departements.map((dep) => (
+              <Tag
+                key={dep.id}
+                bordered
+                style={{ marginRight: 0, borderRadius: 10 }}
+              >
+                {dep.acronym}
+              </Tag>
+            ))}
+            <Divider type="vertical" />
             <Button
               style={{ boxShadow: "none" }}
               onClick={() => setCancel(true)}
@@ -189,6 +204,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
             <Col span={16}>
               <Card>
                 <ListNewCourseEnrollments
+                  course={course}
                   periodEnrollments={periodEnrollments}
                   courseEnrollements={courseEnrollments}
                   selectedRowKeys={selectedRowKeys}

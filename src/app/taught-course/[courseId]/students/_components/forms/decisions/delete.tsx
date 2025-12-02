@@ -30,7 +30,7 @@ export const DeleteSingleCourseEnrollmentForm: FC<
     if (values.validate === "DELETE") {
       mutateAsync(enrollment.id, {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["applications"] });
+          queryClient.invalidateQueries({ queryKey: ["course_enrollments"] });
           message.success("Candidature supprimée avec succès !");
           setOpen(false);
         },
