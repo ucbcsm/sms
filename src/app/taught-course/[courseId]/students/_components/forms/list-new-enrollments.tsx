@@ -41,17 +41,15 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
   const [filteredStudents, setFilteredStudents] = useState<PeriodEnrollment[]>(
     []
   );
-
+console.log("courseEnrollements", courseEnrollements);
   const existsInCourseEnrollments = (periodEnrollmentId: number) => {
     const exists = courseEnrollements?.some((enrollment) => {
-
-      return enrollment.student.period.id === periodEnrollmentId;
+      return enrollment.student.id === periodEnrollmentId;
     });
 
     return exists;
   };
 
-  
 
   const filterStudentsByDepartment = (departmentId: number) => {
     let newfilteredStudents: PeriodEnrollment[] | undefined = [];
@@ -151,7 +149,7 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
             <Avatar
               src={getPublicR2Url(record.year_enrollment.user.avatar)}
               style={{
-                backgroundColor: existsInCourseEnrollments(record.period.id)
+                backgroundColor: existsInCourseEnrollments(record.id)
                   ? colorTextDisabled
                   : getHSLColor(
                       `${record.year_enrollment.user.surname} ${record.year_enrollment.user.last_name} ${record.year_enrollment.user.first_name}`
@@ -172,7 +170,7 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
           render: (_, record, __) => (
             <Typography.Text
               style={{
-                color: existsInCourseEnrollments(record.period.id)
+                color: existsInCourseEnrollments(record.id)
                   ? colorTextDisabled
                   : "",
               }}
@@ -189,7 +187,7 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
           render: (_, record) => (
             <Typography.Text
               style={{
-                color: existsInCourseEnrollments(record.period.id)
+                color: existsInCourseEnrollments(record.id)
                   ? colorTextDisabled
                   : "",
               }}
@@ -207,7 +205,7 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
           render: (_, record, __) => (
             <Typography.Text
               style={{
-                color: existsInCourseEnrollments(record.period.id)
+                color: existsInCourseEnrollments(record.id)
                   ? colorTextDisabled
                   : "",
               }}
@@ -225,8 +223,8 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
           setSelectedRowKeys(newSelectedRowKeys);
         },
         getCheckboxProps: (record) => ({
-          disabled: existsInCourseEnrollments(record.period.id),
-          checked: existsInCourseEnrollments(record.period.id),
+          disabled: existsInCourseEnrollments(record.id),
+          checked: existsInCourseEnrollments(record.id),
         }),
       }}
       rowKey="id"
@@ -236,7 +234,7 @@ export const ListNewCourseEnrollments: FC<ListNewCourseEnrollmentsProps> = ({
       pagination={false}
       onRow={(record) => ({
         onClick: () => {
-          if (!existsInCourseEnrollments(record.period.id)) {
+          if (!existsInCourseEnrollments(record.id)) {
             const exist = selectedRowKeys.includes(record.id);
             if (exist) {
               setSelectedRowKeys((prev) => prev.filter((i) => i !== record.id));

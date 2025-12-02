@@ -15,7 +15,6 @@ import {
   getYearStatusColor,
   getYearStatusName,
 } from "@/lib/api";
-import { getHSLColor } from "@/lib/utils";
 import {
   Classroom,
   Course,
@@ -29,29 +28,20 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   DeleteOutlined,
-  DownOutlined,
   EditOutlined,
   EyeOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
   MoreOutlined,
   PrinterOutlined,
   SearchOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, } from "@tanstack/react-query";
 import {
-  Avatar,
   Button,
-  Card,
-  Col,
   Dropdown,
-  Form,
   Input,
   Layout,
-  Row,
   Select,
-  Skeleton,
   Space,
   Table,
   Tag,
@@ -63,7 +53,6 @@ import { FC, useState } from "react";
 import { NewTaughtCourseForm } from "./forms/new";
 import { DeleteTaughtCourseForm } from "./forms/delete";
 import { EditTaughtCourseForm } from "./forms/edit";
-import { useRouter } from "next/navigation";
 import { parseAsInteger, useQueryState } from "nuqs";
 import Link from "next/link";
 
@@ -89,7 +78,6 @@ const ActionsBar: FC<ActionsBarProps> = ({
 }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
-  const router = useRouter();
 
   return (
     <Space size="middle">
@@ -112,11 +100,9 @@ const ActionsBar: FC<ActionsBarProps> = ({
       />
       <Link href={`/taught-course/${record.id}`}>
         <Button
-          // type="dashed"
           color="primary"
           variant="dashed"
           style={{ boxShadow: "none" }}
-          // onClick={() => router.push(`/taught-course/${record.id}`)}
         >
           Gérer
         </Button>
@@ -289,7 +275,6 @@ export default function Page() {
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
-          // background: colorBgContainer,
           overflowY: "auto",
           height: "calc(100vh - 110px)",
         }}
@@ -554,7 +539,7 @@ export default function Page() {
               ellipsis: true,
             },
             {
-              title: "",
+              title: "Actions",
               key: "actions",
               render: (_, record, __) => {
                 return (

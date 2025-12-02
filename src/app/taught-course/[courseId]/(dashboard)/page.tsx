@@ -42,13 +42,13 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { TaughtCourseDetails } from "./course-details";
 
 export default function Page() {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBorderSecondary },
   } = theme.useToken();
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const { courseId } = useParams();
@@ -63,12 +63,6 @@ export default function Page() {
     queryFn: ({ queryKey }) => getTaughtCours(Number(queryKey[1])),
     enabled: !!courseId,
   });
-
-  // const { data: courses } = useQuery({
-  //   queryKey: ["courses", `${course?.faculty.id}`],
-  //   queryFn: ({ queryKey }) => getCoursesByFacultyId(Number(queryKey[1])),
-  //   enabled: !!course?.faculty.id,
-  // });
 
   const { data: courses } = useQuery({
     queryKey: ["courses", `${course?.faculty.id}`, "all"],
@@ -268,9 +262,9 @@ export default function Page() {
                                     .toUpperCase()}
                                 </Avatar>
                               }
-                              title={`${item?.user?.first_name || ""} ${
+                              title={`${item?.user?.surname || ""} ${
                                 item?.user?.last_name || ""
-                              } ${item?.user?.surname || ""}`}
+                              } ${item?.user?.first_name || ""}`}
                               description={item.academic_title}
                             />
                           </List.Item>
@@ -290,17 +284,17 @@ export default function Page() {
                                 <Avatar
                                   style={{
                                     backgroundColor: getHSLColor(
-                                      `${item.user.first_name} ${item.user.last_name} ${item.user.surname}`
+                                      `${item.user.surname} ${item.user.last_name} ${item.user.first_name}`
                                     ),
                                   }}
+                                  src={getPublicR2Url(item.user.avatar)}
                                 >
                                   {item.user.first_name
                                     ?.charAt(0)
                                     .toUpperCase()}
-                                  {item.user.last_name?.charAt(0).toUpperCase()}
                                 </Avatar>
                               }
-                              title={`${item?.user.first_name} ${item?.user.last_name} ${item?.user.surname}`}
+                              title={`${item?.user.surname} ${item?.user.last_name} ${item?.user.first_name}`}
                               description={item.academic_title}
                             />
                           </List.Item>
