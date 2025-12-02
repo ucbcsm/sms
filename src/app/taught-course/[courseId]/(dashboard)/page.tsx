@@ -20,7 +20,7 @@ import {
   getTeachingUnitsByfaculty,
   getYearStatusName,
 } from "@/lib/api";
-import { getHSLColor, toFixedNumber } from "@/lib/utils";
+import { getHSLColor, getPublicR2Url, toFixedNumber } from "@/lib/utils";
 import { EditOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -166,9 +166,12 @@ export default function Page() {
           classrooms={classrooms}
         />
       </Layout.Sider>
-      <Layout.Content style={{ padding: "24px",
-        //  background: colorBgContainer
-          }}>
+      <Layout.Content
+        style={{
+          padding: "24px",
+          //  background: colorBgContainer
+        }}
+      >
         <Row gutter={[24, 24]} style={{ marginRight: 0 }}>
           <Col span={16}>
             <Row gutter={[16, 16]}>
@@ -255,19 +258,19 @@ export default function Page() {
                                 <Avatar
                                   style={{
                                     backgroundColor: getHSLColor(
-                                      `${item?.user?.first_name} ${item.user?.last_name} ${item.user?.surname}`
+                                      `${item.user?.surname} ${item.user?.last_name} ${item?.user?.first_name}`
                                     ),
                                   }}
+                                  src={getPublicR2Url(item.user?.avatar)}
                                 >
                                   {item.user?.first_name
                                     ?.charAt(0)
                                     .toUpperCase()}
-                                  {item.user?.last_name
-                                    ?.charAt(0)
-                                    .toUpperCase()}
                                 </Avatar>
                               }
-                              title={`${item?.user?.first_name} ${item?.user?.last_name} ${item?.user?.surname}`}
+                              title={`${item?.user?.first_name || ""} ${
+                                item?.user?.last_name || ""
+                              } ${item?.user?.surname || ""}`}
                               description={item.academic_title}
                             />
                           </List.Item>

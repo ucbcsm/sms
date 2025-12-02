@@ -128,35 +128,45 @@ const ActionsBar: FC<ActionsBarProps> = ({
               key: "edit",
               label: "Modifier",
               icon: <EditOutlined />,
+              onClick: () => {
+                setOpenEdit(true);
+              },
             },
             {
               type: "divider",
             },
             {
               key: "view",
-              label: "Voir le cours",
-              onClick: () => router.push(`/taught-course/${record.id}`),
+              label: (
+                <Link href={`/taught-course/${record.id}`}>Voir le cours</Link>
+              ),
               icon: <EyeOutlined />,
             },
             {
               key: "students",
-              label: "Étudiants inscrits",
-              onClick: () =>
-                router.push(`/taught-course/${record.id}/students`),
+              label: (
+                <Link href={`/taught-course/${record.id}/students`}>
+                  Étudiants inscrits
+                </Link>
+              ),
               icon: <TeamOutlined />,
             },
             {
               key: "attendances",
-              label: "Listes de présences",
-              onClick: () =>
-                router.push(`/taught-course/${record.id}/attendances`),
+              label: (
+                <Link href={`/taught-course/${record.id}/attendances`}>
+                  Listes de présences
+                </Link>
+              ),
               icon: <CheckCircleOutlined />,
             },
             {
               key: "hours_tracking",
-              label: "Suivi des heures",
-              onClick: () =>
-                router.push(`/taught-course/${record.id}/hours-tracking`),
+              label: (
+                <Link href={`/taught-course/${record.id}/hours-tracking`}>
+                  Suivi des heures
+                </Link>
+              ),
               icon: <ClockCircleOutlined />,
             },
             {
@@ -167,15 +177,11 @@ const ActionsBar: FC<ActionsBarProps> = ({
               label: "Supprimer",
               icon: <DeleteOutlined />,
               danger: true,
+              onClick: () => {
+                setOpenDelete(true);
+              },
             },
           ],
-          onClick: ({ key }) => {
-            if (key === "edit") {
-              setOpenEdit(true);
-            } else if (key === "delete") {
-              setOpenDelete(true);
-            }
-          },
         }}
       >
         <Button type="text" icon={<MoreOutlined />} />
@@ -506,7 +512,10 @@ export default function Page() {
               key: "teacher",
               render: (_, record, __) =>
                 `
-                  ${record.teacher?.user.surname} ${record.teacher?.user.last_name}
+                  ${record.teacher?.user.surname || ""} ${
+                  record.teacher?.user.last_name || ""
+                }
+                ${record.teacher?.user.first_name || ""}
                `,
               ellipsis: true,
             },

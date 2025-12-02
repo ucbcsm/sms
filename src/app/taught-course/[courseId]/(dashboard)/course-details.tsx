@@ -117,7 +117,9 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
               {
                 key: "teacher",
                 label: "Enseignant principal",
-                children: `${data.teacher?.user.first_name} ${data.teacher?.user.last_name} ${data.teacher?.user.surname}`,
+                children: `${data.teacher?.user.first_name || ""} ${
+                  data.teacher?.user.last_name || ""
+                } ${data.teacher?.user.surname || ""}`,
               },
               {
                 key: "academic_title",
@@ -178,7 +180,8 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
               {
                 key: "category",
                 label: "Catégorie",
-                children: getCourseTypeName(data?.available_course.course_type) || "",
+                children:
+                  getCourseTypeName(data?.available_course.course_type) || "",
               },
               {
                 key: "credits",

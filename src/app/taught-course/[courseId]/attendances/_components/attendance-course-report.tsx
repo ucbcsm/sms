@@ -33,6 +33,7 @@ import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
 import { FC, useRef } from "react";
 import { PrintableAttendanceReport } from "./printable-attendance-report";
 import { useReactToPrint } from "react-to-print";
+import { percentageFormatter } from "@/lib/utils";
 
 type AttendanceCourseReportProps = {
   course?: TaughtCourse;
@@ -274,7 +275,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                       key: "percentage",
                       dataIndex: "percentage",
                       title: "Assiduité",
-                      render: (value) => `${value || 0}%`,
+                      render: (value) => `${percentageFormatter(value) || 0}`,
                       width: 74,
                       align: "right",
                     },
