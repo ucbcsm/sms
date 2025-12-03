@@ -3,6 +3,7 @@
 import { FC, useState } from "react";
 import {
   Alert,
+  App,
   Button,
   Card,
   Col,
@@ -65,8 +66,9 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
   const {
     token: { colorPrimary },
   } = theme.useToken();
+  const {message} = App.useApp();
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
+  const teachingUnitId = Form.useWatch("teaching_unit", form);
   const [newTaughtCourse, setNewTaughtCourse] = useQueryState(
     "new",
     parseAsBoolean.withDefault(false)
@@ -90,20 +92,20 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["taught_courses"] });
-          messageApi.success("Cours programmé avec succès !");
+          message.success("Cours programmé avec succès !");
           onClose();
         },
         onError: (error) => {
           if ((error as any).status === 403) {
-            messageApi.error(
+            message.error(
               `Vous n'avez pas la permission d'effectuer cette action`
             );
           } else if ((error as any).status === 401) {
-            messageApi.error(
+            message.error(
               "Vous devez être connecté pour effectuer cette action."
             );
           } else {
-            messageApi.error(
+            message.error(
               (error as any)?.response?.data?.message ||
                 "Une erreur s'est produite lors de la création du cours programmé."
             );
@@ -115,7 +117,6 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
 
   return (
     <>
-      {contextHolder}
       <Button
         icon={<PlusOutlined />}
         type="primary"
@@ -183,8 +184,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   enseignants, etc.) sont exactes.
                 </li>
                 <li>
-                  ▪ Ajoutez les mentions et la période concernés par ce
-                  cours.
+                  ▪ Ajoutez les mentions et la période concernés par ce cours.
                 </li>
                 <li>
                   ▪ Indiquez les dates de début et de fin, ainsi que la salle de
@@ -227,6 +227,15 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                   allowClear
                   showSearch
                   filterOption={filterOption}
+                  onSelect={(value) => {
+                    const selectedCourse = courses?.find((c) => c.id === value);
+                    if (selectedCourse) {
+                      const tUnitId = selectedCourse.teaching_unit?.id;
+                      if (tUnitId && typeof tUnitId === "number") {
+                        form.setFieldValue("teaching_unit", tUnitId);
+                      }
+                    }
+                  }}
                 />
               </Form.Item>
               <Form.Item

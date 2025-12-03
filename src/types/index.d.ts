@@ -316,6 +316,7 @@ export const Course = z.object({
     "practical",
     "theoretical_and_practical",
   ]),
+  teaching_unit: TeachingUnit.nullable(),
   prerequisite_courses: z.array(z.lazy(() => Course)).default([]),
 });
 

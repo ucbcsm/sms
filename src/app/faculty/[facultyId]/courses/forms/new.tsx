@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Col, Form, Input, message, Modal, Row, Select } from "antd";
+import {
+  App,
+  Button,
+  Col,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+} from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -9,28 +18,34 @@ import {
   getCoursesAsOptions,
   getCourseTypesAsOptions,
   getCurrentFacultiesAsOptions,
+  getTeachingUnitsAsOptions,
 } from "@/lib/api";
-import { Course, Faculty } from "@/types";
+import { Course, Faculty, TeachingUnit } from "@/types";
 import { filterOption } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
 type FormDataType = Omit<
   Course,
-  "id" | "faculties" | "prerequisite_courses"
+  "id" | "faculties" | "prerequisite_courses" | "teaching_unit"
 > & {
   faculties: number[];
   prerequisite_courses: number[];
+  teaching_unit: number;
 };
 
 type NewCourseFormProps = {
-
   faculties?: Faculty[];
   courses?: Course[];
+  teachingUnits?: TeachingUnit[];
 };
-export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties, courses }) => {
-  const [messageApi, contextHolder] = message.useMessage();
+export const NewCourseForm: React.FC<NewCourseFormProps> = ({
+  faculties,
+  courses,
+  teachingUnits,
+}) => {
+  const { message } = App.useApp();
   const [form] = Form.useForm();
-  const {facultyId} = useParams()
+  const { facultyId } = useParams();
   const [open, setOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -41,27 +56,27 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties, courses
   const onclose = () => {
     form.resetFields();
     setOpen(false);
-  }
+  };
 
   const onFinish = (values: FormDataType) => {
     mutateAsync(values, {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ["courses"] });
         queryClient.invalidateQueries({ queryKey: ["all-courses"] });
-        messageApi.success("Cours créé avec succès !");
+        message.success("Cours créé avec succès !");
         onclose();
       },
       onError: (error) => {
         if ((error as any).status === 403) {
-          messageApi.error(
+          message.error(
             `Vous n'avez pas la permission d'effectuer cette action`
           );
         } else if ((error as any).status === 401) {
-          messageApi.error(
+          message.error(
             "Vous devez être connecté pour effectuer cette action."
           );
         } else {
-          messageApi.error(
+          message.error(
             (error as any)?.response?.data?.message ||
               "Une erreur s'est produite lors de la création du cours."
           );
@@ -72,7 +87,6 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties, courses
 
   return (
     <>
-      {contextHolder}
       <Button
         type="primary"
         icon={<PlusOutlined />}
@@ -155,6 +169,15 @@ export const NewCourseForm: React.FC<NewCourseFormProps> = ({ faculties, courses
           ]}
         >
           <Select options={getCourseTypesAsOptions} />
+        </Form.Item>
+        <Form.Item name="teaching_unit" label="Unité d'enseignement">
+          <Select
+            placeholder="Sélectionnez une UE"
+            showSearch
+            options={getTeachingUnitsAsOptions(teachingUnits)}
+            filterOption={filterOption}
+            allowClear
+          />
         </Form.Item>
         <Form.Item name="prerequisite_courses" label="Prérequis du cours">
           <Select

@@ -9,8 +9,9 @@ import {
   getCourseTypeName,
   getCycles,
   getFaculties,
+  getTeachingUnitsByfaculty,
 } from "@/lib/api";
-import { Course, Faculty } from "@/types";
+import { Course, Faculty, TeachingUnit } from "@/types";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -42,9 +43,10 @@ type ActionsBarProps = {
   record: Course;
   faculties?: Faculty[];
   courses?: Course[];
+  teachingUnits?: TeachingUnit[];
 };
 
-const ActionsBar: FC<ActionsBarProps> = ({ record, faculties,courses }) => {
+const ActionsBar: FC<ActionsBarProps> = ({ record, faculties,courses,teachingUnits }) => {
   const [openEdit, setOpenEdit] = useState<boolean>(false);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
 
@@ -54,6 +56,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties,courses }) => {
         course={record}
         faculties={faculties}
         courses={courses}
+        teachingUnits={teachingUnits}
         open={openEdit}
         setOpen={setOpenEdit}
       />
@@ -126,6 +129,12 @@ export default function Page() {
       enabled: !!facultyId,
     });
 
+    const { data: teachingUnits, isPending } = useQuery({
+      queryKey: ["teaching-units", facultyId],
+      queryFn: ({ queryKey }) => getTeachingUnitsByfaculty(Number(queryKey[1])),
+      enabled: !!facultyId,
+    });
+
   const { data: faculties } = useQuery({
     queryKey: ["faculties"],
     queryFn: getFaculties,
@@ -195,6 +204,7 @@ console.log(data);
                     (fac) => fac.id === Number(facultyId)
                   )}
                   courses={allCourses}
+                  teachingUnits={teachingUnits}
                 />
                 <Button
                   icon={<PrinterOutlined />}
@@ -275,6 +285,7 @@ console.log(data);
                       (fac) => fac.id === Number(facultyId)
                     )}
                     courses={allCourses}
+                    teachingUnits={teachingUnits}
                   />
                 );
               },

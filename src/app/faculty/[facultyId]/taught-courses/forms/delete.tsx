@@ -1,6 +1,6 @@
 "use client";
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { Alert, Form, Input, message, Modal } from "antd";
+import { Dispatch, FC, SetStateAction } from "react";
+import { Alert, App, Form, Input, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTaughtCourse } from "@/lib/api";
 import { TaughtCourse } from "@/types";
@@ -21,7 +21,7 @@ export const DeleteTaughtCourseForm: FC<DeleteTaughtCourseFormProps> = ({
   setOpen,
 }) => {
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
+  const {message} = App.useApp();
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: deleteTaughtCourse,
@@ -32,20 +32,20 @@ export const DeleteTaughtCourseForm: FC<DeleteTaughtCourseFormProps> = ({
       mutateAsync(taughtCourse.id, {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["taught_courses"] });
-          messageApi.success("Cours programmé supprimé avec succès !");
+          message.success("Cours programmé supprimé avec succès !");
           setOpen(false);
         },
         onError: (error) => {
           if ((error as any).status === 403) {
-            messageApi.error(
+            message.error(
               `Vous n'avez pas la permission d'effectuer cette action`
             );
           } else if ((error as any).status === 401) {
-            messageApi.error(
+            message.error(
               "Vous devez être connecté pour effectuer cette action."
             );
           } else {
-            messageApi.error(
+            message.error(
               (error as any)?.response?.data?.message ||
                 "Une erreur s'est produite lors de la suppression du cours programmé."
             );
@@ -53,13 +53,12 @@ export const DeleteTaughtCourseForm: FC<DeleteTaughtCourseFormProps> = ({
         }
       });
     } else {
-      messageApi.error("Le nom saisi ne correspond pas au cours programmé.");
+      message.error("Le nom saisi ne correspond pas au cours programmé.");
     }
   };
 
   return (
     <>
-      {contextHolder}
       <Modal
         open={open}
         title="Suppression"

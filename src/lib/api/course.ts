@@ -57,8 +57,12 @@ export async function getCoursesByFacultyId(facultyId: number) {
 }
 
 export async function createCourse(
-  params: Omit<Course, "id" | "faculties" | "prerequisite_courses"> & {
+  params: Omit<
+    Course,
+    "id" | "faculties" | "prerequisite_courses" | "teaching_unit"
+  > & {
     faculties: number[];
+    teaching_unit?: number;
     prerequisite_courses: number[];
   }
 ) {
@@ -67,6 +71,7 @@ export async function createCourse(
     code: params.code,
     course_type: params.course_type,
     faculties: params.faculties,
+    teaching_unit: params.teaching_unit || null,
     prerequisite_courses: params.prerequisite_courses,
   });
   return res.data;
@@ -77,8 +82,9 @@ export async function updateCourse({
   params,
 }: {
   id: number;
-  params: Omit<Course, "id" | "faculties" | "prerequisite_courses"> & {
+  params: Omit<Course, "id" | "faculties" | "prerequisite_courses" | "teaching_unit"> & {
     faculties: number[];
+    teaching_unit?: number;
     prerequisite_courses: number[];
   };
 }) {
@@ -87,6 +93,7 @@ export async function updateCourse({
     code: params.code,
     course_type: params.course_type,
     faculties: params.faculties,
+    teaching_unit: params.teaching_unit || null,
     prerequisite_courses: params.prerequisite_courses,
   });
   return res.data;

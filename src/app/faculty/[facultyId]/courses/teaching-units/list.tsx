@@ -105,6 +105,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
   const [searchResults, setSearchResults] = useState<
     TeachingUnit[] | undefined
   >();
+  
   const { data: teaching_units, isPending } = useQuery({
     queryKey: ["teaching-units", facultyId],
     queryFn: ({ queryKey }) => getTeachingUnitsByfaculty(Number(queryKey[1])),

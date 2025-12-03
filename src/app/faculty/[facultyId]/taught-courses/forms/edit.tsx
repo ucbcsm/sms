@@ -3,6 +3,7 @@
 import { FC, useEffect } from "react";
 import {
   Alert,
+  App,
   Button,
   Card,
   Col,
@@ -69,7 +70,8 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
     token: { colorPrimary },
   } = theme.useToken();
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
+  const teachingUnitId = Form.useWatch("teaching_unit", form);
+  const { message } = App.useApp();
   const queryClient = useQueryClient();
   const { yid } = useYid();
 
@@ -116,20 +118,20 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["taught_courses"] });
-          messageApi.success("Cours programmé modifié avec succès !");
+          message.success("Cours programmé modifié avec succès !");
           setOpen(false);
         },
         onError: (error) => {
           if ((error as any).status === 403) {
-            messageApi.error(
+            message.error(
               `Vous n'avez pas la permission d'effectuer cette action`
             );
           } else if ((error as any).status === 401) {
-            messageApi.error(
+            message.error(
               "Vous devez être connecté pour effectuer cette action."
             );
           } else {
-          messageApi.error(
+          message.error(
             (error as any)?.response?.data?.message ||
               "Une erreur s'est produite lors de la modification du cours programmé."
           );
@@ -140,7 +142,6 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
 
   return (
     <>
-      {contextHolder}
       <Drawer
         styles={{ header: { background: colorPrimary, color: "#fff" } }}
         width={`50%`}
@@ -203,6 +204,15 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                   allowClear
                   showSearch
                   filterOption={filterOption}
+                  onSelect={(value) => {
+                    const selectedCourse = courses?.find((c) => c.id === value);
+                    if (selectedCourse) {
+                      const tUnitId = selectedCourse.teaching_unit?.id;
+                      if (tUnitId && typeof tUnitId === "number") {
+                        form.setFieldValue("teaching_unit", tUnitId);
+                      }
+                    }
+                  }}
                 />
               </Form.Item>
               <Form.Item

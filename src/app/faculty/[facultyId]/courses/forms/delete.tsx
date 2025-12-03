@@ -1,6 +1,6 @@
 "use client";
-import React, { Dispatch, FC, SetStateAction } from "react";
-import { Alert, Form, Input, message, Modal } from "antd";
+import { Dispatch, FC, SetStateAction } from "react";
+import { Alert, App, Form, Input, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCourse } from "@/lib/api";
 import { Course } from "@/types";
@@ -21,7 +21,7 @@ export const DeleteCourseForm: FC<DeleteCourseFormProps> = ({
     setOpen,
 }) => {
     const [form] = Form.useForm();
-    const [messageApi, contextHolder] = message.useMessage();
+    const {message} = App.useApp()
     const queryClient = useQueryClient();
     const { mutateAsync, isPending } = useMutation({
         mutationFn: deleteCourse,
@@ -35,20 +35,20 @@ export const DeleteCourseForm: FC<DeleteCourseFormProps> = ({
                     queryClient.invalidateQueries({
                       queryKey: ["all-courses"],
                     });
-                    messageApi.success("Cours supprimé avec succès !");
+                    message.success("Cours supprimé avec succès !");
                     setOpen(false);
                 },
                 onError: (error) => {
                   if ((error as any).status === 403) {
-                    messageApi.error(
+                    message.error(
                       `Vous n'avez pas la permission d'effectuer cette action`
                     );
                   } else if ((error as any).status === 401) {
-                    messageApi.error(
+                    message.error(
                       "Vous devez être connecté pour effectuer cette action."
                     );
                   } else {
-                    messageApi.error(
+                    message.error(
                       (error as any)?.response?.data?.message ||
                         "Une erreur s'est produite lors de la suppression du cours."
                     );
@@ -56,64 +56,61 @@ export const DeleteCourseForm: FC<DeleteCourseFormProps> = ({
                 }
             });
         } else {
-            messageApi.error("Le code saisi ne correspond pas au cours.");
+            message.error("Le code saisi ne correspond pas au cours.");
         }
     };
 
     return (
-        <>
-            {contextHolder}
-            <Modal
-                open={open}
-                title="Suppression"
-                centered
-                okText="Supprimer"
-                cancelText="Annuler"
-                okButtonProps={{
-                    autoFocus: true,
-                    htmlType: "submit",
-                    style: { boxShadow: "none" },
-                    disabled: isPending,
-                    loading: isPending,
-                    danger: true,
-                }}
-                cancelButtonProps={{
-                    style: { boxShadow: "none" },
-                    disabled: isPending,
-                }}
-                onCancel={() => setOpen(false)}
-                destroyOnHidden
-                closable={{ disabled: isPending }}
-                maskClosable={!isPending}
-                modalRender={(dom) => (
-                    <Form
-                        form={form}
-                        layout="vertical"
-                        name="delete_course_form"
-                        onFinish={onFinish}
-                        disabled={isPending}
-                        initialValues={{ enabled: true }}
-                    >
-                        {dom}
-                    </Form>
-                )}
-            >
-                <Alert
-                    message="Attention"
-                    description={`Êtes-vous sûr de vouloir supprimer le cours "${course.name}" ? Cette action est irréversible.`}
-                    type="warning"
-                    showIcon
-                    style={{ border: 0 }}
-                />
-                <Form.Item
-                    name="validate"
-                    label="Veuillez saisir le code du cours pour confirmer."
-                    rules={[{ required: true }]}
-                    style={{ marginTop: 24 }}
-                >
-                    <Input placeholder={course.code} />
-                </Form.Item>
-            </Modal>
-        </>
+      <Modal
+        open={open}
+        title="Suppression"
+        centered
+        okText="Supprimer"
+        cancelText="Annuler"
+        okButtonProps={{
+          autoFocus: true,
+          htmlType: "submit",
+          style: { boxShadow: "none" },
+          disabled: isPending,
+          loading: isPending,
+          danger: true,
+        }}
+        cancelButtonProps={{
+          style: { boxShadow: "none" },
+          disabled: isPending,
+        }}
+        onCancel={() => setOpen(false)}
+        destroyOnHidden
+        closable={{ disabled: isPending }}
+        maskClosable={!isPending}
+        modalRender={(dom) => (
+          <Form
+            form={form}
+            layout="vertical"
+            name="delete_course_form"
+            onFinish={onFinish}
+            disabled={isPending}
+            initialValues={{ enabled: true }}
+          >
+            {dom}
+          </Form>
+        )}
+      >
+        <Alert
+          message="Attention"
+          description={`Êtes-vous sûr de vouloir supprimer le cours "${course.name}" ? Cette action est irréversible.`}
+          type="warning"
+          showIcon
+          style={{ border: 0 }}
+        />
+        <Form.Item
+          name="validate"
+          label="Veuillez saisir le code du cours pour confirmer."
+          rules={[{ required: true }]}
+          style={{ marginTop: 24 }}
+        >
+          <Input placeholder={course.code} />
+        </Form.Item>
+      </Modal>
     );
 };
