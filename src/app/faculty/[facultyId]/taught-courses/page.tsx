@@ -530,7 +530,7 @@ export default function Page() {
               render: (_, record, __) => (
                 <Tag
                   color={getYearStatusColor(`${record.status}`)}
-                  style={{ border: 0 }}
+                  style={{ border: 0, width: "100%" }}
                 >
                   {getYearStatusName(`${record.status}`)}
                 </Tag>

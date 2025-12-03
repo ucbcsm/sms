@@ -68,7 +68,6 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
   } = theme.useToken();
   const {message} = App.useApp();
   const [form] = Form.useForm();
-  const teachingUnitId = Form.useWatch("teaching_unit", form);
   const [newTaughtCourse, setNewTaughtCourse] = useQueryState(
     "new",
     parseAsBoolean.withDefault(false)
@@ -232,7 +231,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                     if (selectedCourse) {
                       const tUnitId = selectedCourse.teaching_unit?.id;
                       if (tUnitId && typeof tUnitId === "number") {
-                        form.setFieldValue("teaching_unit", tUnitId);
+                        form.setFieldValue("teaching_unit_id", tUnitId);
                       }
                     }
                   }}
@@ -241,7 +240,12 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               <Form.Item
                 name="teaching_unit_id"
                 label="Unité d'enseignement"
-                rules={[]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Veuillez sélectionner une unité d'enseignement.",
+                  },
+                ]}
               >
                 <Select
                   options={getTeachingUnitsAsOptions(teachingUnits)}
@@ -382,7 +386,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 />
               </Form.Item>
               <Alert
-                message="Statut des inscriptions"
+                message="Statut du cours et des inscriptions"
                 description={
                   <Form.Item name="status">
                     <Select

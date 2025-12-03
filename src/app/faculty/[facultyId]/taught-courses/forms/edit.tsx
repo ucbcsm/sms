@@ -70,7 +70,6 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
     token: { colorPrimary },
   } = theme.useToken();
   const [form] = Form.useForm();
-  const teachingUnitId = Form.useWatch("teaching_unit", form);
   const { message } = App.useApp();
   const queryClient = useQueryClient();
   const { yid } = useYid();
@@ -209,7 +208,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                     if (selectedCourse) {
                       const tUnitId = selectedCourse.teaching_unit?.id;
                       if (tUnitId && typeof tUnitId === "number") {
-                        form.setFieldValue("teaching_unit", tUnitId);
+                        form.setFieldValue("teaching_unit_id", tUnitId);
                       }
                     }
                   }}
@@ -218,14 +217,12 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
               <Form.Item
                 name="teaching_unit_id"
                 label="Unité d'enseignement"
-                rules={
-                  [
-                    // {
-                    //   required: true,
-                    //   message: "Veuillez sélectionner une unité d'enseignement.",
-                    // },
-                  ]
-                }
+                rules={[
+                  {
+                    required: true,
+                    message: "Veuillez sélectionner une unité d'enseignement.",
+                  },
+                ]}
               >
                 <Select
                   options={getTeachingUnitsAsOptions(teachingUnits)}
@@ -386,7 +383,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                   allowClear
                 />
               </Form.Item>
-              <Form.Item name="status" label="Statut des inscriptions">
+              <Form.Item name="status" label="Statut du cours et des inscriptions">
                 <Select
                   options={[
                     { value: "pending", label: "En attente" },
