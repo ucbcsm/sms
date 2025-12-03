@@ -67,6 +67,23 @@ export function getTeachingUnitCategoryName(
   }
 }
 
+export function getTeachingUnitCategoryTagColor(
+  category: "required" | "optional" | "free" | "transversal" | string
+): string {
+  switch (category) {
+    case "required":
+      return "red";
+    case "optional":
+      return "blue";
+    case "free":
+      return "green";
+    case "transversal":
+      return "purple";
+    default:
+      return "default";
+  }
+}
+
 export function getTeachingUnitsAsOptions(teaching_units?: TeachingUnit[]) {
   return teaching_units?.map((unit) => {
     return {

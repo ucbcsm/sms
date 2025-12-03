@@ -66,6 +66,7 @@ const ActionsBar: FC<ActionsBarProps> = ({ record, faculties,courses,teachingUni
         setOpen={setOpenDelete}
       />
       <Dropdown
+        arrow
         menu={{
           items: [
             {
@@ -256,7 +257,13 @@ console.log(data);
               dataIndex: "course_type",
               key: "type",
               render: (_, record, __) => getCourseTypeName(record.course_type),
-              // width:100,
+              ellipsis: true,
+            },
+            {
+              title: "Unité d'enseignement",
+              dataIndex: "teaching_unit",
+              key: "teaching_unit",
+              render: (_, record, __) => record.teaching_unit?.name || "-",
               ellipsis: true,
             },
             {
@@ -267,7 +274,9 @@ console.log(data);
                 <Space wrap>
                   {record.prerequisite_courses.map((c) => (
                     <Tooltip title={c.name} key={c.id}>
-                      <Tag style={{ marginRight: 0 }}>{c.code}</Tag>
+                      <Tag style={{ marginRight: 0 }} bordered={false}>
+                        {c.code}
+                      </Tag>
                     </Tooltip>
                   ))}
                 </Space>

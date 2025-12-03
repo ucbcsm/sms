@@ -16,6 +16,7 @@ import { FC, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   getTeachingUnitCategoryName,
+  getTeachingUnitCategoryTagColor,
   getTeachingUnitsByfaculty,
 } from "@/lib/api";
 import { NewTeachingUnitForm } from "./forms/new";
@@ -79,7 +80,10 @@ const ListItem: FC<ListItemProps> = ({ item, cycles }) => {
         description={
           <Space>
             Categorie:
-            <Tag style={{ border: 0 }}>
+            <Tag
+              color={getTeachingUnitCategoryTagColor(item.category)}
+              bordered={false}
+            >
               {getTeachingUnitCategoryName(item.category)}
             </Tag>
             {/* <Badge
@@ -105,7 +109,7 @@ export const ListTeachingUnits: FC<ListTeachingUnitsProps> = ({
   const [searchResults, setSearchResults] = useState<
     TeachingUnit[] | undefined
   >();
-  
+
   const { data: teaching_units, isPending } = useQuery({
     queryKey: ["teaching-units", facultyId],
     queryFn: ({ queryKey }) => getTeachingUnitsByfaculty(Number(queryKey[1])),
