@@ -2,7 +2,7 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { getHoursTrackings, getHourTrackingActivityTypeName } from "@/lib/api";
+import { getHoursTrackings, getHourTrackingActivityTypeName, getTaughtCours } from "@/lib/api";
 import { HourTracking } from "@/types";
 import {
   DeleteOutlined,
@@ -19,6 +19,7 @@ import { FC, useState } from "react";
 import { NewHourTrackingForm } from "./forms/new";
 import { DeleteHourTrackingForm } from "./forms/delete";
 import { EditHourTrackingForm } from "./forms/edit";
+import { PrintableHoursTrackingReport } from "./printable-report";
 
 type ActionsBarProps = {
   record: HourTracking;
@@ -72,15 +73,22 @@ const ActionsBar: FC<ActionsBarProps> = ({ record }) => {
 };
 
 export default function Page() {
-  const {token:{colorBgLayout}}=theme.useToken()
+  const {
+    token: { colorBgLayout },
+  } = theme.useToken();
   const { courseId } = useParams();
+
+  const { data: course } = useQuery({
+    queryKey: ["taught_courses", courseId],
+    queryFn: ({ queryKey }) => getTaughtCours(Number(queryKey[1])),
+    enabled: !!courseId,
+  });
+
   const { data, isPending, isError } = useQuery({
     queryKey: ["course_hours_tracking", courseId],
     queryFn: ({ queryKey }) => getHoursTrackings(Number(queryKey[1])),
     enabled: !!courseId,
   });
-
- 
 
   if (isError) {
     return <DataFetchErrorResult />;
@@ -120,12 +128,14 @@ export default function Page() {
               <div className="flex-1" />
               <Space>
                 <NewHourTrackingForm />
-                <Button
+                <PrintableHoursTrackingReport data={data} course={course} />
+                {/* <Button
                   icon={<PrinterOutlined />}
                   style={{ boxShadow: "none" }}
+                  title="Imprimer le rapport"
                 >
                   Imprimer
-                </Button>
+                </Button> */}
               </Space>
             </header>
           )}
