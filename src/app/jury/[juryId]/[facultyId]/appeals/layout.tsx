@@ -9,7 +9,6 @@ import {
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
-    Badge,
   Collapse,
   type CollapseProps,
   Flex,
@@ -28,9 +27,9 @@ export default function DeliberationsLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBorder },
+    token: { colorBorder, colorBgContainer },
   } = theme.useToken();
-  const { juryId, facultyId, departmentId } = useParams();
+  const { facultyId, departmentId } = useParams();
 
   const { data: departments, isPending: isPendingDepartment } = useQuery({
     queryKey: ["departments", facultyId],
@@ -51,7 +50,12 @@ export default function DeliberationsLayout({
       icon: <SubnodeOutlined />,
       children: (
         <div className="pl-8">
-          <TreeClassesAppeals classes={classes} department={dep} />
+          <TreeClassesAppeals
+            classes={classes?.filter(
+              (c) => c.cycle?.id === dep.faculty.field.cycle?.id
+            )}
+            department={dep}
+          />
         </div>
       ),
       extra: dep.id.toString() === departmentId ? <EyeOutlined /> : undefined,
@@ -67,7 +71,7 @@ export default function DeliberationsLayout({
   };
 
   return (
-    <Splitter style={{ height: `calc(100vh - 110px)` }}>
+    <Splitter style={{ height: `calc(100vh - 110px)`, background:colorBgContainer }}>
       <Splitter.Panel defaultSize={320} min={320} max="25%">
         <Flex
           style={{
