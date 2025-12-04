@@ -12,7 +12,6 @@ import dayjs from "dayjs";
 dayjs.locale("fr");
 
 type PrintableHoursTrackingReportProps = {
-  //   ref: RefObject<HTMLDivElement | null>;
   data?: HourTracking[];
   course?: TaughtCourse;
 };
@@ -35,7 +34,7 @@ export const PrintableHoursTrackingReport: FC<PrintableHoursTrackingReportProps>
         icon={<PrinterOutlined />}
         style={{ boxShadow: "none" }}
         onClick={printReport}
-        title="Imprimer le rapport"
+        title="Imprimer le rapport de suivi des heures"
       >
         Imprimer le rapport
       </Button>

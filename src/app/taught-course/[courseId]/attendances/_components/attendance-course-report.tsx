@@ -43,7 +43,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
   course,
 }) => {
   const {
-    token: { colorPrimary, colorBgLayout },
+    token: {  colorBgLayout },
   } = theme.useToken();
   const { courseId } = useParams();
   const [open, setOpen] = useQueryState(
@@ -83,8 +83,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
   return (
     <>
       <Button
-        variant="dashed"
-        color="primary"
+      
         icon={<CheckCircleOutlined />}
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
@@ -274,9 +273,9 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                     {
                       key: "percentage",
                       dataIndex: "percentage",
-                      title: "Assiduité",
+                      title: "Présences",
                       render: (value) => `${percentageFormatter(value) || 0}`,
-                      width: 74,
+                      width: 90,
                       align: "right",
                     },
                     {

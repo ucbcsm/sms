@@ -3,7 +3,7 @@
 import { DocHeader } from "@/components/doc-header";
 import { percentageFormatter } from "@/lib/utils";
 import { TaughtCourse } from "@/types";
-import { Card, Descriptions, Table, Tag } from "antd";
+import { Descriptions, Table, Tag } from "antd";
 import { FC, RefObject } from "react";
 
 type PrintableAttendanceReportProps = {
@@ -87,9 +87,9 @@ export const PrintableAttendanceReport: FC<PrintableAttendanceReportProps> = ({
             {
               key: "percentage",
               dataIndex: "percentage",
-              title: "Assiduité",
+              title: "Présences",
               render: (value) => percentageFormatter(value),
-              width: 74,
+              width: 90,
               align: "right",
             },
             {

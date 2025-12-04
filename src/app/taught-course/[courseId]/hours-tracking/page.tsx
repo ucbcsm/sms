@@ -5,11 +5,12 @@ import { getHoursTrackings, getHourTrackingActivityTypeName, getTaughtCours } fr
 import { HourTracking } from "@/types";
 import {
   DeleteOutlined,
+  DownloadOutlined,
   EditOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
-import { Button, DatePicker, Dropdown, Layout, Space, Switch, Table, theme, Typography } from "antd";
+import { Badge, Button, DatePicker, Dropdown, Layout, Space, Switch, Table, theme, Typography } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 import { NewHourTrackingForm } from "./_components/forms/new";
@@ -17,6 +18,7 @@ import { DeleteHourTrackingForm } from "./_components/forms/delete";
 import { EditHourTrackingForm } from "./_components/forms/edit";
 import { PrintableHoursTrackingReport } from "./_components/printable-report";
 import dayjs from "dayjs";
+import { EmptyPrintableTracking } from "./_components/empty-printable-tracking";
 
 type ActionsBarProps = {
   record: HourTracking;
@@ -75,6 +77,8 @@ export default function Page() {
   } = theme.useToken();
   const { courseId } = useParams();
 
+  const [openPrintEmptyAttendance, setOpenPrintEmptyAttendance] = useState<boolean>(false);
+
   const { data: course } = useQuery({
     queryKey: ["taught_courses", courseId],
     queryFn: ({ queryKey }) => getTaughtCours(Number(queryKey[1])),
@@ -126,6 +130,24 @@ export default function Page() {
               <Space>
                 <NewHourTrackingForm />
                 <PrintableHoursTrackingReport data={data} course={course} />
+                <Dropdown
+                  arrow
+                  menu={{
+                    items: [
+                      {
+                        key: "export_empty",
+                        label: "Fiche de suivie des heures",
+                        icon: <DownloadOutlined />,
+                        extra: <Badge count="Vide" />,
+                        onClick: () => {
+                          setOpenPrintEmptyAttendance(true);
+                        },
+                      },
+                    ],
+                  }}
+                >
+                  <Button icon={<MoreOutlined />} type="text" />
+                </Dropdown>
               </Space>
             </header>
           )}
@@ -215,6 +237,11 @@ export default function Page() {
             pageSizeOptions: [25, 50, 75, 100],
             size: "small",
           }}
+        />
+        <EmptyPrintableTracking
+          course={course}
+          open={openPrintEmptyAttendance}
+          setOpen={setOpenPrintEmptyAttendance}
         />
       </Layout.Content>
     </Layout>

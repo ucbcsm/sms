@@ -12,11 +12,13 @@ import {
 import { AttendanceList, CourseEnrollment, TaughtCourse } from "@/types";
 import {
   DeleteOutlined,
+  DownloadOutlined,
   EditOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Badge,
   Button,
   DatePicker,
   Dropdown,
@@ -33,6 +35,8 @@ import { NewAttendanceListForm } from "./_components/forms/new";
 import { EditAttendanceListForm } from "./_components/forms/edit";
 import { useYid } from "@/hooks/use-yid";
 import { AttendanceCourseReport } from "./_components/attendance-course-report";
+import { EmptyPrintableAttendance } from "./_components/empty-printable-attentance";
+import { set } from "lodash";
 
 type ActionsBarProps = {
   record: AttendanceList;
@@ -100,6 +104,9 @@ export default function Page() {
   const {token:{colorBgLayout}}=theme.useToken();
   const { courseId } = useParams();
   const {yid}=useYid()
+  const [openPrintEmptyAttendance, setOpenPrintEmptyAttendance] =
+    useState<boolean>(false);
+
   const { data, isPending, isError } = useQuery({
     queryKey: ["attendances-lists", courseId],
     queryFn: ({ queryKey }) => getAttendancesListByCourse(Number(queryKey[1])),
@@ -136,8 +143,8 @@ export default function Page() {
       <Layout.Header
         style={{
           background: colorBgLayout,
-          paddingLeft:28,
-          paddingRight:28
+          paddingLeft: 28,
+          paddingRight: 28,
         }}
       >
         <Space>
@@ -146,7 +153,9 @@ export default function Page() {
           </Typography.Title>
         </Space>
       </Layout.Header>
-      <Layout.Content style={{ padding: "0 28px 0 28px",minHeight:`calc(100vh - 174px)` }}>
+      <Layout.Content
+        style={{ padding: "0 28px 0 28px", minHeight: `calc(100vh - 174px)` }}
+      >
         <Table
           bordered
           title={() => (
@@ -168,30 +177,28 @@ export default function Page() {
                   )}
                 />
                 <AttendanceCourseReport course={course} />
-                {/* <Dropdown
-              menu={{
-                items: [
-                  {
-                    key: "pdf",
-                    label: "Exporter .pdf",
-                    icon: <FilePdfOutlined />,
-                    title: "Exporter en PDF",
-                  },
-                  {
-                    key: "excel",
-                    label: "Exporter .xlsx",
-                    icon: <FileExcelOutlined />,
-                    title: "Exporter vers Excel",
-                  },
-                ],
-              }}
-            >
-              <Button
-                type="text"
-                icon={<MoreOutlined />}
-                style={{ boxShadow: "none" }}
-              />
-            </Dropdown> */}
+                <Dropdown
+                  arrow
+                  menu={{
+                    items: [
+                      {
+                        key: "export_empty",
+                        label: "Fiche de présences",
+                        icon: <DownloadOutlined />,
+                        extra: <Badge count="Vide" />,
+                        onClick: () => {
+                          setOpenPrintEmptyAttendance(true);
+                        },
+                      },
+                    ],
+                  }}
+                >
+                  <Button
+                    type="text"
+                    icon={<MoreOutlined />}
+                    style={{ boxShadow: "none" }}
+                  />
+                </Dropdown>
               </Space>
             </header>
           )}
@@ -295,6 +302,12 @@ export default function Page() {
             pageSizeOptions: [25, 50, 75, 100],
             size: "small",
           }}
+        />
+        <EmptyPrintableAttendance
+          course={course}
+          students={enrollments}
+          open={openPrintEmptyAttendance}
+          setOpen={setOpenPrintEmptyAttendance}
         />
       </Layout.Content>
     </Layout>
