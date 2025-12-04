@@ -188,7 +188,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
           ]}
           rowKey="id"
           pagination={false}
-          style={{ marginBottom: 28 }}
+          scroll={{ x: "max-content", y: "calc(100vh - 236px)" }}
         />
       </Drawer>
       <div className="hidden">
