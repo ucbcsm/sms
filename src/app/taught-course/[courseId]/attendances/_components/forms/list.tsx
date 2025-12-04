@@ -52,7 +52,7 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
                 backgroundColor: record.exempted
                   ? colorTextDisabled
                   : getHSLColor(
-                      `${record.student.user.first_name} ${record.student.user.last_name} ${record.student.user.surname}`
+                      `${record.student.user.surname} ${record.student.user.last_name} ${record.student.user.first_name}`
                     ),
               }}
             >
@@ -60,22 +60,6 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
             </Avatar>
           ),
           width: 58,
-          align: "center",
-        },
-        {
-          title: "Matricule",
-          dataIndex: "matricule",
-          key: "matricule",
-          width: 92,
-          render: (_, record, __) => (
-            <Typography.Text
-              style={{
-                color: record.exempted ? colorTextDisabled : "",
-              }}
-            >
-              {record.student.user.matricule.padStart(6, "0")}
-            </Typography.Text>
-          ),
           align: "center",
         },
         {
@@ -88,8 +72,23 @@ export const ListAttendanceListItem: FC<ListAttendanceListItemProps> = ({
                 color: record.exempted ? colorTextDisabled : "",
               }}
             >
-              {record.student.user.first_name} {record.student.user.last_name}{" "}
-              {record.student.user.surname}
+              {record.student.user.surname} {record.student.user.last_name}{" "}
+              {record.student.user.first_name}
+            </Typography.Text>
+          ),
+        },
+        {
+          title: "Matricule",
+          dataIndex: "matricule",
+          key: "matricule",
+          width: 92,
+          render: (_, record, __) => (
+            <Typography.Text
+              style={{
+                color: record.exempted ? colorTextDisabled : "",
+              }}
+            >
+              {record.student.user.matricule}
             </Typography.Text>
           ),
         },

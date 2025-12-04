@@ -114,7 +114,7 @@ export default function Page() {
           bordered
           loading={isPending}
           title={() => (
-            <header className="flex pb-3">
+            <header className="flex">
               <Space>
                 <DatePicker
                   variant="filled"

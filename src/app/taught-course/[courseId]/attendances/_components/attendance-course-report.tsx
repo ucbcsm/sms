@@ -89,7 +89,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
         style={{ boxShadow: "none" }}
         onClick={() => setOpen(true)}
       >
-        Rapport d&apos;assiduité
+        Rapport de présences
       </Button>
       <Drawer
         open={open}
