@@ -14,21 +14,12 @@ import {
   theme,
   Typography,
 } from "antd";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ReactNode, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
-  getAllCourses,
-  getClassrooms,
-  getDepartmentsByFacultyId,
-  getPeriods,
   getTaughtCours,
-  getTeachersByFaculty,
-  getTeachingUnitsByfaculty,
-  getYearStatusColor,
-  getYearStatusName,
 } from "@/lib/api";
-import { TaughtCourseDetails } from "./(dashboard)/course-details";
 import { CloseOutlined } from "@ant-design/icons";
 import Link from "next/link";
 import { LanguageSwitcher } from "@/components/languageSwitcher";
@@ -38,19 +29,18 @@ import { UserProfileButton } from "@/components/userProfileButton";
 import { useInstitution } from "@/hooks/use-institution";
 import { getPublicR2Url } from "@/lib/utils";
 
-export default function FacultyLayout({
+export default function TaughtCourseLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const {
     token: { colorBgContainer, colorBorderSecondary, colorPrimary },
   } = theme.useToken();
-const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { courseId } = useParams();
   const pathname = usePathname();
-  const router = useRouter()
 
-   const {data:institution} = useInstitution();
+  const { data: institution } = useInstitution();
 
   const {
     data: course,
@@ -60,42 +50,6 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     queryKey: ["taught_courses", courseId],
     queryFn: ({ queryKey }) => getTaughtCours(Number(queryKey[1])),
     enabled: !!courseId,
-  });
-
-  const { data: courses } = useQuery({
-    queryKey: ["courses", `${course?.faculty.id}`, "all"],
-    queryFn: ({ queryKey }) =>
-      getAllCourses({ facultyId: Number(queryKey[1]) }),
-    enabled: !!course?.faculty.id,
-  });
-
-  const { data: departments } = useQuery({
-    queryKey: ["departments", `${course?.faculty.id}`],
-    queryFn: ({ queryKey }) => getDepartmentsByFacultyId(Number(queryKey[1])),
-    enabled: !!course?.faculty.id,
-  });
-
-  const { data: teachers } = useQuery({
-    queryKey: ["teachers", `${course?.faculty.id}`],
-    queryFn: ({ queryKey }) => getTeachersByFaculty(Number(queryKey[1])),
-    enabled: !!course?.faculty.id,
-  });
-
-  const { data: periods } = useQuery({
-    queryKey: ["periods"],
-    queryFn: getPeriods,
-  });
-
-
-  const { data: teachingUnits } = useQuery({
-    queryKey: ["teaching-units", `${course?.faculty.id}`],
-    queryFn: ({ queryKey }) => getTeachingUnitsByfaculty(Number(queryKey[1])),
-    enabled: !!course?.faculty.id,
-  });
-
-  const { data: classrooms } = useQuery({
-    queryKey: ["classrooms"],
-    queryFn: getClassrooms,
   });
 
   return (
@@ -153,24 +107,26 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
           </Modal>
         </Space>
         <Space style={{ marginLeft: 28 }}>
-          <Link
-            href={`/taught-course/${courseId}`}
-            style={{ display: "flex", alignItems: "center" }}
-          >
-            <div className="flex items-center pr-3">
-              <Image
-                src={getPublicR2Url(institution?.logo) || undefined}
-                alt="Logo"
-                width="auto"
-                height={36}
-                preview={false}
-              />
-            </div>
-            <Typography.Title level={5} style={{ marginBottom: 0 }}>
-              {institution?.acronym}
-            </Typography.Title>
-          </Link>
-          <Divider type="vertical" />
+          {institution && (
+            <Link
+              href={`/taught-course/${courseId}`}
+              style={{ display: "flex", alignItems: "center" }}
+            >
+              <div className="flex items-center pr-3">
+                <Image
+                  src={getPublicR2Url(institution?.logo) || undefined}
+                  alt="Logo"
+                  width="auto"
+                  height={36}
+                  preview={false}
+                />
+              </div>
+              <Typography.Title level={5} style={{ marginBottom: 0 }}>
+                {institution?.acronym}
+              </Typography.Title>
+            </Link>
+          )}
+          {institution && <Divider type="vertical" />}
           <Typography.Title
             level={5}
             type="secondary"
@@ -196,6 +152,9 @@ const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
         <div className="flex-1" />
         <Space>
+          <Typography.Text strong type="secondary">
+            {course?.academic_year?.name || ""}
+          </Typography.Text>
           <LanguageSwitcher />
           <SupportDrawer />
           <AppsButton />
