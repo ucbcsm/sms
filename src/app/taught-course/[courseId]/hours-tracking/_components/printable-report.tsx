@@ -4,9 +4,12 @@ import { DocHeader } from "@/components/doc-header";
 import { getHourTrackingActivityTypeName } from "@/lib/api";
 import { HourTracking, TaughtCourse } from "@/types";
 import { PrinterOutlined } from "@ant-design/icons";
-import { Button, Card, Checkbox, Descriptions, Space, Table, Typography } from "antd";
-import { FC, RefObject, useRef } from "react";
+import { Button, Checkbox, Descriptions, Space, Table, Typography } from "antd";
+import { FC, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
+import dayjs from "dayjs";
+
+dayjs.locale("fr");
 
 type PrintableHoursTrackingReportProps = {
   //   ref: RefObject<HTMLDivElement | null>;
@@ -39,99 +42,124 @@ export const PrintableHoursTrackingReport: FC<PrintableHoursTrackingReportProps>
       <div className="hidden">
         <div ref={refToPrint} className=" ">
           <DocHeader
-            serviceName="Sécretariat General académique"
+            serviceName="Secrétariat General académique"
             showContactInfo={false}
           />
-          <Card style={{ marginBottom: 28 }}>
-            <Descriptions
-              title="Fiche de suivi des heures"
-              size="small"
-              bordered
-              column={3}
-              items={[
-                {
-                  key: "course",
-                  label: "Cours",
-                  children: `${course?.available_course.name}`,
-                },
-                {
-                  key: "code",
-                  label: "Code",
-                  children: course?.available_course.code || "",
-                },
-                {
-                  key: "credits",
-                  label: "Crédits",
-                  children: course?.credit_count || "",
-                },
-                {
-                  key: "hours",
-                  label: "Heures totales",
-                  children:
-                    Number(course?.practical_hours) +
-                      Number(course?.theoretical_hours) || "",
-                },
-                {
-                  key: "practical_hours",
-                  label: "Heures pratiques",
-                  children: course?.practical_hours || "",
-                },
-                {
-                  key: "theoretical_hours",
-                  label: "Heures théoriques",
-                  children: course?.theoretical_hours || "",
-                },
-                {
-                  key: "year",
-                  label: "Année académique",
-                  children: course?.academic_year?.name || "",
-                },
-                {
-                  key: "period",
-                  label: "Période",
-                  children: `${course?.period?.name || ""} (${
-                    course?.period?.acronym || ""
-                  })`,
-                },
-                {
-                  key: "faculty",
-                  label: "Filière",
-                  children: course?.faculty?.name || "",
-                },
-                {
-                  key: "department",
-                  label: "Mention(s)",
-                  children: course?.departements
-                    .map((dep) => dep.name)
-                    .join(","),
-                },
-                {
-                  key: "instructor",
-                  label: "Enseignant(e)",
-                  children: `${course?.teacher?.user.surname || ""} ${
-                    course?.teacher?.user.last_name || ""
-                  } ${course?.teacher?.user.first_name || ""}`,
-                },
-                {
-                  key: "education_level",
-                  label: "Niveau d'étude",
-                  children: course?.teacher?.education_level || "",
-                },
-                {
-                  key: "academic_grade",
-                  label: "Grade académique",
-                  children: course?.teacher?.academic_grade || "",
-                },
-                {
-                  key: "field_of_study",
-                  label: "Domaine de formation",
-                  children: course?.teacher?.field_of_study || "",
-                },
-              ]}
-            />
-          </Card>
+          <Descriptions
+            title="Fiche de suivi des heures"
+            styles={{
+              title: { textTransform: "uppercase", textAlign: "center" },
+            }}
+            size="small"
+            bordered
+            column={3}
+            style={{ marginBottom: 28 }}
+            items={[
+              {
+                key: "course",
+                label: "Cours",
+                children: `${course?.available_course.name}`,
+              },
+              {
+                key: "code",
+                label: "Code",
+                children: course?.available_course.code || "",
+              },
+              {
+                key: "credits",
+                label: "Crédits",
+                children: course?.credit_count || "",
+              },
+              {
+                key: "hours",
+                label: "Heures totales",
+                children:
+                  Number(course?.practical_hours) +
+                    Number(course?.theoretical_hours) || "",
+              },
+              {
+                key: "practical_hours",
+                label: "Heures pratiques",
+                children: course?.practical_hours || "",
+              },
+              {
+                key: "theoretical_hours",
+                label: "Heures théoriques",
+                children: course?.theoretical_hours || "",
+              },
+              {
+                key: "year",
+                label: "Année académique",
+                children: course?.academic_year?.name || "",
+              },
+              {
+                key: "period",
+                label: "Période",
+                children: `${course?.period?.name || ""} (${
+                  course?.period?.acronym || ""
+                })`,
+              },
+              {
+                key: "faculty",
+                label: "Filière",
+                children: course?.faculty?.name || "",
+              },
+              {
+                key: "department",
+                label: "Mention(s)",
+                children: course?.departements.map((dep) => dep.name).join(","),
+              },
+              {
+                key: "instructor",
+                label: "Enseignant(e)",
+                children: `${course?.teacher?.user.surname || ""} ${
+                  course?.teacher?.user.last_name || ""
+                } ${course?.teacher?.user.first_name || ""}`,
+              },
+              {
+                key: "education_level",
+                label: "Niveau d'étude",
+                children: course?.teacher?.education_level || "",
+              },
+              {
+                key: "academic_grade",
+                label: "Grade académique",
+                children: course?.teacher?.academic_grade || "",
+              },
+              {
+                key: "field_of_study",
+                label: "Domaine de formation",
+                children: course?.teacher?.field_of_study || "",
+              },
+            ]}
+          />
 
           <Table
+            title={() => (
+              <div className="flex justify-between">
+                <Typography.Title level={5} style={{ marginBottom: 0 }}>
+                  {data?.length || ""} séances
+                </Typography.Title>
+                <Space>
+                  <Typography.Text type="secondary">
+                    Total heures prestées:
+                  </Typography.Text>
+                  <Typography.Text strong>
+                    {data
+                      ?.reduce(
+                        (sum, record) => sum + (record.hours_completed || 0),
+                        0
+                      )
+                      .toString()}
+                  </Typography.Text>
+                  /
+                  <Typography.Text strong>
+                    {Number(course?.practical_hours || 0) +
+                      Number(course?.theoretical_hours || 0)}
+                  </Typography.Text>
+                </Space>
+              </div>
+            )}
             bordered
             size="small"
             dataSource={data}
@@ -141,11 +169,7 @@ export const PrintableHoursTrackingReport: FC<PrintableHoursTrackingReportProps>
                 dataIndex: "date",
                 key: "date",
                 render: (_, record, __) =>
-                  record.date
-                    ? new Intl.DateTimeFormat("fr", {
-                        dateStyle: "full",
-                      }).format(new Date(`${record.date}`))
-                    : "",
+                  ` ${dayjs(record.date).format("dddd, DD/MM/YYYY")}`,
               },
               {
                 title: "Matière",
@@ -214,43 +238,44 @@ export const PrintableHoursTrackingReport: FC<PrintableHoursTrackingReportProps>
           <div className="">
             <Descriptions
               bordered
+              title="Durée et calendrier de prestation"
               column={4}
-              //   size="small"
+              size="small"
               items={[
                 {
                   key: "duration",
                   label: "Durée de prestation",
-                  children: ".........",
+                  children: "...... J",
                 },
                 {
                   key: "start_date",
                   label: "Date de début",
-                  children: ".........",
+                  children: "...... / .... / ............",
                 },
                 {
                   key: "end_date",
                   label: "Date de fin",
-                  children: ".........",
+                  children: "...... / .... / ............",
                 },
                 {
                   key: "deadline",
                   label: "Deadline du dernier TP",
-                  children: ".........",
+                  children: "...... / .... / ............",
                 },
               ]}
             />
           </div>
           <div className="mt-12">
             <Descriptions
-              title="Evaluation du cours par les étudiants"
+              title="Évaluation du cours par les étudiants"
               bordered
               column={2}
-              //   size="small"
+              size="small"
               items={[
                 {
                   key: "date",
                   label: "Date d'évaluation",
-                  children: "....../......./.............",
+                  children: "...... / .... / ............",
                 },
                 {
                   key: "participation",
@@ -259,12 +284,12 @@ export const PrintableHoursTrackingReport: FC<PrintableHoursTrackingReportProps>
                 },
                 {
                   key: "male_participation",
-                  label: "Hommes",
+                  label: "Nombre d'hommes",
                   children: "",
                 },
                 {
                   key: "female_participation",
-                  label: "Femmes",
+                  label: "Nombre de femmes",
                   children: "",
                 },
                 {
@@ -272,39 +297,43 @@ export const PrintableHoursTrackingReport: FC<PrintableHoursTrackingReportProps>
                   label: "Cote finale",
                   children: (
                     <Space>
-                      <Checkbox disabled> Excellent</Checkbox>
-                      <Checkbox disabled> Très bien</Checkbox>
-                      <Checkbox disabled> Bien</Checkbox>
-                      <Checkbox disabled> Assez bien</Checkbox>
-                      <Checkbox disabled> Médiocre</Checkbox>
+                      <Checkbox> Excellent</Checkbox>
+                      <Checkbox> Très bien</Checkbox>
+                      <Checkbox> Bien</Checkbox>
+                      <Checkbox> Assez bien</Checkbox>
+                      <Checkbox> Médiocre</Checkbox>
                     </Space>
                   ),
                 },
               ]}
             />
           </div>
-          <div className=" mt-10">
-            <Typography.Text>
-              Fait à .........................., le .........................
-            </Typography.Text>
-          </div>
+
           <div className="flex justify-between mt-12">
             <div className="text-center">
-              <Typography.Text>Coordonnateur de la filière</Typography.Text>
+              <Typography.Title level={5}>
+                Coordonnateur de la filière
+              </Typography.Title>
               <div className="h-12" />
-              <p>................................</p>
-            </div>
-            <div className="text-center">
-              <Typography.Text>Course evaluation manager</Typography.Text>
-              <div className="h-12" />
-              <Typography.Text>
+              <Typography.Text type="secondary">
                 ................................
               </Typography.Text>
             </div>
             <div className="text-center">
-              <Typography.Text>Sécretaire Géneral Académique</Typography.Text>
+              <Typography.Title level={5}>
+                Course evaluation manager
+              </Typography.Title>
               <div className="h-12" />
-              <Typography.Text>
+              <Typography.Text type="secondary">
+                ................................
+              </Typography.Text>
+            </div>
+            <div className="text-center">
+              <Typography.Title level={5}>
+                Secrétaire Géneral Académique
+              </Typography.Title>
+              <div className="h-12" />
+              <Typography.Text type="secondary">
                 ................................
               </Typography.Text>
             </div>

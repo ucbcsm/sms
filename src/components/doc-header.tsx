@@ -45,7 +45,7 @@ export const DocHeader: FC<DocHeaderProps> = ({
           <div className="flex-1 bg-[#ED6851]" />
           <div className="flex-1 bg-[#FCB34C]" />
         </div>
-        {showContactInfo && (
+        {showContactInfo ? (
           <div className="flex flex-col">
             <Typography.Text>
               {data?.phone_number_1 || "Téléphone"}
@@ -54,6 +54,8 @@ export const DocHeader: FC<DocHeaderProps> = ({
             <Typography.Text>{data?.web_site || "Site web"}</Typography.Text>
             <Typography.Text>{data?.address || "Adresse"}</Typography.Text>
           </div>
+        ) : (
+          <div className="flex flex-col"></div>
         )}
       </div>
     </div>

@@ -7,6 +7,7 @@ import { App, ConfigProvider, ThemeConfig } from "antd";
 import { NuqsAdapter } from "nuqs/adapters/next";
 import { useEffect } from "react";
 import NextTopLoader from 'nextjs-toploader';
+import "dayjs/locale/fr";
 import locale from "antd/es/locale/fr_FR";
 
 const queryClient = new QueryClient();

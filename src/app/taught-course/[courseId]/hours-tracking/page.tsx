@@ -16,10 +16,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Button, DatePicker, Dropdown, Layout, Space, Switch, Table, theme, Typography } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
-import { NewHourTrackingForm } from "./forms/new";
-import { DeleteHourTrackingForm } from "./forms/delete";
-import { EditHourTrackingForm } from "./forms/edit";
-import { PrintableHoursTrackingReport } from "./printable-report";
+import { NewHourTrackingForm } from "./_components/forms/new";
+import { DeleteHourTrackingForm } from "./_components/forms/delete";
+import { EditHourTrackingForm } from "./_components/forms/edit";
+import { PrintableHoursTrackingReport } from "./_components/printable-report";
 
 type ActionsBarProps = {
   record: HourTracking;
