@@ -1,16 +1,12 @@
 "use client";
 
 import { DataFetchErrorResult } from "@/components/errorResult";
-import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
 import { getHoursTrackings, getHourTrackingActivityTypeName, getTaughtCours } from "@/lib/api";
 import { HourTracking } from "@/types";
 import {
   DeleteOutlined,
   EditOutlined,
-  FileExcelOutlined,
-  FilePdfOutlined,
   MoreOutlined,
-  PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Button, DatePicker, Dropdown, Layout, Space, Switch, Table, theme, Typography } from "antd";
@@ -20,6 +16,7 @@ import { NewHourTrackingForm } from "./_components/forms/new";
 import { DeleteHourTrackingForm } from "./_components/forms/delete";
 import { EditHourTrackingForm } from "./_components/forms/edit";
 import { PrintableHoursTrackingReport } from "./_components/printable-report";
+import dayjs from "dayjs";
 
 type ActionsBarProps = {
   record: HourTracking;
@@ -129,13 +126,6 @@ export default function Page() {
               <Space>
                 <NewHourTrackingForm />
                 <PrintableHoursTrackingReport data={data} course={course} />
-                {/* <Button
-                  icon={<PrinterOutlined />}
-                  style={{ boxShadow: "none" }}
-                  title="Imprimer le rapport"
-                >
-                  Imprimer
-                </Button> */}
               </Space>
             </header>
           )}
@@ -146,11 +136,7 @@ export default function Page() {
               dataIndex: "date",
               key: "date",
               render: (_, record, __) =>
-                record.date
-                  ? new Intl.DateTimeFormat("fr", { dateStyle: "long" }).format(
-                      new Date(`${record.date}`)
-                    )
-                  : "",
+                `${dayjs(record.date).locale("fr").format("dddd, DD/MM/YYYY")}`,
             },
             {
               title: "Leçon",
