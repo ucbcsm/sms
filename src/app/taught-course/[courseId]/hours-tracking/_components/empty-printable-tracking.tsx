@@ -132,6 +132,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
               dataIndex: "date",
               key: "date",
               render: (_, record, __) => "",
+              width: 120,
             },
             {
               title: "Matière",
@@ -325,6 +326,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
                 dataIndex: "date",
                 key: "date",
                 render: (_, record, __) => "",
+                width:120
               },
               {
                 title: "Matière",
