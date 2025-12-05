@@ -59,7 +59,7 @@ const numberOfSessions = Form.useWatch("number_of_sessions", form);
         title={
           <Space>
             <Typography.Title level={5} style={{ marginBottom: 0 }}>
-              Fiche de présences vide -
+              Fiche de présences vide :
             </Typography.Title>
             <Typography.Title
               level={5}

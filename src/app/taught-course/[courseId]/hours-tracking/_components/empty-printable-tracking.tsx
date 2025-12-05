@@ -67,7 +67,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
         title={
           <Space>
             <Typography.Title level={5} style={{ marginBottom: 0 }}>
-              Fiche de suivi des heures -
+              Fiche de suivi des heures :
             </Typography.Title>
             <Typography.Title
               level={5}
@@ -125,6 +125,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
               key: "session_number",
               render: (_, record, index) => index + 1,
               width: 48,
+              align:"right"
             },
             {
               title: "Date",
@@ -317,6 +318,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
                 key: "session_number",
                 render: (_, record, index) => index + 1,
                 width: 48,
+                align:"right"
               },
               {
                 title: "Date",
