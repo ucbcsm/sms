@@ -238,6 +238,7 @@ const numberOfSessions = Form.useWatch("number_of_sessions", form);
             style={{ marginBottom: 24 }}
             showIcon
             icon={<BulbOutlined />}
+            banner
           />
           <Table
             size="small"

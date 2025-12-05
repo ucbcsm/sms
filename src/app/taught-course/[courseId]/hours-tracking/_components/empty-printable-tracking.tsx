@@ -125,7 +125,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
               key: "session_number",
               render: (_, record, index) => index + 1,
               width: 48,
-              align:"right"
+              align: "right",
             },
             {
               title: "Date",
@@ -294,6 +294,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
             icon={<BulbOutlined />}
             showIcon
             style={{ marginBottom: 24 }}
+            banner
           />
           <Table
             title={() => (
@@ -319,14 +320,14 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
                 key: "session_number",
                 render: (_, record, index) => index + 1,
                 width: 48,
-                align:"right"
+                align: "right",
               },
               {
                 title: "Date",
                 dataIndex: "date",
                 key: "date",
                 render: (_, record, __) => "",
-                width:120
+                width: 120,
               },
               {
                 title: "Matière",
