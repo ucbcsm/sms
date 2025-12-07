@@ -9,9 +9,9 @@ import {
   Popover,
   Typography,
   Input,
-  message,
   Form,
   Alert,
+  App,
 } from "antd";
 import { useParams } from "next/navigation";
 import { FC, useState } from "react";
@@ -38,7 +38,7 @@ export const ButtonDeleteSingleGrade: FC<ButtonDeleteSingleGradeProps> = ({
   const [opened, setOpened] = useState<boolean>(false);
 
   const { courseId } = useParams();
-  const [messageApi, contextHolder] = message.useMessage();
+  const { message } = App.useApp();
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
@@ -53,100 +53,105 @@ export const ButtonDeleteSingleGrade: FC<ButtonDeleteSingleGradeProps> = ({
           queryClient.invalidateQueries({
             queryKey: ["grade_classes", courseId, session, moment],
           });
-          messageApi.success("La note a été supprimée avec succès");
+          message.success("La note a été supprimée avec succès");
           afterDeleteSuccess && afterDeleteSuccess();
         },
-        onError: (error:Error) => {
+        onError: (error: Error) => {
           setOpened(true);
-          messageApi.error(
-            (error as any)?.response?.data?.message ||
-              "Échec de la suppression. Veuillez réessayer."
-          );
+          if ((error as any).status === 403) {
+            message.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            message.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            message.error(
+              (error as any)?.response?.data?.message ||
+                "Échec de la suppression. Veuillez réessayer."
+            );
+          }
         },
       });
     } else {
-      messageApi.error(
-        "Le texte de confirmation doit être exactement 'DELETE'"
-      );
+      message.error("Le texte de confirmation doit être exactement 'DELETE'");
     }
   };
   return (
-    <>
-      {contextHolder}
-      <Popover
-        open={opened}
-        onOpenChange={(open) => {
-          setOpened(open);
-          if (!open) form.resetFields();
-        }}
-        content={
-          <div className="p-2">
-            <Alert
-              banner
-              description=" Êtes-vous sûr de vouloir supprimer cette note ?"
-              style={{ marginBottom: 16 }}
-            />
+    <Popover
+      open={opened}
+      onOpenChange={(open) => {
+        setOpened(open);
+        if (!open) form.resetFields();
+      }}
+      content={
+        <div className="p-2">
+          <Alert
+            banner
+            description=" Êtes-vous sûr de vouloir supprimer cette note ?"
+            style={{ marginBottom: 16 }}
+          />
 
-            <Form
-              key="delete-single-grade-class-form"
-              form={form}
-              name="delete-single-grade-class-form"
-              layout="vertical"
-              onFinish={handleDelete}
+          <Form
+            key="delete-single-grade-class-form"
+            form={form}
+            name="delete-single-grade-class-form"
+            layout="vertical"
+            onFinish={handleDelete}
+          >
+            <Form.Item
+              name="validate"
+              label={
+                <p>
+                  Tapez <Typography.Text strong>DELETE</Typography.Text> pour
+                  confirmer
+                </p>
+              }
+              rules={[
+                {
+                  required: true,
+                  message: "Veuillez saisir DETELE pour supprimer",
+                },
+              ]}
             >
-              <Form.Item
-                name="validate"
-                label={
-                  <p>
-                    Tapez <Typography.Text strong>DELETE</Typography.Text> pour
-                    confirmer
-                  </p>
-                }
-                rules={[
-                  {
-                    required: true,
-                    message: "Veuillez saisir DETELE pour supprimer",
-                  },
-                ]}
+              <Input placeholder="DELETE" />
+            </Form.Item>
+            <Flex justify="end" gap={8} style={{ marginTop: 12 }}>
+              <Button
+                style={{ boxShadow: "none" }}
+                onClick={() => setOpened(false)}
               >
-                <Input placeholder="DELETE" />
-              </Form.Item>
-              <Flex justify="end" gap={8} style={{ marginTop: 12 }}>
+                Annuler
+              </Button>
+              <Form.Item noStyle>
                 <Button
+                  htmlType="submit"
+                  type="primary"
+                  danger
                   style={{ boxShadow: "none" }}
-                  onClick={() => setOpened(false)}
                 >
-                  Annuler
+                  Confirmer
                 </Button>
-                <Form.Item noStyle>
-                  <Button
-                    htmlType="submit"
-                    type="primary"
-                    danger
-                    style={{ boxShadow: "none" }}
-                  >
-                    Confirmer
-                  </Button>
-                </Form.Item>
-              </Flex>
-            </Form>
-          </div>
-        }
-        title={
-          <Typography.Title level={5} style={{ marginLeft: 8 }}>
-            Confirmer la suppression
-          </Typography.Title>
-        }
-        trigger="click"
-      >
-        <Button
-          type="text"
-          icon={<DeleteOutlined />}
-          title="Supprimer la note"
-          disabled={disabled || isPending}
-          loading={isPending}
-        />
-      </Popover>
-    </>
+              </Form.Item>
+            </Flex>
+          </Form>
+        </div>
+      }
+      title={
+        <Typography.Title level={5} style={{ marginLeft: 8 }}>
+          Confirmer la suppression
+        </Typography.Title>
+      }
+      trigger="click"
+    >
+      <Button
+        type="text"
+        icon={<DeleteOutlined />}
+        title="Supprimer la note"
+        disabled={disabled || isPending}
+        loading={isPending}
+      />
+    </Popover>
   );
 };

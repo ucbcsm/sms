@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   Dispatch,
   FC,
   SetStateAction,
@@ -12,7 +12,6 @@ import {
   Drawer,
   Form,
   Select,
-  message,
   Space,
   Typography,
   theme,
@@ -23,6 +22,7 @@ import {
   Tag,
   Modal,
   Alert,
+  App,
 } from "antd";
 import {
   CheckCircleOutlined,
@@ -79,9 +79,9 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
   setMoment,
 }) => {
   const {
-    token: { colorPrimary, colorSuccess, colorWarning },
+    token: { colorBgLayout, colorSuccess, colorWarning },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
+  const {message} = App.useApp();
   const [form] = Form.useForm();
   const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
   const [newGradeClassItems, setNewGradeClassItems] = useState<
@@ -122,19 +122,29 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
             });
             setSession(values.session);
             setMoment(values.moment);
-            messageApi.success("Soumission en masse réussie !");
+            message.success("Soumission en masse réussie !");
             setOpen(false);
           },
           onError: (error:Error) => {
-            messageApi.error(
+            if ((error as any).status === 403) {
+            message.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            message.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            message.error(
               (error as any)?.response?.data?.message ||
                 "Erreur lors de la soumission en masse."
             );
+          }
           },
         }
       );
     } else {
-      messageApi.error("Aucun étudiant à soumettre.");
+      message.error("Aucun étudiant à soumettre.");
     }
   };
 
@@ -156,15 +166,14 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
   }, [enrollments]);
 
   return (
-    <>
-      {contextHolder}
+   
       <Drawer
         open={open}
         title={
           <Flex align="center" gap={8}>
             <Typography.Title
               level={4}
-              style={{ marginBottom: 0, color: "#fff" }}
+              style={{ marginBottom: 0, }}
             >
               Saisie collective des notes
             </Typography.Title>
@@ -193,7 +202,9 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
         closable={false}
         maskClosable={false}
         width="60%"
-        styles={{ header: { background: colorPrimary, color: "#fff" } }}
+        styles={{ 
+          body: { background: colorBgLayout}
+         }}
         footer={
           <Flex
             justify="space-between"
@@ -528,6 +539,5 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
           />
         </Form>
       </Drawer>
-    </>
   );
 };

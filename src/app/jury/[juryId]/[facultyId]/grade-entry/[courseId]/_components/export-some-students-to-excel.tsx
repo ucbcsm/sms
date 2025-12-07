@@ -17,6 +17,7 @@ import {
   Flex,
   Modal,
   Alert,
+  App,
 } from "antd";
 import {
   CloseOutlined,
@@ -41,9 +42,9 @@ export const ExportSomeStudentsToExcelForm: FC<
   enrollments,
 }) => {
   const {
-    token: { colorPrimary },
+    token: { colorBgLayout },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
+  const {message}= App.useApp();
   const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
 
   const [selectedRows, setSelectedRows] = useState<CourseEnrollment[]>([]);
@@ -54,15 +55,14 @@ export const ExportSomeStudentsToExcelForm: FC<
   };
 
   return (
-    <>
-      {contextHolder}
+   
       <Drawer
         open={open}
         title={
           <Flex align="center" gap={8}>
             <Typography.Title
               level={4}
-              style={{ marginBottom: 0, color: "#fff" }}
+              style={{ marginBottom: 0, }}
             >
               Exportation vers excel
             </Typography.Title>
@@ -90,7 +90,7 @@ export const ExportSomeStudentsToExcelForm: FC<
         closable={false}
         maskClosable={false}
         width="60%"
-        styles={{ header: { background: colorPrimary, color: "#fff" } }}
+        styles={{ body: { background: colorBgLayout } }}
         footer={
           <Flex
             justify="space-between"
@@ -145,7 +145,7 @@ export const ExportSomeStudentsToExcelForm: FC<
                       onAfter: onClose,
                     });
 
-                    messageApi.success(
+                    message.success(
                       "Fichier Excel des notes vides exporté avec succès !"
                     );
                   }
@@ -238,6 +238,5 @@ export const ExportSomeStudentsToExcelForm: FC<
           rowKey="id"
         />
       </Drawer>
-    </>
   );
 };

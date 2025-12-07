@@ -16,6 +16,7 @@ import {
   Tag,
   Modal,
   Alert,
+  App,
 } from "antd";
 import {
   UploadOutlined,
@@ -71,9 +72,9 @@ export const ImportFileGradeSubmissionForm: FC<
   FileGradeSubmissionFormProps
 > = ({ open, setOpen, enrollments, course, setSession, setMoment, juryId }) => {
   const {
-    token: { colorPrimary, colorSuccess, colorWarning },
+    token: { colorBgLayout, colorSuccess, colorWarning },
   } = theme.useToken();
-  const [messageApi, contextHolder] = message.useMessage();
+  const {message} = App.useApp();
   const [form] = Form.useForm();
   const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
   const [newMatchedGradeClassItems, setNewMatchedGradeClassItems] = useState<
@@ -100,42 +101,9 @@ export const ImportFileGradeSubmissionForm: FC<
         enrollments
       );
       setNewMatchedGradeClassItems(matchedData);
-      console.log(matchedData);
-      messageApi.success("Fichier importé avec succès !");
+      message.success("Fichier importé avec succès !");
     }
-    // Papa.parse(file, {
-    //     header: true,
-    //     delimiter:";",
-    //     skipEmptyLines: true,
-    //     complete: (results) => {
-    //         // Adapt this mapping to your CSV structure
-    //         const parsed: NewGradeClass[] = results.data.map((row: any) => ({
-    //             // student: {
-    //             //     id: row["student_id"],
-    //             //     year_enrollment: {
-    //             //         user: {
-    //             //             matricule: row["matricule"],
-    //             //             first_name: row["first_name"],
-    //             //             last_name: row["last_name"],
-    //             //             surname: row["surname"],
-    //             //         },
-    //             //     },
-    //             // },
-    //             matricule: row["matricule"],
-    //             student: row["student"],
-    //             continuous_assessment: Number(row["continuous_assessment"]),
-    //             exam: Number(row["exam"]),
-    //             // status: row["status"] as "validated" | "pending",
-    //             // is_retaken: row["is_retaken"] === "true",
-    //         }));
-    //         console.log(parsed);
-    //         messageApi.success("Fichier importé avec succès !");
-    //     },
-    //     error: () => {
-    //         messageApi.error("Erreur lors de l'import du fichier.");
-    //     },
-    // });
-    // return false; // Prevent upload
+    
   };
 
   const handleFinish = (values: FormDataType) => {
@@ -160,234 +128,241 @@ export const ImportFileGradeSubmissionForm: FC<
             });
             setSession(values.session);
             setMoment(values.moment);
-            messageApi.success("Soumission en masse réussie !");
+            message.success("Soumission en masse réussie !");
            onClose()
           },
           onError: (error:Error) => {
-            messageApi.error(
+            if ((error as any).status === 403) {
+            message.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            message.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
+            message.error(
               (error as any)?.response?.data?.message ||
                 "Erreur lors de la soumission en masse."
             );
+          }
           },
         }
       );
     } else {
-      messageApi.error("Aucun étudiant à soumettre.");
+      message.error("Aucun étudiant à soumettre.");
     }
   };
 
   return (
-    <>
-      {contextHolder}
-      <Drawer
-        open={open}
-        title={
-          <Flex align="center" gap={8}>
-            <Typography.Title
-              level={4}
-              style={{ marginBottom: 0, color: "#fff" }}
-            >
-              Import de notes depuis un fichier .xlsx
-            </Typography.Title>
-            <div className="flex-1" />
-            <Typography.Title
-              level={4}
-              style={{
-                marginBottom: 0,
-                marginTop: 0,
-                textTransform: "uppercase",
-              }}
-              type="success"
-            >
-              {course?.available_course.name}
-            </Typography.Title>
+    <Drawer
+      open={open}
+      title={
+        <Flex align="center" gap={8}>
+          <Typography.Title
+            level={4}
+            style={{ marginBottom: 0 }}
+          >
+            Import de notes depuis un fichier .xlsx
+          </Typography.Title>
+          <div className="flex-1" />
+          <Typography.Title
+            level={4}
+            style={{
+              marginBottom: 0,
+              marginTop: 0,
+              textTransform: "uppercase",
+            }}
+            type="success"
+          >
+            {course?.available_course.name}
+          </Typography.Title>
+          <Button
+            onClick={() => setOpenCancelForm(true)}
+            type="text"
+            icon={<CloseOutlined />}
+            disabled={isPending}
+          />
+        </Flex>
+      }
+      destroyOnHidden
+      onClose={onClose}
+      closable={false}
+      maskClosable={false}
+      width="60%"
+      styles={{ body: { background: colorBgLayout } }}
+      footer={
+        <Flex
+          justify="space-between"
+          style={{
+            padding: "12px 24px",
+          }}
+        >
+          <Typography.Title
+            type="secondary"
+            level={5}
+            style={{ marginBottom: 0 }}
+          >
+            {/* Saisie des notes */}
+          </Typography.Title>
+          <Space>
             <Button
               onClick={() => setOpenCancelForm(true)}
-              type="text"
-              icon={<CloseOutlined />}
-              disabled={isPending}
-            />
-          </Flex>
-        }
-        destroyOnHidden
-        onClose={onClose}
-        closable={false}
-        maskClosable={false}
-        width="60%"
-        styles={{ header: { background: colorPrimary, color: "#fff" } }}
-        footer={
-          <Flex
-            justify="space-between"
-            style={{
-              padding: "12px 24px",
-            }}
-          >
-            <Typography.Title
-              type="secondary"
-              level={5}
-              style={{ marginBottom: 0 }}
+              style={{ boxShadow: "none" }}
+              disabled={
+                isPending ||
+                newMatchedGradeClassItems?.length === 0 ||
+                !newMatchedGradeClassItems
+              }
             >
-              {/* Saisie des notes */}
-            </Typography.Title>
-            <Space>
-              <Button
-                onClick={() => setOpenCancelForm(true)}
-                style={{ boxShadow: "none" }}
-                disabled={
-                  isPending ||
-                  newMatchedGradeClassItems?.length === 0 ||
-                  !newMatchedGradeClassItems
-                }
-              >
-                Annuler
-              </Button>
-              <Modal
-                title="Annuler l'importation des notes"
-                centered
-                open={openCancelForm}
-                destroyOnHidden
-                onOk={() => {
-                  setOpenCancelForm(false);
-                  onClose();
-                }}
-                onCancel={() => setOpenCancelForm(false)}
-                cancelText="Retour"
-                okText="Confirmer"
-                okType="danger"
-                cancelButtonProps={{
-                  style: { boxShadow: "none" },
-                }}
-                okButtonProps={{
-                  style: { boxShadow: "none" },
-                  type: "primary",
-                }}
-              >
-                <Alert
-                  message="Attention !"
-                  description="En confirmant, vous annulerez l'importation en cours. Toutes les notes de cette importation seront perdues."
-                  type="warning"
-                  showIcon
-                  style={{ border: 0, marginBottom: 16 }}
-                />
-              </Modal>
-              <Button
-                type="primary"
-                onClick={() => form.submit()}
-                style={{ boxShadow: "none" }}
-                icon={<CheckCircleOutlined />}
-                disabled={
-                  isPending ||
-                  newMatchedGradeClassItems?.length === 0 ||
-                  !newMatchedGradeClassItems
-                }
-                loading={isPending}
-              >
-                Sauvegarder
-              </Button>
-            </Space>
-          </Flex>
-        }
+              Annuler
+            </Button>
+            <Modal
+              title="Annuler l'importation des notes"
+              centered
+              open={openCancelForm}
+              destroyOnHidden
+              onOk={() => {
+                setOpenCancelForm(false);
+                onClose();
+              }}
+              onCancel={() => setOpenCancelForm(false)}
+              cancelText="Retour"
+              okText="Confirmer"
+              okType="danger"
+              cancelButtonProps={{
+                style: { boxShadow: "none" },
+              }}
+              okButtonProps={{
+                style: { boxShadow: "none" },
+                type: "primary",
+              }}
+            >
+              <Alert
+                message="Attention !"
+                description="En confirmant, vous annulerez l'importation en cours. Toutes les notes de cette importation seront perdues."
+                type="warning"
+                showIcon
+                style={{ border: 0, marginBottom: 16 }}
+              />
+            </Modal>
+            <Button
+              type="primary"
+              onClick={() => form.submit()}
+              style={{ boxShadow: "none" }}
+              icon={<CheckCircleOutlined />}
+              disabled={
+                isPending ||
+                newMatchedGradeClassItems?.length === 0 ||
+                !newMatchedGradeClassItems
+              }
+              loading={isPending}
+            >
+              Sauvegarder
+            </Button>
+          </Space>
+        </Flex>
+      }
+    >
+      <Form
+        key="bulk_grade_submission_form"
+        form={form}
+        name="bulk_grade_submission_form"
+        onFinish={handleFinish}
+        layout="vertical"
       >
-        <Form
-          key="bulk_grade_submission_form"
-          form={form}
-          name="bulk_grade_submission_form"
-          onFinish={handleFinish}
-          layout="vertical"
-        >
-          <Form.Item
-            style={{ marginBottom: newMatchedGradeClassItems ? 16 : 0 }}
+        <Form.Item style={{ marginBottom: newMatchedGradeClassItems ? 16 : 0 }}>
+          <Upload.Dragger
+            accept=".xlsx"
+            beforeUpload={handleFileUpload}
+            showUploadList={false}
+            maxCount={1}
+            style={{ padding: 12 }}
           >
-            <Upload.Dragger
-              accept=".xlsx"
-              beforeUpload={handleFileUpload}
-              showUploadList={false}
-              maxCount={1}
-              style={{ padding: 12 }}
+            <div
+              style={{
+                minHeight: 100,
+                height: newMatchedGradeClassItems
+                  ? "auto"
+                  : `calc(100vh - 244px)`,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
             >
-              <div
-                style={{
-                  minHeight: 100,
-                  height: newMatchedGradeClassItems
-                    ? "auto"
-                    : `calc(100vh - 244px)`,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <p className="ant-upload-drag-icon">
-                  <UploadOutlined style={{ fontSize: 32, color: "GrayText" }} />
-                </p>
-                <p className="ant-upload-text">
-                  Cliquez ou glissez-déposez un fichier XLSX ici pour l&apos;importer
-                </p>
-                <p className="ant-upload-hint">
-                  Seuls les fichiers .xlsx sont acceptés.
-                </p>
-              </div>
-            </Upload.Dragger>
-          </Form.Item>
-          {newMatchedGradeClassItems && (
-            <Table
-              title={() => (
-                <header className="flex pb-1 px-2">
-                  <Space>
-                    <Typography.Title
-                      type="secondary"
-                      level={5}
-                      style={{ marginBottom: 0, textTransform: "uppercase" }}
-                    >
-                      Aperçu de notes
-                    </Typography.Title>
-                  </Space>
-                  <div className="flex-1" />
-                  <Space>
-                    <Form.Item
-                      name="session"
-                      label="Session"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Veuillez sélectionner la session",
-                        },
+              <p className="ant-upload-drag-icon">
+                <UploadOutlined style={{ fontSize: 32, color: "GrayText" }} />
+              </p>
+              <p className="ant-upload-text">
+                Cliquez ou glissez-déposez un fichier XLSX ici pour
+                l&apos;importer
+              </p>
+              <p className="ant-upload-hint">
+                Seuls les fichiers .xlsx sont acceptés.
+              </p>
+            </div>
+          </Upload.Dragger>
+        </Form.Item>
+        {newMatchedGradeClassItems && (
+          <Table
+            title={() => (
+              <header className="flex pb-1 px-2">
+                <Space>
+                  <Typography.Title
+                    type="secondary"
+                    level={5}
+                    style={{ marginBottom: 0, textTransform: "uppercase" }}
+                  >
+                    Aperçu de notes
+                  </Typography.Title>
+                </Space>
+                <div className="flex-1" />
+                <Space>
+                  <Form.Item
+                    name="session"
+                    label="Session"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Veuillez sélectionner la session",
+                      },
+                    ]}
+                    layout="horizontal"
+                    style={{ marginBottom: 0 }}
+                  >
+                    <Select
+                      variant="filled"
+                      placeholder="Session"
+                      options={[
+                        { value: "main_session", label: "Principale" },
+                        { value: "retake_session", label: "Rattrapage" },
                       ]}
-                      layout="horizontal"
-                      style={{ marginBottom: 0 }}
-                    >
-                      <Select
-                        variant="filled"
-                        placeholder="Session"
-                        options={[
-                          { value: "main_session", label: "Principale" },
-                          { value: "retake_session", label: "Rattrapage" },
-                        ]}
-                        style={{ width: 110 }}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      name="moment"
-                      label="Moment"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Veuillez sélectionner le moment",
-                        },
+                      style={{ width: 110 }}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    name="moment"
+                    label="Moment"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Veuillez sélectionner le moment",
+                      },
+                    ]}
+                    layout="horizontal"
+                    style={{ marginBottom: 0 }}
+                  >
+                    <Select
+                      variant="filled"
+                      placeholder="Moment"
+                      options={[
+                        { value: "before_appeal", label: "Avant recours" },
+                        { value: "after_appeal", label: "Après recours" },
                       ]}
-                      layout="horizontal"
-                      style={{ marginBottom: 0 }}
-                    >
-                      <Select
-                        variant="filled"
-                        placeholder="Moment"
-                        options={[
-                          { value: "before_appeal", label: "Avant recours" },
-                          { value: "after_appeal", label: "Après recours" },
-                        ]}
-                        style={{ width: 128 }}
-                      />
-                    </Form.Item>
-                    {/* <Button
+                      style={{ width: 128 }}
+                    />
+                  </Form.Item>
+                  {/* <Button
                       icon={
                         !isLoadingGradeClasses ? (
                           <ReloadOutlined />
@@ -399,196 +374,148 @@ export const ImportFileGradeSubmissionForm: FC<
                       onClick={async () => await refetchGradeClasses()}
                       type="text"
                     /> */}
-                  </Space>
-                </header>
-              )}
-              dataSource={newMatchedGradeClassItems}
-              columns={[
-                {
-                  key: "matricule",
-                  dataIndex: "matricule",
-                  title: "Matricule",
-                  render: (_, record) =>
-                    `${record.student?.year_enrollment.user.matricule}`,
-                  width: 96,
-                  align: "center",
-                },
-                {
-                  key: "names",
-                  dataIndex: "names",
-                  title: "Noms",
-                  render: (_, record) =>
-                    `${record.student?.year_enrollment.user.first_name} ${record.student?.year_enrollment.user.last_name} ${record.student?.year_enrollment.user.surname}`,
-                  ellipsis: true,
-                },
-                {
-                  key: "cc",
-                  dataIndex: "cc",
-                  title: "C. continu",
-                  render: (_, record) => (
-                    <InputGrade
-                      value={record.continuous_assessment}
-                      onChange={(value) => {
-                        const updatedItems = [
-                          ...(newMatchedGradeClassItems ?? []),
-                        ];
-                        const index = updatedItems.findIndex(
-                          (item) => item.student?.id === record.student?.id
-                        );
-                        if (index !== -1) {
-                          updatedItems[index] = {
-                            ...updatedItems[index],
-                            continuous_assessment: value,
-                          };
-                          setNewMatchedGradeClassItems(updatedItems);
-                        }
-                      }}
-                      disabled={!record.student}
-                    />
-                  ),
-                  width: 90,
-                },
-                {
-                  key: "exam",
-                  dataIndex: "exam",
-                  title: "Examen",
-                  render: (_, record) => (
-                    <InputGrade
-                      value={record.exam}
-                      onChange={(value) => {
-                        const updatedItems = [
-                          ...(newMatchedGradeClassItems ?? []),
-                        ];
-                        const index = updatedItems.findIndex(
-                          (item) => item.student?.id === record.student?.id
-                        );
-                        if (index !== -1) {
-                          updatedItems[index] = {
-                            ...updatedItems[index],
-                            exam: value,
-                          };
-                          setNewMatchedGradeClassItems(updatedItems);
-                        }
-                      }}
-                      disabled={!record.student}
-                    />
-                  ),
-                  width: 90,
-                },
-                {
-                  key: "total",
-                  dataIndex: "total",
-                  title: "Total",
-                  render: (_, record) => (
-                    <Typography.Text strong>
-                      {typeof record.continuous_assessment === "number" &&
-                      typeof record.exam === "number"
-                        ? `${Number(
-                            record.continuous_assessment + record.exam
-                          ).toFixed(2)}`
-                        : ""}
-                    </Typography.Text>
-                  ),
-                  width: 52,
-                  align: "right",
-                },
-                {
-                  key: "is_retaken",
-                  dataIndex: "is_retaken",
-                  title: "Retake?",
-                  render: (_, record) => (
-                    <Checkbox
-                      checked={record.is_retaken}
-                      onChange={(e) => {
-                        const updatedItems = [
-                          ...(newMatchedGradeClassItems ?? []),
-                        ];
-                        const index = updatedItems.findIndex(
-                          (item) => item.student?.id === record.student?.id
-                        );
-                        if (index !== -1) {
-                          updatedItems[index] = {
-                            ...updatedItems[index],
-                            is_retaken: e.target.checked,
-                          };
-                          setNewMatchedGradeClassItems(updatedItems);
-                        }
-                      }}
-                    />
-                  ),
-                  width: 68,
-                  align: "center",
-                },
-                {
-                  key: "status",
-                  dataIndex: "status",
-                  title: "Statut",
-                  render: (_, record) => (
-                    <Dropdown
-                      menu={{
-                        items: [
-                          {
-                            key: "validated",
-                            label: "Validée",
-                            icon: <CheckCircleOutlined />,
-                            style: { color: colorSuccess },
-                          },
-                          {
-                            key: "pending",
-                            label: "En attente",
-                            icon: <HourglassOutlined />,
-                            style: { color: colorWarning },
-                          },
-                        ],
-                        onClick: ({ key }) => {
-                          const updatedItems = [
-                            ...(newMatchedGradeClassItems ?? []),
-                          ];
-                          const index = updatedItems.findIndex(
-                            (item) => item.student?.id === record.student?.id
-                          );
-                          if (index !== -1) {
-                            updatedItems[index] = {
-                              ...updatedItems[index],
-                              status: key as "validated" | "pending",
-                            };
-                            setNewMatchedGradeClassItems(updatedItems);
-                          }
+                </Space>
+              </header>
+            )}
+            dataSource={newMatchedGradeClassItems}
+            columns={[
+              {
+                key: "matricule",
+                dataIndex: "matricule",
+                title: "Matricule",
+                render: (_, record) =>
+                  `${record.student?.year_enrollment.user.matricule}`,
+                width: 96,
+                align: "center",
+              },
+              {
+                key: "names",
+                dataIndex: "names",
+                title: "Noms",
+                render: (_, record) =>
+                  `${record.student?.year_enrollment.user.first_name} ${record.student?.year_enrollment.user.last_name} ${record.student?.year_enrollment.user.surname}`,
+                ellipsis: true,
+              },
+              {
+                key: "cc",
+                dataIndex: "cc",
+                title: "C. continu",
+                render: (_, record) => (
+                  <InputGrade
+                    value={record.continuous_assessment}
+                    onChange={(value) => {
+                      const updatedItems = [
+                        ...(newMatchedGradeClassItems ?? []),
+                      ];
+                      const index = updatedItems.findIndex(
+                        (item) => item.student?.id === record.student?.id
+                      );
+                      if (index !== -1) {
+                        updatedItems[index] = {
+                          ...updatedItems[index],
+                          continuous_assessment: value,
+                        };
+                        setNewMatchedGradeClassItems(updatedItems);
+                      }
+                    }}
+                    disabled={!record.student}
+                  />
+                ),
+                width: 90,
+              },
+              {
+                key: "exam",
+                dataIndex: "exam",
+                title: "Examen",
+                render: (_, record) => (
+                  <InputGrade
+                    value={record.exam}
+                    onChange={(value) => {
+                      const updatedItems = [
+                        ...(newMatchedGradeClassItems ?? []),
+                      ];
+                      const index = updatedItems.findIndex(
+                        (item) => item.student?.id === record.student?.id
+                      );
+                      if (index !== -1) {
+                        updatedItems[index] = {
+                          ...updatedItems[index],
+                          exam: value,
+                        };
+                        setNewMatchedGradeClassItems(updatedItems);
+                      }
+                    }}
+                    disabled={!record.student}
+                  />
+                ),
+                width: 90,
+              },
+              {
+                key: "total",
+                dataIndex: "total",
+                title: "Total",
+                render: (_, record) => (
+                  <Typography.Text strong>
+                    {typeof record.continuous_assessment === "number" &&
+                    typeof record.exam === "number"
+                      ? `${Number(
+                          record.continuous_assessment + record.exam
+                        ).toFixed(2)}`
+                      : ""}
+                  </Typography.Text>
+                ),
+                width: 52,
+                align: "right",
+              },
+              {
+                key: "is_retaken",
+                dataIndex: "is_retaken",
+                title: "Retake?",
+                render: (_, record) => (
+                  <Checkbox
+                    checked={record.is_retaken}
+                    onChange={(e) => {
+                      const updatedItems = [
+                        ...(newMatchedGradeClassItems ?? []),
+                      ];
+                      const index = updatedItems.findIndex(
+                        (item) => item.student?.id === record.student?.id
+                      );
+                      if (index !== -1) {
+                        updatedItems[index] = {
+                          ...updatedItems[index],
+                          is_retaken: e.target.checked,
+                        };
+                        setNewMatchedGradeClassItems(updatedItems);
+                      }
+                    }}
+                  />
+                ),
+                width: 68,
+                align: "center",
+              },
+              {
+                key: "status",
+                dataIndex: "status",
+                title: "Statut",
+                render: (_, record) => (
+                  <Dropdown
+                    menu={{
+                      items: [
+                        {
+                          key: "validated",
+                          label: "Validée",
+                          icon: <CheckCircleOutlined />,
+                          style: { color: colorSuccess },
                         },
-                      }}
-                      arrow
-                    >
-                      <Tag
-                        color={
-                          record.status === "validated" ? "success" : "warning"
-                        }
-                        bordered={false}
-                        style={{ width: "100%", padding: "4px 8px" }}
-                        icon={
-                          record.status === "validated" ? (
-                            <CheckCircleOutlined
-                              style={{ color: colorSuccess }}
-                            />
-                          ) : (
-                            <HourglassOutlined />
-                          )
-                        }
-                      >
-                        {record.status === "validated"
-                          ? "Validée"
-                          : "En attente"}
-                      </Tag>
-                    </Dropdown>
-                  ),
-                  width: 128,
-                },
-                {
-                  key: "actions",
-                  dataIndex: "actions",
-                  title: "",
-                  render: (_, record) => (
-                    <ButtonRemoveGrade
-                      onDelete={() => {
+                        {
+                          key: "pending",
+                          label: "En attente",
+                          icon: <HourglassOutlined />,
+                          style: { color: colorWarning },
+                        },
+                      ],
+                      onClick: ({ key }) => {
                         const updatedItems = [
                           ...(newMatchedGradeClassItems ?? []),
                         ];
@@ -596,23 +523,68 @@ export const ImportFileGradeSubmissionForm: FC<
                           (item) => item.student?.id === record.student?.id
                         );
                         if (index !== -1) {
-                          updatedItems.splice(index, 1);
+                          updatedItems[index] = {
+                            ...updatedItems[index],
+                            status: key as "validated" | "pending",
+                          };
                           setNewMatchedGradeClassItems(updatedItems);
                         }
-                      }}
-                      disabled={isPending}
-                    />
-                  ),
-                  width: 48,
-                },
-              ]}
-              size="small"
-              pagination={false}
-              scroll={{ y: "calc(100vh - 454px)" }}
-            />
-          )}
-        </Form>
-      </Drawer>
-    </>
+                      },
+                    }}
+                    arrow
+                  >
+                    <Tag
+                      color={
+                        record.status === "validated" ? "success" : "warning"
+                      }
+                      bordered={false}
+                      style={{ width: "100%", padding: "4px 8px" }}
+                      icon={
+                        record.status === "validated" ? (
+                          <CheckCircleOutlined
+                            style={{ color: colorSuccess }}
+                          />
+                        ) : (
+                          <HourglassOutlined />
+                        )
+                      }
+                    >
+                      {record.status === "validated" ? "Validée" : "En attente"}
+                    </Tag>
+                  </Dropdown>
+                ),
+                width: 128,
+              },
+              {
+                key: "actions",
+                dataIndex: "actions",
+                title: "",
+                render: (_, record) => (
+                  <ButtonRemoveGrade
+                    onDelete={() => {
+                      const updatedItems = [
+                        ...(newMatchedGradeClassItems ?? []),
+                      ];
+                      const index = updatedItems.findIndex(
+                        (item) => item.student?.id === record.student?.id
+                      );
+                      if (index !== -1) {
+                        updatedItems.splice(index, 1);
+                        setNewMatchedGradeClassItems(updatedItems);
+                      }
+                    }}
+                    disabled={isPending}
+                  />
+                ),
+                width: 48,
+              },
+            ]}
+            size="small"
+            pagination={false}
+            scroll={{ y: "calc(100vh - 454px)" }}
+          />
+        )}
+      </Form>
+    </Drawer>
   );
 };
