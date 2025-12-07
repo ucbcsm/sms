@@ -78,7 +78,7 @@ export const SelectAStudent: FC<SelectAStudentProps> = ({
           <UserOutlined />
         ) : undefined
       }
-      placeholder="Nom ou matricule de l'étudiant"
+      placeholder="Matr., Nom ou Prénom de l'étudiant"
       showSearch
       labelInValue
       size="large"

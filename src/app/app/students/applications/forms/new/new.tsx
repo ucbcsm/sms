@@ -41,7 +41,7 @@ type Props = {
 export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
   const { data: institution } = useInstitution();
   const {
-    token: { colorPrimary },
+    token: { colorPrimary , colorBgLayout},
   } = theme.useToken();
   const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0));
   const [cancel, setCancel] = useState<boolean>(false);
@@ -108,24 +108,20 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
       title={
         isFormer ? (
           <Badge count="Ancien étudiant">
-            <Typography.Title
-              style={{ marginBottom: 0, color: "#fff" }}
-              level={5}
-            >
+            <Typography.Title style={{ marginBottom: 0 }} level={5}>
               Formulaire d&apos;enregistrement
             </Typography.Title>
           </Badge>
         ) : (
-          <Typography.Title
-            style={{ marginBottom: 0, color: "#fff" }}
-            level={5}
-            ellipsis={{}}
-          >
+          <Typography.Title style={{ marginBottom: 0 }} level={5} ellipsis={{}}>
             Nouvelle candidature
           </Typography.Title>
         )
       }
-      styles={{ header: { background: colorPrimary, color: "#fff" } }}
+      styles={{
+        //  header: { background: colorPrimary, color: "#fff" }
+        body: { background: colorBgLayout },
+      }}
       onClose={onClose}
       open={open}
       closable={false}
@@ -138,7 +134,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
             percent={(step / (steps.length - 1)) * 100}
           />
           <Button
-            style={{ boxShadow: "none", color: "#fff" }}
+            style={{ boxShadow: "none" }}
             onClick={() => {
               setCancel(true);
             }}
@@ -178,12 +174,19 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
             description={`Veuillez noter que ce formulaire est strictement réservé aux anciens étudiants de l'${institution?.acronym} qui ne sont pas encore enregistrés dans le système. Si l'étudiant n'a jamais été inscrit à l'${institution?.acronym}, veuillez utiliser le formulaire de nouvelle candidature ou de réinscription s'il existe déjà dans le système.`}
             showIcon
             style={{ border: 0 }}
+            closable
           />
         )}
         <Card
           title={steps[step].title}
           variant="borderless"
           style={{ boxShadow: "none" }}
+          styles={{
+            header: {
+              borderBottom: "none",
+            },
+            body: { paddingTop: 0 }
+          }}
         >
           {steps[step].content}
         </Card>

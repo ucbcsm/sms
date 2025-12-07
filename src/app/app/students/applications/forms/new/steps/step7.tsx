@@ -32,6 +32,7 @@ import { Options } from "nuqs";
 import { FC, useEffect, useMemo } from "react";
 import { Palette } from "@/components/palette";
 import { BulbOutlined } from "@ant-design/icons";
+import { filterOption } from "@/lib/utils";
 
 type Props = {
   setStep: (
@@ -92,20 +93,32 @@ export const Step7: FC<Props> = ({ setStep }) => {
     queryFn: getClasses,
   });
 
-  const filteredFields = useMemo(() => {
-    return fields?.filter((f) => f.cycle?.id === cycleId);
-  }, [cycleId]);
+const filteredFields = useMemo(() => {
+  const flds = fields?.filter((f) => f.cycle?.id === cycleId);
+  if (flds && flds.length > 0) {
+    return flds;
+  }
+}, [cycleId]);
 
-  const filteredFaculties = useMemo(() => {
-    return faculties?.filter((fac) => fac.field.id === fieldId);
-  }, [fieldId]);
+const filteredFaculties = useMemo(() => {
+  const facs = faculties?.filter((fac) => fac.field.id === fieldId);
+  if (facs && facs.length > 0) {
+    return facs;
+  }
+}, [fieldId]);
 
-  const filteredDepartments = useMemo(() => {
-    return departments?.filter((dep) => dep.faculty.id === facultyId);
-  }, [facultyId]);
+const filteredDepartments = useMemo(() => {
+  const depts = departments?.filter((dep) => dep.faculty.id === facultyId);
+  if (depts && depts.length > 0) {
+    return depts;
+  }
+}, [facultyId]);
 
   const filteredClasses = useMemo(() => {
-    return classes?.filter((c) => c.cycle?.id === cycleId);
+    const clas = classes?.filter((c) => c.cycle?.id === cycleId);
+    if (clas && clas.length > 0) {
+      return clas;
+    }
   }, [cycleId]);
 
   useEffect(() => {
@@ -166,13 +179,6 @@ export const Step7: FC<Props> = ({ setStep }) => {
         setStep(7);
       }}
     >
-      <Alert
-        showIcon
-        icon={<BulbOutlined />}
-        description="Respecter l'ordre de remplissage pour une bonne cohérence des données"
-        closable
-        style={{ marginBottom: 16 }}
-      />
       <Form.Item
         label="Cycle"
         name="cycle_id"
@@ -186,8 +192,17 @@ export const Step7: FC<Props> = ({ setStep }) => {
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Select
-          options={getCurrentFieldsAsOptions(filteredFields)}
+          options={getCurrentFieldsAsOptions(filteredFields || fields)}
           showSearch
+          filterOption={filterOption}
+          onSelect={(value) => {
+            const selectedField = fields?.find((f) => f.id === value);
+            form.setFieldsValue({
+              cycle_id: selectedField?.cycle?.id,
+              faculty_id: undefined,
+              department_id: undefined,
+            });
+          }}
         />
       </Form.Item>
       <Form.Item
@@ -196,8 +211,17 @@ export const Step7: FC<Props> = ({ setStep }) => {
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Select
-          options={getCurrentFacultiesAsOptions(filteredFaculties)}
+          options={getCurrentFacultiesAsOptions(filteredFaculties || faculties)}
           showSearch
+          filterOption={filterOption}
+          onSelect={(value) => {
+            const selectedFac = faculties?.find((fac) => fac.id === value);
+            form.setFieldsValue({
+              cycle_id: selectedFac?.field.cycle?.id,
+              field_id: selectedFac?.field.id,
+              department_id: undefined,
+            });
+          }}
         />
       </Form.Item>
       <Form.Item
@@ -207,12 +231,15 @@ export const Step7: FC<Props> = ({ setStep }) => {
       >
         <Select
           placeholder="Département"
-          options={getCurrentDepartmentsAsOptions(filteredDepartments)}
+          options={getCurrentDepartmentsAsOptions(
+            filteredDepartments || departments
+          )}
           onSelect={(value) => {
             const selectedDep = departments?.find((dep) => dep.id === value);
             const facId = selectedDep?.faculty.id;
             const selectedFac = faculties?.find((fac) => fac.id === facId);
             form.setFieldsValue({
+              cycle_id: selectedFac?.field.cycle?.id,
               faculty_id: facId,
               field_id: selectedFac?.field.id,
             });
@@ -228,8 +255,14 @@ export const Step7: FC<Props> = ({ setStep }) => {
       >
         <Select
           placeholder="Promotion ou classe"
-          options={getCurrentClassesAsOptions(filteredClasses)}
+          options={getCurrentClassesAsOptions(filteredClasses || classes)}
           showSearch
+          onSelect={(value) => {
+            const selectedClass = classes?.find((c) => c.id === value);
+            form.setFieldsValue({
+              cycle_id: selectedClass?.cycle?.id,
+            });
+          }}
         />
       </Form.Item>
       <Flex justify="space-between" align="center">

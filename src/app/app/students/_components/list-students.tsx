@@ -159,7 +159,7 @@ export const ListStudents: FC = () => {
       <div className="flex justify-between mb-4">
         <Radio.Group
           options={[
-            { value: 0, label: "Tous les cycles" },
+            { value: 0, label: "Tous" },
             ...(getCurrentCyclesAsOptions(cycles) || []),
           ]}
           value={cycleId}

@@ -88,7 +88,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
               <Card
                 title={
                   <Space>
-                    <Badge count=" " />
+                    <Badge count={index + 1} />
                     <FileOutlined />
                     <Typography.Title level={5} style={{ marginBottom: 0 }}>
                       {required_documents?.[index].title}
@@ -97,6 +97,14 @@ export const Step9: FC<Props> = ({ setStep }) => {
                 }
                 key={key}
                 style={{ marginBottom: 24 }}
+                styles={{
+                  header: {
+                    borderBottom: "none",
+                  },
+                  body: {
+                    paddingTop: 0,
+                  },
+                }}
               >
                 <Form.Item
                   {...restField}

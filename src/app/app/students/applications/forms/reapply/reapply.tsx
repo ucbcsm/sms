@@ -59,7 +59,7 @@ type ReapplyFormProps = {
 
 export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
   const {
-    token: { colorPrimary },
+    token: { colorBgLayout },
   } = theme.useToken();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
@@ -166,7 +166,7 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
           <Space>
             <Typography.Title
               level={5}
-              style={{ marginBottom: 0, color: "#fff" }}
+              style={{ marginBottom: 0 }}
               ellipsis={{}}
             >
               Réinscription :
@@ -176,8 +176,8 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
               setSelectedStudent={setSelectedStudent}
               search={search}
               setSearch={setSearch}
-              variant="underlined"
-              style={{ width: "100%", color: "#fff" }}
+              // variant="underlined"
+              style={{ width: "100%" }}
             />
           </Space>
         }
@@ -187,7 +187,7 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
         extra={
           <Space>
             <Button
-              style={{ boxShadow: "none", color: "#fff" }}
+              style={{ boxShadow: "none" }}
               onClick={() => {
                 setCancel(true);
               }}
@@ -245,12 +245,12 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
           </div>
         }
         styles={{
-          header: { background: colorPrimary, color: "white" },
+          body: { background: colorBgLayout },
         }}
       >
         {selectedStudent && (
           <div className=" max-w-7xl mx-auto">
-            <Card variant="borderless" style={{ boxShadow: "none" }}>
+            <Card style={{ boxShadow: "none" }}>
               <Row gutter={[28, 28]}>
                 <Col xs={24} sm={24} md={12} lg={8}>
                   <Descriptions
@@ -290,6 +290,12 @@ export const ReapplyForm: FC<ReapplyFormProps> = ({ open, setOpen }) => {
                   <Card
                     title="Nouvelle inscription"
                     style={{ boxShadow: "none" }}
+                    styles={{
+                      header: {
+                        borderBottom: "none",
+                      },
+                      body:{paddingTop:0}
+                    }}
                   >
                     {!checkInPreviousEnrollments(year?.id) && (
                       <Form

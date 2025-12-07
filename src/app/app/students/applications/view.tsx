@@ -150,6 +150,8 @@ export const ViewEditApplicationForm: React.FC<
     mutationFn: updateApplication,
   });
 
+  
+
   const onFinish = (
     values: Omit<
       Application,
@@ -906,9 +908,6 @@ export const ViewEditApplicationForm: React.FC<
                         {...restField}
                         name={[name, "response"]}
                         rules={[
-                          {
-                            required: true,
-                          },
                         ]}
                         label={
                           <>
@@ -948,7 +947,7 @@ export const ViewEditApplicationForm: React.FC<
                     <Card
                       title={
                         <Space>
-                          <Badge color="blue" count=" " />
+                          <Badge color="blue" count={index + 1} />
                           <FileOutlined />
 
                           <Typography.Title
@@ -965,6 +964,14 @@ export const ViewEditApplicationForm: React.FC<
                       }
                       key={key}
                       style={{ marginBottom: 24 }}
+                      styles={{
+                        header: {
+                          borderBottom: "none",
+                        },
+                        body:{
+                          paddingTop:0
+                        }
+                      }}
                     >
                       <Form.Item
                         {...restField}
