@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, FC, SetStateAction } from "react";
+import  { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Button, Modal } from "antd";
 import { CloseCircleOutlined } from "@ant-design/icons";
 

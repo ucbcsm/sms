@@ -126,10 +126,20 @@ export const IndividualGradeEntryForm: FC<IndividualGradeEntryFormProps> = ({
           onClose();
         },
         onError: (error) => {
+          if ((error as any).status === 403) {
+            message.error(
+              `Vous n'avez pas la permission d'effectuer cette action`
+            );
+          } else if ((error as any).status === 401) {
+            message.error(
+              "Vous devez être connecté pour effectuer cette action."
+            );
+          } else {
           message.error(
             (error as any)?.response?.data?.message ||
               "Erreur lors de l'enregistrement de la note."
           );
+        }
         },
       }
     );
