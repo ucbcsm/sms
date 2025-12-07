@@ -25,6 +25,11 @@ import {
   useQueryState,
 } from "nuqs";
 import { ViewEditApplicationForm } from "./applications/view";
+import { useClasses } from "@/hooks/useClasses";
+import { useFields } from "@/hooks/useFields";
+import { useFaculties } from "@/hooks/useFaculties";
+import { useDepartments } from "@/hooks/useDepartments";
+import { useCycles } from "@/hooks/useCycles";
 
 export default function StudentsLayout({
   children,
@@ -32,7 +37,7 @@ export default function StudentsLayout({
   children: React.ReactNode;
 }>) {
   const {
-    token: { colorBorderSecondary, colorBgLayout },
+    token: { colorBgContainer, colorBgLayout },
   } = theme.useToken();
   const { yid } = useYid();
   const [reapply, setReapply] = useQueryState(
@@ -76,34 +81,16 @@ export default function StudentsLayout({
     queryFn: getEnabledRequiredDocuments,
   });
 
-  const { data: cycles } = useQuery({
-    queryKey: ["cycles"],
-    queryFn: getCycles,
-  });
+  const { data: cycles } = useCycles()
 
-  const { data: faculties } = useQuery({
-    queryKey: ["faculties"],
-    queryFn: getFaculties,
-  });
-
-  const { data: fields } = useQuery({
-    queryKey: ["fields"],
-    queryFn: getFields,
-  });
-
-  const { data: departments } = useQuery({
-    queryKey: ["departments"],
-    queryFn: getDepartments,
-  });
-
-  const { data: classes } = useQuery({
-    queryKey: ["classes"],
-    queryFn: getClasses,
-  });
+  const { data: faculties } = useFaculties()
+  const { data: fields } = useFields() 
+  const { data: departments } = useDepartments();
+  const { data: classes } = useClasses() 
 
   return (
     <Splitter>
-      <Splitter.Panel min={360} max={400}>
+      <Splitter.Panel min={360} max={400} style={{background:colorBgContainer}}>
         <Flex
           justify="space-between"
           align="center"
