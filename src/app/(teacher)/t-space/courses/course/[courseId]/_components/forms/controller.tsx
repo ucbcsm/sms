@@ -40,7 +40,7 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
         onClick={() => editRecordStatus("present", index)}
         bordered={false}
         style={{
-          cursor: "pointer",
+          cursor: record.exempted ? "not-allowed" : "pointer",
 
           color:
             record.status !== "present" || record.exempted
@@ -61,10 +61,13 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
         onClick={() => !record.exempted && editRecordStatus("absent", index)}
         bordered={false}
         style={{
-          cursor: "pointer",
+          cursor: record.exempted ? "not-allowed" : "pointer",
 
           marginRight: 0,
-          color: record.status !== "absent" ? colorTextDisabled : colorError,
+          color:
+            record.status !== "absent" || record.exempted
+              ? colorTextDisabled
+              : colorError,
           background: record.status !== "absent" ? "transparent" : "",
         }}
       />
