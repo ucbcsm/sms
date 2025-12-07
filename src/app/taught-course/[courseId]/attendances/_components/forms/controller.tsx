@@ -42,11 +42,11 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
             <Alert
               type="info"
               showIcon
-              description="L'étudiant est exempté de toute assiduité pour ce cours. Son statut ne peut pas être modifié."
+              description="L'étudiant est exempté de toute présence pour ce cours. Son statut ne peut pas être modifié."
               style={{ border: 0, maxWidth: 400 }}
             />
           }
-          title="Exempté d'assiduité"
+          title="Exempté de présence"
         >
           <Button type="text">
             <InfoCircleTwoTone />

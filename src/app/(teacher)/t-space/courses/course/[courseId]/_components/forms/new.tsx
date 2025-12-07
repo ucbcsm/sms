@@ -8,7 +8,6 @@ import {
   Drawer,
   Flex,
   Form,
-  message,
   Modal,
   Row,
   Space,
@@ -16,6 +15,7 @@ import {
   DatePicker,
   Tag,
   TimePicker,
+  App,
 } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import {
@@ -27,6 +27,7 @@ import {
 import { AttendanceListItem, CourseEnrollment, TaughtCourse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  AttendanceItemFromCourseEnrollment,
   createAttendanceList,
   getAttendanceAbsentCount,
   getAttendanceItemsFromCourseEnrollments,
@@ -47,10 +48,10 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
   courseEnrollements,
 }) => {
   const {
-    token: { colorPrimary },
+    token: { colorBgLayout },
   } = theme.useToken();
   const [form] = Form.useForm();
-  const [messageApi, contextHolder] = message.useMessage();
+  const { message } = App.useApp();
   const { courseId } = useParams();
   const [newAttendance, setNewAttendance] = useQueryState(
     "new_attendance",
@@ -58,7 +59,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
   );
   const [cancel, setCancel] = useState<boolean>(false);
   const [attendanceItems, setAttendanceItems] = useState<
-    Omit<AttendanceListItem, "id" & { id?: number }>[]
+    AttendanceItemFromCourseEnrollment[]
   >([]);
   const queryClient = useQueryClient();
 
@@ -103,7 +104,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           queryClient.invalidateQueries({
             queryKey: ["attendances-lists", courseId],
           });
-          messageApi.success("Liste de présence créée avec succès !");
+          message.success("Liste de présence créée avec succès !");
           setNewAttendance(false);
           form.resetFields();
           setAttendanceItems(
@@ -112,15 +113,15 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         },
         onError: (error) => {
           if ((error as any).status === 403) {
-            messageApi.error(
+            message.error(
               `Vous n'avez pas la permission d'effectuer cette action`
             );
           } else if ((error as any).status === 401) {
-            messageApi.error(
+            message.error(
               "Vous devez être connecté pour effectuer cette action."
             );
           } else {
-            messageApi.error(
+            message.error(
               (error as any).response.data.message ||
                 "Erreur lors de la création de la liste de présence."
             );
@@ -140,7 +141,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
 
   return (
     <>
-      {contextHolder}
+    
       <Button
         type="primary"
         style={{ boxShadow: "none" }}
@@ -151,7 +152,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         Faire l&apos;appel
       </Button>
       <Drawer
-        styles={{ header: { background: colorPrimary, color: "#fff" } }}
+        styles={{ body: { background: colorBgLayout } }}
         width={`100%`}
         title="Nouvelle liste de présence"
         onClose={onClose}
@@ -160,7 +161,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         extra={
           <Space>
             <Button
-              style={{ boxShadow: "none", color: "#fff" }}
+              style={{ boxShadow: "none",}}
               onClick={() => setCancel(true)}
               icon={<CloseOutlined />}
               type="text"
@@ -302,6 +303,6 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           />
         </div>
       </Drawer>
-    </>
+      </>
   );
 };

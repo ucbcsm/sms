@@ -63,7 +63,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
   );
   const [cancel, setCancel] = useState<boolean>(false);
   const [attendanceItems, setAttendanceItems] = useState<
-    AttendanceItemFromCourseEnrollment[] //Omit<AttendanceListItem, "id" & { id?: number; exempted: boolean }>[]
+    AttendanceItemFromCourseEnrollment[]
   >([]);
   const queryClient = useQueryClient();
 
@@ -161,7 +161,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           body: { background: colorBgLayout },
         }}
         width={`100%`}
-        title="Création d'une liste de présence"
+        title="Nouvelle liste de présence"
         onClose={onClose}
         open={newAttendance}
         closable={false}

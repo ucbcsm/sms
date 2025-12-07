@@ -1,15 +1,16 @@
 "use client";
 
-import { AttendanceListItem } from "@/types";
+import { AttendanceItemFromCourseEnrollment } from "@/lib/api";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
+  InfoCircleTwoTone,
 } from "@ant-design/icons";
-import { Space, Tag, theme } from "antd";
+import { Alert, Button, Popover, Space, Tag, theme } from "antd";
 import { FC } from "react";
 
 type AttendanceControllerProps = {
-  record: Omit<AttendanceListItem, "id" & { id?: number }>;
+  record: AttendanceItemFromCourseEnrollment;
   index: number;
   editRecordStatus: (
     status: "present" | "absent" | "justified",
@@ -29,29 +30,58 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
     <Space size={0}>
       <Tag
         icon={<CheckCircleOutlined />}
-        color={record.status === "present" ? "success" : "default"}
+        color={
+          record.status === "present"
+            ? record.exempted
+              ? "default"
+              : "success"
+            : "default"
+        }
         onClick={() => editRecordStatus("present", index)}
         bordered={false}
         style={{
           cursor: "pointer",
-         
+
           color: record.status !== "present" ? colorTextDisabled : colorSuccess,
-          background: record.status !== "present"?"transparent":""
+          background: record.status !== "present" ? "transparent" : "",
         }}
       />
       <Tag
         icon={<CloseCircleOutlined />}
-        color={record.status === "absent" ? "error" : "default"}
-        onClick={() => editRecordStatus("absent", index)}
+        color={
+          record.status === "absent"
+            ? record.exempted
+              ? "default"
+              : "error"
+            : "default"
+        }
+        onClick={() => !record.exempted && editRecordStatus("absent", index)}
         bordered={false}
         style={{
           cursor: "pointer",
-         
+
           marginRight: 0,
           color: record.status !== "absent" ? colorTextDisabled : colorError,
-          background: record.status !== "absent"?"transparent":""
+          background: record.status !== "absent" ? "transparent" : "",
         }}
       />
+      {record.exempted && (
+        <Popover
+          content={
+            <Alert
+              type="info"
+              showIcon
+              description="L'étudiant est exempté de toute présence pour ce cours. Son statut ne peut pas être modifié."
+              style={{ border: 0, maxWidth: 400 }}
+            />
+          }
+          title="Exempté de présence"
+        >
+          <Button type="text">
+            <InfoCircleTwoTone />
+          </Button>
+        </Popover>
+      )}
     </Space>
   );
 };

@@ -1,44 +1,55 @@
 "use client";
 
-import { Avatar, Flex, List, Space, Table, Typography } from "antd";
+import { Avatar, Flex, List, theme, Typography } from "antd";
 import { FC } from "react";
 import { AttendanceListItem } from "@/types";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { AttendanceController } from "./controller";
+import { AttendanceItemFromCourseEnrollment } from "@/lib/api";
 
 type ListItemProps = {
-  item: Omit<AttendanceListItem, "id" & { id?: number }>;
+  item: AttendanceItemFromCourseEnrollment;
   index: number;
   editRecordStatus?: (
     status: "present" | "absent" | "justified",
     index: number
   ) => void;
 };
+
 const ListItem: FC<ListItemProps> = ({ item, index, editRecordStatus }) => {
+  const {
+    token: { colorTextDisabled },
+  } = theme.useToken();
   return (
     <List.Item>
       <List.Item.Meta
         avatar={
           <Avatar
-            style={{
-              backgroundColor: getHSLColor(
-                `${item.student.user.surname} ${item.student.user.last_name} ${item.student.user.first_name}`
-              ),
-            }}
             src={getPublicR2Url(item.student.user.avatar)}
+            style={{
+              backgroundColor: item.exempted
+                ? colorTextDisabled
+                : getHSLColor(
+                    `${item.student.user.surname} ${item.student.user.last_name} ${item.student.user.first_name}`
+                  ),
+            }}
           >
             {item.student.user.first_name?.charAt(0).toUpperCase()}
           </Avatar>
         }
         title={
-          <Typography.Text>
+          <Typography.Text
+            style={{
+              color: item.exempted ? colorTextDisabled : "",
+            }}
+          >
             {item.student.user.surname} {item.student.user.last_name}{" "}
             {item.student.user.first_name}
           </Typography.Text>
         }
         description={
           <Flex justify="space-between" align="center">
-            <Typography.Text type="secondary">
+            <Typography.Text type="secondary" disabled={item.exempted}>
               Matr. {item.student.user.matricule}
             </Typography.Text>
             <AttendanceController
@@ -54,7 +65,7 @@ const ListItem: FC<ListItemProps> = ({ item, index, editRecordStatus }) => {
 };
 
 type ListAttendanceProps = {
-  items?: Omit<AttendanceListItem, "id" & { id?: number }>[];
+  items?: AttendanceItemFromCourseEnrollment[];
   editRecordStatus?: (
     status: "present" | "absent" | "justified",
     index: number
@@ -65,6 +76,9 @@ export const ListAttendance: FC<ListAttendanceProps> = ({
   items,
   editRecordStatus,
 }) => {
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
   return (
     <List
       header={
@@ -74,6 +88,9 @@ export const ListAttendance: FC<ListAttendanceProps> = ({
         </Flex>
       }
       dataSource={items}
+      bordered
+      size="small"
+      style={{background:colorBgContainer}}
       renderItem={(item, index) => (
         <ListItem
           key={index}
