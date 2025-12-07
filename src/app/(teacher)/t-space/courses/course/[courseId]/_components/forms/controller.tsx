@@ -42,7 +42,10 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
         style={{
           cursor: "pointer",
 
-          color: record.status !== "present" ? colorTextDisabled : colorSuccess,
+          color:
+            record.status !== "present" || record.exempted
+              ? colorTextDisabled
+              : colorSuccess,
           background: record.status !== "present" ? "transparent" : "",
         }}
       />
