@@ -79,7 +79,7 @@ export default function Page() {
               <Skeleton.Input active />
             </Form>
           )}
-          {<StudentsStatsDashboard />}
+          <StudentsStatsDashboard />
         </Space>
       </Layout.Header>
       <Layout.Content>

@@ -1,6 +1,5 @@
 'use client'
 
-import React from "react";
 import {  Button, Card, Flex, List, Space, Typography } from "antd";
 import {
   CheckCircleOutlined,

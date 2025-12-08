@@ -157,7 +157,7 @@ export default function Page() {
               },
               {
                 key: `assessments`,
-                label: "Notes", // TD/TP & Examens
+                label: "Notes", //CC/TJ, TD/TP & Examens
                 children: <StudentCourseGrades />,
               },
               {

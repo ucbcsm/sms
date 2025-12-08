@@ -99,9 +99,6 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
         }
         description={
           <Flex justify="space-between">
-            {/* <Typography.Text type="secondary">
-                     {item.student_attendance_status.length} Inscrit (s)
-                  </Typography.Text> */}
             <Typography.Text>
               <Tag color="green" bordered={false}>
                 {getAttendancePresentCount(item.student_attendance_status)}{" "}
