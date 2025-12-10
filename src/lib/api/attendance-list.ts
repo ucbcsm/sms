@@ -119,6 +119,7 @@ export type AttendanceItemFromCourseEnrollment = Omit<
   id?: number;
   exempted: boolean;
 };
+
 export const getAttendanceItemsFromCourseEnrollments = (
   enrollments?: CourseEnrollment[]
 ): AttendanceItemFromCourseEnrollment[] => {

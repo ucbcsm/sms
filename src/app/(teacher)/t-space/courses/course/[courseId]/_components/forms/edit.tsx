@@ -22,11 +22,13 @@ import {
   CloseCircleOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { AttendanceList, AttendanceListItem } from "@/types";
+import { AttendanceList, AttendanceListItem, CourseEnrollment } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
+  AttendanceItemFromCourseEnrollment,
   getAttendanceAbsentCount,
   getAttendancePresentCount,
+  getItemsFromCurrentAttendanceListAndCourseEnrollments,
   updateAttendanceList,
 } from "@/lib/api";
 import { useParams } from "next/navigation";
@@ -37,12 +39,14 @@ type EditAttendanceListFormProps = {
   attendanceList: AttendanceList;
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  courseEnrollments?: CourseEnrollment[];
 };
 
 export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
   open,
   setOpen,
   attendanceList,
+  courseEnrollments
 }) => {
   const {
     token: { colorPrimary },
@@ -53,7 +57,7 @@ export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
 
   const [cancel, setCancel] = useState<boolean>(false);
   const [attendanceItems, setAttendanceItems] = useState<
-    Omit<AttendanceListItem, "id" & { id?: number }>[]
+    AttendanceItemFromCourseEnrollment[] //Omit<AttendanceListItem, "id" & { id?: number }>[]
   >([]);
 
   const queryClient = useQueryClient();
@@ -130,7 +134,11 @@ export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
         date: dayjs(attendanceList.date),
         time: dayjs(attendanceList.time, "HH:mm"),
       });
-      setAttendanceItems(attendanceList.student_attendance_status);
+       const items = getItemsFromCurrentAttendanceListAndCourseEnrollments(
+         attendanceList.student_attendance_status,
+         courseEnrollments
+       );
+      setAttendanceItems(items);
     }
   }, [attendanceList, open, form]);
 

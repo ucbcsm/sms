@@ -19,11 +19,10 @@ import {
   Tag,
   Statistic,
   Progress,
-  Typography,
   TimePicker,
 } from "antd";
 import { BulbOutlined, CloseOutlined } from "@ant-design/icons";
-import { AttendanceList, AttendanceListItem, CourseEnrollment, TaughtCourse } from "@/types";
+import { AttendanceList, CourseEnrollment, TaughtCourse } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AttendanceItemFromCourseEnrollment,

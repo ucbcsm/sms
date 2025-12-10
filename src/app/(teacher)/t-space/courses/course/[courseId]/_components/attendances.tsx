@@ -35,8 +35,9 @@ import { EditAttendanceListForm } from "./forms/edit";
 
 type ListItemProps = {
   item: AttendanceList;
+  courseEnrollments?: CourseEnrollment[];
 };
-const ListItem: FC<ListItemProps> = ({ item }) => {
+const ListItem: FC<ListItemProps> = ({ item, courseEnrollments }) => {
   const {
     token: { colorTextDisabled },
   } = theme.useToken();
@@ -49,70 +50,82 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
         attendanceList={item}
         open={openEdit}
         setOpen={setOpenEdit}
+        courseEnrollments={courseEnrollments}
       />
       <DeleteAttendanceListForm
         attendanceList={item}
         open={openDelete}
         setOpen={setOpenDelete}
       />
-    
-    <List.Item
-      key={item.id}
-      extra={
-        <Space>
-          <Button type="link" icon={<EyeOutlined />} onClick={()=>{setOpenEdit(true)}} />
-          <Dropdown
-            menu={{
-              items: [
-                // {
-                //   key: "edit",
-                //   label: "Modifier",
-                //   icon: <EditOutlined />,
-                // },
-                {
-                  key: "delete",
-                  label: "Supprimer",
-                  icon: <DeleteOutlined />,
-                  danger: true,
+
+      <List.Item
+        key={item.id}
+        extra={
+          <Space>
+            <Button
+              type="link"
+              icon={<EyeOutlined />}
+              onClick={() => {
+                setOpenEdit(true);
+              }}
+            />
+            <Dropdown
+              menu={{
+                items: [
+                  // {
+                  //   key: "edit",
+                  //   label: "Modifier",
+                  //   icon: <EditOutlined />,
+                  // },
+                  {
+                    key: "delete",
+                    label: "Supprimer",
+                    icon: <DeleteOutlined />,
+                    danger: true,
+                  },
+                ],
+                onClick: ({ key }) => {
+                  if (key === "edit") {
+                    setOpenEdit(true);
+                  } else if (key === "delete") {
+                    setOpenDelete(true);
+                  }
                 },
-              ],
-              onClick: ({ key }) => {
-                if (key === "edit") {
-                  setOpenEdit(true);
-                } else if (key === "delete") {
-                  setOpenDelete(true);
-                }
-              },
-            }}
-          >
-            <Button type="text" icon={<MoreOutlined />} />
-          </Dropdown>
-        </Space>
-      }
-    >
-      <List.Item.Meta
-        title={
-          <Space size={2} onClick={()=>{setOpenEdit(true)}}>
-            <ClockCircleOutlined style={{ color: colorTextDisabled }} />{" "}
-            {dayjs(item.date).format("DD/MM/YYYY")}
+              }}
+            >
+              <Button type="text" icon={<MoreOutlined />} />
+            </Dropdown>
           </Space>
         }
-        description={
-          <Flex justify="space-between">
-            <Typography.Text>
-              <Tag color="green" bordered={false}>
-                {getAttendancePresentCount(item.student_attendance_status)}{" "}
-                Présent(s)
-              </Tag>
-              <Tag color="red" bordered={false} style={{ marginRight: 0 }}>
-                {getAttendanceAbsentCount(item.student_attendance_status)}{" "}
-                Absent(s)
-              </Tag>{" "}
-            </Typography.Text>
-          </Flex>
-        }
-      />
-    </List.Item>
+      >
+        <List.Item.Meta
+          title={
+            <Space
+              size={2}
+              onClick={() => {
+                setOpenEdit(true);
+              }}
+            >
+              <ClockCircleOutlined style={{ color: colorTextDisabled }} />{" "}
+              {dayjs(item.date).format("DD/MM/YYYY")}
+            </Space>
+          }
+          description={
+            <Flex justify="space-between">
+              <Typography.Text>
+                <Tag color="green" bordered={false}>
+                  {getAttendancePresentCount(item.student_attendance_status)}{" "}
+                  Présent(s)
+                </Tag>
+                <Tag color="red" bordered={false} style={{ marginRight: 0 }}>
+                  {getAttendanceAbsentCount(item.student_attendance_status)}{" "}
+                  Absent(s)
+                </Tag>{" "}
+              </Typography.Text>
+            </Flex>
+          }
+        />
+      </List.Item>
     </>
   );
 };
