@@ -23,13 +23,17 @@ import axios from "axios";
  * ```
  */
 export async function checkInstitutionExistence() {
+    console.log("Checking institution existence...");
   try {
+    console.log("Making API request to check institution existence...");
     const res = await api.get("/main_config/institution-exist");
+    console.log("API response received:", res.data);
     const data = res.data as { institutionExist: boolean };
 
     return data.institutionExist;
   } catch (error: unknown) {
     if (axios.isAxiosError(error)) {
+      console.error("Axios message:", error.message);
       // Axios received an error response from the server
       console.error("Axios error:", error.response?.data || error.message);
       throw new Error(`Server error: ${error.response?.status}`);

@@ -1,7 +1,6 @@
 import { checkInstitutionExistence } from "@/lib/api";
 import { NextResponse, type NextRequest } from "next/server";
 import { isAuthenticated } from "./lib/api/auth";
-import { match } from "assert";
 
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
