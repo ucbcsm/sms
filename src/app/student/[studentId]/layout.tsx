@@ -108,7 +108,7 @@ export default function StudentLayout({
           >
             <Alert
               description={`Vous allez quitter le compte étudiant: ${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name} et retourner à la liste des étudiants.`}
-              message={`Information`}
+              title={`Information`}
               type="info"
               showIcon
               style={{
@@ -137,7 +137,7 @@ export default function StudentLayout({
               {institution?.acronym}
             </Typography.Title>
           </Link>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Title
             level={5}
             type="secondary"
@@ -180,7 +180,7 @@ export default function StudentLayout({
           <Typography.Text type="secondary">
             {enrolledStudent?.academic_year.name}
           </Typography.Text>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <LanguageSwitcher />
           <SupportDrawer />
           <AppsButton />

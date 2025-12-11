@@ -95,7 +95,7 @@ export default function TaughtCourseLayout({
           >
             <Alert
               description={`Vous allez quitter le cours: ${course?.available_course.name} et retourner à la liste des cours.`}
-              message={`Information`}
+              title={`Information`}
               type="info"
               showIcon
               style={{
@@ -126,7 +126,7 @@ export default function TaughtCourseLayout({
               </Typography.Title>
             </Link>
           )}
-          {institution && <Divider type="vertical" />}
+          {institution && <Divider orientation="vertical" />}
           <Typography.Title
             level={5}
             type="secondary"
