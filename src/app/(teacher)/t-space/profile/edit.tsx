@@ -241,7 +241,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
               />
             </Form.Item>
           )}
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider  titlePlacement="left" styles={{content:{margin:0}}} >
             <Typography.Title level={3}>Identité</Typography.Title>
           </Divider>
 
@@ -346,7 +346,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             />
           </Form.Item>
 
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider  titlePlacement="left" styles={{content:{margin:0}}} >
             <Typography.Title level={3}>Contacts</Typography.Title>
           </Divider>
           <Form.Item
@@ -371,7 +371,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
             <Input placeholder="Numéro de téléphone 2" />
           </Form.Item>
 
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider  titlePlacement="left" styles={{content:{margin:0}}}  >
             <Typography.Title level={3}>
               Études et titres académiques
             </Typography.Title>
