@@ -31,10 +31,12 @@ import {
   getCurrentCyclesAsOptions,
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
+  getTypeOfEnrollmentText,
   importStudentsFromExcel,
 } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { filterOption, getMaritalStatusName } from "@/lib/utils";
+import { record } from "zod";
 
 type ImportStudentsDataDrawerProps = {
   open: boolean;
@@ -51,10 +53,10 @@ type FormDataType = {
   field_id: number;
   faculty_id: number;
   departement_id: number;
-  type_of_enrollment:
-    | "new_application"
-    | "reapplication"
-    | "former_application";
+  // type_of_enrollment:
+  //   | "new_application"
+  //   | "reapplication"
+  //   | "former_application";
 };
 
 export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
@@ -124,7 +126,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
         }));
         mutateAsync(
           {
-            type_of_enrollment: values.type_of_enrollment,
+            // type_of_enrollment: values.type_of_enrollment,
             academic_year: yearId,
             cycle: values.cycle_id,
             field: values.field_id,
@@ -156,9 +158,19 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
 
   const removeStudent = (promotionIndex: number, studentIndex: number) => {
     if (!newStudentItems) return;
+    const student= newStudentItems[promotionIndex].students[studentIndex];
+    console.log("Removing student: ", student);
     modal.confirm({
       title: "Confirmer la suppression",
-      content: "Êtes-vous sûr de vouloir supprimer cet étudiant ?",
+      content: (
+        <div>
+          Êtes-vous sûr de vouloir supprimer,{" "}
+          <Typography.Text strong>
+            {student.surname} {student.last_name} {student.first_name}
+          </Typography.Text>{" "}
+          de la liste d'importation ?
+        </div>
+      ),
       okText: "Oui",
       okButtonProps: { style: { boxShadow: "none" } },
       okType: "danger",
@@ -240,8 +252,8 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                 onClose();
               }}
               onCancel={() => setOpenCancelForm(false)}
-              cancelText="Retour"
-              okText="Confirmer"
+              cancelText="Non"
+              okText="Oui"
               okType="danger"
               cancelButtonProps={{
                 style: { boxShadow: "none" },
@@ -252,7 +264,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
               }}
             >
               <Alert
-                message="Attention !"
+                title="Attention !"
                 description="En confirmant, vous annulerez l'importation en cours. Toutes les données étudiants de cette importation seront perdues."
                 type="warning"
                 showIcon
@@ -335,7 +347,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
               <div className="flex-1" />
 
               <Space>
-                <Form.Item
+                {/* <Form.Item
                   label="Type d'inscription"
                   name="type_of_enrollment"
                   layout="horizontal"
@@ -361,8 +373,8 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                     ]}
                     placeholder="Sélectionner le type d'inscription"
                   />
-                </Form.Item>
-                <Divider type="vertical" />
+                </Form.Item> */}
+                <Divider orientation="vertical" />
                 <Form.Item
                   label="Cycle"
                   name="cycle_id"
@@ -385,7 +397,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                 >
                   <InputNumber placeholder="Domaine" disabled />
                 </Form.Item>
-                <Divider type="vertical" />
+                <Divider orientation="vertical" />
                 <Form.Item
                   label="Filière"
                   name="faculty_id"
@@ -395,13 +407,12 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                 >
                   <Select
                     options={getCurrentFacultiesAsOptions(faculties)}
-                    showSearch
-                    filterOption={filterOption}
+                    showSearch={{ filterOption: filterOption }}
                     placeholder="Filière"
                     disabled
                   />
                 </Form.Item>
-                <Divider type="vertical" />
+                <Divider orientation="vertical" />
                 <Form.Item
                   name="departement_id"
                   label="Mention"
@@ -439,6 +450,13 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                         width: 42,
                         align: "right",
                         fixed: "left",
+                      },
+                      {
+                        key: "type_of_enrollment",
+                        dataIndex: "type_of_enrollment",
+                        title: "Type d'inscription",
+                        fixed: "left",
+                        render:(_, record)=>getTypeOfEnrollmentText(record.type_of_enrollment)
                       },
                       {
                         key: "former_matricule",
@@ -678,6 +696,39 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                   />
                 ),
               }))}
+              type="editable-card"
+              hideAdd
+              onEdit={(targetKey, action) => {
+                if (action === "remove") {
+                  const classe = classes?.find((c) => `${c.id}` === targetKey);
+
+                  modal.confirm({
+                    title: "Confirmer la suppression",
+                    content: (
+                      <div>
+                        Êtes-vous sûr de vouloir supprimer{" "}
+                        <Typography.Text strong>
+                          {classe?.acronym} ({classe?.name})
+                        </Typography.Text>{" "}
+                        et tous ses étudiants importés ?
+                      </div>
+                    ),
+                    okText: "Oui",
+                    okButtonProps: { style: { boxShadow: "none" } },
+                    okType: "danger",
+                    cancelText: "Non",
+                    cancelButtonProps: { style: { boxShadow: "none" } },
+
+                    centered: true,
+                    onOk: () => {
+                      const newItems = newStudentItems?.filter(
+                        (_, index) => `${_.classYearId}` !== targetKey
+                      );
+                      setNewStudentItems(newItems);
+                    },
+                  });
+                }
+              }}
             />
           </>
         )}

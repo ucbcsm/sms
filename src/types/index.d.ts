@@ -1280,6 +1280,11 @@ export const BulkStudentItem = z.object({
   last_name: z.string(),
   surname: z.string(),
   gender: z.enum(["M", "F"]),
+  type_of_enrollment: z.enum([
+    "new_application",
+    "reapplication",
+    "former_application",
+  ]),
   former_matricule: z.string(),
   email: z.string().email(),
   date_of_birth: z.string().date(),

@@ -9,7 +9,6 @@ import {
 } from "@/types";
 import ExcelJS from "exceljs";
 import { forEach } from "lodash";
-import { object } from "zod";
 
 export async function getYearEnrollments(searchParams: {
   yearId?: number;
@@ -242,6 +241,7 @@ export async function downloadStudentImportTemplate({
     worksheet.getRow(8).hidden = true;
     worksheet.addRow([]); //row 9
     worksheet.addRow([
+      "Type d'inscription",
       "Matricule",
       "Nom",
       "Postnom",
@@ -295,8 +295,24 @@ export async function downloadStudentImportTemplate({
     autoFitColumns(worksheet);
 
     for (let row = 11; row <= 1500; row++) {
-      // Colonne 5 = Genre (M/F)
-      worksheet.getCell(`E${row}`).dataValidation = {
+      // colonne 1 type d'insciption
+      worksheet.getCell(`A${row}`).dataValidation = {
+        type: "list",
+        allowBlank: false,
+        formulae: [
+          '"Nouvelle candidature,Réinscription,Enregistrement ancienne candidature"',
+        ],
+        showErrorMessage: true,
+        showInputMessage: true,
+        errorStyle: "stop",
+        errorTitle: "Valeur non valide",
+        error: "Veuillez sélectionner une vrai valeur",
+        promptTitle: "Type d'inscription",
+        prompt:
+          "Veuillez sélectionner le type d'inscription dans la liste déroulante",
+      };
+      // Colonne 6 = Genre (M/F)
+      worksheet.getCell(`F${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"M,F"'],
@@ -309,8 +325,8 @@ export async function downloadStudentImportTemplate({
         prompt: "Veuillez sélectionner le genre dans la liste déroulante.",
       };
 
-      //Validation date de naissance (colonne G)
-      const cell = worksheet.getCell(`G${row}`);
+      //Validation date de naissance (colonne H)
+      const cell = worksheet.getCell(`H${row}`);
 
       cell.dataValidation = {
         type: "date",
@@ -332,7 +348,7 @@ export async function downloadStudentImportTemplate({
       cell.numFmt = "dd/mm/yyyy";
 
       // Colonne 9 = Statut matrimonial
-      worksheet.getCell(`I${row}`).dataValidation = {
+      worksheet.getCell(`J${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"Célibataire,Marié(e),Divorcé(e),Veuf/Veuve"'],
@@ -348,7 +364,7 @@ export async function downloadStudentImportTemplate({
       };
 
       // Colonne 10 = Aptitude physique
-      worksheet.getCell(`J${row}`).dataValidation = {
+      worksheet.getCell(`K${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"Normale,Handicapé"'],
@@ -363,7 +379,7 @@ export async function downloadStudentImportTemplate({
       };
 
       // Colonne 23 = Est-il étranger ?
-      worksheet.getCell(`W${row}`).dataValidation = {
+      worksheet.getCell(`X${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"Oui,Non"'],
@@ -450,6 +466,36 @@ export function getMaritalStatus(value?: string) {
   }
 }
 
+export function getTypeOfEnrollment(value?: string) {
+   if (!value) return null;
+
+  switch (value) {
+    case "Nouvelle candidature":
+      return "new_application";
+    case "Réinscription":
+      return "reapplication";
+    case "Enregistrement ancienne candidature":
+      return "former_application";
+    default:
+      return null;
+  }
+}
+
+export function getTypeOfEnrollmentText(
+  value: "new_application" | "reapplication" | "former_application" | string
+) {
+  switch (value) {
+    case "new_application":
+      return "Nouvelle candidature";
+    case "reapplication":
+      return "Réinscription";
+    case "former_application":
+      return "Enregistrement ancienne candidature";
+    default:
+      return "";
+  }
+}
+
 export function getPhysicalAbility(value?: string) {
   if (!value) return null;
   switch (value) {
@@ -520,6 +566,7 @@ export async function importStudentsFromExcel(file: File): Promise<
         ? row.values.slice(1) // Supprimer la première valeur vide
         : [];
       const [
+        type_of_enrollment,
         former_matricule,
         surname,
         last_name,
@@ -564,6 +611,9 @@ export async function importStudentsFromExcel(file: File): Promise<
           surname: surname?.toString() || "",
           gender: (gender?.toString() as "M" | "F") || null,
           former_matricule: former_matricule?.toString() || "",
+          type_of_enrollment:
+            getTypeOfEnrollment(type_of_enrollment?.toString()) ||
+            "new_application",
           email:
             typeof email === "object"
               ? (email as { hyperlink: string; text: string })?.text || ""
@@ -605,8 +655,8 @@ export async function importStudentsFromExcel(file: File): Promise<
           diploma_percentage: Number(diploma_percentage?.toString() || ""),
           is_foreign_registration:
             is_foreign_registration?.toString() === "Oui" ? true : false,
-            avatar:null,
-            pending_avatar:null
+          avatar: null,
+          pending_avatar: null,
         });
       }
     });
@@ -631,10 +681,10 @@ export async function createBulkStudents(data: {
   field: number;
   faculty: number;
   departement: number;
-  type_of_enrollment:
-    | "new_application"
-    | "reapplication"
-    | "former_application";
+  // type_of_enrollment:
+  //   | "new_application"
+  //   | "reapplication"
+  //   | "former_application";
   data: { class_year: number; students: BulkStudentItem[] }[];
 }) {
   const res = await api.post(

@@ -216,6 +216,7 @@ export const ListStudents: FC = () => {
                 }
               },
             }}
+            trigger={["click"]}
           >
             <Button
               // type="text"
@@ -276,7 +277,7 @@ export const ListStudents: FC = () => {
                       ) || []),
                     ]}
                     showSearch={{
-                      filterOption:filterOption
+                      filterOption: filterOption,
                     }}
                     style={{ minWidth: 150 }}
                     loading={isPendingFaculties}
@@ -313,7 +314,7 @@ export const ListStudents: FC = () => {
                     style={{ minWidth: 150 }}
                     loading={facultyId !== 0 && isPendingDepartments}
                     showSearch={{
-                      filterOption:filterOption
+                      filterOption: filterOption,
                     }}
                   />
                 </Space>

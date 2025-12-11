@@ -152,15 +152,15 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
       >
         <Select
           options={getCurrentFieldsAsOptions(filteredFields || fields)}
-          showSearch
-          filterOption={filterOption}
-          onSelect={(value)=>{
-            const selectedField= fields?.find(f=>f.id===value)
-             form.setFieldsValue({
-               cycle_id: selectedField?.cycle?.id,
-               faculty_id: undefined,
-               department_id: undefined,
-             });
+          showSearch={{ filterOption: filterOption }}
+          placeholder="Séléctionner un domaine"
+          onSelect={(value) => {
+            const selectedField = fields?.find((f) => f.id === value);
+            form.setFieldsValue({
+              cycle_id: selectedField?.cycle?.id,
+              faculty_id: undefined,
+              department_id: undefined,
+            });
           }}
         />
       </Form.Item>
@@ -171,25 +171,25 @@ export const ExportTemplateFormModal: FC<ExportTemplateFormModalProps> = ({
       >
         <Select
           options={getCurrentFacultiesAsOptions(filteredFaculties || faculties)}
-          showSearch
-          filterOption={filterOption}
-          onSelect={(value) =>{
+          showSearch={{ filterOption: filterOption }}
+          placeholder="Séléctionner une filière"
+          onSelect={(value) => {
             const selectedFac = faculties?.find((fac) => fac.id === value);
-             form.setFieldsValue({
-               cycle_id: selectedFac?.field.cycle?.id,
-               field_id: selectedFac?.field.id,
-               department_id: undefined,
-             });
+            form.setFieldsValue({
+              cycle_id: selectedFac?.field.cycle?.id,
+              field_id: selectedFac?.field.id,
+              department_id: undefined,
+            });
           }}
         />
       </Form.Item>
       <Form.Item
-        label="Département"
+        label="Mention"
         name="department_id"
         rules={[{ required: true, message: "Ce champ est requis" }]}
       >
         <Select
-          placeholder="Département"
+          placeholder="Séléctionner une mention"
           options={getCurrentDepartmentsAsOptions(
             filteredDepartments || departments
           )}
