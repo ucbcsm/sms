@@ -1,14 +1,11 @@
 "use client";
 
 import {
-  getClasses,
   getClassesYearsAsOptions,
   getCurrentCyclesAsOptions,
   getCurrentDepartmentsAsOptions,
   getCurrentFacultiesAsOptions,
   getCurrentFieldsAsOptions,
-  getDepartmentsByFacultyId,
-  getFaculties,
   getYearEnrollments,
 } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
@@ -172,12 +169,6 @@ export const ListStudents: FC = () => {
         <Space wrap>
           <Input.Search
             placeholder="Matr., nom, prénom..."
-            // onChange={(e) => {
-            //   // if(search && e.target.value.trim()!==""){
-            //   setPage(0);
-            //   setSearch(e.target.value);
-            //   // }
-            // }}
             onSearch={(value) => {
               setPage(0);
               setSearch(value);
@@ -185,7 +176,11 @@ export const ListStudents: FC = () => {
             allowClear
             value={search?.trim() || undefined}
             enterButton={
-              <Button color="primary" variant="solid">
+              <Button
+                color="primary"
+                variant="solid"
+                style={{ boxShadow: "none" }}
+              >
                 Rechercher
               </Button>
             }
@@ -244,8 +239,9 @@ export const ListStudents: FC = () => {
                       ...(getCurrentFieldsAsOptions(filteredFields || fields) ||
                         []),
                     ]}
-                    showSearch
-                    filterOption={filterOption}
+                    showSearch={{
+                      filterOption: filterOption,
+                    }}
                     variant="filled"
                     onSelect={(value) => {
                       const selectedField = fields?.find((f) => f.id === value);
@@ -279,7 +275,9 @@ export const ListStudents: FC = () => {
                         filteredFaculties || faculties
                       ) || []),
                     ]}
-                    filterOption={filterOption}
+                    showSearch={{
+                      filterOption:filterOption
+                    }}
                     style={{ minWidth: 150 }}
                     loading={isPendingFaculties}
                   />
@@ -314,7 +312,9 @@ export const ListStudents: FC = () => {
                     ]}
                     style={{ minWidth: 150 }}
                     loading={facultyId !== 0 && isPendingDepartments}
-                    filterOption={filterOption}
+                    showSearch={{
+                      filterOption:filterOption
+                    }}
                   />
                 </Space>
               </div>
@@ -426,7 +426,7 @@ export const ListStudents: FC = () => {
             width: 96,
             render: (_, record, __) => (
               <Tag
-                bordered={false}
+                variant="filled"
                 color={record.status === "enabled" ? "success" : "red"}
                 className="w-full mr-0"
               >

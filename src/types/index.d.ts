@@ -1051,7 +1051,7 @@ export const ResultGrid = z.object({
     }),
     retaken: z.object({
       course_list: z.array(TaughtCourse),
-      credits: z.array(number),
+      credits: z.array(z.number()),
       header: z.array(
         z.object({
           course_counter: z.number(),
