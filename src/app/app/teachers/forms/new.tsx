@@ -6,16 +6,14 @@ import {
   Button,
   Card,
   Drawer,
-  Dropdown,
   Flex,
   Modal,
   Space,
-  StepProps,
   Steps,
   theme,
   Typography,
 } from "antd";
-import { Options, parseAsBoolean, parseAsInteger, useQueryState } from "nuqs";
+import { Options, parseAsInteger, useQueryState } from "nuqs";
 
 import { CloseOutlined,} from "@ant-design/icons";
 import { Step1 } from "./step1";
@@ -68,9 +66,7 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
    setOpen(false)
   };
 
-  const getStepItems = (): StepProps[] | undefined => {
-    return steps.map((item) => ({ key: item.title, title: "" }));
-  };
+ 
 
   return (
     <>
@@ -104,7 +100,7 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
           <Space>
             <Steps
               current={step}
-              items={getStepItems()}
+              items={steps.map((item) => ({ key: item.title, title: "" }))}
               onChange={(current) => setStep(current)}
               percent={(step / (steps.length - 1)) * 100}
             />
@@ -142,14 +138,6 @@ export const NewTeacherForm: FC<NewTeacherFormProps> = ({
         }
       >
         <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
-          {/* <Alert
-            type="info"
-            message="Veuillez remplir toutes les informations nécessaires pour enregistrer un nouvel enseignant."
-            description="Assurez-vous que toutes les données saisies sont exactes et complètes avant de soumettre."
-            showIcon
-            style={{ border: 0 }}
-            closable
-          /> */}
           <Card
             title={
               <Typography.Title level={5}>{steps[step].title}</Typography.Title>
