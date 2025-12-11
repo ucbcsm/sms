@@ -87,7 +87,7 @@ export function ConfigForm() {
           <Alert
             style={{ border: 0 }}
             type="info"
-            message="Bienvenue dans la configuration initiale de SMS-UCBC."
+            title="Bienvenue dans la configuration initiale de SMS-UCBC."
             description={`Veuillez remplir
 le formulaire ci-dessous pour commencer. Assurez-vous également que les configurations de la base des données et des autres variables d'environnement sont déjà configurées chez votre hébergeur.`}
           />
@@ -101,7 +101,7 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
             onFinish={onFinish}
           >
             <Divider
-              orientation="left"
+              titlePlacement="left"
               orientationMargin={0}
               style={{ color: "#ED6851" }}
             >
@@ -184,7 +184,7 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
               />
             </Form.Item>
             <Divider
-              orientation="left"
+              titlePlacement="left"
               orientationMargin={0}
               style={{ color: "#ED6851" }}
             >
@@ -222,7 +222,7 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
               <Input placeholder="Entrez le site web" />
             </Form.Item>
             <Divider
-              orientation="left"
+              titlePlacement="left"
               orientationMargin={0}
               style={{ color: "#ED6851" }}
             >
@@ -235,7 +235,7 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
               <Input.TextArea placeholder="Entrez la mission" rows={4} />
             </Form.Item>
             <Divider
-              orientation="left"
+              titlePlacement="left"
               orientationMargin={0}
               style={{ color: "#ED6851" }}
             >
@@ -295,7 +295,7 @@ le formulaire ci-dessous pour commencer. Assurez-vous également que les configu
               <Input.TextArea placeholder="Entrez l'adresse" />
             </Form.Item>
             <Divider
-              orientation="left"
+              titlePlacement="left"
               orientationMargin={0}
               style={{ color: "#ED6851" }}
             >
