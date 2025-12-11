@@ -1,8 +1,6 @@
 "use client";
 
-import { DataFetchErrorResult } from "@/components/errorResult";
-import { Palette } from "@/components/palette";
-import { getLoggedTeacher, getTeacher } from "@/lib/api";
+import { getLoggedTeacher } from "@/lib/api";
 import { getHSLColor, getMaritalStatusName, getPublicR2Url } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -21,7 +19,6 @@ import {
   theme,
   Typography,
 } from "antd";
-import { EditTeacherProfileForm } from "./edit";
 import { useRouter } from "next/navigation";
 import { useSessionStore } from "@/store";
 import Link from "next/link";
@@ -239,8 +236,8 @@ export default function Page() {
             <Alert
               showIcon={false}
               type="error"
-              message="Sécurité"
-              description="Mot de passes forts recommandés pour protéger vos informations personnelles."
+              title="Sécurité du compte"
+              description="Mot de passe fort recommandé pour protéger vos informations personnelles."
               action={
                 <Link href={`/auth/reset-password`}>
                   <Button color="danger" variant="solid">
