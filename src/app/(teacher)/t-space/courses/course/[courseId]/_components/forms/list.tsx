@@ -2,7 +2,6 @@
 
 import { Avatar, Flex, List, theme, Typography } from "antd";
 import { FC } from "react";
-import { AttendanceListItem } from "@/types";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import { AttendanceController } from "./controller";
 import { AttendanceItemFromCourseEnrollment } from "@/lib/api";
