@@ -9,7 +9,6 @@ import {
   Button,
   Card,
   Input,
-  message,
   Modal,
   Typography,
 } from "antd";
@@ -99,7 +98,7 @@ export default function TeacherDangerZonePage() {
         )}
 
         <Alert
-          message="Cette action supprimera définitivement le compte enseignant."
+          title="Cette action supprimera définitivement le compte enseignant."
           description="L'enseignant perdra l'accès à tous ses cours, évaluations et données associées. Cette action affectera également tous les étudiants inscrits à ses cours."
           type="warning"
           showIcon
@@ -138,7 +137,7 @@ export default function TeacherDangerZonePage() {
         centered
       >
         <Alert
-          message="ATTENTION - Action irréversible"
+          title="ATTENTION - Action irréversible"
           description="Cette suppression est définitive et ne peut pas être annulée. L'enseignant perdra immédiatement l'accès à tous ses cours et données. Tous les étudiants inscrits à ses cours seront affectés."
           type="error"
           showIcon

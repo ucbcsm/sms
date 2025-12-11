@@ -1,24 +1,11 @@
 "use client";
 
-import BackButton from "@/components/backButton";
-import { Palette } from "@/components/palette";
 import {
-  //  getDepartments, getFaculties, 
   getTeacher } from "@/lib/api";
-import { CloseOutlined, DashboardOutlined, MoreOutlined } from "@ant-design/icons";
+import { CloseOutlined, DashboardOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 
-import {
-  Button,
-  Card,
-  Dropdown,
-  Form,
-  Layout,
-  Skeleton,
-  Space,
-  theme,
-  Typography,
-} from "antd";
+import { Card, Form, Layout, Skeleton, Space, theme, Typography } from "antd";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { TeacherProfileDetails } from "./profile/profileDetails";
 
@@ -26,7 +13,7 @@ export default function TeacherLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    cssVar: { colorBorderSecondary },
   } = theme.useToken();
   const { teacherId } = useParams();
   const router = useRouter();
