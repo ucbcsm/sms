@@ -167,7 +167,7 @@ export const EditInstitutionForm: React.FC<Props> = ({
           style={{ maxWidth: 520, margin: "auto" }}
         >
           <Divider
-            orientation="left"
+            titlePlacement="left"
             orientationMargin={0}
             // style={{ color: "#ED6851" }}
           >
@@ -248,7 +248,7 @@ export const EditInstitutionForm: React.FC<Props> = ({
             <Input.TextArea />
           </Form.Item>
           <Divider
-            orientation="left"
+            titlePlacement="left"
             orientationMargin={0}
             // style={{ color: "#ED6851" }}
           >
@@ -285,7 +285,7 @@ export const EditInstitutionForm: React.FC<Props> = ({
             <Input.TextArea />
           </Form.Item>
           <Divider
-            orientation="left"
+            titlePlacement="left"
             orientationMargin={0}
             // style={{ color: "#ED6851" }}
           >
