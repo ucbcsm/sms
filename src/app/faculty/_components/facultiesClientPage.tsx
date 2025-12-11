@@ -56,7 +56,7 @@ export const FacultiesClientPage = () => {
               {institution?.acronym}
             </Typography.Title>
           </Link>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
             Filières
           </Typography.Title>

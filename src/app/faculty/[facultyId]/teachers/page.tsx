@@ -2,34 +2,27 @@
 
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { DataFetchPendingSkeleton } from "@/components/loadingSkeleton";
-import { useYid } from "@/hooks/use-yid";
 import { getTeachersByFaculty } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
 import {
-  DeleteOutlined,
   DownOutlined,
-  EditOutlined,
   FileExcelOutlined,
   FilePdfOutlined,
   MoreOutlined,
-  PlusOutlined,
   PrinterOutlined,
 } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
-  Col,
   Dropdown,
   Input,
-  Row,
   Space,
   Table,
   Tag,
 } from "antd";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { ListStaffOfficer } from "./staff";
 
 export default function Page() {
   const { facultyId } = useParams();

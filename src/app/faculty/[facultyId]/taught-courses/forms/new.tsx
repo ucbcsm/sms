@@ -159,7 +159,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               centered
             >
               <Alert
-                message="Êtes-vous sûr de vouloir annuler la planification de ce cours ?"
+                title="Êtes-vous sûr de vouloir annuler la planification de ce cours ?"
                 description="Toutes les informations saisies pour la programmation de ce cours seront perdues."
                 type="warning"
                 showIcon
@@ -172,7 +172,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
         <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
           <Alert
             type="info"
-            message="Instructions"
+            title="Instructions"
             description={
               <ul style={{ margin: 0 }}>
                 <li>

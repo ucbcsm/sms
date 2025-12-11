@@ -135,7 +135,7 @@ export default function JuryLayout({
           >
             <Alert
               description={`Vous allez quitter le jury: ${jury?.name} et retourner à la liste des jurys de l'année sélectionnée.`}
-              message={`Information`}
+              title={`Information`}
               type="info"
               showIcon
               style={{
@@ -164,7 +164,7 @@ export default function JuryLayout({
               {institution?.acronym}
             </Typography.Title>
           </Link>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           {!isPending ? (
             <Typography.Title level={5} style={{ marginBottom: 0 }}>
               {jury?.name}
@@ -174,7 +174,7 @@ export default function JuryLayout({
               <Skeleton.Input size="small" active />
             </Form>
           )}
-          {facultyId && <Divider type="vertical" />}
+          {facultyId && <Divider orientation="vertical" />}
           {facultyId && (
             <Typography.Title
               type="secondary"
@@ -229,7 +229,7 @@ export default function JuryLayout({
               {jury?.academic_year.name}
             </Typography.Title>
           </Dropdown>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <LanguageSwitcher />
           <SupportDrawer />
           <AppsButton />

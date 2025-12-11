@@ -311,7 +311,11 @@ export default function Page() {
                   allowClear
                   // variant="filled"
                   prefix={<SearchOutlined />}
-                  enterButton={<Button type="primary">Rechercher</Button>}
+                  enterButton={
+                    <Button type="primary" style={{ boxShadow: "none" }}>
+                      Rechercher
+                    </Button>
+                  }
                 />
               </Space>
               <div className="flex-1" />

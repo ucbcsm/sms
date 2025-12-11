@@ -162,7 +162,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
         <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
           <Alert
             type="info"
-            message="Instructions"
+            title="Instructions"
             description={
               <ul>
                 <li>▪ Mettez à jour les champs si nécessaires .</li>
@@ -201,8 +201,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                 <Select
                   options={getCoursesAsOptions(courses)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                   onSelect={(value) => {
                     const selectedCourse = courses?.find((c) => c.id === value);
                     if (selectedCourse) {
@@ -383,7 +382,10 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                   allowClear
                 />
               </Form.Item>
-              <Form.Item name="status" label="Statut du cours et des inscriptions">
+              <Form.Item
+                name="status"
+                label="Statut du cours et des inscriptions"
+              >
                 <Select
                   options={[
                     { value: "pending", label: "En attente" },

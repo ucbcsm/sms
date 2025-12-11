@@ -108,7 +108,7 @@ export function ClientFacultyLayout({
               {institution?.acronym}
             </Typography.Title>
           </Link>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Title
             level={5}
             type="secondary"

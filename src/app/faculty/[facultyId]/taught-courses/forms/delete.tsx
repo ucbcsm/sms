@@ -1,6 +1,6 @@
 "use client";
 import { Dispatch, FC, SetStateAction } from "react";
-import { Alert, App, Form, Input, message, Modal } from "antd";
+import { Alert, App, Form, Input, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTaughtCourse } from "@/lib/api";
 import { TaughtCourse } from "@/types";
@@ -95,7 +95,7 @@ export const DeleteTaughtCourseForm: FC<DeleteTaughtCourseFormProps> = ({
         )}
       >
         <Alert
-          message="Attention"
+          title="Attention"
           description={`Êtes-vous sûr de vouloir supprimer le cours programmé "${taughtCourse.available_course?.name}" ? Cette action est irréversible.`}
           type="warning"
           showIcon

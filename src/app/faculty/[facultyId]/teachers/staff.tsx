@@ -1,10 +1,8 @@
 import {
-  CloseCircleOutlined,
   CloseOutlined,
   EyeOutlined,
   MoreOutlined,
-  PlusCircleOutlined,
-  RightOutlined,
+  PlusCircleOutlined
 } from "@ant-design/icons";
 import { Avatar, Button, Card, Dropdown, List } from "antd";
 import Link from "next/link";
