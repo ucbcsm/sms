@@ -9,7 +9,6 @@ import {
   Flex,
   Modal,
   Space,
-  StepProps,
   Steps,
   theme,
   Typography,
@@ -98,9 +97,6 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
     setOpen(false);
   };
 
-  const getStepItems = (): StepProps[] | undefined => {
-    return steps.map((item) => ({ key: item.title, title: "" }));
-  };
 
   return (
     <Drawer
@@ -129,7 +125,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
         <Space>
           <Steps
             current={step}
-            items={getStepItems()}
+            items={steps.map((item) => ({ key: item.title, title: "" }))}
             onChange={(current) => setStep(current)}
             percent={(step / (steps.length - 1)) * 100}
           />
@@ -185,7 +181,7 @@ export const NewApplicationForm: FC<Props> = ({ open, setOpen, isFormer }) => {
             header: {
               borderBottom: "none",
             },
-            body: { paddingTop: 0 }
+            body: { paddingTop: 0 },
           }}
         >
           {steps[step].content}

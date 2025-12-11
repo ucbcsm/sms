@@ -1,18 +1,12 @@
 "use client";
 
-import { useYid } from "@/hooks/use-yid";
 import {
   getApplication,
-  getClasses,
-  getCycles,
-  getDepartments,
   getEnabledRequiredDocuments,
   getEnabledTestCourses,
-  getFaculties,
-  getFields,
 } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import { Flex, Layout, Splitter, Tag, theme, Typography } from "antd";
+import { Flex, Splitter, Tag, theme, Typography } from "antd";
 import { EnrollButton } from "./applications/enrollButton";
 import { NewApplicationForm } from "./applications/forms/new/new";
 import { ListNewApplications } from "./applications/lists/new_applications";
@@ -39,7 +33,7 @@ export default function StudentsLayout({
   const {
     token: { colorBgContainer, colorBgLayout },
   } = theme.useToken();
-  const { yid } = useYid();
+ 
   const [reapply, setReapply] = useQueryState(
     "reapply",
     parseAsBoolean.withDefault(false)

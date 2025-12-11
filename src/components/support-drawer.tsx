@@ -6,17 +6,20 @@ import {
   QuestionCircleOutlined,
   WhatsAppOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Drawer, Result, Space, Typography } from "antd";
+import { Button, Card, Drawer, Result, Space, theme, Typography } from "antd";
 import { parseAsBoolean, useQueryState } from "nuqs";
 
 export const SupportDrawer = () => {
+  const {
+    cssVar: { colorBgLayout },
+  } = theme.useToken();
   const [open, setOpen] = useQueryState(
     "support",
     parseAsBoolean.withDefault(false)
   );
-    const onclose = () => {
-      setOpen(false);
-    }
+  const onclose = () => {
+    setOpen(false);
+  };
 
   return (
     <>
@@ -27,7 +30,7 @@ export const SupportDrawer = () => {
           setOpen(true);
         }}
         title="Assistance technique"
-        style={{boxShadow:"none"}}
+        style={{ boxShadow: "none" }}
       />
       <Drawer
         open={open}
@@ -46,42 +49,44 @@ export const SupportDrawer = () => {
             </Typography.Title>
           </Space>
         }
-        width="100%"
+        size={"large"}
         extra={
           <Button type="text" icon={<CloseOutlined />} onClick={onclose} />
         }
-        styles={{ header: { borderBottom: 0 }, body: { paddingTop: 0 } }}
+        styles={{
+          header: { borderBottom: 0 },
+          body: { background: colorBgLayout },
+        }}
       >
         <Card
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            minHeight: `calc(100vh - 96px)`,
+            minHeight: `calc(100vh - 112px)`,
           }}
         >
           <Result
             className="max-w-3xl mx-auto"
             icon={<QuestionCircleOutlined style={{ color: "GrayText" }} />}
             title="Assistance technique"
-            subTitle="Les experts à la matière n'attendent que vous. Nous vous proposons de l’expertise,
-    de l’expérience et de la méthodologie pour une bonne utilisation de cette application. Pour tout problème technique n'hésitez pas à nous contacter et nous pouvons nous déplacer vers vous s'il le faut."
+            subTitle="L'équipe IT est là pour vous aider. Contactez-nous pour toute question ou problème technique."
             extra={[
               <Button
-                type="dashed"
-                key="call"
-                icon={<PhoneOutlined />}
-                style={{ boxShadow: "none" }}
+          type="dashed"
+          key="call"
+          icon={<PhoneOutlined />}
+          style={{ boxShadow: "none" }}
               >
-                Télephone
+          Télephone
               </Button>,
               <Button
-                type="primary"
-                key="write"
-                icon={<WhatsAppOutlined />}
-                style={{ boxShadow: "none" }}
+          type="primary"
+          key="write"
+          icon={<WhatsAppOutlined />}
+          style={{ boxShadow: "none" }}
               >
-                Whatsapp
+          Whatsapp
               </Button>,
             ]}
           />
