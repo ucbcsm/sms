@@ -402,12 +402,12 @@ export const ViewEditApplicationForm: React.FC<
               <Alert
                 showIcon
                 icon={<BulbOutlined />}
-                message="Veuillez examiner les informations avec soin."
+                title="Veuillez examiner les informations avec soin."
                 description="Tout formulaire qui contiendrait de faux renseignements ne doit pas étre validé!"
                 closable
               />
             )}
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Informations personnelles
               </Typography.Title>
@@ -552,7 +552,7 @@ export const ViewEditApplicationForm: React.FC<
                 mode="multiple"
               />
             </Form.Item>
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Informations sur les parents
               </Typography.Title>
@@ -586,7 +586,7 @@ export const ViewEditApplicationForm: React.FC<
               <Input placeholder="Téléphone de la mère" />
             </Form.Item>
 
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Origine de l&apos;étudiant
               </Typography.Title>
@@ -624,7 +624,7 @@ export const ViewEditApplicationForm: React.FC<
               <Checkbox />
             </Form.Item>
 
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>Adresse actuelle</Typography.Title>
             </Divider>
             <Form.Item
@@ -648,7 +648,7 @@ export const ViewEditApplicationForm: React.FC<
             >
               <Input.TextArea placeholder="Quartier ou Avenue et No" />
             </Form.Item>
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Études secondaires faites
               </Typography.Title>
@@ -725,7 +725,7 @@ export const ViewEditApplicationForm: React.FC<
                 max={100}
               />
             </Form.Item>
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Occupations après les humanités
               </Typography.Title>
@@ -738,7 +738,7 @@ export const ViewEditApplicationForm: React.FC<
               <Input.TextArea placeholder="Activités professionnelles" />
             </Form.Item>
 
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Études universitaires précédentes
               </Typography.Title>
@@ -829,7 +829,7 @@ export const ViewEditApplicationForm: React.FC<
                 </>
               )}
             </Form.List>
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>Choix de filière</Typography.Title>
             </Divider>
             <Form.Item
@@ -894,7 +894,7 @@ export const ViewEditApplicationForm: React.FC<
                 showSearch
               />
             </Form.Item>
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Autres questions importantes
               </Typography.Title>
@@ -907,8 +907,7 @@ export const ViewEditApplicationForm: React.FC<
                       <Form.Item
                         {...restField}
                         name={[name, "response"]}
-                        rules={[
-                        ]}
+                        rules={[]}
                         label={
                           <>
                             <Badge
@@ -933,7 +932,7 @@ export const ViewEditApplicationForm: React.FC<
             </Form.List>
 
             <Divider
-              orientation="left"
+              titlePlacement="left"
               orientationMargin={0}
               style={{ marginTop: 32 }}
             >
@@ -968,9 +967,9 @@ export const ViewEditApplicationForm: React.FC<
                         header: {
                           borderBottom: "none",
                         },
-                        body:{
-                          paddingTop:0
-                        }
+                        body: {
+                          paddingTop: 0,
+                        },
                       }}
                     >
                       <Form.Item
@@ -1020,7 +1019,7 @@ export const ViewEditApplicationForm: React.FC<
               )}
             </Form.List>
 
-            <Divider orientation="left" orientationMargin={0}>
+            <Divider titlePlacement="left" orientationMargin={0}>
               <Typography.Title level={3}>
                 Resultats aux tests de sélection
               </Typography.Title>
@@ -1063,7 +1062,7 @@ export const ViewEditApplicationForm: React.FC<
 
             <Alert
               showIcon
-              message="Frais d'inscription"
+              title="Frais d'inscription"
               type={
                 application?.enrollment_fees === "paid"
                   ? "success"
@@ -1098,7 +1097,7 @@ export const ViewEditApplicationForm: React.FC<
 
             <Alert
               showIcon
-              message="Statut de la candidature"
+              title="Statut de la candidature"
               type={getApplicationStatusAlertType(application?.status!)}
               description={
                 <Form.Item

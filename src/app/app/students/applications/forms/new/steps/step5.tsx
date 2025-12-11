@@ -15,7 +15,7 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
-import { Step5ApplicationFormDataType, Year } from "@/types";
+import { Step5ApplicationFormDataType, } from "@/types";
 import { countries } from "@/lib/data/countries";
 import { Palette } from "@/components/palette";
 import dayjs from "dayjs";
