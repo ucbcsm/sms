@@ -6,7 +6,6 @@ import { useYid } from "@/hooks/use-yid";
 import { useClasses } from "@/hooks/useClasses";
 import { usePrevPathname } from "@/hooks/usePrevPathname";
 import {
-  getClasses,
   getClassesYearsAsOptions,
   getCurrentDepartmentsAsOptions,
   getDepartmentsByFacultyId,
@@ -14,9 +13,6 @@ import {
 } from "@/lib/api";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
 import {
-  FileExcelOutlined,
-  FilePdfOutlined,
-  MoreOutlined,
   PrinterOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
@@ -24,7 +20,6 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Avatar,
   Button,
-  Dropdown,
   Input,
   Select,
   Space,
@@ -109,7 +104,11 @@ export default function Page() {
               }}
               allowClear
               prefix={<SearchOutlined />}
-              enterButton={<Button type="primary">Rechercher</Button>}
+              enterButton={
+                <Button type="primary" style={{ boxShadow: "none" }}>
+                  Rechercher
+                </Button>
+              }
             />
           </Space>
           <div className="flex-1" />

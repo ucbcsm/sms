@@ -3,8 +3,7 @@
 import BackButton from "@/components/backButton";
 import { DataFetchErrorResult } from "@/components/errorResult";
 import { Palette } from "@/components/palette";
-import { getInstitution } from "@/lib/api";
-import { useQuery } from "@tanstack/react-query";
+
 import {
   Card,
   Col,
@@ -19,7 +18,7 @@ import {
 } from "antd";
 import { EditInstitutionForm } from "./forms/edit";
 import { useInstitution } from "@/hooks/use-institution";
-import { getPublicR2Url, isImageUrl } from "@/lib/utils";
+import { getPublicR2Url } from "@/lib/utils";
 
 export default function Page() {
   const {
