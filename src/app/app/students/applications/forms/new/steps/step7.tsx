@@ -212,8 +212,7 @@ const filteredDepartments = useMemo(() => {
       >
         <Select
           options={getCurrentFacultiesAsOptions(filteredFaculties || faculties)}
-          showSearch
-          filterOption={filterOption}
+          showSearch={{ filterOption: filterOption }}
           onSelect={(value) => {
             const selectedFac = faculties?.find((fac) => fac.id === value);
             form.setFieldsValue({

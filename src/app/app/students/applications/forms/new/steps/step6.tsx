@@ -50,7 +50,7 @@ export const Step6: FC<Props> = ({ setStep }) => {
         <Input.TextArea placeholder="Activités professionnelles" />
       </Form.Item>
 
-      <Divider orientation="left" orientationMargin={0}>
+      <Divider titlePlacement="left" styles={{ content: { padding: 0 } }}>
         <Typography.Title level={5}>
           Études universitaires précédentes
         </Typography.Title>
@@ -139,27 +139,27 @@ export const Step6: FC<Props> = ({ setStep }) => {
         )}
       </Form.List>
       <Flex justify="space-between" align="center">
-      <Palette />
-      <Form.Item
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          paddingTop: 20,
-        }}
-      >
-        <Space>
-          <Button onClick={() => setStep(4)} style={{ boxShadow: "none" }}>
-            Précédent
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            style={{ boxShadow: "none" }}
-          >
-            Suivant
-          </Button>
-        </Space>
-      </Form.Item>
+        <Palette />
+        <Form.Item
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingTop: 20,
+          }}
+        >
+          <Space>
+            <Button onClick={() => setStep(4)} style={{ boxShadow: "none" }}>
+              Précédent
+            </Button>
+            <Button
+              type="primary"
+              htmlType="submit"
+              style={{ boxShadow: "none" }}
+            >
+              Suivant
+            </Button>
+          </Space>
+        </Form.Item>
       </Flex>
     </Form>
   );

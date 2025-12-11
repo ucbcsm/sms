@@ -38,12 +38,6 @@ export const SupportDrawer = () => {
         closable={false}
         title={
           <Space>
-            {/* <Button
-              type="text"
-              icon={<ArrowLeftOutlined />}
-              shape="circle"
-              onClick={onclose}
-            /> */}
             <Typography.Title level={5} style={{ marginBottom: 0 }}>
               Assistance technique
             </Typography.Title>

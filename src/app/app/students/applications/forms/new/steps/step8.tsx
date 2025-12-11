@@ -2,7 +2,6 @@
 
 import { Palette } from "@/components/palette";
 import { getEnrollmentQuestions } from "@/lib/api";
-import { Step8ApplicationFormDataType } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import {
   Badge,

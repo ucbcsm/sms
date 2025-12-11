@@ -8,9 +8,7 @@ import {
   InputNumber,
   Select,
   Space,
-  Upload,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
 import { Options } from "nuqs";
 import { FC, useEffect } from "react";
 import {
