@@ -22,7 +22,7 @@ import {
   CloseCircleOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { AttendanceList, AttendanceListItem, CourseEnrollment } from "@/types";
+import { AttendanceList, CourseEnrollment } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   AttendanceItemFromCourseEnrollment,

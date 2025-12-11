@@ -26,7 +26,7 @@ import {
   theme,
   Typography,
 } from "antd";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useInstitution } from "@/hooks/use-institution";
 import { getHSLColor, getPublicR2Url } from "@/lib/utils";
@@ -45,7 +45,6 @@ export default function StudentLayout({
   } = theme.useToken();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { data: institution } = useInstitution();
-  const router = useRouter();
   
 
   const { studentId } = useParams();

@@ -257,7 +257,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
               />
             }
           />
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>Identité</Typography.Title>
           </Divider>
           <Form.Item label="Photo de profil" name="avatar" layout="vertical">
@@ -367,7 +367,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
               mode="multiple"
             />
           </Form.Item>
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>Contacts</Typography.Title>
           </Divider>
           <Form.Item
@@ -391,7 +391,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
           >
             <Input placeholder="Numéro de téléphone 2" />
           </Form.Item>
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>Parents</Typography.Title>
           </Divider>
           <Form.Item
@@ -422,7 +422,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
           >
             <Input placeholder="Téléphone de la mère" />
           </Form.Item>
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>
               Origine de l&apos;étudiant
             </Typography.Title>
@@ -460,7 +460,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
             <Checkbox />
           </Form.Item>
 
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>Adresse actuelle</Typography.Title>
           </Divider>
           <Form.Item
@@ -485,7 +485,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
             <Input.TextArea placeholder="Quartier ou Avenue et No" />
           </Form.Item>
 
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>Études secondaires</Typography.Title>
           </Divider>
 
@@ -557,7 +557,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
             />
           </Form.Item>
 
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>
               Occupations après les humanités
             </Typography.Title>
@@ -570,7 +570,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
             <Input.TextArea placeholder="Activités professionnelles" />
           </Form.Item>
 
-          <Divider orientation="left" orientationMargin={0}>
+          <Divider titlePlacement="left" orientationMargin={0}>
             <Typography.Title level={3}>
               Études universitaires précédentes
             </Typography.Title>
