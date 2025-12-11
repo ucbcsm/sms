@@ -189,7 +189,7 @@ export type Period = z.infer<typeof Period>;
 export const Currency = z.object({
   id: z.number(),
   name: z.string(),
-  iso_code: z.enum([]),
+  iso_code: z.enum(["USD", "CDF"]),
   symbol: z.string(),
   enabled: z.boolean(),
 });

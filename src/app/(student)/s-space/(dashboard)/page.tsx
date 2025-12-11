@@ -17,7 +17,7 @@ export default function Page(){
             <Alert
               showIcon
               type="info"
-              message="Information"
+              title="Information"
               description="Cette partie est en cours de migration depuis l'ancienne version séparée et sera bientôt disponible."
             />
           </Card>

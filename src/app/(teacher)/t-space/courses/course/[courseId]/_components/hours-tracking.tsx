@@ -1,14 +1,9 @@
 "use client";
 import { FC, useState } from "react";
 import {
-  Button,
-  Card,
-  Dropdown,
   Flex,
   List,
-  Skeleton,
   Space,
-  Statistic,
   Tag,
   theme,
   Typography,
@@ -17,30 +12,16 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   CloseCircleOutlined,
-  DeleteOutlined,
-  EyeOutlined,
-  MoreOutlined,
 } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
 import {
-  getAttendancesListByCourse,
-  getAttendanceAbsentCount,
-  getAttendancePresentCount,
-  getHoursTrackings,
   getCumulativeHours,
 } from "@/lib/api";
 import dayjs from "dayjs";
 import {
-  AttendanceList,
-  CourseEnrollment,
   HourTracking,
   TaughtCourse,
 } from "@/types";
 import { useParams } from "next/navigation";
-import { NewAttendanceListForm } from "./forms/new";
-import { DataFetchErrorResult } from "@/components/errorResult";
-import { DeleteAttendanceListForm } from "./forms/delete";
-import { EditAttendanceListForm } from "./forms/edit";
 
 type ListItemProps = {
   item: HourTracking;

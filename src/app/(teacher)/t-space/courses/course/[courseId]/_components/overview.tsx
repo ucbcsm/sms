@@ -1,5 +1,5 @@
 "use client";
-import React, { FC } from "react";
+import { FC } from "react";
 import {
   Card,
   Col,
@@ -15,7 +15,6 @@ import {
   Flex,
   Button,
 } from "antd";
-import { BookOutlined } from "@ant-design/icons";
 import { TaughtCourse } from "@/types";
 import {
   getCourseTypeName,

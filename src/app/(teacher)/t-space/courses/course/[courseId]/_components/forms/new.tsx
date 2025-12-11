@@ -181,7 +181,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
               centered
             >
               <Alert
-                message="Êtes-vous sûr de vouloir annuler la création de cette liste de présence ?"
+                title="Êtes-vous sûr de vouloir annuler la création de cette liste de présence ?"
                 description="Toutes les informations saisies seront perdues."
                 type="warning"
                 showIcon
@@ -260,7 +260,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           <Alert
             type="info"
             icon={<BulbOutlined />}
-            message="Instructions"
+            title="Instructions"
             description={
               <>
                 <div>
