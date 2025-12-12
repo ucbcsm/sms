@@ -37,7 +37,6 @@ export const EditClassForm: React.FC<EditClassFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(
       { id: classe.id, params: values },

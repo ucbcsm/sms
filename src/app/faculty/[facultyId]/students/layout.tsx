@@ -18,10 +18,9 @@ import {
   Menu,
   Skeleton,
   Space,
-  theme,
   Typography,
 } from "antd";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import { NewPeriodEnrollmentForm } from "./[periodId]/forms/new";
 import Link from "next/link";
@@ -29,10 +28,7 @@ import Link from "next/link";
 export default function StudentsLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-  const router = useRouter();
+
   const pathname = usePathname();
   const { facultyId, periodId } = useParams();
   const { yid } = useYid();

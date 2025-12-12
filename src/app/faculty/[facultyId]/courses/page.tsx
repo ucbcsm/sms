@@ -149,7 +149,7 @@ export default function Page() {
   // if (isPending) {
   //   return <DataFetchPendingSkeleton variant="table" />;
   // }
-console.log(data);
+
   if (isError) {
     return <DataFetchErrorResult />;
   }

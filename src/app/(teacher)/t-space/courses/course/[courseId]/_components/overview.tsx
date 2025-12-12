@@ -23,7 +23,6 @@ import {
   getYearStatusName,
 } from "@/lib/api";
 import { getHSLColor } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 type CourseOverviewProps = {
@@ -37,7 +36,7 @@ export const CourseOverview: FC<CourseOverviewProps> = ({
   cumulativeHours,
   numberOfEnrollments,
 }) => {
-  const router = useRouter();
+  
   if (typeof course === "undefined") {
     return undefined;
   }

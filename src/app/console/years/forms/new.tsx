@@ -33,7 +33,6 @@ export const NewYearForm: React.FC<NewYearFormProps> = ({buttonType="primary"}) 
     });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(values, {
       onSuccess: () => {

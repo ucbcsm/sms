@@ -260,7 +260,7 @@ export const logout = async () => {
 export const resetPassword = async (email: string) => {
   try {
     const res = await authApi.post("/users/reset_password/", { email });
-    console.log("Res: ", res);
+    return res.data;
   } catch (error: any) {
     console.error("Error during password reset:", error);
     // console.error("Error during password reset:", error.message || error);

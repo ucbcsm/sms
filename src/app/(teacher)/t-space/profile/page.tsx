@@ -19,7 +19,6 @@ import {
   theme,
   Typography,
 } from "antd";
-import { useRouter } from "next/navigation";
 import { useSessionStore } from "@/store";
 import Link from "next/link";
 
@@ -28,7 +27,7 @@ export default function Page() {
     token: { colorBgLayout },
   } = theme.useToken();
   const { user } = useSessionStore();
-  const router = useRouter();
+
 
   const {
     data: teacher,

@@ -73,7 +73,7 @@ export const Step9: FC<Props> = ({ setStep }) => {
       form={form}
       layout="horizontal"
       onFinish={(values) => {
-        console.log(values);
+        
         const compressedData = compressToEncodedURIComponent(
           JSON.stringify(values)
         );

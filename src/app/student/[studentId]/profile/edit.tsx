@@ -140,7 +140,7 @@ export const EditStudentProfileForm: FC<EditStudentProfileFormProps> = ({
       );
     }
   };
-console.log("Rendering EditStudentProfileForm with data:", data);
+
   return (
     <>
       {contextHolder}

@@ -8,7 +8,7 @@ import { BookOutlined, SearchOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Alert, Flex, Input, List, Tag, theme } from "antd";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { FC, useState } from "react";
 
 type ListCourseProps = {
@@ -22,7 +22,6 @@ export const ListCourse: FC<ListCourseProps> = ({ period }) => {
     } = theme.useToken();
 
     const { juryId, facultyId, courseId } = useParams();
-    const router = useRouter();
     const [departmentId, setDepartmentId] = useState<string | number>("all");
     const [searchResult, setSearchResult] = useState<
       TaughtCourse[] | undefined

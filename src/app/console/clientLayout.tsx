@@ -30,7 +30,6 @@ import {
   Typography,
 } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function ClientConsoleLayout({
@@ -43,7 +42,6 @@ export function ClientConsoleLayout({
     token: { colorBgContainer, colorBorderSecondary, colorPrimary },
   } = theme.useToken();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const router = useRouter();
   const {data:institution}= useInstitution();
 
   return (

@@ -9,7 +9,7 @@ type TeacherStudentsListProps={
     students?:CourseEnrollment[]
 }
 export const TeacherStudentsList:FC<TeacherStudentsListProps>=({students})=>{
-    console.log("Students: ",students)
+    
     return (
       <List
         

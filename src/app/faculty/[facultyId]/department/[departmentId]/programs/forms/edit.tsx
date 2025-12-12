@@ -95,13 +95,6 @@ export const EditDepartmentProgramForm: FC<EditDepartmentProgramFormProps> = ({
 
   const onFinish = (values: any) => {
     if (!departmentProgram) return;
-    console.log(
-      "New courses:",
-      coursesOfProgram.map((c) => ({
-        ...c,
-        available_course: c.available_course?.id!,
-      }))
-    );
     mutateAsync(
       {
         id: departmentProgram.id,

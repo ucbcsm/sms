@@ -34,7 +34,7 @@ export async function updateDepartmentProgram({
     department_id: number;
   };
 }) {
-  console.log("Check:", data.courses_of_program);
+ 
   const res = await api.put(`/faculty/departement-program/${id}/`, {
     departement: data.department_id,
     courses_of_program: data.courses_of_program,

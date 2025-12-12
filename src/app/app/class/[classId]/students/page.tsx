@@ -7,7 +7,6 @@ import {
     FileExcelOutlined,
     FilePdfOutlined,
     MoreOutlined,
-    PlusOutlined,
     PrinterOutlined,
 } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Input, Space, Table, Tag } from "antd";

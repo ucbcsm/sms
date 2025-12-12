@@ -36,7 +36,6 @@ export const EditLetterGradingForm: React.FC<EditLetterGradingFormProps> = ({
 }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
-console.log(letterGrading)
   const queryClient = useQueryClient();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: updateLetterGrading,

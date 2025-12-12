@@ -53,8 +53,7 @@ export const EditTeacherProfileForm: FC<EditTeacherProfileFormProps> = ({
   });
 
   const onFinish = (values: any) => {
-    console.log("Values:", values)
-    console.log("Teacher", teacher)
+    
     if (!teacher) {
       message.error("Aucune donnée disponible pour la mise à jour.");
     } else {

@@ -14,19 +14,15 @@ import {
 } from "antd";
 
 import { Palette } from "@/components/palette";
-import Link from "next/link";
 import BackButton from "@/components/backButton";
-import { ReactNode } from "react";
-import { usePathname, useRouter } from "next/navigation";
+
 import { useInstitution } from "@/hooks/use-institution";
 
 export default function Page() {
   const {
-    token: { colorBgContainer, colorBorderSecondary },
+    token: { colorBgContainer, },
   } = theme.useToken();
 
-  const pathname = usePathname();
-  const router = useRouter();
   const { data: institution } = useInstitution();
 
   return (

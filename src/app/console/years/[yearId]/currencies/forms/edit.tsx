@@ -31,7 +31,6 @@ export const EditCurrencyForm: FC<EditPaymentMethodFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log(values)
     mutateAsync(
       { id: currency.id, params: values },
       {

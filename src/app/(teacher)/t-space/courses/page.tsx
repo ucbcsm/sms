@@ -1,12 +1,8 @@
 "use client";
 
-import { Palette } from "@/components/palette";
 import { useYid } from "@/hooks/use-yid";
 import {
-  getPeriodsByYear,
-  getTaughtCourses,
-  getTeacherTaughtCourses,
-  getYearEnrollment,
+  getTeacherTaughtCourses
 } from "@/lib/api";
 import { TaughtCourse } from "@/types";
 import { useQuery } from "@tanstack/react-query";
@@ -22,7 +18,6 @@ import {
   theme,
   Typography,
 } from "antd";
-import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { EyeOutlined, MoreOutlined, ReadOutlined } from "@ant-design/icons";
 import Link from "next/link";
@@ -32,7 +27,6 @@ type CourseListItemProps = {
 };
 
 const CourseListItem: FC<CourseListItemProps> = ({ item }) => {
-  const router = useRouter();
 
   return (
     <>

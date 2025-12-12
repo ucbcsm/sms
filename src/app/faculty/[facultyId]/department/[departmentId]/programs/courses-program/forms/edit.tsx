@@ -53,7 +53,7 @@ export const EditCourseProgramForm: FC<EditCourseProgramModalProps> = ({
       });
     }
   }, [courseProgram, open, form]);
-  console.log(courseProgram);
+  
   return (
     <Modal
       title="Modifier le cours du programme"

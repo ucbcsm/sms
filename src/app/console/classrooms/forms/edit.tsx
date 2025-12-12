@@ -38,7 +38,6 @@ export const EditClassroomForm: React.FC<EditClassroomFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    // console.log("Received values of form: ", values);
 
     mutateAsync(
       { params: values, id: classroom.id }, // Include the classroom ID for the update

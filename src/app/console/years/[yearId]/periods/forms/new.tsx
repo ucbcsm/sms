@@ -43,7 +43,6 @@ export const NewPeriodForm: React.FC<NewPeriodFormProps> = ({ cycles }) => {
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(
       { ...values, year_id: Number(yearId) },

@@ -35,7 +35,6 @@ export const NewTestCourseForm: React.FC<NewTestCourseFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(values, {
       onSuccess: () => {

@@ -34,7 +34,6 @@ export const EditPeriodForm: React.FC<EditPeriodFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(
       { id: period.id, params: { ...values, year_id: period.academic_year.id } },

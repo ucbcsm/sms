@@ -21,7 +21,7 @@ import { useState } from "react";
 import { z } from "zod";
 
 const formSchema = z.object({
-  email: z.string().email("Veuillez entrer une adresse e-mail valide."),
+  email: z.email("Veuillez entrer une adresse e-mail valide."),
 });
 
 type FormSchema = z.infer<typeof formSchema>;

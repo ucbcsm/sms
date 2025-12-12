@@ -44,7 +44,7 @@ export function ConfigForm() {
   });
 
   const onFinish = (values: FormSchemaType) => {
-    // console.log(values); // Debugging line
+   
     mutateAsync(values, {
       onSuccess: () => {
         messageApi.success("Configuration initiale réussie!");

@@ -76,7 +76,6 @@ export function ListTeachers() {
         page_size: pageSize !== 0 ? pageSize : undefined,
       }),
   });
-  console.log(data);
 
   if (isError) {
     return <DataFetchErrorResult />;

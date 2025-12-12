@@ -178,7 +178,7 @@ export const ListRequiredDocuments = () => {
     queryKey: ["required-documents"],
     queryFn: getRequiredDocuments,
   });
-    console.log(documents);
+   
 
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;

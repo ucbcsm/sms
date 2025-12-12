@@ -30,7 +30,6 @@ export const EditFieldForm: React.FC<EditFieldFormProps> = ({
   });
 
   const onFinish = (values: FormDataType) => {
-    console.log("Received values of form: ", values);
 
     mutateAsync(
       { id: field.id, params: values },

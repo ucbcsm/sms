@@ -158,7 +158,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
   const removeStudent = (promotionIndex: number, studentIndex: number) => {
     if (!newStudentItems) return;
     const student= newStudentItems[promotionIndex].students[studentIndex];
-    console.log("Removing student: ", student);
+    
     modal.confirm({
       title: "Confirmer la suppression",
       content: (

@@ -106,8 +106,6 @@ export const ListStudentsUsers: FC<ListStudentsUsersProps> = ({
     queryFn: getStudentsUsers,
   });
 
-  console.log(users);
-
   if (isPending) {
     return <DataFetchPendingSkeleton variant="table" />;
   }
