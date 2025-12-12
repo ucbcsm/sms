@@ -364,7 +364,7 @@ export const ViewEditApplicationForm: React.FC<
               </Typography.Title>
               <Tag
                 color={getApplicationTagColor(application?.status!)}
-                bordered={false}
+                variant="filled"
                 style={{ borderRadius: 10 }}
               >
                 {getApplicationStatusName(application?.status!)}

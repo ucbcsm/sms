@@ -155,7 +155,7 @@ export default function Page() {
                             return (
                                 <Tag
                                     color={color}
-                                    bordered={false}
+                                    variant="filled"
                                     style={{ borderRadius: 10 }}
                                 >
                                     {record.status}

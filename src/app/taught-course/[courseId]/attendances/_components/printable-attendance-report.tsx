@@ -101,7 +101,7 @@ export const PrintableAttendanceReport: FC<PrintableAttendanceReportProps> = ({
                   color={
                     record.required_attendance_reached ? "success" : "error"
                   }
-                  bordered={false}
+                  variant="filled"
                   style={{ marginRight: 0, width: "100%", textAlign: "center" }}
                 >
                   {record.required_attendance_reached ? "OUI" : "NON"}

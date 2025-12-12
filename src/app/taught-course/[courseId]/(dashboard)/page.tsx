@@ -412,7 +412,7 @@ export default function Page() {
                   key: "status",
                   label: "Statut",
                   children: (
-                    <Tag bordered={false}>
+                    <Tag variant="filled">
                       {getYearStatusName(course?.status!)}
                     </Tag>
                   ),

@@ -301,7 +301,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                     key: "status",
                     label: "Statut",
                     children: (
-                      <Tag bordered={false}>
+                      <Tag variant="filled">
                         {getYearStatusName(course?.status!)}
                       </Tag>
                     ),

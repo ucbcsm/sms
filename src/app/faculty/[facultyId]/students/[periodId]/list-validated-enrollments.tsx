@@ -332,7 +332,7 @@ export const ListPeriodValidatedStudents: FC<
           width: 96,
           render: (_, record, __) => (
             <Tag
-              bordered={false}
+              variant="filled"
               color={
                 record?.year_enrollment.status === "enabled" ? "success" : "red"
               }

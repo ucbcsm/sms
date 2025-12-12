@@ -166,7 +166,7 @@ export default function StudentLayout({
               style={{ marginBottom: 0, textTransform: "uppercase" }}
             >
               {`${enrolledStudent?.user.surname} ${enrolledStudent?.user.last_name} ${enrolledStudent?.user.first_name}`}{" "}
-              <Tag bordered={false}>{enrolledStudent?.user.matricule}</Tag>
+              <Tag variant="filled">{enrolledStudent?.user.matricule}</Tag>
             </Typography.Title>
           ) : (
             <Form>

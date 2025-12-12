@@ -74,7 +74,7 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
                       <CloseCircleOutlined />
                     )
                   }
-                  bordered={false}
+                  variant="filled"
                 >
                   Ens.
                 </Tag>
@@ -87,13 +87,13 @@ const ListItem: FC<ListItemProps> = ({ item }) => {
                       <CloseCircleOutlined />
                     )
                   }
-                  bordered={false}
+                  variant="filled"
                   style={{ marginRight: 0 }}
                 >
                   CP
                 </Tag>
               </Space>
-               <Tag color="blue" style={{marginRight:0}} bordered={false}>{item.hours_completed} Heures</Tag>
+               <Tag color="blue" style={{marginRight:0}} variant="filled">{item.hours_completed} Heures</Tag>
             </Flex>
           }
         />

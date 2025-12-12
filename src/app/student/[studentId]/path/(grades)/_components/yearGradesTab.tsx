@@ -166,7 +166,7 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
               render: (_, record) => (
                 <Tag
                   color={getDecisionColor(record.final_decision)}
-                  bordered={false}
+                  variant="filled"
                   style={{ marginRight: 0, width: "100%", textAlign: "center" }}
                 >
                   {getDecisionText(record.final_decision)}

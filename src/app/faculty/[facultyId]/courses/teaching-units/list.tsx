@@ -82,7 +82,7 @@ const ListItem: FC<ListItemProps> = ({ item, cycles }) => {
             Categorie:
             <Tag
               color={getTeachingUnitCategoryTagColor(item.category)}
-              bordered={false}
+              variant="filled"
             >
               {getTeachingUnitCategoryName(item.category)}
             </Tag>

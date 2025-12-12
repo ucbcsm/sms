@@ -38,7 +38,7 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
             : "default"
         }
         onClick={() => editRecordStatus("present", index)}
-        bordered={false}
+        variant="filled"
         style={{
           cursor: record.exempted ? "not-allowed" : "pointer",
 
@@ -59,7 +59,7 @@ export const AttendanceController: FC<AttendanceControllerProps> = ({
             : "default"
         }
         onClick={() => !record.exempted && editRecordStatus("absent", index)}
-        bordered={false}
+        variant="filled"
         style={{
           cursor: record.exempted ? "not-allowed" : "pointer",
 

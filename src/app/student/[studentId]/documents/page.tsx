@@ -90,7 +90,7 @@ export default function Page() {
                   <Space style={{ width: "100%" }}>
                     <Tag
                       icon={<FileOutlined />}
-                      bordered={false}
+                      variant="filled"
                       style={{ borderRadius: 10, marginRight: 0 }}
                     >
                       .{record.file_url
@@ -122,7 +122,7 @@ export default function Page() {
             render: (_, record) => (
               <Tag
                 color={getApplicationTagColor(record.status)}
-                bordered={false}
+                variant="filled"
                 style={{ borderRadius: 10 }}
               >
                 {getApplicationStatusName(record.status)}

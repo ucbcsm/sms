@@ -259,7 +259,7 @@ export const PrintableDeliberationMinutes: FC<PrintableDeliberationMinutesProps>
                           color={
                             record.decision === "passed" ? "success" : "error"
                           }
-                          bordered={false}
+                          variant="filled"
                           style={{
                             marginRight: 0,
                             width: "100%",

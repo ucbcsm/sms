@@ -244,7 +244,7 @@ const isPartOfDepartment = (departmentId: number) => {
               <Tag
                 color="error"
                 style={{ marginRight: 0, width: "100%" }}
-                bordered={false}
+                variant="filled"
                 icon={<CloseCircleOutlined/>}
               >
                 Pas concerné(e)
@@ -253,7 +253,7 @@ const isPartOfDepartment = (departmentId: number) => {
               <Tag
                 color="success"
                 style={{ marginRight: 0, width: "100%" }}
-                bordered={false}
+                variant="filled"
                 icon={<CheckCircleFilled />}
               >
                 Déjà inscrit

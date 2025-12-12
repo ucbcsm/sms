@@ -107,7 +107,7 @@ export const HomeClient: FC<HomeClientProps> = ({ apps, user }) => {
                     {user?.is_superuser && (
                       <Tag
                         key="admin"
-                        bordered={false}
+                        variant="filled"
                         style={{ borderRadius: 10 }}
                         icon={<CrownOutlined />}
                         color="red"
@@ -118,7 +118,7 @@ export const HomeClient: FC<HomeClientProps> = ({ apps, user }) => {
                     {user?.is_staff && (
                       <Tag
                         key="staff"
-                        bordered={false}
+                        variant="filled"
                         style={{ borderRadius: 10 }}
                         icon={<UserOutlined />}
                         color="blue"
@@ -129,7 +129,7 @@ export const HomeClient: FC<HomeClientProps> = ({ apps, user }) => {
                     {user?.is_student && (
                       <Tag
                         key="student"
-                        bordered={false}
+                        variant="filled"
                         style={{ borderRadius: 10 }}
                         icon={<CheckOutlined />}
                         color="blue"
@@ -141,7 +141,7 @@ export const HomeClient: FC<HomeClientProps> = ({ apps, user }) => {
                     {user?.roles.map((r) => (
                       <Tag
                         key={r.id}
-                        bordered={false}
+                        variant="filled"
                         style={{ borderRadius: 10 }}
                         icon={<CheckOutlined />}
                         color="success"

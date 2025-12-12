@@ -274,7 +274,7 @@ console.log(data);
                 <Space wrap>
                   {record.prerequisite_courses.map((c) => (
                     <Tooltip title={c.name} key={c.id}>
-                      <Tag style={{ marginRight: 0 }} bordered={false}>
+                      <Tag style={{ marginRight: 0 }} variant="filled">
                         {c.code}
                       </Tag>
                     </Tooltip>

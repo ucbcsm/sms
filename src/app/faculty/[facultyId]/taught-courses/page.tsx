@@ -517,7 +517,7 @@ export default function Page() {
                   {record.departements.map((dep) => (
                     <Tag
                       key={dep.id}
-                      bordered={false}
+                      variant="filled"
                       style={{ borderRadius: 10 }}
                     >
                       {dep.acronym}

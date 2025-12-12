@@ -105,7 +105,7 @@ export const MyProfileModal: FC<MyProfileModalProps> = ({
     <Modal
       title={
         <Typography.Title level={5} style={{ marginBottom: 0 }}>
-          Profile <Tag bordered={false}>{user?.matricule}</Tag>
+          Profile <Tag variant="filled">{user?.matricule}</Tag>
         </Typography.Title>
       }
       loading={!user}

@@ -126,7 +126,7 @@ export default function Page() {
                 <Tag
                   color="blue"
                   key={index}
-                  bordered={false}
+                  variant="filled"
                   style={{ borderRadius: 10 }}
                 >
                   {course}

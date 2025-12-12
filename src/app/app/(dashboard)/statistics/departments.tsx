@@ -100,7 +100,7 @@ export function DepartmentsStatistics() {
                 }
                 description={
                   <Space>
-                    <Tag bordered={false}>Filière:</Tag>
+                    <Tag variant="filled">Filière:</Tag>
                     <Typography.Text type="secondary" ellipsis>
                       {item.faculty.name}
                     </Typography.Text>

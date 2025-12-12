@@ -141,7 +141,6 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
 
   return (
     <>
-    
       <Button
         type="primary"
         style={{ boxShadow: "none" }}
@@ -161,7 +160,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         extra={
           <Space>
             <Button
-              style={{ boxShadow: "none",}}
+              style={{ boxShadow: "none" }}
               onClick={() => setCancel(true)}
               icon={<CloseOutlined />}
               type="text"
@@ -272,13 +271,13 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
                   <Tag
                     color="success"
                     icon={<CheckCircleOutlined />}
-                    bordered={false}
+                    variant="filled"
                   />{" "}
                   Absent ={" "}
                   <Tag
                     color="red"
                     icon={<CloseCircleOutlined />}
-                    bordered={false}
+                    variant="filled"
                   />
                 </div>
                 <div>- Puis sauvegarder</div>
@@ -303,6 +302,6 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
           />
         </div>
       </Drawer>
-      </>
+    </>
   );
 };

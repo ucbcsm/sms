@@ -168,7 +168,7 @@ export const CourseOverview: FC<CourseOverviewProps> = ({
                   children: (
                     <Tag
                       color={getYearStatusColor(course.status!)}
-                      bordered={false}
+                      variant="filled"
                     >
                       {getYearStatusName(course.status!)}
                     </Tag>

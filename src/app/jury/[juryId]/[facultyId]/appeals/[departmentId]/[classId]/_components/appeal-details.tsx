@@ -108,7 +108,7 @@ export const AppealDetails: FC<AppealDetailsProps> = ({
             <Flex justify="space-between" align="center" gap={8}>
               <Typography.Text type="secondary">Statut</Typography.Text>
               <Tag
-                bordered={false}
+                variant="filled"
                 color={getAppealStatusColor(appeal?.status!)}
                 style={{ marginRight: 0 }}
                 icon={
@@ -193,7 +193,7 @@ export const AppealDetails: FC<AppealDetailsProps> = ({
                 label: "Statut",
                 children: (
                   <Tag
-                    bordered={false}
+                    variant="filled"
                     color={getAppealStatusColor(appeal?.status!)}
                     style={{ marginRight: 0 }}
                     icon={

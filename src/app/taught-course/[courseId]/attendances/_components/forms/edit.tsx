@@ -293,7 +293,7 @@ export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
                     key: "status",
                     label: "Statut",
                     children: (
-                      <Tag bordered={false}>
+                      <Tag variant="filled">
                         {getYearStatusName(course?.status!)}
                       </Tag>
                     ),

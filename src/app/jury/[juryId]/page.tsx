@@ -107,7 +107,7 @@ export default function Page() {
                     jury?.chairperson?.user.is_active ? (
                       <Tag
                         color="green"
-                        bordered={false}
+                        variant="filled"
                         style={{ marginRight: 0 }}
                       >
                         Actif
@@ -115,7 +115,7 @@ export default function Page() {
                     ) : (
                       <Tag
                         color="red"
-                        bordered={false}
+                        variant="filled"
                         style={{ marginRight: 0 }}
                       >
                         Inactif
@@ -164,7 +164,7 @@ export default function Page() {
                     jury?.secretary?.user.is_active ? (
                       <Tag
                         color="green"
-                        bordered={false}
+                        variant="filled"
                         style={{ marginRight: 0 }}
                       >
                         Actif
@@ -172,7 +172,7 @@ export default function Page() {
                     ) : (
                       <Tag
                         color="red"
-                        bordered={false}
+                        variant="filled"
                         style={{ marginRight: 0 }}
                       >
                         Inactif
@@ -222,7 +222,7 @@ export default function Page() {
                     item.user.is_active ? (
                       <Tag
                         color="green"
-                        bordered={false}
+                        variant="filled"
                         style={{ marginRight: 0 }}
                       >
                         Actif
@@ -230,7 +230,7 @@ export default function Page() {
                     ) : (
                       <Tag
                         color="red"
-                        bordered={false}
+                        variant="filled"
                         style={{ marginRight: 0 }}
                       >
                         Inactif

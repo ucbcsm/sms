@@ -733,7 +733,7 @@ export default function Page() {
                   render: (_, record) => (
                     <Tag
                       color={getGradeValidationColor(record.validation)}
-                      bordered={false}
+                      variant="filled"
                       style={{
                         width: "100%",
                         padding: "4px 8px",
@@ -795,7 +795,7 @@ export default function Page() {
                         color={
                           record.status === "validated" ? "success" : "warning"
                         }
-                        bordered={false}
+                        variant="filled"
                         style={{ width: "100%", padding: "4px 8px" }}
                         icon={
                           record.status === "validated" ? (

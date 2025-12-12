@@ -113,11 +113,11 @@ const ListItem: FC<ListItemProps> = ({ item, courseEnrollments }) => {
           description={
             <Flex justify="space-between">
               <Typography.Text>
-                <Tag color="green" bordered={false}>
+                <Tag color="green" variant="filled">
                   {getAttendancePresentCount(item.student_attendance_status)}{" "}
                   Présent(s)
                 </Tag>
-                <Tag color="red" bordered={false} style={{ marginRight: 0 }}>
+                <Tag color="red" variant="filled" style={{ marginRight: 0 }}>
                   {getAttendanceAbsentCount(item.student_attendance_status)}{" "}
                   Absent(s)
                 </Tag>{" "}

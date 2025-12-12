@@ -157,7 +157,7 @@ const watchedValue = Form.useWatch(name, form);
         <Tag
           icon={<CheckCircleFilled />}
           color="success"
-          bordered={false}
+          variant="filled"
           style={{ borderRadius: 10 }}
         >
           Fichier uploadé

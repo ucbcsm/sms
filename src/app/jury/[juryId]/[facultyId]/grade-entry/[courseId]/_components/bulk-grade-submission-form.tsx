@@ -493,7 +493,7 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
                       color={
                         record.status === "validated" ? "success" : "warning"
                       }
-                      bordered={false}
+                      variant="filled"
                       style={{ width: "100%", padding: "4px 8px" }}
                       icon={
                         record.status === "validated" ? (

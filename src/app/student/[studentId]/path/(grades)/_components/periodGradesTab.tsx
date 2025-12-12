@@ -184,7 +184,7 @@ export const PeriodGradesTab: FC<PeriodGradesTabProps> = ({ userId }) => {
               render: (_, record) => (
                 <Tag
                   color={getDecisionColor(record.period_decision)}
-                  bordered={false}
+                  variant="filled"
                   style={{ marginRight: 0, width: "100%", textAlign: "center" }}
                 >
                   {getDecisionText(record.period_decision)}

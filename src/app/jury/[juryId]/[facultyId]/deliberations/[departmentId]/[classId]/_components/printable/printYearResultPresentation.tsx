@@ -237,7 +237,7 @@ export const PrintableYearResultPresentation: FC<PrintableYearResultPresentation
                     render: (_, record) => (
                       <Tag
                         color={record.decision === "passed" ? "success" : "error"}
-                        bordered={false}
+                        variant="filled"
                         style={{ marginRight: 0, width: "100%", textAlign: "center" }}
                       >
                         {getDecisionText(record.decision)}

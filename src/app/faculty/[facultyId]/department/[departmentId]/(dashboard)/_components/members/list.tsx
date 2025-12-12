@@ -25,7 +25,7 @@ export const DepartmentMembersList: FC<DepartmentMembersListProps> = ({
                   department.director?.user.is_active ? (
                     <Tag
                       color="green"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Actif
@@ -33,7 +33,7 @@ export const DepartmentMembersList: FC<DepartmentMembersListProps> = ({
                   ) : (
                     <Tag
                       color="red"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Inactif
@@ -84,7 +84,7 @@ export const DepartmentMembersList: FC<DepartmentMembersListProps> = ({
                   item.user.is_active ? (
                     <Tag
                       color="green"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Actif
@@ -92,7 +92,7 @@ export const DepartmentMembersList: FC<DepartmentMembersListProps> = ({
                   ) : (
                     <Tag
                       color="red"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Inactif

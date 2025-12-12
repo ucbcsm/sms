@@ -146,7 +146,7 @@ export const ListAppeals: FC<ListAppealsProps> = ({
                     </Typography.Text>
                     <Tag
                       color={getAppealStatusColor(item.status)}
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       {getAppealStatusText(item.status)}

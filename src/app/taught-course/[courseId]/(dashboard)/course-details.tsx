@@ -245,7 +245,7 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
                 key: "status",
                 label: "Statut",
                 children: (
-                  <Tag bordered={false}>{getYearStatusName(data?.status!)}</Tag>
+                  <Tag variant="filled">{getYearStatusName(data?.status!)}</Tag>
                 ),
               },
             ]}

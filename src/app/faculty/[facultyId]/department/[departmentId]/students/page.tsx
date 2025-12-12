@@ -177,7 +177,7 @@ export default function Page() {
           width: 96,
           render: (_, record, __) => (
             <Tag
-              bordered={false}
+              variant="filled"
               color={record.status === "enabled" ? "success" : "red"}
               className="w-full mr-0"
             >

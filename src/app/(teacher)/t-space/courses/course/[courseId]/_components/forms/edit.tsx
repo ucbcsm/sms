@@ -263,13 +263,13 @@ export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
                   <Tag
                     color="success"
                     icon={<CheckCircleOutlined />}
-                    bordered={false}
+                    variant="filled"
                   />{" "}
                   Absent ={" "}
                   <Tag
                     color="red"
                     icon={<CloseCircleOutlined />}
-                    bordered={false}
+                    variant="filled"
                   />
                 </div>
                 <div>- Puis sauvegarder</div>

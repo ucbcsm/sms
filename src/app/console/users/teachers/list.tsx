@@ -216,7 +216,7 @@ export const ListStaffUsers: FC<ListStaffUsersProps> = ({
           render: (_, record) => (
             <Space wrap>
               {record.roles.map((r) => (
-                <Tag key={r.id} bordered={false}>
+                <Tag key={r.id} variant="filled">
                   {getRoleName(r.name)}
                 </Tag>
               ))}
@@ -231,7 +231,7 @@ export const ListStaffUsers: FC<ListStaffUsersProps> = ({
           render: (_, record) => (
             <Space wrap>
               {record.groups.map((g) => (
-                <Tag key={g.id} icon={<TeamOutlined />} bordered={false}>
+                <Tag key={g.id} icon={<TeamOutlined />} variant="filled">
                   {g.name}
                 </Tag>
               ))}

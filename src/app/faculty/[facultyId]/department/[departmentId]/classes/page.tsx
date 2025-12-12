@@ -109,7 +109,7 @@ export default function Page() {
                     render: (type) => {
                         let color = type === "Licence" ? "blue" : type === "Master" ? "green" : "purple";
                         return (
-                            <Tag color={color} bordered={false} style={{ borderRadius: 10 }}>
+                            <Tag color={color} variant="filled" style={{ borderRadius: 10 }}>
                                 {type}
                             </Tag>
                         );

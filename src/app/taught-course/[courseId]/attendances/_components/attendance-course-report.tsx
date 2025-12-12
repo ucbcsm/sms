@@ -204,7 +204,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                     key: "status",
                     label: "Statut",
                     children: (
-                      <Tag bordered={false}>
+                      <Tag variant="filled">
                         {getYearStatusName(course?.status!)}
                       </Tag>
                     ),
@@ -289,7 +289,7 @@ export const AttendanceCourseReport: FC<AttendanceCourseReportProps> = ({
                               ? "success"
                               : "error"
                           }
-                          bordered={false}
+                          variant="filled"
                           style={{
                             marginRight: 0,
                             width: "100%",

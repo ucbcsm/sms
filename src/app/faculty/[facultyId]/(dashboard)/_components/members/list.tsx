@@ -24,7 +24,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                   faculty?.coordinator?.user.is_active ? (
                     <Tag
                       color="green"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Actif
@@ -32,7 +32,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                   ) : (
                     <Tag
                       color="red"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Inactif
@@ -85,7 +85,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                   faculty?.secretary?.user.is_active ? (
                     <Tag
                       color="green"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Actif
@@ -93,7 +93,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                   ) : (
                     <Tag
                       color="red"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Inactif
@@ -147,7 +147,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                   item.user.is_active ? (
                     <Tag
                       color="green"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Actif
@@ -155,7 +155,7 @@ export const FacultyMembersList: FC<FacultyMembersListProps> = ({
                   ) : (
                     <Tag
                       color="red"
-                      bordered={false}
+                      variant="filled"
                       style={{ marginRight: 0 }}
                     >
                       Inactif

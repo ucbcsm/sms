@@ -165,7 +165,7 @@ export function JurysList() {
                 <Tag
                   key={index}
                   color={getHSLColor(fac.name)}
-                  bordered={false}
+                  variant="filled"
                   style={{ borderRadius: 15 }}
                 >
                   {fac.acronym}

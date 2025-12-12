@@ -55,7 +55,7 @@ export const ListItemApplication: FC<ListItemApplicationProps> = ({ item }) => {
             <Tag
               color={getApplicationTagColor(item.status || "")}
               style={{ marginRight: 0 }}
-              bordered={false}
+              variant="filled"
             >
               {getApplicationStatusName(`${item.status}`)}
             </Tag>

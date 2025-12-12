@@ -191,11 +191,11 @@ export default function Page() {
                 key: "status",
                 render: (status) =>
                   status === "Réussi" ? (
-                    <Tag color="green" bordered={false}>
+                    <Tag color="green" variant="filled">
                       Payé
                     </Tag>
                   ) : (
-                    <Tag color="red" bordered={false}>
+                    <Tag color="red" variant="filled">
                       Non payé
                     </Tag>
                   ),

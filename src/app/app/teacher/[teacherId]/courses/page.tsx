@@ -152,7 +152,7 @@ export default function Page() {
                                 color = "default";
                         }
                         return (
-                            <Tag color={color} bordered={false} style={{ borderRadius: 10 }}>
+                            <Tag color={color} variant="filled" style={{ borderRadius: 10 }}>
                                 {status}
                             </Tag>
                         );

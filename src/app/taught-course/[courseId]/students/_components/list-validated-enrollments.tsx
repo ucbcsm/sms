@@ -336,13 +336,13 @@ export const ListCourseValidatedStudents: FC<
             record.exempted_on_attendance ? (
               <Tag
                 color="success"
-                bordered={false}
+                variant="filled"
                 style={{ marginRight: 0, width: "100%" }}
               >
                 Oui
               </Tag>
             ) : (
-              <Tag bordered={false} style={{ marginRight: 0, width: "100%" }}>
+              <Tag variant="filled" style={{ marginRight: 0, width: "100%" }}>
                 Non
               </Tag>
             ),
