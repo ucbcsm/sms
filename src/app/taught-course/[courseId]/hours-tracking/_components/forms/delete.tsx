@@ -87,7 +87,7 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
         modalRender={(dom) => (
@@ -104,7 +104,7 @@ export const DeleteHourTrackingForm: FC<DeleteHourTrackingFormProps> = ({
         )}
       >
         <Alert
-          message="Attention"
+          title="Attention"
           description={
             <>
               Êtes-vous sûr de vouloir supprimer le suivi d&apos;heures du{" "}

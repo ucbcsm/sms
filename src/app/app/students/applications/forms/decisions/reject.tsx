@@ -1,9 +1,9 @@
 "use client";
-import React, { Dispatch, FC, SetStateAction } from "react";
+import  { Dispatch, FC, SetStateAction } from "react";
 import { Alert, Form, message, Modal, Checkbox } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { rejectEditedApplication } from "@/lib/api";
-import { Application, ApplicationEditFormDataType } from "@/types";
+import {  ApplicationEditFormDataType } from "@/types";
 
 type FormDataType = {
   rejected: boolean;
@@ -107,7 +107,7 @@ export const RejectApplicationForm: FC<RejectApplicationFormProps> = ({
         )}
       >
         <Alert
-          message="Attention"
+          title="Attention"
           description={`Êtes-vous sûr de vouloir rejeter l'inscription "${EditedApplication.name}" ? Cette action est irréversible.`}
           type="warning"
           showIcon

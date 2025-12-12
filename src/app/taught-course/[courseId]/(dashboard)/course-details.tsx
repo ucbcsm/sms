@@ -60,7 +60,7 @@ export const TaughtCourseDetails: FC<TaughtCourseDetailsProps> = ({
           classrooms={classrooms}
         />
         <Space
-          direction="vertical"
+          orientation="vertical"
           size="middle"
           style={{
             padding: "16px 0 40px 28px",

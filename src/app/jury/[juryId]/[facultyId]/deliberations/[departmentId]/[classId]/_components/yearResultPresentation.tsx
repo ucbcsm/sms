@@ -8,7 +8,7 @@ import { Button, Divider, Drawer, Empty, Result, Select, Space, Table, Tag, Typo
 import { useParams } from "next/navigation";
 import { Options, parseAsStringEnum, useQueryState } from "nuqs";
 
-import React, { FC, useRef } from "react";
+import { FC, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { getYearResultPresentation } from "@/lib/api/result-presentation";
 import { useYid } from "@/hooks/use-yid";
@@ -122,7 +122,7 @@ export const YearResultPresentation: FC<
         <Space>
           <Typography.Text type="secondary">Année:</Typography.Text>
           <Typography.Text strong>{year?.name}</Typography.Text>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Text type="secondary">Session: </Typography.Text>
           <Select
             variant="filled"
@@ -151,7 +151,7 @@ export const YearResultPresentation: FC<
               setMoment(value as "before_appeal" | "after_appeal");
             }}
           />
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Button
             style={{
               boxShadow: "none",

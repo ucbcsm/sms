@@ -119,7 +119,7 @@ export function ClientConsoleLayout({
           <Typography.Title level={5} style={{ marginBottom: 0 }}>
             {institution?.acronym}
           </Typography.Title>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Text type="secondary">
             Console d&apos;administration
           </Typography.Text>

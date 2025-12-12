@@ -111,7 +111,7 @@ export const EditInstitutionForm: React.FC<Props> = ({
         width="100%"
         closable={false}
         onClose={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         loading={isLoading}
         styles={{ header: { background: colorPrimary } }}
         extra={

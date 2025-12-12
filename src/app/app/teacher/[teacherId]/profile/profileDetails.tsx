@@ -54,7 +54,7 @@ export const TeacherProfileDetails: FC<TeacherProfileDetailsProps> = ({
           />
         </Flex>
         <Space
-          direction="vertical"
+          orientation="vertical"
           size="middle"
           style={{
             padding: "40px 0 40px 28px",

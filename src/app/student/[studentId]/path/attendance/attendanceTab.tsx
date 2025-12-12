@@ -55,7 +55,7 @@ export const AttendanceTab = () => {
 
   return (
     <div style={{}}>
-      <Space direction="vertical" size="large" style={{ width: "100%" }}>
+      <Space orientation="vertical" size="large" style={{ width: "100%" }}>
         <Card>
           <Space size="large" align="start">
             <div>
@@ -74,7 +74,7 @@ export const AttendanceTab = () => {
               />
             </div>
 
-            <Space direction="vertical">
+            <Space orientation="vertical">
               <div>
                 <Text strong>Formation : </Text>
                 <Text>Licence Informatique</Text>

@@ -36,7 +36,6 @@ import {
 } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { filterOption, getMaritalStatusName } from "@/lib/utils";
-import { record } from "zod";
 
 type ImportStudentsDataDrawerProps = {
   open: boolean;
@@ -374,7 +373,6 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                     placeholder="Sélectionner le type d'inscription"
                   />
                 </Form.Item> */}
-                <Divider orientation="vertical" />
                 <Form.Item
                   label="Cycle"
                   name="cycle_id"

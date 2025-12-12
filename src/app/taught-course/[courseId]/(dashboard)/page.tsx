@@ -235,7 +235,7 @@ export default function Page() {
               </Col>
               <Col span={24}>
                 <Card loading={isPending}>
-                  <Space direction="vertical" style={{ width: "100%" }}>
+                  <Space orientation="vertical" style={{ width: "100%" }}>
                     <Typography.Title level={5}>
                       Équipe pédagogique
                     </Typography.Title>

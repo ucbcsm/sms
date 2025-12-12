@@ -150,7 +150,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               centered
             >
               <Alert
-                message="Êtes-vous sûr de vouloir annuler la planification de ce cours ?"
+                title="Êtes-vous sûr de vouloir annuler la planification de ce cours ?"
                 description="Toutes les informations saisies pour la programmation de ce cours seront perdues."
                 type="warning"
                 showIcon
@@ -163,7 +163,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
         <Flex vertical gap={16} style={{ maxWidth: 520, margin: "auto" }}>
           <Alert
             type="info"
-            message="Veuillez fournir toutes les informations nécessaires pour programmer un nouveau cours."
+            title="Veuillez fournir toutes les informations nécessaires pour programmer un nouveau cours."
             description="Assurez-vous que les détails du cours (intitulé, horaires, enseignants, et étudiants concernés) sont complets et exacts avant de valider la planification."
             showIcon
             closable
@@ -262,8 +262,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 <Select
                   options={getCurrentPeriodsAsOptions(periods)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                 />
               </Form.Item>
 
@@ -282,9 +281,9 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                     <Select
                       options={getCurrentDepartmentsAsOptions(departments)}
                       allowClear
-                      showSearch
+                      showSearch={{ filterOption: filterOption }}
                       mode="multiple"
-                      filterOption={filterOption}
+
                       // onChange={(value) => {
                       //   const selectedDepartment = departments?.find(
                       //     (department) => department.id === value
@@ -353,13 +352,12 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               >
                 <Select
                   options={getClassroomsAsOptionsWithDisabled(classrooms)}
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{filterOption: filterOption}}
                   allowClear
                 />
               </Form.Item>
               <Alert
-                message="Statut des inscriptions"
+                title="Statut des inscriptions"
                 description={
                   <Form.Item name="status">
                     <Select

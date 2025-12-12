@@ -50,29 +50,7 @@ export const YearGradesTab: FC<YearGradesTabProps> = ({ userId }) => {
 
   return (
     <div style={{}}>
-      <Space direction="vertical" size="large" style={{ width: "100%" }}>
-        {/* <Card>
-          <Space size="large">
-            <div>
-              <Statistic
-                title="Moyenne générale"
-                value={calculateAverage()}
-                suffix="/20"
-                valueStyle={{ color: "#1890ff" }}
-              />
-            </div>
-            <Divider type="vertical" />
-            <div>
-              <Statistic
-                title="Matières validées"
-                value={
-                  gradesData.filter((item) => item.status === "Validé").length
-                }
-                valueStyle={{ color: "#52c41a" }}
-              />
-            </div>
-          </Space>
-        </Card> */}
+      <Space orientation="vertical" size="large" style={{ width: "100%" }}>
         <Table
           title={() => (
             <header className="flex pb-1 px-2">
