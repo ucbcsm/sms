@@ -1,6 +1,6 @@
 import api from "@/lib/fetcher";
 import {
-  BulkStudentItem,
+  BulkStudentApplicationItem,
   Class,
   Cycle,
   Department,
@@ -242,6 +242,7 @@ export async function downloadStudentImportTemplate({
     worksheet.addRow([]); //row 9
     worksheet.addRow([
       "Type d'inscription",
+      "Frais d'inscription",
       "Matricule",
       "Nom",
       "Postnom",
@@ -306,13 +307,25 @@ export async function downloadStudentImportTemplate({
         showInputMessage: true,
         errorStyle: "stop",
         errorTitle: "Valeur non valide",
-        error: "Veuillez sélectionner une vrai valeur",
+        error: "Veuillez sélectionner une vraie valeur",
         promptTitle: "Type d'inscription",
-        prompt:
-          "Veuillez sélectionner le type d'inscription dans la liste déroulante",
+        prompt:"Veuillez sélectionner le type d'inscription dans la liste déroulante",
+      };
+      // colonne 2 frais d'inscription
+      worksheet.getCell(`B${row}`).dataValidation = {
+        type: "list",
+        allowBlank: false,
+        formulae: ['"Payé,Partiellement payé,Non payé"'],
+        showErrorMessage: true,
+        showInputMessage: true,
+        errorStyle: "stop",
+        errorTitle: "Valeur non valide",
+        error: "Veuillez sélectionner une vraie valeur",
+        promptTitle: "Frais d'inscription",
+        prompt:"Veuillez sélectionner le statut des frais d'inscription dans la liste déroulante",
       };
       // Colonne 6 = Genre (M/F)
-      worksheet.getCell(`F${row}`).dataValidation = {
+      worksheet.getCell(`G${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"M,F"'],
@@ -325,8 +338,8 @@ export async function downloadStudentImportTemplate({
         prompt: "Veuillez sélectionner le genre dans la liste déroulante.",
       };
 
-      //Validation date de naissance (colonne H)
-      const cell = worksheet.getCell(`H${row}`);
+      //Validation date de naissance (colonne I)
+      const cell = worksheet.getCell(`I${row}`);
 
       cell.dataValidation = {
         type: "date",
@@ -348,7 +361,7 @@ export async function downloadStudentImportTemplate({
       cell.numFmt = "dd/mm/yyyy";
 
       // Colonne 9 = Statut matrimonial
-      worksheet.getCell(`J${row}`).dataValidation = {
+      worksheet.getCell(`K${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"Célibataire,Marié(e),Divorcé(e),Veuf/Veuve"'],
@@ -364,7 +377,7 @@ export async function downloadStudentImportTemplate({
       };
 
       // Colonne 10 = Aptitude physique
-      worksheet.getCell(`K${row}`).dataValidation = {
+      worksheet.getCell(`V${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"Normale,Handicapé"'],
@@ -379,7 +392,7 @@ export async function downloadStudentImportTemplate({
       };
 
       // Colonne 23 = Est-il étranger ?
-      worksheet.getCell(`X${row}`).dataValidation = {
+      worksheet.getCell(`Y${row}`).dataValidation = {
         type: "list",
         allowBlank: true,
         formulae: ['"Oui,Non"'],
@@ -508,6 +521,20 @@ export function getPhysicalAbility(value?: string) {
   }
 }
 
+export function getEnrollmentFeesStatus(value?: string) {
+  if (!value) return null;
+    switch (value) {
+    case "Payé":
+      return "paid";
+    case "Partiellement payé":
+      return "partially_paid";
+    case "Non payé":
+      return "unpaid";
+    default:
+      return null;
+  }
+}
+
 export function ddMMyyyyToIsoDate(dateStr: string): string | null {
   const parts = dateStr.split("/");
   if (parts.length !== 3) return null;
@@ -532,7 +559,7 @@ export async function importStudentsFromExcel(file: File): Promise<
     facultyId: number;
     departmentId: number;
     classYearId: number;
-    students: BulkStudentItem[];
+    students: BulkStudentApplicationItem[];
   }[]
 > {
   const workbook = new ExcelJS.Workbook();
@@ -549,10 +576,10 @@ export async function importStudentsFromExcel(file: File): Promise<
     facultyId: number;
     departmentId: number;
     classYearId: number;
-    students: BulkStudentItem[];
+    students: BulkStudentApplicationItem[];
   }[] = [];
   forEach(worksheets, (sheet) => {
-    let parsedStudents: BulkStudentItem[] = [];
+    let parsedStudents: BulkStudentApplicationItem[] = [];
     const secretRow = sheet.getRow(8); // La ligne 8 contient les données secrètes (IDs)
     const secretRowValues = Array.isArray(secretRow.values)
       ? secretRow.values.slice(1) // Supprimer la première valeur vide
@@ -567,6 +594,7 @@ export async function importStudentsFromExcel(file: File): Promise<
         : [];
       const [
         type_of_enrollment,
+        enrollment_fees,
         former_matricule,
         surname,
         last_name,
@@ -657,6 +685,8 @@ export async function importStudentsFromExcel(file: File): Promise<
             is_foreign_registration?.toString() === "Oui" ? true : false,
           avatar: null,
           pending_avatar: null,
+          enrollment_fees:
+            getEnrollmentFeesStatus(enrollment_fees?.toString()) || "unpaid",
         });
       }
     });
@@ -681,11 +711,7 @@ export async function createBulkStudents(data: {
   field: number;
   faculty: number;
   departement: number;
-  // type_of_enrollment:
-  //   | "new_application"
-  //   | "reapplication"
-  //   | "former_application";
-  data: { class_year: number; students: BulkStudentItem[] }[];
+  data: { class_year: number; students: BulkStudentApplicationItem[] }[];
 }) {
   const res = await api.post(
     `/apparitorat/year-enrollment/import-from-excel/`,

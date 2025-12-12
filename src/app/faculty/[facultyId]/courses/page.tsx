@@ -146,10 +146,6 @@ export default function Page() {
     queryFn: getCycles,
   });
 
-  // if (isPending) {
-  //   return <DataFetchPendingSkeleton variant="table" />;
-  // }
-
   if (isError) {
     return <DataFetchErrorResult />;
   }
@@ -159,7 +155,6 @@ export default function Page() {
         style={{
           minHeight: 280,
           padding: "0 32px 0 32px",
-          // background: colorBgContainer,
           overflowY: "auto",
           height: "calc(100vh - 110px)",
         }}

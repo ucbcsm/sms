@@ -1275,7 +1275,7 @@ export const GradeReportResponse = z.object({
 
 export type GradeReportResponse = z.infer<typeof GradeReportResponse>;
 
-export const BulkStudentItem = z.object({
+export const BulkStudentApplicationItem = z.object({
   first_name: z.string(),
   last_name: z.string(),
   surname: z.string(),
@@ -1320,6 +1320,7 @@ export const BulkStudentItem = z.object({
   is_foreign_registration: z.boolean().nullable(),
   avatar: z.string().nullable(),
   pending_avatar: z.string().nullable(),
+  enrollment_fees:z.enum(["paid", "partially_paid", "unpaid"]),
 });
 
-export type BulkStudentItem = z.infer<typeof BulkStudentItem>;
+export type BulkStudentApplicationItem = z.infer<typeof BulkStudentApplicationItem>;

@@ -25,7 +25,13 @@ import {
   CloseOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
-import { BulkStudentItem, Class, Cycle, Department, Faculty } from "@/types";
+import {
+  BulkStudentApplicationItem,
+  Class,
+  Cycle,
+  Department,
+  Faculty,
+} from "@/types";
 import {
   createBulkStudents,
   getCurrentCyclesAsOptions,
@@ -35,7 +41,12 @@ import {
   importStudentsFromExcel,
 } from "@/lib/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { filterOption, getMaritalStatusName } from "@/lib/utils";
+import {
+  filterOption,
+  getEnrollmentFeesStatusName,
+  getMaritalStatusName,
+} from "@/lib/utils";
+import { record } from "zod";
 
 type ImportStudentsDataDrawerProps = {
   open: boolean;
@@ -52,10 +63,6 @@ type FormDataType = {
   field_id: number;
   faculty_id: number;
   departement_id: number;
-  // type_of_enrollment:
-  //   | "new_application"
-  //   | "reapplication"
-  //   | "former_application";
 };
 
 export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
@@ -70,7 +77,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
   const {
     token: { colorBgLayout },
   } = theme.useToken();
-  const {message, modal} = App.useApp();
+  const { message, modal } = App.useApp();
   const [form] = Form.useForm();
   const [openCancelForm, setOpenCancelForm] = useState<boolean>(false);
   const [newStudentItems, setNewStudentItems] = useState<
@@ -81,7 +88,7 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
         facultyId: number;
         departmentId: number;
         classYearId: number;
-        students: BulkStudentItem[];
+        students: BulkStudentApplicationItem[];
       }[]
     | undefined
   >();
@@ -119,46 +126,45 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
 
   const handleFinish = (values: FormDataType) => {
     if (newStudentItems && newStudentItems.length > 0) {
-        const studentsData = newStudentItems.map((item) => ({
-          class_year: item.classYearId,
-          students: item.students,
-        }));
-        mutateAsync(
-          {
-            // type_of_enrollment: values.type_of_enrollment,
-            academic_year: yearId,
-            cycle: values.cycle_id,
-            field: values.field_id,
-            faculty: values.faculty_id,
-            departement: values.departement_id,
-            data: studentsData,
+      const studentsData = newStudentItems.map((item) => ({
+        class_year: item.classYearId,
+        students: item.students,
+      }));
+      mutateAsync(
+        {
+          // type_of_enrollment: values.type_of_enrollment,
+          academic_year: yearId,
+          cycle: values.cycle_id,
+          field: values.field_id,
+          faculty: values.faculty_id,
+          departement: values.departement_id,
+          data: studentsData,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: ["year_enrollments"],
+            });
+            message.success("Importation des étudiants réussie !");
+            onClose();
           },
-          {
-            onSuccess: () => {
-              queryClient.invalidateQueries({
-                queryKey: ["year_enrollments"],
-              });
-              message.success("Importation des étudiants réussie !");
-              onClose();
-            },
-            onError: (error: Error) => {
-              message.error(
-                (error as any)?.response?.data?.message ||
-                  "Erreur lors de l'importation des étudiants."
-              );
-            },
-          }
-        );
+          onError: (error: Error) => {
+            message.error(
+              (error as any)?.response?.data?.message ||
+                "Erreur lors de l'importation des étudiants."
+            );
+          },
+        }
+      );
     } else {
       message.error("Aucun étudiant à importer.");
     }
   };
 
-
   const removeStudent = (promotionIndex: number, studentIndex: number) => {
     if (!newStudentItems) return;
-    const student= newStudentItems[promotionIndex].students[studentIndex];
-    
+    const student = newStudentItems[promotionIndex].students[studentIndex];
+
     modal.confirm({
       title: "Confirmer la suppression",
       content: (
@@ -346,33 +352,6 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
               <div className="flex-1" />
 
               <Space>
-                {/* <Form.Item
-                  label="Type d'inscription"
-                  name="type_of_enrollment"
-                  layout="horizontal"
-                  style={{ marginBottom: 0 }}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Veuillez sélectionner un type d'inscription",
-                    },
-                  ]}
-                >
-                  <Select
-                    options={[
-                      {
-                        value: "new_application",
-                        label: "Nouvelle candidature",
-                      },
-                      { value: "reapplication", label: "Réinscription" },
-                      {
-                        value: "former_application",
-                        label: "Ancienne candidature",
-                      },
-                    ]}
-                    placeholder="Sélectionner le type d'inscription"
-                  />
-                </Form.Item> */}
                 <Form.Item
                   label="Cycle"
                   name="cycle_id"
@@ -454,7 +433,16 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                         dataIndex: "type_of_enrollment",
                         title: "Type d'inscription",
                         fixed: "left",
-                        render:(_, record)=>getTypeOfEnrollmentText(record.type_of_enrollment)
+                        render: (_, record) =>
+                          getTypeOfEnrollmentText(record.type_of_enrollment),
+                      },
+                      {
+                        key: "enrollment_fees",
+                        dataIndex: "enrollment_fees",
+                        title: "Frais d'inscription",
+                        fixed: "left",
+                        render: (_, record) =>
+                          getEnrollmentFeesStatusName(record.enrollment_fees),
                       },
                       {
                         key: "former_matricule",
@@ -647,7 +635,6 @@ export const ImportStudentsDataDrawer: FC<ImportStudentsDataDrawerProps> = ({
                         key: "year_of_diploma_obtained",
                         dataIndex: "year_of_diploma_obtained",
                         title: "Année du diplôme",
-                        //
                       },
                       {
                         key: "diploma_number",
