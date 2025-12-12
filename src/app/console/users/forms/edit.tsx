@@ -267,8 +267,7 @@ export const EditUserForm: FC<EditUserFormProps> = ({
             <Select
               mode="multiple"
               options={getRolesAsOptions(roles)}
-              showSearch
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
@@ -276,17 +275,15 @@ export const EditUserForm: FC<EditUserFormProps> = ({
             <Select
               mode="multiple"
               options={getPermissionsAsOptions(permissions)}
-              showSearch
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
           <Form.Item name="groups" label="Groupes">
             <Select
               mode="multiple"
-              showSearch
+              showSearch={{ filterOption: filterOption }}
               options={getGroupsAsOptions(groups)}
-              filterOption={filterOption}
               allowClear
             />
           </Form.Item>

@@ -226,8 +226,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                 <Select
                   options={getTeachingUnitsAsOptions(teachingUnits)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{filterOption: filterOption}}
                 />
               </Form.Item>
               <Row gutter={[16, 16]}>
@@ -286,8 +285,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                 <Select
                   options={getCurrentPeriodsAsOptions(periods)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                 />
               </Form.Item>
               {/* 
@@ -306,42 +304,11 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                 <Select
                   options={getCurrentDepartmentsAsOptions(departments)}
                   allowClear
-                  showSearch
+                  showSearch={{ filterOption: filterOption }}
                   mode="multiple"
-                  filterOption={filterOption}
-                  // onChange={(value) => {
-                  //   const selectedDepartment = departments?.find(
-                  //     (department) => department.id === value
-                  //   );
-                  //   form.setFieldValue(
-                  //     "faculty_id",
-                  //     selectedDepartment?.faculty.id
-                  //   );
-                  // }}
                 />
               </Form.Item>
-              {/* </Col> */}
-              {/* <Col span={12}>
-                  <Form.Item
-                    name="faculty_id"
-                    label="Faculté"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Veuillez sélectionner une faculté.",
-                      },
-                    ]}
-                  >
-                    <Select
-                      options={getCurrentFacultiesAsOptions(faculties)}
-                      allowClear
-                      showSearch
-                      filterOption={filterOption}
-                      disabled
-                    />
-                  </Form.Item>
-                </Col> */}
-              {/* </Row> */}
+
               <Row gutter={[16, 16]}>
                 <Col span={12}>
                   <Form.Item name="start_date" label="Date de début">
@@ -358,15 +325,15 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
                 <Select
                   options={getTeachersAsOptions(teachers)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                 />
               </Form.Item>
               <Form.Item name="assistants" label="Assistants" rules={[]}>
                 <Select
                   options={getTeachersAsOptions(teachers)}
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{
+                    filterOption: filterOption,
+                  }}
                   mode="multiple"
                 />
               </Form.Item>
@@ -377,8 +344,7 @@ export const EditTaughtCourseForm: FC<EditTaughtCourseFormProps> = ({
               >
                 <Select
                   options={getClassroomsAsOptionsWithDisabled(classrooms)}
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                   allowClear
                 />
               </Form.Item>

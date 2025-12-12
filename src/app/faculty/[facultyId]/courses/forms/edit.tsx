@@ -162,17 +162,15 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
           placeholder="Sélectionnez une UE"
           showSearch
           options={getTeachingUnitsAsOptions(teachingUnits)}
-          filterOption={filterOption}
           allowClear
         />
       </Form.Item>
       <Form.Item name="prerequisite_courses" label="Prérequis du cours">
         <Select
           placeholder="Sélectionnez les cours prérequis"
-          showSearch
+          showSearch={{ filterOption: filterOption }}
           options={getCoursesAsOptions(courses)}
           mode="multiple"
-          filterOption={filterOption}
           allowClear
         />
       </Form.Item>
@@ -183,10 +181,9 @@ export const EditCourseForm: React.FC<EditCourseFormProps> = ({
       >
         <Select
           placeholder="Sélectionnez une faculté"
-          showSearch
+          showSearch={{ filterOption: filterOption }}
           options={getCurrentFacultiesAsOptions(faculties)}
           mode="multiple"
-          filterOption={filterOption}
           disabled
         />
       </Form.Item>

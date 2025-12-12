@@ -141,11 +141,9 @@ export const EditDocument: FC<EditDocumentProps> = ({
           ]}
         >
           <Select
-            showSearch
+            showSearch={{ filterOption: filterOption, optionFilterProp: "children" }}
             placeholder="Sélectionner un ou plusieurs documents"
             options={getDocumentsAsOptions()}
-            optionFilterProp="children"
-            filterOption={filterOption}
             mode="multiple"
             disabled
           />

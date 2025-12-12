@@ -165,7 +165,7 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
               placeholder="Séléctionnez le chef"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
@@ -175,8 +175,8 @@ export const EditDepartmentForm: React.FC<EditDepartmentFormProps> = ({
               placeholder="Séléctionnez les autres membres"
               prefix={<TeamOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
               allowClear
+              showSearch={{ filterOption: filterOption }}
             />
           </Form.Item>
         </Card>

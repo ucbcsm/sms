@@ -106,8 +106,7 @@ export const EditCourseProgramForm: FC<EditCourseProgramModalProps> = ({
                   currentsCoursesOfProgram
                 )}
                 allowClear
-                showSearch
-                filterOption={filterOption}
+                showSearch={{ filterOption: filterOption }}
                 placeholder="Sélectionnez le cours"
               />
             </Form.Item>

@@ -224,8 +224,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 <Select
                   options={getCoursesAsOptions(courses)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                   onSelect={(value) => {
                     const selectedCourse = courses?.find((c) => c.id === value);
                     if (selectedCourse) {
@@ -250,8 +249,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 <Select
                   options={getTeachingUnitsAsOptions(teachingUnits)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                 />
               </Form.Item>
               <Row gutter={[16, 16]}>
@@ -321,8 +319,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 <Select
                   options={getCurrentPeriodsAsOptions(periods)}
                   allowClear
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                 />
               </Form.Item>
 
@@ -339,9 +336,8 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
                 <Select
                   options={getCurrentDepartmentsAsOptions(departments)}
                   allowClear
-                  showSearch
+                  showSearch={{ filterOption: filterOption }}
                   mode="multiple"
-                  filterOption={filterOption}
                 />
               </Form.Item>
 
@@ -361,15 +357,13 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               <Form.Item name="teacher_id" label="Enseignant" rules={[]}>
                 <Select
                   options={getTeachersAsOptions(teachers)}
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                 />
               </Form.Item>
               <Form.Item name="assistants" label="Assistants" rules={[]}>
                 <Select
                   options={getTeachersAsOptions(teachers)}
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                   mode="multiple"
                 />
               </Form.Item>
@@ -380,8 +374,7 @@ export const NewTaughtCourseForm: FC<NewTaughtCourseFormProps> = ({
               >
                 <Select
                   options={getClassroomsAsOptionsWithDisabled(classrooms)}
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                   allowClear
                 />
               </Form.Item>

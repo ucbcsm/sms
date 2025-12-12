@@ -215,8 +215,7 @@ export const IndividualGradeEntryForm: FC<IndividualGradeEntryFormProps> = ({
             <Select
               placeholder="Sélectionner un étudiant"
               options={getCourseEnrollmentsAsOptions(students)}
-              showSearch
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
               variant="filled"
             />

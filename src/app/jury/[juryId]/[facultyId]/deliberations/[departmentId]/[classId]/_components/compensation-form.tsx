@@ -201,11 +201,9 @@ export const CompensationForm:FC<CompensationFormProps> = ({hearderData, itemDat
             ]}
           >
             <Select
-              showSearch
+              showSearch={{ filterOption: filterOption , optionFilterProp:"label"}}
               allowClear
               placeholder="Sélectionner un cours"
-              optionFilterProp="label"
-              filterOption={filterOption}
               style={{ width: "100%" }}
               options={[
                 ...(getTaughtCoursAsOptions(mergeCourses()) || []),
@@ -236,11 +234,9 @@ export const CompensationForm:FC<CompensationFormProps> = ({hearderData, itemDat
             ]}
           >
             <Select
-              showSearch
+              showSearch={{ filterOption: filterOption , optionFilterProp:"label"}}
               allowClear
               placeholder="Sélectionner un cours"
-              optionFilterProp="label"
-              filterOption={filterOption}
               style={{ width: "100%" }}
               options={[
                 ...(getTaughtCoursAsOptions(mergeCourses()) || []),

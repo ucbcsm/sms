@@ -193,11 +193,9 @@ export const ButtonAddNewDocument: FC<ButtonAddNewDocumentProps> = ({
           ]}
         >
           <Select
-            showSearch
+            showSearch={{ filterOption: filterOption, optionFilterProp: "children" }}
             placeholder="Sélectionner un document"
             options={getDocumentsAsOptions()}
-            optionFilterProp="children"
-            filterOption={filterOption}
             mode="multiple"
             maxCount={1}
           />

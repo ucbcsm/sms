@@ -189,11 +189,9 @@ export default function JuryLayout({
             (!isPending ? (
               <Select
                 value={Number(facultyId)}
-                showSearch
+                showSearch={{ filterOption: filterOption }}
                 variant="filled"
-                filterOption={filterOption}
                 options={getFacultiesAAsOptionsWithAcronym(jury?.faculties)}
-                // style={{ width: 128 }}
                 loading={isPending}
                 onSelect={(value) => {
                   router.push(`/jury/${juryId}/${value}/grade-entry`);

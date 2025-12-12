@@ -155,8 +155,8 @@ export const NewDepartmentForm: React.FC<NewDepartmentFormProps> = ({
               placeholder="Séléctionnez le chef"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
               allowClear
+              showSearch={{ filterOption: filterOption }}
             />
           </Form.Item>
           <Form.Item name="other_members" label="Autres membres" rules={[]}>
@@ -165,7 +165,7 @@ export const NewDepartmentForm: React.FC<NewDepartmentFormProps> = ({
               placeholder="Séléctionnez les autres membres"
               prefix={<TeamOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>

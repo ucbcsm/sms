@@ -70,10 +70,12 @@ export const NewCourseProgramForm: FC<NewCourseProgramFormProps> = ({
               ]}
             >
               <Select
-                options={getCoursesAsOptionsWithDisabled(courses,currentsCoursesOfProgram)}
+                options={getCoursesAsOptionsWithDisabled(
+                  courses,
+                  currentsCoursesOfProgram
+                )}
                 allowClear
-                showSearch
-                filterOption={filterOption}
+                showSearch={{ filterOption }}
               />
             </Form.Item>
             <Row gutter={[16, 16]}>

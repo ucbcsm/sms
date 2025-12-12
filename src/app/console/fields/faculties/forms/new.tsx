@@ -159,7 +159,7 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
               placeholder="Séléctionnez le coordinateur"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
@@ -168,7 +168,7 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
               placeholder="Séléctionnez le nom du secrétaire"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
@@ -179,7 +179,7 @@ export const NewFacultyForm: React.FC<NewFacultyFormProps> = ({
               placeholder="Séléctionnez les autres membres"
               prefix={<TeamOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>

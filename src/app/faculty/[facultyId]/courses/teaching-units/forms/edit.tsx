@@ -160,21 +160,9 @@ export const EditTeachingUnitForm: React.FC<EditTeachingUnitFormProps> = ({
         <Form.Item name="cycle_id" label="Cycle" rules={[{ required: true }]}>
           <Select
             options={getCurrentCyclesAsOptions(cycles)}
-            showSearch
-            filterOption={filterOption}
+            showSearch={{filterOption:filterOption}}
           />
         </Form.Item>
-        {/* <Form.Item
-          name="department_id"
-          label="Département"
-          rules={[{ required: true }]}
-        >
-          <Select
-            options={getCurrentDepartmentsAsOptions(departments)}
-            showSearch
-            filterOption={filterOption}
-          />
-        </Form.Item> */}
       </Modal>
     </>
   );

@@ -79,10 +79,11 @@ export const SelectAStudent: FC<SelectAStudentProps> = ({
         ) : undefined
       }
       placeholder="Matr., nom ou prénom de l'étudiant"
-      showSearch
+      showSearch={{
+        filterOption: false,
+      }}
       labelInValue
       size="large"
-      filterOption={false}
       value={
         data?.results && data?.results.length > 0 && selectedStudent
           ? selectedStudent.id

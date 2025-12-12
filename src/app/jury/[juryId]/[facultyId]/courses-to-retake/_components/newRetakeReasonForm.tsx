@@ -279,8 +279,7 @@ export const NewRetakeReasonForm: FC<NewRetakeReasonFormProps> = ({
                       (r) => r.available_course.id === c.id
                     ),
                 }))}
-                showSearch
-                filterOption={filterOption}
+                showSearch={{ filterOption: filterOption }}
               />
             </Form.Item>
             <Form.Item

@@ -173,8 +173,7 @@ export const StudentWithRetakeForm: FC<StudentWithRetakeFormProps> = ({
               label: `${c.name} (${c.code})`,
               value: c.id,
             }))}
-            showSearch
-            filterOption={filterOption}
+            showSearch={{ filterOption: filterOption }}
           />
         </Form.Item>
         <Form.Item

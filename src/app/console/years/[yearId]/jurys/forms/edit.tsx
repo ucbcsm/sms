@@ -156,7 +156,8 @@ export const EditJuryForm: React.FC<EditJuryFormProps> = ({
             mode="multiple"
             placeholder="Sélectionnez les facultés"
             options={getCurrentFacultiesAsOptions?.(faculties)}
-            filterOption={filterOption}
+            showSearch={{ filterOption: filterOption }}
+
           />
         </Form.Item>
         <Card>
@@ -166,7 +167,7 @@ export const EditJuryForm: React.FC<EditJuryFormProps> = ({
               placeholder="Sélectionnez le président"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions?.(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
@@ -175,7 +176,7 @@ export const EditJuryForm: React.FC<EditJuryFormProps> = ({
               placeholder="Sélectionnez le secrétaire"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions?.(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
@@ -185,7 +186,7 @@ export const EditJuryForm: React.FC<EditJuryFormProps> = ({
               placeholder="Sélectionnez les autres membres"
               prefix={<TeamOutlined />}
               options={getTeachersAsOptions?.(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>

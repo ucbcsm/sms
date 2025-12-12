@@ -165,21 +165,19 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
           <Typography.Title level={5}>Membres de la faculté</Typography.Title>
           <Form.Item name="coordinator_id" label="Coordinateur" rules={[]}>
             <Select
-              showSearch
               placeholder="Séléctionnez le coordinateur"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>
           <Form.Item name="secretary_id" label="Secrétaire" rules={[]}>
             <Select
-              showSearch
+              showSearch={{ filterOption: filterOption }}
               placeholder="Séléctionnez le nom du secrétaire"
               prefix={<UserOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
               allowClear
             />
           </Form.Item>
@@ -190,7 +188,7 @@ export const EditFacultyForm: React.FC<EditFacultyFormProps> = ({
               placeholder="Séléctionnez les autres membres"
               prefix={<TeamOutlined />}
               options={getTeachersAsOptions(teachers)}
-              filterOption={filterOption}
+              showSearch={{ filterOption: filterOption }}
               allowClear
             />
           </Form.Item>

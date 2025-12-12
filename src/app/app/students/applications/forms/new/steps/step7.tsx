@@ -193,8 +193,7 @@ const filteredDepartments = useMemo(() => {
       >
         <Select
           options={getCurrentFieldsAsOptions(filteredFields || fields)}
-          showSearch
-          filterOption={filterOption}
+          showSearch={{filterOption:filterOption}}
           onSelect={(value) => {
             const selectedField = fields?.find((f) => f.id === value);
             form.setFieldsValue({

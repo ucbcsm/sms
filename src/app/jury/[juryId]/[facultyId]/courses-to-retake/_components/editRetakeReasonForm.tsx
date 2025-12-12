@@ -207,8 +207,7 @@ export const EditRetakeReasonForm: FC<EditRetakeReasonFormProps> = ({
                       ) &&
                         c.id !== retakeCourseReasonToEdit.available_course.id),
                   }))}
-                  showSearch
-                  filterOption={filterOption}
+                  showSearch={{ filterOption: filterOption }}
                 />
               </Form.Item>
               <Form.Item
