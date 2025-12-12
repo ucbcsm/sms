@@ -109,7 +109,7 @@ export const InvalidateRetakeCourseForm: FC<
         )}
       >
         <Alert
-          message="Confirmation importante"
+          title="Confirmation importante"
           description={
             <div>
               Vous êtes sur le point d&apos;invalider le cours{" "}

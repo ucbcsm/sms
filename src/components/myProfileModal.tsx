@@ -198,7 +198,7 @@ export const MyProfileModal: FC<MyProfileModalProps> = ({
         <Alert
           type="info"
           showIcon
-          message="Information"
+          title="Information"
           description="Si vous souhaitez modifier les autres informations de votre profil, veuillez contacter l'apparitorat central ou l'administrateur du système."
           style={{ border: 0 }}
         />

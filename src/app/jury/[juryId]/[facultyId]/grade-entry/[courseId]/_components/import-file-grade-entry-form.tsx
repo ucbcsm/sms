@@ -239,7 +239,7 @@ export const ImportFileGradeSubmissionForm: FC<
               }}
             >
               <Alert
-                message="Attention !"
+                title="Attention !"
                 description="En confirmant, vous annulerez l'importation en cours. Toutes les notes de cette importation seront perdues."
                 type="warning"
                 showIcon

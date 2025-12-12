@@ -100,17 +100,17 @@ export const ViewPeriodGradeReport: FC<ViewPeriodGradeReportProps> = ({
             <Typography.Text strong>
               {periodGrade.student.year_enrollment.academic_year.name}
             </Typography.Text>
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Typography.Text type="secondary">Session: </Typography.Text>
             <Typography.Text strong>
               {getSessionText(periodGrade.session)}
             </Typography.Text>
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Typography.Text type="secondary">Moment: </Typography.Text>
             <Typography.Text strong>
               {getMomentText(periodGrade.moment)}
             </Typography.Text>
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Button
               style={{
                 boxShadow: "none",

@@ -188,7 +188,7 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
               centered
             >
               <Alert
-                message="Êtes-vous sûr de vouloir annuler la création de cette liste de présence ?"
+                title="Êtes-vous sûr de vouloir annuler la création de cette liste de présence ?"
                 description="Toutes les informations saisies seront perdues."
                 type="warning"
                 showIcon
@@ -199,22 +199,12 @@ export const NewAttendanceListForm: FC<NewAttendanceListFormProps> = ({
         }
       >
         <div style={{ maxWidth: 1400, margin: "auto" }}>
-          {/* <Alert
-            type="info"
-            icon={<BulbOutlined/>}
-            message="Instructions"
-            description={<><div>Indiquez la date, l&apos;heure et marquez avec précision les étudiants présents et absents</div>
-            </>}
-            showIcon
-            closable
-            style={{ marginBottom: 24 }}
-          /> */}
           <Row gutter={[24, 24]}>
             <Col span={6}>
               <Alert
                 type="info"
                 icon={<BulbOutlined />}
-                message="Instructions"
+                title="Instructions"
                 description={
                   <>
                     <div>

@@ -85,7 +85,7 @@ export const PendingSingleCourseEnrollmentForm: FC<
         maskClosable={!isPending}
       >
         <Alert
-          message={
+          title={
             <span>
               <ClockCircleOutlined style={{ color: "#faad14", marginRight: 8 }} />
               Confirmation requise

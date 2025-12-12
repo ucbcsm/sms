@@ -154,7 +154,7 @@ export const ListYearGrades: FC<ListYearGradesProps> = ({
           <Space>
             <Typography.Text type="secondary">Année:</Typography.Text>
             <Typography.Text strong>{year?.name}</Typography.Text>
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Typography.Text type="secondary">Session: </Typography.Text>
             <Select
               variant="filled"

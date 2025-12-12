@@ -109,7 +109,7 @@ export const TreeCourses: FC<TreeCoursesProps> = ({ period }) => {
       <div className="pt-4">
         {searchResult && searchResult.length > 0 && (
           <Alert
-            message={`${searchResult.length} resultat (s) de recherche`}
+            title={`${searchResult.length} resultat (s) de recherche`}
             type="info"
             banner
           />

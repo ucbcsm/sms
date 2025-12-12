@@ -110,7 +110,7 @@ export const ValidateRetakeCourseForm: FC<ValidateRetakeCourseFormProps> = ({
         )}
       >
         <Alert
-          message="Confirmation importante"
+          title="Confirmation importante"
           description={
             <div>
               Vous êtes sur le point de valider le cours{" "}

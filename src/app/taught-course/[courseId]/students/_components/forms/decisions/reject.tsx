@@ -83,7 +83,7 @@ export const RejectSingleCourseEnrollmentForm: FC<
         maskClosable={!isPending}
       >
         <Alert
-          message="Confirmation requise"
+          title="Confirmation requise"
           description={
             <p>
               Êtes-vous sûr de vouloir <b>rejeter</b> l&apos;inscription de{" "}

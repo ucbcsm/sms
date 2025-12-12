@@ -186,7 +186,7 @@ export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
               centered
             >
               <Alert
-                message="Êtes-vous sûr de vouloir annuler la modification de cette liste de présence ?"
+                title="Êtes-vous sûr de vouloir annuler la modification de cette liste de présence ?"
                 description="Toutes les modifications apportées seront perdues."
                 type="warning"
                 showIcon
@@ -203,7 +203,7 @@ export const EditAttendanceListForm: FC<EditAttendanceListFormProps> = ({
             <Alert
             type="warning"
             icon={<BulbOutlined/>}
-            message="Instructions"
+            title="Instructions"
             description="Modifiez la date si nécessaire, puis mettez à jour avec précision les étudiants présents et absents."
             showIcon
             closable

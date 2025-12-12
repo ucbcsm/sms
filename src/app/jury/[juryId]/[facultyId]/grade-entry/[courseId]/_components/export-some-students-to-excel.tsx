@@ -128,7 +128,7 @@ export const ExportSomeStudentsToExcelForm: FC<
                 okButtonProps={{ style: { boxShadow: "none" }, danger: true }}
               >
                 <Alert
-                  message="Attention !"
+                  title="Attention !"
                   description="Êtes-vous sûr de vouloir annuler l'exportation ?"
                   type="warning"
                   showIcon

@@ -246,7 +246,7 @@ export const NewAnnoucementWithSomeForm: FC<
               <Alert
                 type="info"
                 icon={<BulbOutlined />}
-                message="Instructions"
+                title="Instructions"
                 description={
                   <>
                     <div>

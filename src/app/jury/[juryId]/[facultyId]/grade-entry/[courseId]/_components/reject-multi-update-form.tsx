@@ -46,7 +46,7 @@ export const ButtonMultiUpdateFormReject: FC<
         destroyOnHidden
       >
         <Alert
-          message="Confirmation"
+          title="Confirmation"
           description="Êtes-vous sûr de vouloir rejeter les modifications des notes ? Cette action annulera toutes les modifications apportées."
           type="warning"
           showIcon

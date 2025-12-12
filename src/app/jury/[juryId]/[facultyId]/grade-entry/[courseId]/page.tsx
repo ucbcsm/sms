@@ -426,7 +426,7 @@ export default function Page() {
                 showIcon
                 closable
                 style={{ marginBottom: 20 }}
-                message="Modifications non enregistrées"
+                title="Modifications non enregistrées"
                 description="Vous avez effectué des changements dans la liste des notes. N'oubliez pas de sauvegarder si nécessaire."
                 action={
                   <div style={{ marginTop: 12, display: "flex", gap: 8 }}>

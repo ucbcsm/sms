@@ -118,7 +118,7 @@ export const EditHourTrackingForm: React.FC<EditHourTrackingFormProps> = ({
           style: { boxShadow: "none" },
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         maskClosable={!isPending}
         modalRender={(dom) => (
           <Form

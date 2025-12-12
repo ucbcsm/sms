@@ -78,7 +78,7 @@ export const DeleteAttendanceListForm: FC<DeleteAttendanceListFormProps> = ({
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
         modalRender={(dom) => (

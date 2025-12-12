@@ -128,17 +128,17 @@ export const ListPeriodGrades: FC<ListPeriodGradesProps> = ({
           <Typography.Text strong>
             {annoucement.academic_year.name}
           </Typography.Text>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Text type="secondary">Session: </Typography.Text>
           <Typography.Text strong>
             {getSessionText(annoucement.session)}
           </Typography.Text>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Text type="secondary">Moment: </Typography.Text>
           <Typography.Text strong>
             {getMomentText(annoucement.moment)}
           </Typography.Text>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Dropdown
             arrow
             trigger={["click"]}

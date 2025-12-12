@@ -1,23 +1,17 @@
 "use client";
 
 import {
-  AppstoreOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
-import {
   Card,
   Divider,
   Image,
   Layout,
-  Radio,
   Space,
   theme,
   Typography,
 } from "antd";
 import { StaffList } from "./list";
 import Link from "next/link";
-import { Palette } from "@/components/palette";
-import BackButton from "@/components/backButton";
+import { Palette } from "@/components/palette";;
 import { UserProfileButton } from "@/components/userProfileButton";
 import { AppsButton } from "@/components/appsButton";
 import { SupportDrawer } from "@/components/support-drawer";
@@ -61,7 +55,7 @@ export default function Page() {
               {institution?.acronym}
             </Typography.Title>
           </Link>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Text>Finances</Typography.Text>
         </Space>
         <div className="flex-1" />

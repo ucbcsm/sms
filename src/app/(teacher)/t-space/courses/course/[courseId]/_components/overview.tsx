@@ -76,7 +76,7 @@ export const CourseOverview: FC<CourseOverviewProps> = ({
           
         </Col> */}
         <Col xs={24} sm={24} md={18} lg={16}>
-          <Space direction="vertical" size="middle">
+          <Space orientation="vertical" size="middle">
             <Descriptions
               title={
                 <Space>

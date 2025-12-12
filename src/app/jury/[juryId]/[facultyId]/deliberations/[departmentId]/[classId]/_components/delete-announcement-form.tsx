@@ -95,7 +95,7 @@ export const DeleteAnnouncementForm: FC<DeleteAnnouncementFormProps> = ({
           )}
         >
           <Alert
-            message="Attention"
+            title="Attention"
             description={`Êtes-vous sûr de vouloir supprimer cette publication" ? Cette action est irréversible.`}
             type="warning"
             showIcon

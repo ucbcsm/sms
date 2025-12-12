@@ -288,7 +288,7 @@ export const EmptyPrintableTracking: React.FC<EmptyPrintableTrackingProps> = ({
             ]}
           />
           <Alert
-            message="Cette fiche de suivi des heures est vide. Elle est destinée à être remplie manuellement lors des séances."
+            title="Cette fiche de suivi des heures est vide. Elle est destinée à être remplie manuellement lors des séances."
             description={`Une fois remplie manuellement, cette fiche devra être retournée à la filière ${course?.faculty.name} pour encodage dans le système de gestion académique.`}
             type="info"
             icon={<BulbOutlined />}

@@ -242,7 +242,7 @@ export const NewRetakeReasonForm: FC<NewRetakeReasonFormProps> = ({
         {enrollments && (
           <>
             <Alert
-              message={
+              title={
                 type === "not_done"
                   ? "Ajouter un cours à reprendre"
                   : "Ajouter un cours un cours déjà repris et acquis"
@@ -328,7 +328,7 @@ export const NewRetakeReasonForm: FC<NewRetakeReasonFormProps> = ({
         )}
         {isErrorEnrollements && (
           <Alert
-            message="Erreur lors du chargement des resources nécessaires."
+            title="Erreur lors du chargement des resources nécessaires."
             type="error"
             showIcon
             style={{ marginTop: 16, border: 0 }}

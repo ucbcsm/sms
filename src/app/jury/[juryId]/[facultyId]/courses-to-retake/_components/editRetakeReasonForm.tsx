@@ -174,7 +174,7 @@ export const EditRetakeReasonForm: FC<EditRetakeReasonFormProps> = ({
           {enrollments && (
             <>
               <Alert
-                // message={"Modifier un cours à reprendre"}
+                // title={"Modifier un cours à reprendre"}
                 description="Modifiez si nécessaire le cours à reprendre, la raison, l'année académique et la promotion durant laquelle l'étudiant avait manqué ou échoué ce cours."
                 type="info"
                 showIcon
@@ -256,7 +256,7 @@ export const EditRetakeReasonForm: FC<EditRetakeReasonFormProps> = ({
           )}
           {isErrorEnrollements && (
             <Alert
-              message="Erreur lors du chargement des resources nécessaires."
+              title="Erreur lors du chargement des resources nécessaires."
               type="error"
               showIcon
               style={{ marginTop: 16, border: 0 }}

@@ -107,7 +107,7 @@ export default function StudentDangerZonePage() {
           )}
 
           <Alert
-            message={`Cette action supprimera définitivement l'inscription de l'étudiant pour l'année académique ${enrolledStudent?.academic_year.name}.`}
+            title={`Cette action supprimera définitivement l'inscription de l'étudiant pour l'année académique ${enrolledStudent?.academic_year.name}.`}
             description="L'étudiant perdra l'accès à tous les cours et données associés à cette inscription."
             type="warning"
             showIcon
@@ -145,7 +145,7 @@ export default function StudentDangerZonePage() {
           centered
         >
           <Alert
-            message="ATTENTION - Action irréversible"
+            title="ATTENTION - Action irréversible"
             description="Cette suppression est définitive et ne peut pas être annulée. L'étudiant perdra immédiatement l'accès à tous ses cours et données."
             type="error"
             showIcon

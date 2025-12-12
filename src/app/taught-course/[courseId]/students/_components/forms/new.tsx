@@ -165,7 +165,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
                 {dep.acronym}
               </Tag>
             ))}
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Button
               style={{ boxShadow: "none" }}
               onClick={() => setCancel(true)}
@@ -189,7 +189,7 @@ export const NewCourseEnrollmentForm: FC<NewCourseEnrollmentFormProps> = ({
               centered
             >
               <Alert
-                message="Êtes-vous sûr de vouloir annuler cette inscription ?"
+                title="Êtes-vous sûr de vouloir annuler cette inscription ?"
                 description="Toutes les informations saisies seront perdues."
                 type="warning"
                 showIcon

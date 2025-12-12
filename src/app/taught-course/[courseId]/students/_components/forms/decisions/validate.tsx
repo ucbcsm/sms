@@ -84,7 +84,7 @@ export const ValidateSingleCourseEnrollmentForm: FC<
         maskClosable={!isPending}
       >
         <Alert
-          message="Confirmation requise"
+          title="Confirmation requise"
           description={
             <p>
               Êtes-vous sûr de vouloir <b>valider</b> l&apos;inscription de{" "}

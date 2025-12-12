@@ -197,7 +197,7 @@ export const NewPeriodEnrollmentForm: FC<NewPeriodEnrollmentFormProps> = ({
               centered
             >
               <Alert
-                message="Êtes-vous sûr de vouloir annuler cette inscription ?"
+                title="Êtes-vous sûr de vouloir annuler cette inscription ?"
                 description="Toutes les informations saisies seront perdues."
                 type="warning"
                 showIcon

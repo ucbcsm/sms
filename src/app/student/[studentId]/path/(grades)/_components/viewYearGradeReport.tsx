@@ -7,7 +7,7 @@ import { CloseOutlined, PrinterOutlined } from "@ant-design/icons";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Divider, Drawer, Flex, Result, Space, Typography } from "antd";
 import { parseAsInteger, useQueryState } from "nuqs";
-import React, { FC, useRef } from "react";
+import { FC, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
 import { GradeTableReport } from "./gradeTableReport";
 import { YearGrades } from "@/types";
@@ -92,17 +92,17 @@ export const ViewYearGradeReport: FC<ViewYearGradeReportProps> = ({
             <Typography.Text strong>
               {yearGrade.student.academic_year.name}
             </Typography.Text>
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Typography.Text type="secondary">Session: </Typography.Text>
             <Typography.Text strong>
               {getSessionText(yearGrade.session)}
             </Typography.Text>
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Typography.Text type="secondary">Moment: </Typography.Text>
             <Typography.Text strong>
               {getMomentText(yearGrade.moment)}
             </Typography.Text>
-            <Divider type="vertical" />
+            <Divider orientation="vertical" />
             <Button
               style={{
                 boxShadow: "none",

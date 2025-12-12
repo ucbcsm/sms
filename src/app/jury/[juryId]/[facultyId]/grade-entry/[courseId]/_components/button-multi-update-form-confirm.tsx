@@ -57,7 +57,7 @@ export const ButtonMultiUpdateFormConfirm: FC<ButtonMultiUpdateFormConfirmProps>
         maskClosable={!isPending}
       >
         <Alert
-          message="Confirmation"
+          title="Confirmation"
           description="Êtes-vous sûr de vouloir sauvegarder les mises à jour des notes ? Cette action enregistrera les modifications apportées."
           type="info"
           showIcon

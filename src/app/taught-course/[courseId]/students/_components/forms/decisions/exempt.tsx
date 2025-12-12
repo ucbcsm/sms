@@ -94,7 +94,7 @@ export const ExemptSingleCourseEnrollmentForm: FC<
         maskClosable={!isPending}
       >
         <Alert
-          message="Confirmation requise"
+          title="Confirmation requise"
           description={
             <p>
               Êtes-vous sûr de vouloir{" "}

@@ -96,7 +96,7 @@ export const DeleteDocument: FC<DeleteDocumentProps> = ({ doc }) => {
       >
         <Alert
           type="warning"
-          message={doc.required_document?.title}
+          title={doc.required_document?.title}
           description={`Pour confirmer la suppression du document "${doc.required_document?.title}", veuillez saisir "DELETE" ci-dessous.`}
           style={{ border: 0, marginBottom: 16 }}
         />

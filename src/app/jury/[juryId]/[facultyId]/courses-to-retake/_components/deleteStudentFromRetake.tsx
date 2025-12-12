@@ -121,7 +121,7 @@ export const DeleteStudentFromRetakeForm: FC<
         {studentWithRetake.retake_course_list.length === 0 ? (
           <>
             <Alert
-              message={`Confirmation de suppression `}
+              title={`Confirmation de suppression `}
               description={
                 <>
                   Pour supprimer l&apos;étudiant{" "}
@@ -161,7 +161,7 @@ export const DeleteStudentFromRetakeForm: FC<
             <Alert
               showIcon
               type="warning"
-              message="Attention"
+              title="Attention"
               description="Vous ne pouvez pas supprimer un étudiant de cette liste pendant qu'il a encore des cours à reprendre ci-dessous."
               style={{ border: 0 }}
             />
@@ -184,7 +184,7 @@ export const DeleteStudentFromRetakeForm: FC<
             <Alert
               showIcon
               type="info"
-              message="Information"
+              title="Information"
               description="Si vous souhaitez tout de même supprimer cet étudiant parmis les étudiants qui ont des cours à reprendre, il faudra d'abord marquer tous ses cours à reprendre comme déjà repris et acquis."
               style={{ border: 0, marginTop: 24 }}
             />

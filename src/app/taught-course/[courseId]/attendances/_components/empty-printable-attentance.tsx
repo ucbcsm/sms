@@ -233,7 +233,7 @@ const numberOfSessions = Form.useWatch("number_of_sessions", form);
           />
           <Alert
             type="info"
-            message="Cette fiche de présences est vide. Elle est destinée à être remplie manuellement lors des séances."
+            title="Cette fiche de présences est vide. Elle est destinée à être remplie manuellement lors des séances."
             description={`Une fois remplie manuellement, cette fiche devra être retournée à la filière ${course?.faculty.name} pour encodage dans le système de gestion académique.`}
             style={{ marginBottom: 24 }}
             showIcon

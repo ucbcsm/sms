@@ -78,12 +78,12 @@ export const PendingSinglePeriodEnrollmentForm: FC<
         }}
         onCancel={() => setOpen(false)}
         onOk={onFinish}
-        destroyOnClose
+        destroyOnHidden
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
       >
         <Alert
-          message={
+          title={
             <span>
               Confirmation requise
             </span>

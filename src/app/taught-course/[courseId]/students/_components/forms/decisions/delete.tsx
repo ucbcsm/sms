@@ -97,7 +97,7 @@ export const DeleteSingleCourseEnrollmentForm: FC<
       )}
     >
       <Alert
-        message="Attention"
+        title="Attention"
         description={`Êtes-vous sûr de vouloir supprimer l'inscription de l'étudiant ${enrollment.student.year_enrollment.user.surname} ${enrollment.student.year_enrollment.user.last_name} ${enrollment.student.year_enrollment.user.first_name} au cours ${enrollment.course.available_course.name} ? Cette action est irréversible.`}
         type="warning"
         showIcon

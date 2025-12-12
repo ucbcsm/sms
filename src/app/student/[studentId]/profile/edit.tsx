@@ -230,7 +230,7 @@ console.log("Rendering EditStudentProfileForm with data:", data);
         >
           <Alert
             showIcon
-            message="Identifiant académique"
+            title="Identifiant académique"
             type="info"
             description={
               <Form.Item

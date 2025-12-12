@@ -118,7 +118,7 @@ export const DeleteMultiGradesButton: FC<DeleteMultiGradesButtonProps> = ({
           style={{ border: 0 }}
         /> */}
       <Alert
-        message="Suppression des notes"
+        title="Suppression des notes"
         description={
           <div>
             Êtes-vous sûr de vouloir supprimer toutes les notes de la session{" "}

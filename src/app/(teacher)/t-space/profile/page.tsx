@@ -113,7 +113,7 @@ export default function Page() {
         )}
 
         <Card loading={isPending}>
-          <Space direction="vertical" size="large">
+          <Space orientation="vertical" size="large">
             <Descriptions
               // extra={<EditTeacherProfileForm teacher={teacher} />}
               title="Identité"

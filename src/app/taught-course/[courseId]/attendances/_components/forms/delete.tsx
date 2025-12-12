@@ -79,7 +79,7 @@ export const DeleteAttendanceListForm: FC<DeleteAttendanceListFormProps> = ({
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
         modalRender={(dom) => (
@@ -96,7 +96,7 @@ export const DeleteAttendanceListForm: FC<DeleteAttendanceListFormProps> = ({
         )}
       >
         <Alert
-          message="Attention"
+          title="Attention"
           description={
              <>
               Êtes-vous sûr de vouloir supprimer la liste de présence du{" "}

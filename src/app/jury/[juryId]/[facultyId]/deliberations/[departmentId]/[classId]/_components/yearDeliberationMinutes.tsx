@@ -134,7 +134,7 @@ export const YearDeliberationMinutes: FC<YearDeliberationMinutesProps> = ({
         <Space>
           <Typography.Text type="secondary">Année:</Typography.Text>
           <Typography.Text strong>{year?.name}</Typography.Text>
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Typography.Text type="secondary">Session: </Typography.Text>
           <Select
             variant="filled"
@@ -163,7 +163,7 @@ export const YearDeliberationMinutes: FC<YearDeliberationMinutesProps> = ({
               setMoment(value as "before_appeal" | "after_appeal");
             }}
           />
-          <Divider type="vertical" />
+          <Divider orientation="vertical" />
           <Button
             style={{
               boxShadow: "none",

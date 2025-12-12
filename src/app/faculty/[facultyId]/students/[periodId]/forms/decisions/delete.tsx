@@ -79,7 +79,7 @@ export const DeleteSinglePeriodEnrollmentForm: FC<
         maskClosable={!isPending}
       >
         <Alert
-          message="Confirmation requise"
+          title="Confirmation requise"
           description={
             <p>
               Êtes-vous sûr de vouloir <b>supprimer</b> l&apos;inscription de{" "}

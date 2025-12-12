@@ -121,7 +121,7 @@ export const PrintSomeStudentsForm: FC<PrintSomeStudentsFormProps> = ({
               okButtonProps={{ style: { boxShadow: "none" }, danger: true }}
             >
               <Alert
-                message="Attention !"
+                title="Attention !"
                 description="Êtes-vous sûr de vouloir annuler l'impression ?"
                 type="warning"
                 showIcon

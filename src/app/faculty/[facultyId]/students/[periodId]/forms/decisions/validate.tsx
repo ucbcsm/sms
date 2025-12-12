@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { Alert, message, Modal } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { PeriodEnrollment } from "@/types";
@@ -78,12 +78,12 @@ export const ValidateSignlePeriodEnllmentForm: FC<
         }}
         onCancel={() => setOpen(false)}
         onOk={onFinish}
-        destroyOnClose
+        destroyOnHidden
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
       >
         <Alert
-          message="Confirmation requise"
+          title="Confirmation requise"
           description={
             <p>
               Êtes-vous sûr de vouloir <b>valider</b> l&apos;inscription de{" "}

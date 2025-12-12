@@ -247,7 +247,7 @@ export const BulkGradeSubmissionForm: FC<BulkGradeSubmissionFormProps> = ({
                 okButtonProps={{ style: { boxShadow: "none" }, danger: true }}
               >
                 <Alert
-                  message="Attention !"
+                  title="Attention !"
                   description="Vous êtes sur le point de quitter ce formulaire. Toutes les notes non enregistrées seront perdues."
                   type="warning"
                   showIcon

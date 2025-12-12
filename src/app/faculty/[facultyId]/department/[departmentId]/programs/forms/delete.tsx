@@ -79,7 +79,7 @@ export const DeleteDepartmentProgramForm: FC<DeleteDepartmentProgramFormProps> =
           disabled: isPending,
         }}
         onCancel={() => setOpen(false)}
-        destroyOnClose
+        destroyOnHidden
         closable={{ disabled: isPending }}
         maskClosable={!isPending}
         modalRender={(dom) => (

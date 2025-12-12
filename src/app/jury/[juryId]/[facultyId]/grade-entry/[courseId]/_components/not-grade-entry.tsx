@@ -73,7 +73,7 @@ export const NotGradeEntry: FC<NotGradeEntryProps> = ({ course }) => {
             <Alert
               type="info"
               showIcon
-              message={
+              title={
                 <div>
                   Veuillez contacter les membres de la filière:{" "}
                   <Typography.Text strong>
