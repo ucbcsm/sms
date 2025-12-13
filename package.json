@@ -1,5 +1,5 @@
 {
-  "name": "sms_new",
+  "name": "sms",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -20,12 +20,12 @@
     "exceljs": "^4.4.0",
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
-    "next": "16.0.8",
+    "next": "^16.0.10",
     "nextjs-toploader": "^3.9.17",
     "nuqs": "^2.8.4",
     "papaparse": "^5.5.3",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "react-to-print": "^3.2.0",
     "sharp": "^0.34.5",
     "zod": "^4.1.13",
